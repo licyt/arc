@@ -20,6 +20,7 @@ interface iDbTable
   public function loadFields();
   public function getCurrentRecord();
   public function getNumRecords();
+  public function go($index);
   public function setName($name);
   public function printFields();
   public function detailForm();
@@ -140,6 +141,17 @@ class cDbTable implements iDbTable
     $this->count = mysql_num_rows($result);
 	return $this->count;
    }
+   
+  public function go($index) {
+    $this->at = $index;
+    $_SESSION[table][$this->name][at] = $this->at;
+    $this->getCurrentRecord();
+  }
+  
+  function setStatus($status) {
+    $this->status = $status;
+    $_SESSION[table][$this->name][status] = $this->status;
+  }
 
   public function setName($name)
   {
@@ -153,8 +165,7 @@ class cDbTable implements iDbTable
       $this->status = $_SESSION[table][$this->name][status];
     } else {
 	  // or set status to "BROWSE" by default
-      $this->status = "BROWSE";
-      $_SESSION[table][$this->name][status] = $this->status;
+      $this->setStatus("BROWSE");
     }
 
     // get table POSITION from session 
@@ -162,60 +173,39 @@ class cDbTable implements iDbTable
       $this->at = $_SESSION[table][$this->name][at];
     } else {
 	  // or set position to 0 by default
-      $this->at = 0;
-      $_SESSION[table][$this->name][at] = $this->at;
+      $this->go(0);
     }
 
 	// respond to navigation buttons
-    if ($_POST[$this->name."First"]) {
-	  $this->at = 1;
-	  $_SESSION[table][$this->name][at] = $this->at;
-      $this->getCurrentRecord();
-	}
-    if ($_POST[$this->name."Prev"]) {
-	  $this->at = $_SESSION[table][$this->name][at]-1;
-	  $_SESSION[table][$this->name][at] = $this->at;
-      $this->getCurrentRecord();
-	}
-    if ($_POST[$this->name."Next"]) {
-	  $this->at = $_SESSION[table][$this->name][at]+1;
-	  $_SESSION[table][$this->name][at] = $this->at;
-      $this->getCurrentRecord();
-	}
-    if ($_POST[$this->name."Last"]) {
-	  $this->at = $this->count;
-	  $_SESSION[table][$this->name][at] = $this->at;
-      $this->getCurrentRecord();
-	}
+    if ($_POST[$this->name."First"]) $this->go(1);
+    if ($_POST[$this->name."Prev"])  $this->go($_SESSION[table][$this->name][at]-1);
+    if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1)
+    if ($_POST[$this->name."Last"])  $this->go($this->count);
 
     // + Add button was pressed
     if ($_POST[$this->name."Insert"]) {
-      $this->status = "INSERT";
-      $_SESSION[table][$this->name][status] = $this->status;
-    }
+	  $this->setStatus("INSERT");
+	}
     // * Edit button was pressed
     if ($_POST[$this->name."Update"]) {
       $this->getCurrentRecord();
-      $this->status = "UPDATE";
-      $_SESSION[table][$this->name][status] = $this->status;
+      $this->setStatus("UPDATE");
     }
     // x Delete button was pressed
     if ($_POST[$this->name."Delete"]) {
       $this->getCurrentRecord();
-      $this->status = "DELETE";
-      $_SESSION[table][$this->name][status] = $this->status;
+      $this->setStatus("DELETE");
     }
-
     // Cancel button was pressed
     if ($_POST[$this->name."Cancel"]) {
       $this->getCurrentRecord();
-      $this->status = "BROWSE";
-      $_SESSION[table][$this->name][status] = $this->status;
+      $this->setStatus("BROWSE");
     }
+
     // Ok button was pressed
     if ($_POST[$this->name."Ok"]) {
 	  switch ($this->status) {
-        // build SQL
+        // build SQL 
 		case "DELETE" :
 		  $query = "DELETE FROM ".$this->name.
 		    " WHERE id".$this->name."=".$_POST["id".$this->name];
@@ -230,6 +220,7 @@ class cDbTable implements iDbTable
                 $fieldName." = \"".$_POST[$fieldName]."\"";
             } 
           }
+		  // choose SQL keyword depending on status
 		  switch ($this->status) {
 			case "INSERT" :
               $query = "INSERT INTO ".$this->name.
@@ -260,8 +251,7 @@ class cDbTable implements iDbTable
 			break;
 		}
 		// return to BROWSE mode
-	    $this->status = "BROWSE";
-        $_SESSION[table][$this->name][status] = $this->status;
+	    $this->setStatus("BROWSE");
 		$this->getCurrentRecord();
 	  } else {
 	    // sql error handling
