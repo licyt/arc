@@ -29,6 +29,7 @@ interface iHtmlControl {
                       
 interface iHtmlInput {
   public function display();
+  public function __construct ($id="", $type="", $value="");
 }
                       
 interface iHtmlSelect {
@@ -65,7 +66,7 @@ class cHtmlInput extends cHtmlElement {
    *   SIZE
    */
    
-  public function __construct ($id, $type, $value) {
+  public function __construct ($id="", $type="", $value="") {
     $this->setAttribute("ID", $id);
     $this->setAttribute("TYPE", $type);
     $this->setAttribute("VALUE", $value);
@@ -91,14 +92,27 @@ class cHtmlSelect extends cHtmlElement {
    * Attributes
    *   ID
    */
+  protected $selected;
   protected $options = array();
   
+  public function setSelected($value) {
+	$this->selected = $value;
+  }
+  
+  public function addOption($option, $value) {
+	$this->options[$option] = $value;
+  }
+  
   public function displayOptions() {
+	$result = "<OPTION VALUE=0></OPTION>";
     foreach ($this->options as $option => $value) {
       $result.=
-        "<OPTION VALUE=$value>$option</OPTION>";
+        "<OPTION ".
+		  ($value==$this->selected?" SELECTED":"").
+		  " VALUE=$value>".
+		  $option.
+		"</OPTION>";
     }
-    $result .= "<OPTION VALUE=0>Add</OPTION>";
     return $result;
   }
 

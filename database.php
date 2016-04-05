@@ -7,11 +7,12 @@ include_once("./dbConfig.php");
 // Declare the interface iDbField
 interface iDbField
 {
+  public function __construct($column="");
   public function setProperties($properties); 
+  public function setTableName($name);
   public function getName();
   public function isForeignKey();
   public function getHtmlControl();
-  public function __construct($column);
 }
 
 // Declare the interface iDbTable
@@ -21,6 +22,7 @@ interface iDbTable
   public function getCurrentRecord();
   public function getNumRecords();
   public function go($index);
+  public function setStatus($status);
   public function setName($name);
   public function printFields();
   public function detailForm();
@@ -40,9 +42,10 @@ interface iDbScheme
 // Implement the interface iDbField
 class cDbField implements iDbField
 {
-  private $properties = array();
+  protected $properties = array();
+  protected $tableName;
   
-  public function __construct($column) 
+  public function __construct($column="") 
   {
 	 $this->setProperties($column);  
   }
@@ -66,11 +69,28 @@ class cDbField implements iDbField
       ($this->properties[Key]=="PRI");
   }
 
+  public function foreignTableName() {
+    $fieldName = $this->getName();
+	return substr($fieldName, 0, strpos($fieldName, "_id"));
+  }
+  
+  public function setTableName($name) {
+	$this->tableName=$name;
+  }
+  
   public function getHtmlControl($value="")
   {
     if ($this->isForeignKey()) {
       // use select for foreign keys
       $htmlControl = new cHtmlSelect;
+	  $htmlControl->setSelected($value);
+	  $ftName = $this->foreignTableName();
+	  $query = "SELECT id".$ftName.", ".$ftName."Name".     // tbd: possibly change lookupField name
+	    " FROM ".$ftName;
+	  if ($result = mysql_query($query)) {
+		while ($row = mysql_fetch_array($result))
+		$htmlControl->addOption($row[$ftName."Name"], $row["id".$ftName]);
+	  }
     } else {
       // use input for other fields
       $htmlControl = new cHtmlInput;
@@ -118,6 +138,7 @@ class cDbTable implements iDbTable
       while ($column = mysql_fetch_assoc($result)) {
         // create/set cDbField object for each table column
         $field = new cDbField($column);
+		$field->setTableName($this->name);
         // push this new field into array of fields of this object
         array_push($this->fields, $field);
       }
@@ -145,11 +166,10 @@ class cDbTable implements iDbTable
   public function go($index) {
     $this->at = $index;
     $_SESSION[table][$this->name][at] = $this->at;
-    $this->getCurrentRecord();
   }
   
   function setStatus($status) {
-    $this->status = $status;
+    $this->status = strtoupper($status);
     $_SESSION[table][$this->name][status] = $this->status;
   }
 
@@ -176,34 +196,20 @@ class cDbTable implements iDbTable
       $this->go(0);
     }
 
-	// respond to navigation buttons
+	// respond to navigator buttons
     if ($_POST[$this->name."First"]) $this->go(1);
     if ($_POST[$this->name."Prev"])  $this->go($_SESSION[table][$this->name][at]-1);
     if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1);
     if ($_POST[$this->name."Last"])  $this->go($this->count);
 
-    // + Add button was pressed
-    if ($_POST[$this->name."Insert"]) {
-	  $this->setStatus("INSERT");
-	}
-    // * Edit button was pressed
-    if ($_POST[$this->name."Update"]) {
-      $this->getCurrentRecord();
-      $this->setStatus("UPDATE");
-    }
-    // x Delete button was pressed
-    if ($_POST[$this->name."Delete"]) {
-      $this->getCurrentRecord();
-      $this->setStatus("DELETE");
-    }
-    // Cancel button was pressed
-    if ($_POST[$this->name."Cancel"]) {
-      $this->getCurrentRecord();
-      $this->setStatus("BROWSE");
-    }
+    if ($_POST[$this->name."Insert"]) $this->setStatus("INSERT"); // + Add
+    if ($_POST[$this->name."Update"]) $this->setStatus("UPDATE"); // * Edit
+    if ($_POST[$this->name."Delete"]) $this->setStatus("DELETE"); // x Delete
+    if ($_POST[$this->name."Cancel"]) $this->setStatus("BROWSE"); // Cancel
 
-    // Ok button was pressed
-    if ($_POST[$this->name."Ok"]) {
+    if ($this->status!="INSERT") $this->getCurrentRecord();
+    
+    if ($_POST[$this->name."Ok"]) {                               // Ok 
 	  switch ($this->status) {
         // build SQL 
 		case "DELETE" :
@@ -392,6 +398,5 @@ class cDbScheme implements iDbScheme
 $dbScheme = new cDbScheme;
 $dbScheme->link($dbServerName, $dbUser, $dbPassword);
 $dbScheme->useDb($dbName);
-
 
 ?>
