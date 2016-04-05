@@ -179,7 +179,7 @@ class cDbTable implements iDbTable
 	// respond to navigation buttons
     if ($_POST[$this->name."First"]) $this->go(1);
     if ($_POST[$this->name."Prev"])  $this->go($_SESSION[table][$this->name][at]-1);
-    if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1)
+    if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1);
     if ($_POST[$this->name."Last"])  $this->go($this->count);
 
     // + Add button was pressed
