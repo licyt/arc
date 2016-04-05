@@ -128,7 +128,8 @@ class cHtmlLabel extends cHtmlElement {
 
 class cHtmlForm extends cHtmlElement {
   /**
-   * Attributes  
+   * Attributes
+   *   ID   
    *   ACTION - URL of script to execute after form commit   
    *   METHOD - GET/POST
    *   CONTENT - form elements
@@ -137,6 +138,8 @@ class cHtmlForm extends cHtmlElement {
   public function display() {
 	  return
       "<FORM".
+	    " ID=".$this->attributes[ID].
+	    " NAME=".$this->attributes[ID].
         " ACTION=\"".$this->attributes[ACTION]."\"".
         " METHOD=\"".$this->attributes[METHOD]."\"".
       ">".

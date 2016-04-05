@@ -11,17 +11,20 @@ interface iDbField
   public function getName();
   public function isForeignKey();
   public function getHtmlControl();
-  public function __construct($name);
+  public function __construct($column);
 }
 
 // Declare the interface iDbTable
 interface iDbTable
 {
+  public function loadFields();
+  public function getCurrentRecord();
+  public function getNumRecords();
   public function setName($name);
   public function printFields();
   public function detailForm();
-  //public function getFieldByName($fieldName);
   public function navigator();
+	//public function getFieldByName($fieldName);
 }  
 
 // Declare the interface iDbSchema
@@ -64,9 +67,6 @@ class cDbField implements iDbField
 
   public function getHtmlControl($value="")
   {
-    // no control for auto_increment fields
-    if ($this->properties[Extra]=="auto_increment") return;
-
     if ($this->isForeignKey()) {
       // use select for foreign keys
       $htmlControl = new cHtmlSelect;
@@ -80,16 +80,16 @@ class cDbField implements iDbField
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
-    $htmlControl->setAttribute("VALUE", $this->value);
+    $htmlControl->setAttribute("VALUE", $value);
     
-    // create  label
-    $htmlLabel = new cHtmlLabel;
-    $htmlLabel->setAttribute("ID", "Label".$this->properties[Field]);
-    $htmlLabel->setAttribute("TARGET", $this->properties[Field]);
-    $htmlLabel->setAttribute("VALUE", $this->properties[Field]);
+      // create  label
+      $htmlLabel = new cHtmlLabel;
+      $htmlLabel->setAttribute("ID", "Label".$this->properties[Field]);
+      $htmlLabel->setAttribute("TARGET", $this->properties[Field]);
+      $htmlLabel->setAttribute("VALUE", $this->properties[Field]);
     
     return 
-      $htmlLabel->display().
+      ($htmlLabel ? $htmlLabel->display() : "").
       $htmlControl->display();
   }
 }
@@ -103,15 +103,11 @@ class cDbTable implements iDbTable
   protected $at;
   protected $count;
   protected $status;
-  protected $currentRecord;                  
+  protected $currentRecord;
 
-  public function setName($name)
-  {
-    // set table name 
-    $this->name = $name;
-
+  public function loadFields() {
     // get list of fields for a table from database
-    $query = "SHOW COLUMNS FROM $name";
+    $query = "SHOW COLUMNS FROM ".$this->name;
     $result = mysql_query($query);
     if (!$result) {
       echo "Could not run query $query : ". mysql_error();
@@ -125,85 +121,155 @@ class cDbTable implements iDbTable
         array_push($this->fields, $field);
       }
     }
+  }
 
+  public function getCurrentRecord() {
+	// get current record from database
+	if ($this->at) {
+	  $query = "SELECT * FROM ".$this->name." LIMIT ".($this->at-1).",1";
+	  $result = mysql_query($query);
+	  $this->currentRecord = mysql_fetch_row($result);
+	}	  
+	return $this->currentRecord;
+  }  
+  
+  public function getNumRecords() {
     // number of records in this table
-    $query = "SELECT * FROM $name";
+    $query = "SELECT * FROM ".$this->name;
     $result = mysql_query($query);
     $this->count = mysql_num_rows($result);
+	return $this->count;
+   }
 
-    // get last table status from session or set status to "BROWSE" by default
+  public function setName($name)
+  {
+    // initialize table from database
+    $this->name = $name;
+    $this->loadFields();
+    $this->getNumRecords();
+
+    // get last table STATUS from session 
     if ($_SESSION[table][$this->name][status]) {
       $this->status = $_SESSION[table][$this->name][status];
     } else {
+	  // or set status to "BROWSE" by default
       $this->status = "BROWSE";
       $_SESSION[table][$this->name][status] = $this->status;
     }
-    // get table position from session or set position to 0 by default
+
+    // get table POSITION from session 
     if ($_SESSION[table][$this->name][at]) {
       $this->at = $_SESSION[table][$this->name][at];
     } else {
+	  // or set position to 0 by default
       $this->at = 0;
       $_SESSION[table][$this->name][at] = $this->at;
     }
+
+	// respond to navigation buttons
     if ($_POST[$this->name."First"]) {
 	  $this->at = 1;
 	  $_SESSION[table][$this->name][at] = $this->at;
+      $this->getCurrentRecord();
 	}
     if ($_POST[$this->name."Prev"]) {
 	  $this->at = $_SESSION[table][$this->name][at]-1;
 	  $_SESSION[table][$this->name][at] = $this->at;
+      $this->getCurrentRecord();
 	}
     if ($_POST[$this->name."Next"]) {
 	  $this->at = $_SESSION[table][$this->name][at]+1;
 	  $_SESSION[table][$this->name][at] = $this->at;
+      $this->getCurrentRecord();
 	}
     if ($_POST[$this->name."Last"]) {
 	  $this->at = $this->count;
 	  $_SESSION[table][$this->name][at] = $this->at;
+      $this->getCurrentRecord();
 	}
-    // get current record from database
-    if (($this->status == "BROWSE")&&($this->at)) {
-      $query = "SELECT * FROM $name LIMIT ".($this->at-1).",1";
-      $result = mysql_query($query);
-      $this->currentRecord = mysql_fetch_row($result);
-    }
 
     // + Add button was pressed
     if ($_POST[$this->name."Insert"]) {
       $this->status = "INSERT";
       $_SESSION[table][$this->name][status] = $this->status;
     }
+    // * Edit button was pressed
+    if ($_POST[$this->name."Update"]) {
+      $this->getCurrentRecord();
+      $this->status = "UPDATE";
+      $_SESSION[table][$this->name][status] = $this->status;
+    }
+    // x Delete button was pressed
+    if ($_POST[$this->name."Delete"]) {
+      $this->getCurrentRecord();
+      $this->status = "DELETE";
+      $_SESSION[table][$this->name][status] = $this->status;
+    }
 
     // Cancel button was pressed
     if ($_POST[$this->name."Cancel"]) {
+      $this->getCurrentRecord();
       $this->status = "BROWSE";
       $_SESSION[table][$this->name][status] = $this->status;
     }
-    // Ok button was pressed while in INSERT mode
-    if (($this->status=="INSERT")&&($_POST[$this->name."Ok"])) {
-      // assign field values 
-      foreach ($this->fields as $i => $field) {
-        $fieldName = $field->getName();
-        if (strpos($fieldName, "id")===false) {
-          $assign .= ($assign ? ", " : "").
-            $fieldName." = \"".$_POST[$fieldName]."\"";
-        } 
-      }
-      // build SQL 
-      $query = "INSERT INTO ".$this->name." SET ".$assign;
-      // execute SQL
-      if ($result = mysql_query($query)) {
-        $this->status = "BROWSE";
-        $this->count++;
-        $this->at = $this->count;
-		$_SESSION[table][$this->name][at] = $this->at;
-      } else {
-        // sql error handling
-        echo "Could not run query $query : ". mysql_error();
-        exit;      
-      } 
-      $_SESSION[table][$this->name][status] = $this->status;
+    // Ok button was pressed
+    if ($_POST[$this->name."Ok"]) {
+	  switch ($this->status) {
+        // build SQL
+		case "DELETE" :
+		  $query = "DELETE FROM ".$this->name.
+		    " WHERE id".$this->name."=".$_POST["id".$this->name];
+		  break;
+		case "INSERT" :
+		case "UPDATE" :
+          // assign field values 
+          foreach ($this->fields as $i => $field) {
+            $fieldName = $field->getName();
+            if ($fieldName != "id".$this->name) {
+              $assign .= ($assign ? ", " : "").
+                $fieldName." = \"".$_POST[$fieldName]."\"";
+            } 
+          }
+		  switch ($this->status) {
+			case "INSERT" :
+              $query = "INSERT INTO ".$this->name.
+			    " SET ".$assign;
+			  break;
+			case "UPDATE" :
+			  $query = "UPDATE ".$this->name.
+			    " SET ".$assign.
+				" WHERE id".$this->name."=".$_POST["id".$this->name];
+			  break;
+		  }
+		  break;
+	  }
+	  
+	  // execute SQL
+	  if ($result = mysql_query($query)) {
+		// adjust table position
+		switch ($this->status) { 
+		  case "INSERT" :
+			$this->count++;
+			$this->at = $this->count;
+			$_SESSION[table][$this->name][at] = $this->at;
+			break;
+		  case "DELETE" :
+			$this->count--;
+			if ($this->at>1) $this->at--;
+			$_SESSION[table][$this->name][at] = $this->at;
+			break;
+		}
+		// return to BROWSE mode
+	    $this->status = "BROWSE";
+        $_SESSION[table][$this->name][status] = $this->status;
+		$this->getCurrentRecord();
+	  } else {
+	    // sql error handling
+	    echo "Could not run query $query : ". mysql_error();
+	    exit;      
+	  } 
     }
+
   }
   
   public function printFields() {
@@ -246,7 +312,7 @@ class cDbTable implements iDbTable
       $button = new cHtmlInput;
       $button->setAttribute("ID", $this->name."Update");
       $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "* Change");
+      $button->setAttribute("VALUE", "* Edit");
       $result .= $button->display();
     }
     // display delete button
@@ -258,7 +324,9 @@ class cDbTable implements iDbTable
       $result .= $button->display();
     }
     // display ok & cancel buttons
-    if ($this->status == "INSERT") {
+    if (($this->status == "INSERT") ||
+	    ($this->status == "UPDATE") ||
+		($this->status == "DELETE")) {
       $button = new cHtmlInput;
       $button->setAttribute("ID", $this->name."Ok");
       $button->setAttribute("TYPE", "SUBMIT");
@@ -292,6 +360,7 @@ class cDbTable implements iDbTable
   public function detailForm()
   {
     $form = new cHtmlForm();
+    $form->setAttribute("ID", "detailForm".$this->name);
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
