@@ -399,5 +399,4 @@ $dbScheme = new cDbScheme;
 $dbScheme->link($dbServerName, $dbUser, $dbPassword);
 $dbScheme->useDb($dbName);
 
-
 ?>
