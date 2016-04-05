@@ -64,6 +64,12 @@ class cHtmlInput extends cHtmlElement {
    *   NAME
    *   SIZE
    */
+   
+  public function __construct ($id, $type, $value) {
+    $this->setAttribute("ID", $id);
+    $this->setAttribute("TYPE", $type);
+    $this->setAttribute("VALUE", $value);
+  }
 
   public function display() {
     $size=$this->attributes[SIZE];  

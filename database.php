@@ -83,14 +83,14 @@ class cDbField implements iDbField
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
     $htmlControl->setAttribute("VALUE", $value);
     
-      // create  label
-      $htmlLabel = new cHtmlLabel;
-      $htmlLabel->setAttribute("ID", "Label".$this->properties[Field]);
-      $htmlLabel->setAttribute("TARGET", $this->properties[Field]);
-      $htmlLabel->setAttribute("VALUE", $this->properties[Field]);
+    // create  label
+	$htmlLabel = new cHtmlLabel;
+	$htmlLabel->setAttribute("ID", "Label".$this->properties[Field]);
+	$htmlLabel->setAttribute("TARGET", $this->properties[Field]);
+	$htmlLabel->setAttribute("VALUE", $this->properties[Field]);
     
     return 
-      ($htmlLabel ? $htmlLabel->display() : "").
+      $htmlLabel->display().
       $htmlControl->display();
   }
 }
@@ -275,73 +275,46 @@ class cDbTable implements iDbTable
   {
     // display first button
     if (($this->status == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."First");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "|< First");
+      $button = new cHtmlInput($this->name."First", "SUBMIT", "|< First");
       $result .= $button->display();
     }
     // display prev button
     if (($this->status == "BROWSE")&&($this->count > 2)&&($this->at > 2)) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Prev");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "< Prev");
+      $button = new cHtmlInput($this->name."Prev", "SUBMIT", "< Prev");
       $result .= $button->display();
     }
     // display insert button
     if ($this->status == "BROWSE") {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Insert");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "+ Add");
+      $button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
       $result .= $button->display();
     }
     // display update button
     if (($this->status == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Update");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "* Edit");
+      $button = new cHtmlInput($this->name."Update", "SUBMIT", "* Edit");
       $result .= $button->display();
     }
     // display delete button
     if (($this->status == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Delete");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "x Delete");
+      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x Delete");
       $result .= $button->display();
     }
     // display ok & cancel buttons
     if (($this->status == "INSERT") ||
 	    ($this->status == "UPDATE") ||
 		($this->status == "DELETE")) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Ok");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "Ok");
+      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
       $result .= $button->display();
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Cancel");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "Cancel");
+      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
       $result .= $button->display();
     }
     // display next button
     if (($this->status == "BROWSE")&&($this->at<($this->count-1))) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Next");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "Next >");
+      $button = new cHtmlInput($this->name."Next", "SUBMIT", "Next >");
       $result .= $button->display();
     }
     // display last button
     if (($this->status == "BROWSE")&&($this->at < $this->count)) {
-      $button = new cHtmlInput;
-      $button->setAttribute("ID", $this->name."Last");
-      $button->setAttribute("TYPE", "SUBMIT");
-      $button->setAttribute("VALUE", "Last >|");
+      $button = new cHtmlInput($this->name."Last", "SUBMIT", "Last >|");
       $result .= $button->display();
     }
     return $result;
