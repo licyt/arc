@@ -1,10 +1,7 @@
 <?php
 // ------------------------------------------------------ C O N S T A N T S
 
-$dbServerName = 'wendelstein';
-$dbUser       = 'root';
-$dbPassword   = 'mindfold';
-$dbName       = 'hmat';
+include_once("./dbConfig.php");
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -14,6 +11,7 @@ interface iDbField
   public function getName();
   public function isForeignKey();
   public function getHtmlControl();
+  public function __construct($name);
 }
 
 // Declare the interface iDbTable
@@ -39,6 +37,11 @@ interface iDbScheme
 class cDbField implements iDbField
 {
   private $properties = array();
+  
+  public function __construct($column) 
+  {
+	 $this->setProperties($column);  
+  }
   
   public function setProperties($properties) 
   {         
@@ -106,6 +109,7 @@ class cDbTable implements iDbTable
   {
     // set table name 
     $this->name = $name;
+
     // get list of fields for a table from database
     $query = "SHOW COLUMNS FROM $name";
     $result = mysql_query($query);
@@ -116,16 +120,17 @@ class cDbTable implements iDbTable
     if (mysql_num_rows($result) > 0) {
       while ($column = mysql_fetch_assoc($result)) {
         // create/set cDbField object for each table column
-        $field = new cDbField;
-        $field->setProperties($column);
+        $field = new cDbField($column);
         // push this new field into array of fields of this object
         array_push($this->fields, $field);
       }
     }
+
     // number of records in this table
     $query = "SELECT * FROM $name";
     $result = mysql_query($query);
     $this->count = mysql_num_rows($result);
+
     // get last table status from session or set status to "BROWSE" by default
     if ($_SESSION[table][$this->name][status]) {
       $this->status = $_SESSION[table][$this->name][status];
@@ -168,6 +173,7 @@ class cDbTable implements iDbTable
       $this->status = "INSERT";
       $_SESSION[table][$this->name][status] = $this->status;
     }
+
     // Cancel button was pressed
     if ($_POST[$this->name."Cancel"]) {
       $this->status = "BROWSE";
