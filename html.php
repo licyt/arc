@@ -69,9 +69,12 @@ class cHtmlInput extends cHtmlElement {
     $size=$this->attributes[SIZE];  
     return 
       "<INPUT".
-        " TYPE=TEXT".
+        " TYPE=".($this->attributes[TYPE]
+          ? $this->attributes[TYPE]
+          : "TEXT").
         " ID=".$this->attributes[ID].
-        " NAME=".$this->attributes[NAME].
+        " NAME=".$this->attributes[ID].
+        " VALUE=\"".$this->attributes[VALUE]."\"".                                        
         ($size?" SIZE=$size":"").
       ">";
   }
@@ -108,7 +111,7 @@ class cHtmlLabel extends cHtmlElement {
   /**
    * Attributes
    *   ID      
-   *   TARGET - id of labeled element 
+   *   TARGET - id of labeled element / "FOR" is a reserved word in php
    *   VALUE  - displayed text
    */
 
@@ -122,5 +125,24 @@ class cHtmlLabel extends cHtmlElement {
       "</LABEL>";
   }
 }
+
+class cHtmlForm extends cHtmlElement {
+  /**
+   * Attributes  
+   *   ACTION - URL of script to execute after form commit   
+   *   METHOD - GET/POST
+   *   CONTENT - form elements
+   */
+
+  public function display() {
+	  return
+      "<FORM".
+        " ACTION=\"".$this->attributes[ACTION]."\"".
+        " METHOD=\"".$this->attributes[METHOD]."\"".
+      ">".
+        $this->attributes[CONTENT].
+      "</FORM>";
+  }
+}                   
 
 ?>

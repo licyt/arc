@@ -4,18 +4,16 @@ select {
 	margin-top: 5px;
 }
 
-
 input {
 	background-color: #dfefff;
 	height: 20px;
 	margin-top: 5px;
 }
 
-
-
 #AddressName {
 	background-color: #fffedf;
 }
+
 #LabelAddressName {
 	font-style: italic;
 }

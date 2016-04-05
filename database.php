@@ -122,6 +122,10 @@ class cDbTable implements iDbTable
         array_push($this->fields, $field);
       }
     }
+    // number of records in this table
+    $query = "SELECT * FROM $name";
+    $result = mysql_query($query);
+    $this->count = mysql_num_rows($result);
     // get last table status from session or set status to "BROWSE" by default
     if ($_SESSION[table][$this->name][status]) {
       $this->status = $_SESSION[table][$this->name][status];
@@ -136,6 +140,29 @@ class cDbTable implements iDbTable
       $this->at = 0;
       $_SESSION[table][$this->name][at] = $this->at;
     }
+    if ($_POST[$this->name."First"]) {
+	  $this->at = 1;
+	  $_SESSION[table][$this->name][at] = $this->at;
+	}
+    if ($_POST[$this->name."Prev"]) {
+	  $this->at = $_SESSION[table][$this->name][at]-1;
+	  $_SESSION[table][$this->name][at] = $this->at;
+	}
+    if ($_POST[$this->name."Next"]) {
+	  $this->at = $_SESSION[table][$this->name][at]+1;
+	  $_SESSION[table][$this->name][at] = $this->at;
+	}
+    if ($_POST[$this->name."Last"]) {
+	  $this->at = $this->count;
+	  $_SESSION[table][$this->name][at] = $this->at;
+	}
+    // get current record from database
+    if (($this->status == "BROWSE")&&($this->at)) {
+      $query = "SELECT * FROM $name LIMIT ".($this->at-1).",1";
+      $result = mysql_query($query);
+      $this->currentRecord = mysql_fetch_row($result);
+    }
+
     // + Add button was pressed
     if ($_POST[$this->name."Insert"]) {
       $this->status = "INSERT";
@@ -146,8 +173,8 @@ class cDbTable implements iDbTable
       $this->status = "BROWSE";
       $_SESSION[table][$this->name][status] = $this->status;
     }
-    // Ok button was pressed
-    if ($_POST[$this->name."Ok"]) {
+    // Ok button was pressed while in INSERT mode
+    if (($this->status=="INSERT")&&($_POST[$this->name."Ok"])) {
       // assign field values 
       foreach ($this->fields as $i => $field) {
         $fieldName = $field->getName();
@@ -163,22 +190,13 @@ class cDbTable implements iDbTable
         $this->status = "BROWSE";
         $this->count++;
         $this->at = $this->count;
+		$_SESSION[table][$this->name][at] = $this->at;
       } else {
         // sql error handling
         echo "Could not run query $query : ". mysql_error();
         exit;      
       } 
       $_SESSION[table][$this->name][status] = $this->status;
-    }
-    // number of records in this table
-    $query = "SELECT * FROM $name";
-    $result = mysql_query($query);
-    $this->count = mysql_num_rows($result);
-    // get current record from database
-    if (($this->status == "BROWSE")&&($this->at)) {
-      $query = "SELECT * FROM $name LIMIT ".($this->at-1).",1";
-      $result = mysql_query($query);
-      $this->currentRecord = mysql_fetch_row($result);
     }
   }
   
@@ -336,7 +354,5 @@ class cDbScheme implements iDbScheme
 $dbScheme = new cDbScheme;
 $dbScheme->link($dbServerName, $dbUser, $dbPassword);
 $dbScheme->useDb($dbName);
-
-
 
 ?>
