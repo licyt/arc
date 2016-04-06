@@ -2,7 +2,6 @@
 
 session_start();
 
-require_once("html.php");
 require_once("database.php");
 
 echo head(linkCss("hmat.css")).body($dbScheme->allDetailForms());

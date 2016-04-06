@@ -2,6 +2,7 @@
 // ------------------------------------------------------ C O N S T A N T S
 
 include_once("./dbConfig.php");
+require_once("html.php");
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -384,11 +385,11 @@ class cDbScheme implements iDbScheme
   
   public function allDetailForms() 
   {
-    foreach ($this->tables as $name=>$table) {
-      $result.=
-        $table->detailForm().br();      
+    $tableTabs = new cHtmlTabControl($dbName."Admin");
+	foreach ($this->tables as $name=>$table) {
+	  $tableTabs->addTab($name, $table->detailForm());
     }
-    return $result;
+    return $tableTabs->display();
   }
 }
 
