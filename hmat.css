@@ -5,9 +5,22 @@ select {
 }
 
 input {
+   border: 0px;
+   margin: 2px;
 	background-color: #dfefff;
 	height: 20px;
 	margin-top: 5px;
+}
+
+#tabAdminProject {
+	color: fuchsia;
+}
+#tabButtonAdminProject {
+	background-color: fuchsia;
+}
+
+#idAddress {
+	visibility: hidden;
 }
 
 #AddressName {
@@ -15,5 +28,8 @@ input {
 }
 
 #LabelAddressName {
-	font-style: italic;
+   padding-left: 20px;
+   display: inline-block;
+   min-width: 300px;
+	font-size: 22px;
 }

@@ -20,9 +20,13 @@ function linkCss($cssFileName) {
   return "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssFileName\">";
 }
 
+function charset($charset="UTF-8") {
+  return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
+}
+ 
 // ------------------------------------------------------ I N T E R F A C E
 // common ancestor for all Html elements on a page
-interface iHtmlControl {
+interface iHtmlElement {
   public function setAttribute($name, $value);
   public function display();
 }
@@ -43,6 +47,9 @@ interface iHtmlInput {
 }
                       
 interface iHtmlSelect {
+  public function setSelected();
+  public function addOption($option, $value, $color);
+  public function displayOptions();
   public function display();
 }
                  
@@ -52,6 +59,7 @@ interface iHtmlForm {
 
 interface iHtmlTabControl {
   public function __construct ($name="");
+  public function setSelected($tabName);
   public function addTab($name, $content);	
   public function display();
 }   
@@ -145,13 +153,15 @@ class cHtmlSelect extends cHtmlElement {
    */
   protected $selected;
   protected $options = array();
+  protected $colors = array();
   
   public function setSelected($value) {
 	$this->selected = $value;
   }
   
-  public function addOption($option, $value) {
+  public function addOption($option, $value, $color="#FFFFFF") {
 	$this->options[$option] = $value;
+	$this->colors[$option] = $color;
   }
   
   public function displayOptions() {
@@ -160,6 +170,7 @@ class cHtmlSelect extends cHtmlElement {
       $result.=
         "<OPTION ".
 		  ($value==$this->selected?" SELECTED":"").
+		  " STYLE=\"background-color:".$this->colors[$option].";\"".
 		  " VALUE=$value>".
 		  $option.
 		"</OPTION>";
@@ -172,7 +183,7 @@ class cHtmlSelect extends cHtmlElement {
       "<SELECT".
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[NAME].
-      "/>".
+      ">".
         $this->displayOptions().
       "</SELECT>";
   }

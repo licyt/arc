@@ -13,6 +13,7 @@ interface iDbField
   public function setTableName($name);
   public function getName();
   public function isForeignKey();
+  public function foreignTableName();
   public function getHtmlControl();
 }
 
@@ -63,6 +64,10 @@ class cDbField implements iDbField
     return $this->properties[Field];
   }
   
+  public function isAutoInc() {
+	return $this->properties[Extra]=="Auto_increment";
+  }
+  
   public function isForeignKey() {
     // PK is a FK if fields name concontains "_id" 
     return 
@@ -72,7 +77,7 @@ class cDbField implements iDbField
 
   public function foreignTableName() {
     $fieldName = $this->getName();
-	return substr($fieldName, 0, strpos($fieldName, "_id"));
+	return substr($fieldName, strpos($fieldName, "_id")+3);
   }
   
   public function setTableName($name) {
@@ -85,12 +90,25 @@ class cDbField implements iDbField
       // use select for foreign keys
       $htmlControl = new cHtmlSelect;
 	  $htmlControl->setSelected($value);
-	  $ftName = $this->foreignTableName();
-	  $query = "SELECT id".$ftName.", ".$ftName."Name".     // tbd: possibly change lookupField name
-	    " FROM ".$ftName;
+	  $ftName = $this->foreignTableName(); 
+	  $query = 
+	    "SELECT id".$ftName.", ".
+		  $ftName."Name". 
+		  ($ftName=="Status" ? ", StatusColor" : "").
+	    " FROM ".$ftName.
+		// Status - additional filter for StatusType
+		($ftName=="Status"
+		  ? " WHERE StatusType=\"".$this->tableName."\""
+		  : ""
+		);
+	  // push options
 	  if ($result = mysql_query($query)) {
 		while ($row = mysql_fetch_array($result))
-		$htmlControl->addOption($row[$ftName."Name"], $row["id".$ftName]);
+		$htmlControl->addOption(
+		  $row[$ftName."Name"], 
+		  $row["id".$ftName], 
+		  ($ftName=="Status" ? $row[StatusColor] : "")
+		);
 	  }
     } else {
       // use input for other fields
@@ -241,7 +259,7 @@ class cDbTable implements iDbTable
 		  }
 		  break;
 	  }
-	  
+
 	  // execute SQL
 	  if ($result = mysql_query($query)) {
 		// adjust table position
@@ -266,7 +284,6 @@ class cDbTable implements iDbTable
 	    exit;      
 	  } 
     }
-
   }
   
   public function printFields() {
