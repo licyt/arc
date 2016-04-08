@@ -23,10 +23,11 @@ interface iDbTable
   public function __construct($tableName="");
   public function loadFields();
   public function getFieldByName($fieldName); 
+  public function getFieldIndex($fieldName);
   public function getCurrentRecord();
   public function getNumRecords();
   public function go($index);
-  public function setStatus($status);
+  public function setMode($mode);
   public function setName($name);
   public function insert($record);
   public function update($record);
@@ -147,7 +148,7 @@ class cDbTable implements iDbTable
   
   protected $at;
   protected $count;
-  protected $status;
+  protected $mode;
   protected $currentRecord;
   
   public function __construct($tableName="") 
@@ -175,11 +176,19 @@ class cDbTable implements iDbTable
     }
   }
   
+  public function getFieldIndex($fieldName) 
+  {
+	foreach ($this->fields as $i => $field) {
+	  if ($field->getName()==$fieldName) return $i;
+	}
+  }
+  
   public function getFieldByName($fieldName) 
   {
-	foreach ($fields as $i => $field) {
+	foreach ($this->fields as $i => $field) {
 	  if ($field->getName()==$fieldName) return $field;
 	}
+	return nil;
   }
 
   public function getCurrentRecord() 
@@ -208,20 +217,20 @@ class cDbTable implements iDbTable
     $_SESSION[table][$this->name][at] = $this->at;
   }
   
-  function setStatus($status) 
+  function setMode($mode) 
   {
-    $this->status = strtoupper($status);
-    $_SESSION[table][$this->name][status] = $this->status;
+    $this->mode = strtoupper($mode);
+    $_SESSION[table][$this->name][mode] = $this->mode;
   }
   
   public function loadSession() 
   {
-    // get table STATUS from session 
-    if ($_SESSION[table][$this->name][status]) {
-      $this->status = $_SESSION[table][$this->name][status];
+    // get table MODE from session 
+    if ($_SESSION[table][$this->name][mode]) {
+      $this->mode = $_SESSION[table][$this->name][mode];
     } else {
-	  // or set status to "BROWSE" by default
-      $this->setStatus("BROWSE");
+	  // or set mode to "BROWSE" by default
+      $this->setMode("BROWSE");
     }
 
     // get table POSITION from session 
@@ -287,46 +296,46 @@ class cDbTable implements iDbTable
   public function navigator() 
   {
     // display first button
-    if (($this->status == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
+    if (($this->mode == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
       $button = new cHtmlInput($this->name."First", "SUBMIT", "|< First");
       $result .= $button->display();
     }
     // display prev button
-    if (($this->status == "BROWSE")&&($this->count > 2)&&($this->at > 2)) {
+    if (($this->mode == "BROWSE")&&($this->count > 2)&&($this->at > 2)) {
       $button = new cHtmlInput($this->name."Prev", "SUBMIT", "< Prev");
       $result .= $button->display();
     }
     // display insert button
-    if ($this->status == "BROWSE") {
+    if ($this->mode == "BROWSE") {
       $button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
       $result .= $button->display();
     }
     // display update button
-    if (($this->status == "BROWSE")&&($this->at)) {
+    if (($this->mode == "BROWSE")&&($this->at)) {
       $button = new cHtmlInput($this->name."Update", "SUBMIT", "* Edit");
       $result .= $button->display();
     }
     // display delete button
-    if (($this->status == "BROWSE")&&($this->at)) {
+    if (($this->mode == "BROWSE")&&($this->at)) {
       $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x Delete");
       $result .= $button->display();
     }
     // display ok & cancel buttons
-    if (($this->status == "INSERT") ||
-	    ($this->status == "UPDATE") ||
-		($this->status == "DELETE")) {
+    if (($this->mode == "INSERT") ||
+	    ($this->mode == "UPDATE") ||
+		($this->mode == "DELETE")) {
       $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
       $result .= $button->display();
     }
     // display next button
-    if (($this->status == "BROWSE")&&($this->at<($this->count-1))) {
+    if (($this->mode == "BROWSE")&&($this->at<($this->count-1))) {
       $button = new cHtmlInput($this->name."Next", "SUBMIT", "Next >");
       $result .= $button->display();
     }
     // display last button
-    if (($this->status == "BROWSE")&&($this->at < $this->count)) {
+    if (($this->mode == "BROWSE")&&($this->at < $this->count)) {
       $button = new cHtmlInput($this->name."Last", "SUBMIT", "Last >|");
       $result .= $button->display();
     }
@@ -341,15 +350,15 @@ class cDbTable implements iDbTable
     if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1);
     if ($_POST[$this->name."Last"])  $this->go($this->count);
 
-    if ($_POST[$this->name."Insert"]) $this->setStatus("INSERT"); // + Add
-    if ($_POST[$this->name."Update"]) $this->setStatus("UPDATE"); // * Edit
-    if ($_POST[$this->name."Delete"]) $this->setStatus("DELETE"); // x Delete
-    if ($_POST[$this->name."Cancel"]) $this->setStatus("BROWSE"); // Cancel
+    if ($_POST[$this->name."Insert"]) $this->setMode("INSERT"); // + Add
+    if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
+    if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Delete
+    if ($_POST[$this->name."Cancel"]) $this->setMode("BROWSE"); // Cancel
 
-    if ($this->status!="INSERT") $this->getCurrentRecord();
+    if ($this->mode!="INSERT") $this->getCurrentRecord();
     
     if ($_POST[$this->name."Ok"]) {                               // Ok 
-	  switch ($this->status) {
+	  switch ($this->mode) {
         // build SQL 
 		case "DELETE" :
 		  $query = "DELETE FROM ".$this->name.
@@ -365,8 +374,8 @@ class cDbTable implements iDbTable
                 $fieldName." = \"".$_POST[$fieldName]."\"";
             } 
           }
-		  // choose SQL keyword depending on status
-		  switch ($this->status) {
+		  // choose SQL keyword depending on mode
+		  switch ($this->mode) {
 			case "INSERT" :
               $query = "INSERT INTO ".$this->name.
 			    " SET ".$assign;
@@ -383,7 +392,7 @@ class cDbTable implements iDbTable
 	  // execute SQL
 	  if ($result = mysql_query($query)) {
 		// adjust table position
-		switch ($this->status) { 
+		switch ($this->mode) { 
 		  case "INSERT" :
 			$this->count++;
 			$this->at = $this->count;
@@ -395,9 +404,22 @@ class cDbTable implements iDbTable
 			$_SESSION[table][$this->name][at] = $this->at;
 			break;
 		}
-		// return to BROWSE mode
-	    $this->setStatus("BROWSE");
 		$this->getCurrentRecord();
+	    // log any status change 
+		$fieldName = $this->name."_idStatus";
+		if ($field = $this->getFieldByName($fieldName)) {
+		  $fieldIndex = $this->getFieldIndex($fieldName);
+		  $query=
+		    "INSERT INTO StatusLog".
+		    " SET ".
+			  "StatusLog_idTableName=".$this->at.", ".
+			  "StatusLog_idStatus=".$this->currentRecord[$fieldIndex];
+		  if ($resuld=mysql_query($query)) {
+			
+		  }
+		}
+		// return to BROWSE mode
+	    $this->setMode("BROWSE");
 	  } else {
 	    // sql error handling
 	    echo "Could not run query $query : ". mysql_error();
@@ -434,7 +456,7 @@ class cDbScheme implements iDbScheme
     if ($this->dbLink = mysql_connect($dbServerName, $dbUser, $dbPassword)) 
     {
     } 
-    else die('Not connected : ' . mysql_error());
+    else echo 'Not connected : ' . mysql_error();
   }
   
   // select database schema to work with
@@ -456,9 +478,15 @@ class cDbScheme implements iDbScheme
           // register all table objects in tables property of this object
           $this->tables[$tableName] = $table;
         }
-      } else die("oops ".mysql_error());
+      } else {
+		echo "oops ".mysql_error();
+		exit;
+	  }
     } 
-    else echo "oops ".mysql_error();
+    else {
+	  echo "oops ".mysql_error();
+	  exit;
+	}
   }
   
   public function allDetailForms() 

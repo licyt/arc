@@ -41,13 +41,17 @@ interface iHtmlSpan {
   public function display();
 }   
    
-interface iHtmlInput {
+interface iHtmlLabel {
   public function display();
+}    
+
+interface iHtmlInput {
   public function __construct ($id="", $type="", $value="");
+  public function display();
 }
                       
 interface iHtmlSelect {
-  public function setSelected();
+  public function setSelected($value);
   public function addOption($option, $value, $color);
   public function displayOptions();
   public function display();
@@ -84,7 +88,7 @@ class cHtmlElement  {
 }
 
 // implement interface iHtmlDiv
-class cHtmlDiv extends cHtmlElement 
+class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 { 
   public function __construct ($id="") {
 	$this->setAttribute("ID", $id);
@@ -101,7 +105,7 @@ class cHtmlDiv extends cHtmlElement
 }
 
 // implement interface iHtmlDiv
-class cHtmlSpan extends cHtmlElement 
+class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 { 
   public function __construct ($id="") {
 	$this->setAttribute("ID", $id);
@@ -117,7 +121,8 @@ class cHtmlSpan extends cHtmlElement
   }
 }
 
-class cHtmlInput extends cHtmlElement {
+class cHtmlInput extends cHtmlElement implements iHtmlInput
+{
   /**
    * Attributes
    *   ID
@@ -146,7 +151,8 @@ class cHtmlInput extends cHtmlElement {
   }
 }
 
-class cHtmlSelect extends cHtmlElement {
+class cHtmlSelect extends cHtmlElement implements iHtmlSelect
+{
   /**
    * Attributes
    *   ID
@@ -189,7 +195,8 @@ class cHtmlSelect extends cHtmlElement {
   }
 }
 
-class cHtmlLabel extends cHtmlElement {
+class cHtmlLabel extends cHtmlElement implements iHtmlLabel
+{
   /**
    * Attributes
    *   ID      
@@ -209,7 +216,8 @@ class cHtmlLabel extends cHtmlElement {
 }
 
 // implement interface iHtmlForm
-class cHtmlForm extends cHtmlElement {
+class cHtmlForm extends cHtmlElement implements iHtmlForm
+{
   /**
    * Attributes
    *   ID   
@@ -232,7 +240,8 @@ class cHtmlForm extends cHtmlElement {
 }                   
 
 // implement interface cHtmlTabControl
-class cHtmlTabControl extends cHtmlElement {
+class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
+{
   protected $name;
   protected $tabs;
   protected $selected;
