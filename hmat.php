@@ -3,6 +3,8 @@
 session_start();
 
 require_once("database.php");
+require_once("status.php");
+
 
 echo 
   head(

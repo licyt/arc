@@ -5,12 +5,16 @@
             <File name="dbConfig.php" />
             <File name="hmat.php" />
             <File name="html.php" />
+            <File name="status.php" />
         </Folder>
         <Folder name="css">
             <File name="hmat.css" />
         </Folder>
         <Folder name="sql">
             <File name="hmat.sql" />
+        </Folder>
+        <Folder name="mwb">
+            <File name="hmat.mwb" />
         </Folder>
     </Project>
 </NotepadPlus>
