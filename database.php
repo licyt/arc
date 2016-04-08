@@ -20,16 +20,20 @@ interface iDbField
 // Declare the interface iDbTable
 interface iDbTable
 {
+  public function __construct($tableName="");
   public function loadFields();
+  public function getFieldByName($fieldName); 
   public function getCurrentRecord();
   public function getNumRecords();
   public function go($index);
   public function setStatus($status);
   public function setName($name);
+  public function insert($record);
+  public function update($record);
   public function printFields();
-  public function detailForm();
   public function navigator();
-	//public function getFieldByName($fieldName);
+  public function respondToNavigator();
+  public function detailForm();
 }  
 
 // Declare the interface iDbSchema
@@ -138,14 +142,21 @@ class cDbField implements iDbField
 class cDbTable implements iDbTable
 {
   protected $name;
+  
   protected $fields = array(); 
   
   protected $at;
   protected $count;
   protected $status;
   protected $currentRecord;
+  
+  public function __construct($tableName="") 
+  {
+	$this->setName($tableName);
+  }
 
-  public function loadFields() {
+  public function loadFields() 
+  {
     // get list of fields for a table from database
     $query = "SHOW COLUMNS FROM ".$this->name;
     $result = mysql_query($query);
@@ -163,8 +174,16 @@ class cDbTable implements iDbTable
       }
     }
   }
+  
+  public function getFieldByName($fieldName) 
+  {
+	foreach ($fields as $i => $field) {
+	  if ($field->getName()==$fieldName) return $field;
+	}
+  }
 
-  public function getCurrentRecord() {
+  public function getCurrentRecord() 
+  {
 	// get current record from database
 	if ($this->at) {
 	  $query = "SELECT * FROM ".$this->name." LIMIT ".($this->at-1).",1";
@@ -174,7 +193,8 @@ class cDbTable implements iDbTable
 	return $this->currentRecord;
   }  
   
-  public function getNumRecords() {
+  public function getNumRecords() 
+  {
     // number of records in this table
     $query = "SELECT * FROM ".$this->name;
     $result = mysql_query($query);
@@ -182,24 +202,21 @@ class cDbTable implements iDbTable
 	return $this->count;
    }
    
-  public function go($index) {
+  public function go($index) 
+  {
     $this->at = $index;
     $_SESSION[table][$this->name][at] = $this->at;
   }
   
-  function setStatus($status) {
+  function setStatus($status) 
+  {
     $this->status = strtoupper($status);
     $_SESSION[table][$this->name][status] = $this->status;
   }
-
-  public function setName($name)
+  
+  public function loadSession() 
   {
-    // initialize table from database
-    $this->name = $name;
-    $this->loadFields();
-    $this->getNumRecords();
-
-    // get last table STATUS from session 
+    // get table STATUS from session 
     if ($_SESSION[table][$this->name][status]) {
       $this->status = $_SESSION[table][$this->name][status];
     } else {
@@ -213,8 +230,111 @@ class cDbTable implements iDbTable
     } else {
 	  // or set position to 0 by default
       $this->go(0);
-    }
+    }	  
+  }
 
+  public function setName($name)
+  {
+    // initialize table from database
+    $this->name = $name;
+    $this->loadFields();
+    $this->getNumRecords();
+
+    $this->loadSession();
+	$this->respondToNavigator();
+  }
+  
+  private function assignSQL($record) 
+  {
+	foreach ($record as $fieldName=>$value) {
+      // is there a field by this name
+	  if ($field=$this->getFieldByName($fieldName)) {
+        $assign.=($assign?", ":"").
+	      "$fieldName = \"$value\"";
+	  }
+	}
+	return $assign;
+  }
+  
+  public function insert($record) {
+	$query = 
+	  "INSERT INTO ".$this->name.
+	  " SET ".$this->assignSQL($record);
+	if ($result = mysql_query($query)) {
+		
+	}
+  }
+  
+  public function update($record) {
+	$query = 
+	  "UPDATE ".$this->name.
+	  " SET ".$this->assignSQL($record).
+	  " WHERE id".$this->name."=".$record["id".$this->name];
+	if ($result = mysql_query($query)) {
+		
+	}
+  }
+
+  public function printFields() {
+    // display each field as a html control on a separate line
+    foreach ($this->fields as $i => $field) {
+      if ($this->count) $value = $this->currentRecord[$i];      
+      $result .= $this->fields[$i]->getHtmlControl($value).br();
+    }   
+    return $result;   
+  }
+
+  public function navigator() 
+  {
+    // display first button
+    if (($this->status == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
+      $button = new cHtmlInput($this->name."First", "SUBMIT", "|< First");
+      $result .= $button->display();
+    }
+    // display prev button
+    if (($this->status == "BROWSE")&&($this->count > 2)&&($this->at > 2)) {
+      $button = new cHtmlInput($this->name."Prev", "SUBMIT", "< Prev");
+      $result .= $button->display();
+    }
+    // display insert button
+    if ($this->status == "BROWSE") {
+      $button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
+      $result .= $button->display();
+    }
+    // display update button
+    if (($this->status == "BROWSE")&&($this->at)) {
+      $button = new cHtmlInput($this->name."Update", "SUBMIT", "* Edit");
+      $result .= $button->display();
+    }
+    // display delete button
+    if (($this->status == "BROWSE")&&($this->at)) {
+      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x Delete");
+      $result .= $button->display();
+    }
+    // display ok & cancel buttons
+    if (($this->status == "INSERT") ||
+	    ($this->status == "UPDATE") ||
+		($this->status == "DELETE")) {
+      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
+      $result .= $button->display();
+      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
+      $result .= $button->display();
+    }
+    // display next button
+    if (($this->status == "BROWSE")&&($this->at<($this->count-1))) {
+      $button = new cHtmlInput($this->name."Next", "SUBMIT", "Next >");
+      $result .= $button->display();
+    }
+    // display last button
+    if (($this->status == "BROWSE")&&($this->at < $this->count)) {
+      $button = new cHtmlInput($this->name."Last", "SUBMIT", "Last >|");
+      $result .= $button->display();
+    }
+    return $result;
+  }
+
+  public function respondToNavigator() 
+  {
 	// respond to navigator buttons
     if ($_POST[$this->name."First"]) $this->go(1);
     if ($_POST[$this->name."Prev"])  $this->go($_SESSION[table][$this->name][at]-1);
@@ -283,67 +403,9 @@ class cDbTable implements iDbTable
 	    echo "Could not run query $query : ". mysql_error();
 	    exit;      
 	  } 
-    }
+    }	  
   }
   
-  public function printFields() {
-    // display each field as a html control on a separate line
-    foreach ($this->fields as $i => $field) {
-      if ($this->count) $value = $this->currentRecord[$i];      
-      $result .= $this->fields[$i]->getHtmlControl($value).br();
-    }   
-    return $result;   
-  }
-
-  public function navigator() 
-  {
-    // display first button
-    if (($this->status == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
-      $button = new cHtmlInput($this->name."First", "SUBMIT", "|< First");
-      $result .= $button->display();
-    }
-    // display prev button
-    if (($this->status == "BROWSE")&&($this->count > 2)&&($this->at > 2)) {
-      $button = new cHtmlInput($this->name."Prev", "SUBMIT", "< Prev");
-      $result .= $button->display();
-    }
-    // display insert button
-    if ($this->status == "BROWSE") {
-      $button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
-      $result .= $button->display();
-    }
-    // display update button
-    if (($this->status == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput($this->name."Update", "SUBMIT", "* Edit");
-      $result .= $button->display();
-    }
-    // display delete button
-    if (($this->status == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x Delete");
-      $result .= $button->display();
-    }
-    // display ok & cancel buttons
-    if (($this->status == "INSERT") ||
-	    ($this->status == "UPDATE") ||
-		($this->status == "DELETE")) {
-      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
-      $result .= $button->display();
-      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
-      $result .= $button->display();
-    }
-    // display next button
-    if (($this->status == "BROWSE")&&($this->at<($this->count-1))) {
-      $button = new cHtmlInput($this->name."Next", "SUBMIT", "Next >");
-      $result .= $button->display();
-    }
-    // display last button
-    if (($this->status == "BROWSE")&&($this->at < $this->count)) {
-      $button = new cHtmlInput($this->name."Last", "SUBMIT", "Last >|");
-      $result .= $button->display();
-    }
-    return $result;
-  }
-
   public function detailForm()
   {
     $form = new cHtmlForm();
@@ -390,8 +452,7 @@ class cDbScheme implements iDbScheme
         while ($row = mysql_fetch_array($result)) {
           // create cDbTable object for each database table
           $tableName=$row["Tables_in_$dbName"];
-          $table = new cDbTable;
-          $table->setName($tableName);
+          $table = new cDbTable($tableName, $this);
           // register all table objects in tables property of this object
           $this->tables[$tableName] = $table;
         }
