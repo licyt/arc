@@ -2,7 +2,7 @@
 // This script generates css file that implements tag hidding for idLabelTag and idInputTag
 //
 // USAGE: Run in browser and copy+paste the output into desired css file
-//
+//...
 
 include_once ("./database.php");
 include_once("./dbConfig.php");
