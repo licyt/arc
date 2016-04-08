@@ -144,7 +144,7 @@ class cDbTable implements iDbTable
 {
   protected $name;
   
-  protected $fields = array(); 
+  public $fields = array(); 
   
   protected $at;
   protected $count;
@@ -448,7 +448,7 @@ class cDbTable implements iDbTable
 class cDbScheme implements iDbScheme 
 {
   protected $dbLink;
-  protected $tables = array();
+  public $tables = array();
   
   // create link to MySQL database 
   public function link ($dbServerName, $dbUser, $dbPassword)
