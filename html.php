@@ -294,4 +294,37 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   }
 }
 
+class cHtmlTable 
+{
+  protected $headers = array();
+  protected $rows  = array();
+  
+  // $columns is array of values
+  public function addHeader(array $columns) {
+	array_push($this->headers, $columns);
+  }
+  public function addRow(array $columns) {
+	// var_dump( $columns );
+	array_push($this->rows, $columns);
+  }
+  public function display() {
+	// add headers
+	foreach ($this->headers as $i=>$columns) {
+	  $header = "";
+	  foreach ($columns as $j=>$value) {
+		$header.="<TH>$value</TH>";
+	  }
+	  $table.="<TR>$header</TR>";
+	}
+	// add rows 
+	foreach ($this->rows as $i=>$columns) {
+	  $row = "";
+	  foreach ($columns as $j=>$value) {
+		$row.="<TD>$value</TD>";
+	  }
+	  $table.="<TR>$row</TR>";
+	}
+	return "<TABLE>$table</TABLE>";
+  }
+}
 ?>

@@ -70,7 +70,7 @@ class cDbField implements iDbField
   }
   
   public function isAutoInc() {
-	return $this->properties[Extra]=="Auto_increment";
+	return $this->properties[Extra]=="auto_increment";
   }
   
   public function isForeignKey() {
@@ -142,14 +142,19 @@ class cDbField implements iDbField
 // Implement the interface iDbTable
 class cDbTable implements iDbTable
 {
-  protected $name;
-  
-  public $fields = array(); 
-  
-  protected $at;
-  protected $count;
-  protected $mode;
-  protected $currentRecord;
+  protected $name;  
+  public $fields = array();   
+  // parameters for navigation
+  protected $at;									// index of current record
+  protected $count;									// total count of records
+  protected $mode;									// object operational mode BROWSE/INSERT/UPDATE/DELETE
+  protected $currentRecord;                        
+  // browser parameters
+  protected $columnNames = array();
+  protected $ftNames = array();
+  protected $start;									// browser starting position
+  protected $rowCount;								// number of rows in browser
+  protected $order;
   
   public function __construct($tableName="") 
   {
@@ -442,6 +447,59 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
+  
+  public function browseForm() 
+  {
+	// load list of columns for browser from list of fields
+	foreach ($this->fields as $i=>$field) {
+	  if ($field->isAutoInc()) {
+	    array_push($this->columnNames, $field->getName());
+	  } else if ($field->isForeignKey()) {
+		// this field is a foreign key, display Name from referenced table
+		$ftName = $field->foreignTableName();
+		array_push($this->columnNames, $ftName.".$ftName"."Name");
+		array_push($this->ftNames, $ftName);
+	  } else {
+	    array_push($this->columnNames, $field->getName());
+	  }
+	}
+	// add column for action buttons at the end
+	array_push($this->columnName, "Action");
+    // column names
+	foreach ($this->columnNames as $i=>$columnName) {
+	  $columns .= ($columns?", ":"").$columnName;
+	}
+	// foreign table names
+	foreach ($this->ftNames as $i=>$ftName) {
+	  $ftNames .= ", ".$ftName;
+	  $where .= ($where?" AND ":" WHERE ")."(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
+	}
+	// build SQL
+	$query = 
+	  "SELECT ".$columns.
+	  " FROM ".$this->name.$ftNames.
+	  $where;
+	// echo $query;
+	// create output as html table
+	$table = new cHtmlTable();
+	$table->addHeader($this->columnNames);
+	if ($dbResult = mysql_query($query)) {
+	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
+		$table->addRow($dbRow);
+	  }
+	}
+	mysql_free_result($result);
+	// include table in form
+    $form = new cHtmlForm();
+    $form->setAttribute("ID", "browseForm".$this->name);
+    $form->setAttribute("ACTION", "");
+    $form->setAttribute("METHOD", "POST");
+    $form->setAttribute("CONTENT", 
+	  $this->name." [".$this->at."/".$this->count."]".br().
+      $table->display()
+    );
+    return $form->display();
+  }
 }
 
 //implement the interface iDbScheme
@@ -472,9 +530,8 @@ class cDbScheme implements iDbScheme
       $query = "SHOW TABLES";
       if ($result = mysql_query($query, $this->dbLink)) {
         while ($row = mysql_fetch_array($result)) {
-          // create cDbTable object for each database table
           $tableName=$row["Tables_in_$dbName"];
-          $table = new cDbTable($tableName, $this);
+          $table = new cDbTable($tableName);
           // register all table objects in tables property of this object
           $this->tables[$tableName] = $table;
         }
@@ -493,7 +550,10 @@ class cDbScheme implements iDbScheme
   {
     $tableTabs = new cHtmlTabControl($dbName."Admin");
 	foreach ($this->tables as $name=>$table) {
-	  $tableTabs->addTab($name, $table->detailForm());
+	  $tableTabs->addTab(
+	    $name, 
+		$table->detailForm().$table->browseForm()
+	  ); // addTab
     }
     return $tableTabs->display();
   }

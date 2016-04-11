@@ -9,7 +9,8 @@ require_once("status.php");
 echo 
   head(
     charset().
-	linkCss("hmat.css")
+	linkCss("hmat.css").
+	linkCss("hidetags.css")
   ).
   body(
     $dbScheme->allDetailForms()
