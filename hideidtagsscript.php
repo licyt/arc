@@ -6,8 +6,9 @@
 include_once( "./cssHideIdTags.php" );
 
 $cssFilePath = "";
-$cssFileName = "hidetags.css";
+$cssFileName = "hideIdTags.css";
+$cssFileNameTimeStamps = "hidetimestamps.css";
 
-$css = new cCssHideIdTags( $dbServerName, $dbUser, $dbPassword, $dbName , $cssFilePath , $cssFileName );
-$css->createCssFile();
+$css = new cCssHideIdTags( $dbServerName, $dbUser, $dbPassword, $dbName , $cssFilePath , $cssFileName , $cssFileNameTimeStamps);
+$css->createCssFiles();
 ?>
