@@ -24,6 +24,15 @@ function charset($charset="UTF-8") {
   return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
 }
  
+function buttonSet(array $buttonNames, $setName="") 
+{
+  foreach ($buttonNames as $i=>$buttonName) {
+	$button  = new cHtmlInput("button".$setName.$buttonName, "SUBMIT", $buttonName);
+	$buttonNames[$i]=$button->display();
+  }
+  return $buttonNames;	
+}
+
 // ------------------------------------------------------ I N T E R F A C E
 // common ancestor for all Html elements on a page
 interface iHtmlElement {
@@ -66,6 +75,16 @@ interface iHtmlTabControl {
   public function setSelected($tabName);
   public function addTab($name, $content);	
   public function display();
+}
+
+interface iHtmlJsDatePick {
+  public function setAttribute($name, $value);
+  public function display();	
+}   
+
+interface iHtmlJsColorPick {
+  public function setAttribute($name, $value);
+  public function display();	
 }   
             
 // -------------------------------------------  I M P L E M E N T A T I O N
@@ -176,7 +195,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
       $result.=
         "<OPTION ".
 		  ($value==$this->selected?" SELECTED":"").
-		  " STYLE=\"background-color:".$this->colors[$option].";\"".
+		  " STYLE=\"background-color:#".$this->colors[$option].";\"".
 		  " VALUE=$value>".
 		  $option.
 		"</OPTION>";
@@ -326,5 +345,64 @@ class cHtmlTable
 	}
 	return "<TABLE>$table</TABLE>";
   }
+}
+
+class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
+{
+	// see http://javascriptcalendar.org/javascript-date-picker.php for meaning of various values
+	
+	// Class constructor is same as parent's (cHtmlInput)
+	// public function __construct()
+	
+	// display is overloaded 
+	public function display() {
+		$size=$this->attributes[SIZE];  
+		return
+			"<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"jsDatePick_ltr.min.css\" />".
+			"<script language=\"JavaScript\" type=\"text/javascript\" src=\"jsDatePick.min.1.3.js\"></script>".
+			"<script language=\"JavaScript\" type=\"text/javascript\">".
+			"window.onload = function(){".
+			"new JsDatePick({".
+			"useMode:2,".
+			"target:\"".$this->attributes[ID]."\",".
+			"dateFormat:\"%Y-%m-%d\"".
+			"});".
+			"};".
+			"</script>".
+			"<INPUT".
+			" TYPE=".($this->attributes[TYPE]
+			? $this->attributes[TYPE]
+			: "TEXT").
+			" ID=".$this->attributes[ID].
+			" NAME=".$this->attributes[ID].
+			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
+			($size?" SIZE=$size":"").
+			">";
+	}
+}
+
+class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
+{
+	// see http://jscolor.com/
+	
+	// Class constructor is same as parent's (cHtmlInput)
+	// public function __construct()
+	
+	// display is overloaded 
+	public function display() {
+		$size=$this->attributes[SIZE];  
+		return
+			"<script src=\"jscolor.js\"></script>".
+			"<input  value=\"".$this->attributes[VALUE]."\"". 
+			"class=\"jscolor {closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'} ".
+			" TYPE=".($this->attributes[TYPE]
+			? $this->attributes[TYPE]
+			: "TEXT").
+			" ID=".$this->attributes[ID].
+			" NAME=".$this->attributes[ID].
+			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
+			($size?" SIZE=$size":"").
+			">";
+	}
 }
 ?>

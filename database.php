@@ -13,6 +13,8 @@ interface iDbField
   public function setTableName($name);
   public function getName();
   public function isForeignKey();
+  public function isDateTime();
+  public function isStatusColor();
   public function foreignTableName();
   public function getHtmlControl();
 }
@@ -76,10 +78,17 @@ class cDbField implements iDbField
   public function isForeignKey() {
     // PK is a FK if fields name concontains "_id" 
     return 
-      (strpos($this->properties[Field],"_id")>0) &&
-      ($this->properties[Key]=="PRI");
+      (strpos($this->properties[Field],"_id")>0);
   }
-
+  
+  public function isDateTime() {
+		return ($this->properties[Type] == "datetime");
+  }
+  
+  public function isStatusColor() {
+	return ( $this->properties[Field] == "StatusColor" );
+  }
+  
   public function foreignTableName() {
     $fieldName = $this->getName();
 	return substr($fieldName, strpos($fieldName, "_id")+3);
@@ -116,8 +125,17 @@ class cDbField implements iDbField
 		);
 	  }
     } else {
-      // use input for other fields
-      $htmlControl = new cHtmlInput;
+		if($this->isDateTime()) {
+		  $htmlControl = new cHtmlJsDatePick;
+		}
+		elseif ($this->isStatusColor() )  {
+			//use input for other fields
+			$htmlControl = new cHtmlJsColorPick;
+		}
+		else {
+		  $htmlControl = new cHtmlInput;
+		}
+
       // set input size based on dbField type
       $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
     }
@@ -225,7 +243,13 @@ class cDbTable implements iDbTable
   function setMode($mode) 
   {
     $this->mode = strtoupper($mode);
-    $_SESSION[table][$this->name][mode] = $this->mode;
+    $_SESSION[table][$this->name][mode] = $mode;
+  }
+  
+  public function setOrder($order) 
+  {
+    $this->order = $order;
+	$_SESSION[table][$this->name][order] = $order;
   }
   
   public function loadSession() 
@@ -447,7 +471,6 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
-  
   public function browseForm() 
   {
 	// load list of columns for browser from list of fields
@@ -463,32 +486,39 @@ class cDbTable implements iDbTable
 	    array_push($this->columnNames, $field->getName());
 	  }
 	}
-	// add column for action buttons at the end
-	array_push($this->columnName, "Action");
+    // load order stored in session	
+	$this->order = $_SESSION[table][$this->name][order];
     // column names
 	foreach ($this->columnNames as $i=>$columnName) {
 	  $columns .= ($columns?", ":"").$columnName;
+      // collation order
+	  if (isset($_POST[button.$columnName])) {
+		$this->setOrder($columnName);
+	  }
 	}
 	// foreign table names
 	foreach ($this->ftNames as $i=>$ftName) {
 	  $ftNames .= ", ".$ftName;
-	  $where .= ($where?" AND ":" WHERE ")."(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
+	  $where .= ($where?" AND ":"")."(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
 	}
 	// build SQL
 	$query = 
 	  "SELECT ".$columns.
 	  " FROM ".$this->name.$ftNames.
-	  $where;
-	// echo $query;
+	  ($where ? " WHERE ".$where : "").
+	  ($this->order ? " ORDER BY ".$this->order : "");
 	// create output as html table
 	$table = new cHtmlTable();
-	$table->addHeader($this->columnNames);
+	$table->addHeader(buttonSet($this->columnNames));
 	if ($dbResult = mysql_query($query)) {
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
+		$id = $dbRow["id".$this->name];
+		$button = new cHtmlInput("view".$this->name, "SUBMIT", $id);
+		$dbRow["id".$this->name] = $button->display();
 		$table->addRow($dbRow);
 	  }
+      mysql_free_result($dbResult);
 	}
-	mysql_free_result($result);
 	// include table in form
     $form = new cHtmlForm();
     $form->setAttribute("ID", "browseForm".$this->name);
