@@ -124,21 +124,17 @@ class cDbField implements iDbField
 		  ($ftName=="Status" ? $row[StatusColor] : "")
 		);
 	  }
-    } else {
-		if($this->isDateTime()) {
+    } elseif($this->isDateTime()) {
 		  $htmlControl = new cHtmlJsDatePick;
-		}
-		elseif ($this->isStatusColor() )  {
-			//use input for other fields
+    } elseif ($this->isStatusColor())  {
 			$htmlControl = new cHtmlJsColorPick;
-		}
-		else {
-		  $htmlControl = new cHtmlInput;
-		}
+	} else {
+        //use input for other fields
+		$htmlControl = new cHtmlInput;
+	}
 
-      // set input size based on dbField type
-      $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
-    }
+    // set input size based on dbField type
+    $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
     
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);
@@ -475,13 +471,17 @@ class cDbTable implements iDbTable
   {
 	// load list of columns for browser from list of fields
 	foreach ($this->fields as $i=>$field) {
+	  // autoincrement field
 	  if ($field->isAutoInc()) {
 	    array_push($this->columnNames, $field->getName());
-	  } else if ($field->isForeignKey()) {
-		// this field is a foreign key, display Name from referenced table
+	  
+      // this field is a foreign key, display Name from referenced table
+	  } elseif ($field->isForeignKey()) {
 		$ftName = $field->foreignTableName();
 		array_push($this->columnNames, $ftName.".$ftName"."Name");
 		array_push($this->ftNames, $ftName);
+	  
+	  // other fields
 	  } else {
 	    array_push($this->columnNames, $field->getName());
 	  }
@@ -492,8 +492,15 @@ class cDbTable implements iDbTable
 	foreach ($this->columnNames as $i=>$columnName) {
 	  $columns .= ($columns?", ":"").$columnName;
       // collation order
-	  if (isset($_POST[button.$columnName])) {
+	  if (isset($_POST[$this->name."OrderBy".$columnName])) {
 		$this->setOrder($columnName);
+	  }
+	  // filter
+	  $name = $this->name.$columnName;
+      if (isset($_POST["filter".$name])) $_SESSION["filter".$name] = $_POST["filter".$name];
+	  if ($_SESSION["filter".$name]) {
+		$filter .= ($filter ? " AND " : "").
+		  "($columnName LIKE \"".$_SESSION["filter".$name]."%\")";
 	  }
 	}
 	// foreign table names
@@ -501,15 +508,17 @@ class cDbTable implements iDbTable
 	  $ftNames .= ", ".$ftName;
 	  $where .= ($where?" AND ":"")."(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
 	}
+	// create output as html table
+	$table = new cHtmlTable();
+	$table->addHeader(filterSet($this->columnNames, $this->name));
+	$table->addHeader(buttonSet($this->columnNames, $this->name."OrderBy"));
 	// build SQL
 	$query = 
 	  "SELECT ".$columns.
 	  " FROM ".$this->name.$ftNames.
-	  ($where ? " WHERE ".$where : "").
+	  ($where || $filter ? " WHERE ".$where.($where && $filter ? " AND " : "").$filter : "").
 	  ($this->order ? " ORDER BY ".$this->order : "");
-	// create output as html table
-	$table = new cHtmlTable();
-	$table->addHeader(buttonSet($this->columnNames));
+	//echo $query.br();
 	if ($dbResult = mysql_query($query)) {
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
 		$id = $dbRow["id".$this->name];

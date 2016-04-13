@@ -27,10 +27,23 @@ function charset($charset="UTF-8") {
 function buttonSet(array $buttonNames, $setName="") 
 {
   foreach ($buttonNames as $i=>$buttonName) {
-	$button  = new cHtmlInput("button".$setName.$buttonName, "SUBMIT", $buttonName);
+	$pointPos = strpos($buttonName, ".");
+	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", $buttonName);
 	$buttonNames[$i]=$button->display();
   }
   return $buttonNames;	
+}
+
+function filterSet(array $inputNames, $setName="")
+{
+  foreach ($inputNames as $i=>$inputName) {
+	$name = $setName.$inputName;
+	$filter  = new cHtmlInput("filter".$name, "TEXT", $_SESSION["filter".$name]);
+	$filter->setAttribute("OnChange", "this.form.submit()");
+
+	$inputNames[$i]=$filter->display();
+  }
+  return $inputNames;
 }
 
 // ------------------------------------------------------ I N T E R F A C E
@@ -165,6 +178,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[ID].
         " VALUE=\"".$this->attributes[VALUE]."\"".                                        
+        " OnChange=\"".$this->attributes[OnChange]."\"".                                        
         ($size?" SIZE=$size":"").
       ">";
   }
