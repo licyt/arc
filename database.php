@@ -2,8 +2,8 @@
 // ------------------------------------------------------ C O N S T A N T S
 
 include_once("./dbConfig.php");
-require_once("html.php");
 require_once 'gui.php';
+require_once("html.php");
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField

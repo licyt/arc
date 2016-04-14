@@ -316,10 +316,10 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 	foreach ($this->tabs as $tabName => $content) {
 	  if ($tabName == $this->selected) {
 		$button = new cHtmlSpan("tab".$this->name.$tabName);
-		$button->setAttribute("CONTENT", $tabName);
+		$button->setAttribute("CONTENT", GUI("tabButton".$this->name.$tabName, "ENG", $tabName));
 		$body->setAttribute("CONTENT", $content);
 	  } else {
-        $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", $tabName);
+        $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", GUI("tabButton".$this->name.$tabName, "ENG", $tabName));
 	  }
       $switch.=$button->display();
 	}
