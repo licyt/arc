@@ -3,6 +3,7 @@
 
 include_once("./dbConfig.php");
 require_once("html.php");
+require_once 'gui.php';
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -98,7 +99,7 @@ class cDbField implements iDbField
 	$this->tableName=$name;
   }
   
-  public function getHtmlControl($value="")
+  public function getHtmlControl($value="", $disabled=false)
   {
     if ($this->isForeignKey()) {
       // use select for foreign keys
@@ -139,6 +140,7 @@ class cDbField implements iDbField
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
+    $htmlControl->setAttribute("DISABLED", ($disabled?" DISABLED":""));
     $htmlControl->setAttribute("VALUE", $value);
     
     // create  label
@@ -312,8 +314,9 @@ class cDbTable implements iDbTable
   public function printFields() {
     // display each field as a html control on a separate line
     foreach ($this->fields as $i => $field) {
+      unset($value);
       if ($this->count) $value = $this->currentRecord[$i];      
-      $result .= $this->fields[$i]->getHtmlControl($value).br();
+      $result .= $this->fields[$i]->getHtmlControl($value, $this->mode=="BROWSE").br();
     }   
     return $result;   
   }
@@ -460,7 +463,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-      $this->name." [".$this->at."/".$this->count."]".br().
+      $this->name." [".$this->at."/".$this->count."] ".$this->mode.br().
       $this->printFields().                          
       $this->navigator()
     );
@@ -478,7 +481,10 @@ class cDbTable implements iDbTable
       // this field is a foreign key, display Name from referenced table
 	  } elseif ($field->isForeignKey()) {
 		$ftName = $field->foreignTableName();
-		array_push($this->columnNames, $ftName.".$ftName"."Name");
+		array_push($this->columnNames, $ftName."Name");
+		if ($ftName == "Status") {
+		  array_push($this->columnNames, "StatusColor");
+		}
 		array_push($this->ftNames, $ftName);
 	  
 	  // other fields
@@ -486,48 +492,55 @@ class cDbTable implements iDbTable
 	    array_push($this->columnNames, $field->getName());
 	  }
 	}
-    // load order stored in session	
-	$this->order = $_SESSION[table][$this->name][order];
+	
+    // load order and filter stored in session	
+	$this->order = $_SESSION[table][$this->name][ORDER];
     // column names
 	foreach ($this->columnNames as $i=>$columnName) {
 	  $columns .= ($columns?", ":"").$columnName;
       // collation order
-	  if (isset($_POST[$this->name."OrderBy".$columnName])) {
+	  if (isset($_POST[$this->name."ORDER".$columnName])) {
 		$this->setOrder($columnName);
 	  }
 	  // filter
-	  $name = $this->name.$columnName;
-      if (isset($_POST["filter".$name])) $_SESSION["filter".$name] = $_POST["filter".$name];
-	  if ($_SESSION["filter".$name]) {
+      if (isset($_POST[$this->name."FILTER".$columnName])) {
+      	$_SESSION[table][$this->name]["FILTER"][$columnName] = 
+      	  $_POST[$this->name."FILTER".$columnName];
+      }
+	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
 		$filter .= ($filter ? " AND " : "").
-		  "($columnName LIKE \"".$_SESSION["filter".$name]."%\")";
+		  "($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
 	  }
 	}
+	
 	// foreign table names
 	foreach ($this->ftNames as $i=>$ftName) {
 	  $ftNames .= ", ".$ftName;
-	  $where .= ($where?" AND ":"")."(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
+	  $where .= ($where?" AND ":"").
+	    "(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
 	}
+	
 	// create output as html table
 	$table = new cHtmlTable();
-	$table->addHeader(filterSet($this->columnNames, $this->name));
-	$table->addHeader(buttonSet($this->columnNames, $this->name."OrderBy"));
+	$table->addHeader(inputSet($this->columnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+	$table->addHeader(buttonSet($this->columnNames, $this->name."ORDER"));
 	// build SQL
 	$query = 
 	  "SELECT ".$columns.
 	  " FROM ".$this->name.$ftNames.
 	  ($where || $filter ? " WHERE ".$where.($where && $filter ? " AND " : "").$filter : "").
 	  ($this->order ? " ORDER BY ".$this->order : "");
-	//echo $query.br();
 	if ($dbResult = mysql_query($query)) {
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
-		$id = $dbRow["id".$this->name];
+	  	$id = $dbRow["id".$this->name];
 		$button = new cHtmlInput("view".$this->name, "SUBMIT", $id);
 		$dbRow["id".$this->name] = $button->display();
+		// add row to table
 		$table->addRow($dbRow);
 	  }
       mysql_free_result($dbResult);
 	}
+	
 	// include table in form
     $form = new cHtmlForm();
     $form->setAttribute("ID", "browseForm".$this->name);

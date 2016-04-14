@@ -24,26 +24,25 @@ function charset($charset="UTF-8") {
   return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
 }
  
-function buttonSet(array $buttonNames, $setName="") 
+function buttonSet(array $columnNames, $setName="") 
 {
-  foreach ($buttonNames as $i=>$buttonName) {
-	$pointPos = strpos($buttonName, ".");
+  $newNames = array();
+  foreach ($columnNames as $i=>$buttonName) {
 	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", $buttonName);
-	$buttonNames[$i]=$button->display();
+	$newNames[$i]=$button->display();
   }
-  return $buttonNames;	
+  return $newNames;	
 }
 
-function filterSet(array $inputNames, $setName="")
+function inputSet(array $columnNames, $setName="", $values)
 {
-  foreach ($inputNames as $i=>$inputName) {
-	$name = $setName.$inputName;
-	$filter  = new cHtmlInput("filter".$name, "TEXT", $_SESSION["filter".$name]);
+  $newNames = array();
+  foreach ($columnNames as $i=>$inputName) {
+	$filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
 	$filter->setAttribute("OnChange", "this.form.submit()");
-
-	$inputNames[$i]=$filter->display();
+	$newNames[$i]=$filter->display();
   }
-  return $inputNames;
+  return $newNames;
 }
 
 // ------------------------------------------------------ I N T E R F A C E
@@ -177,6 +176,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
           : "TEXT").
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[ID].
+        $this->attributes[DISABLED].
         " VALUE=\"".$this->attributes[VALUE]."\"".                                        
         " OnChange=\"".$this->attributes[OnChange]."\"".                                        
         ($size?" SIZE=$size":"").
@@ -191,6 +191,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
    *   ID
    */
   protected $selected;
+  protected $selectedColor;
   protected $options = array();
   protected $colors = array();
   
@@ -206,6 +207,9 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
   public function displayOptions() {
 	$result = "<OPTION VALUE=0></OPTION>";
     foreach ($this->options as $option => $value) {
+      if ($value == $this->selected) {
+	    $this->selectedColor = $this->colors[$option];		  
+	  }
       $result.=
         "<OPTION ".
 		  ($value==$this->selected?" SELECTED":"").
@@ -218,12 +222,15 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
   }
 
   public function display() {
+	$options = $this->displayOptions();
     return
       "<SELECT".
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[NAME].
+        $this->attributes[DISABLED].
+        " STYLE=\"background-color:#".$this->selectedColor.";\"".
       ">".
-        $this->displayOptions().
+        $options.
       "</SELECT>";
   }
 }
@@ -333,29 +340,36 @@ class cHtmlTable
   protected $rows  = array();
   
   // $columns is array of values
-  public function addHeader(array $columns) {
+  public function addHeader($columns) {
 	array_push($this->headers, $columns);
   }
-  public function addRow(array $columns) {
+  public function addRow($columns) {
 	// var_dump( $columns );
 	array_push($this->rows, $columns);
   }
   public function display() {
-	// add headers
-	foreach ($this->headers as $i=>$columns) {
-	  $header = "";
-	  foreach ($columns as $j=>$value) {
-		$header.="<TH>$value</TH>";
+  	$table = "";
+	// display headers
+	foreach ($this->headers as $headerIndex=>$header) {
+	  $html = "";
+	  foreach ($header as $columnName=>$value) {
+	  	if (strpos($value, "StatusColor")) continue;
+	  	$html.="<TH>$value</TH>";
 	  }
-	  $table.="<TR>$header</TR>";
+	  $table.="<TR>$html</TR>";
 	}
-	// add rows 
-	foreach ($this->rows as $i=>$columns) {
-	  $row = "";
-	  foreach ($columns as $j=>$value) {
-		$row.="<TD>$value</TD>";
+	// display rows 
+	foreach ($this->rows as $rowIndex=>$row) {
+	  $html = "";
+	  foreach ($row as $columnName=>$value) {
+	  	unset($style);
+	  	if ($columnName == "StatusName") {
+	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
+	  	}
+	  	if ($columnName == "StatusColor") continue;
+		$html.="<TD $style>$value</TD>";
 	  }
-	  $table.="<TR>$row</TR>";
+	  $table.="<TR>$html</TR>";
 	}
 	return "<TABLE>$table</TABLE>";
   }
