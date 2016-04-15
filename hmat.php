@@ -3,14 +3,12 @@
 session_start();
 
 require_once("database.php");
-require_once("status.php");
-
 
 echo 
   head(
     charset().
 	linkCss("hmat.css").
-	linkCss("hidetags.css")
+	linkCss("hideIdTags.css")
   ).
   body(
     $dbScheme->allDetailForms()
