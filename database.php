@@ -174,7 +174,6 @@ class cDbTable implements iDbTable
   protected $columns;
   protected $order;
   protected $filter;
-  protected $loaded;
   
   public function __construct($tableName="") 
   {
@@ -183,6 +182,8 @@ class cDbTable implements iDbTable
 
   public function loadFields() 
   {
+  	// clear list of fields
+  	foreach ($this->fields as $i=>$field) unset($this->fields[$i]);
     // get list of fields for a table from database
     $query = "SHOW COLUMNS FROM ".$this->name;
     $result = mysql_query($query);
@@ -218,7 +219,7 @@ class cDbTable implements iDbTable
 
   public function getCurrentRecord() 
   {
-  	$this->loadColumns();
+  	$this->loadColumns(false);
 	if ($this->at) {
 	  $query = $this->buildSQL()." LIMIT ".($this->at-1).",1";
 	  if ($result = mysql_query($query)) {
@@ -320,9 +321,7 @@ class cDbTable implements iDbTable
   public function printFields() {
     // display each field as a html control on a separate line
     foreach ($this->fields as $i => $field) {
-      unset($value);
-      if ($this->count) $value = $this->currentRecord[$i];      
-      $result .= $this->fields[$i]->getHtmlControl($value, $this->mode=="BROWSE").br();
+      $result .= $this->fields[$i]->getHtmlControl($this->currentRecord[$i], $this->mode=="BROWSE").br();
     }   
     return $result;   
   }
@@ -478,32 +477,30 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
-  public function loadColumns() 
+  public function loadColumns($useForeignFields=true) 
   {
-    // this function can load only once!
-  	if ($this->loaded) return;
-    $this->loaded = true;
+  	// empty list of columns and foreign_tables
+  	foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
+  	foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
   	// load list of columns for browser from list of fields
 	foreach ($this->fields as $i=>$field) {
-	  // autoincrement field
-	  if ($field->isAutoInc()) {
-	    array_push($this->columnNames, $field->getName());
-	  
-      // this field is a foreign key, display Name from referenced table
-	  } elseif ($field->isForeignKey()) {
-		$ftName = $field->foreignTableName();
+	  array_push($this->columnNames, $field->getName());
+	  if ($useForeignFields && $field->isForeignKey()) {
+        // this field is a foreign key, display Name from referenced table
+	  	$ftName = $field->foreignTableName();
 		array_push($this->columnNames, $ftName."Name");
 		if ($ftName == "Status") {
 		  array_push($this->columnNames, "StatusColor");
 		}
 		array_push($this->ftNames, $ftName);
-	  
-	  // other fields
-	  } else {
-	    array_push($this->columnNames, $field->getName());
 	  }
 	}
-  	
+  }
+  
+  public function buildSQL() 
+  {
+    $this->columns = "";
+  	$this->filter = "";
   	// load order and filter stored in session
   	$this->order = $_SESSION[table][$this->name][order];
   	// column names
@@ -523,10 +520,7 @@ class cDbTable implements iDbTable
   			"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
   		}
   	}
-  }
-  
-  public function buildSQL() 
-  {
+  	
   	// foreign table names as string to SQL
 	$ftNames = "";
 	$fkConstraints = "";
@@ -546,7 +540,10 @@ class cDbTable implements iDbTable
   	  		  $this->filter 
   	  	: ""
   	  ).
-  	  ($this->order ? " ORDER BY ".$this->order : "");
+  	  ($this->order //&& strpos($this->columns, $this->order) 
+  	    ? " ORDER BY ".$this->order 
+  	  	: ""
+  	  );
     return $query;
   }
   

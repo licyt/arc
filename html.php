@@ -212,8 +212,11 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
 	  }
       $result.=
         "<OPTION ".
-		  ($value==$this->selected?" SELECTED":"").
-		  " STYLE=\"background-color:#".$this->colors[$option].";\"".
+		  (($value==$this->selected) ? " SELECTED" : "").
+		  ($this->colors[$option]
+		    ? " STYLE=\"background-color:#".$this->colors[$option].";\""
+		  	: ""
+		  ).
 		  " VALUE=$value>".
 		  $option.
 		"</OPTION>";
@@ -228,8 +231,11 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[NAME].
         $this->attributes[DISABLED].
-        " STYLE=\"background-color:#".$this->selectedColor.";\"".
-		" OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\"".
+        ($this->selectedColor
+          ? " STYLE=\"background-color:#".$this->selectedColor.";\"".
+		    " OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\""
+          : ""
+        ).
       ">".
         $options.
       "</SELECT>";
@@ -355,6 +361,7 @@ class cHtmlTable
 	  $html = "";
 	  foreach ($header as $columnName=>$value) {
 	  	if (strpos($value, "StatusColor")) continue;
+	  	if (strpos($value, "_id")) continue;
 	  	$html.="<TH>$value</TH>";
 	  }
 	  $table.="<TR>$html</TR>";
@@ -368,7 +375,8 @@ class cHtmlTable
 	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
 	  	}
 	  	if ($columnName == "StatusColor") continue;
-		$html.="<TD $style>$value</TD>";
+	  	if (strpos($columnName, "_id")) continue;
+	  	$html.="<TD $style>$value</TD>";
 	  }
 	  $table.="<TR>$html</TR>";
 	}
