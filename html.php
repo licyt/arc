@@ -229,6 +229,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
         " NAME=".$this->attributes[NAME].
         $this->attributes[DISABLED].
         " STYLE=\"background-color:#".$this->selectedColor.";\"".
+		" OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\"".
       ">".
         $options.
       "</SELECT>";

@@ -170,7 +170,11 @@ class cDbTable implements iDbTable
   protected $ftNames = array();
   protected $start;									// browser starting position
   protected $rowCount;								// number of rows in browser
+  // build SQL substrings
+  protected $columns;
   protected $order;
+  protected $filter;
+  protected $loaded;
   
   public function __construct($tableName="") 
   {
@@ -214,11 +218,12 @@ class cDbTable implements iDbTable
 
   public function getCurrentRecord() 
   {
-	// get current record from database
+  	$this->loadColumns();
 	if ($this->at) {
-	  $query = "SELECT * FROM ".$this->name." LIMIT ".($this->at-1).",1";
-	  $result = mysql_query($query);
-	  $this->currentRecord = mysql_fetch_row($result);
+	  $query = $this->buildSQL()." LIMIT ".($this->at-1).",1";
+	  if ($result = mysql_query($query)) {
+	    $this->currentRecord = mysql_fetch_row($result);
+	  }
 	}	  
 	return $this->currentRecord;
   }  
@@ -226,16 +231,17 @@ class cDbTable implements iDbTable
   public function getNumRecords() 
   {
     // number of records in this table
-    $query = "SELECT * FROM ".$this->name;
-    $result = mysql_query($query);
-    $this->count = mysql_num_rows($result);
+    $query = "SELECT id".$this->name." FROM ".$this->name;
+    if ($result = mysql_query($query)) {
+      $this->count = mysql_num_rows($result);
+    }
 	return $this->count;
-   }
-   
+  }
+  
   public function go($index) 
   {
     $this->at = $index;
-    $_SESSION[table][$this->name][at] = $this->at;
+    $_SESSION[table][$this->name][at] = $index;
   }
   
   function setMode($mode) 
@@ -382,7 +388,9 @@ class cDbTable implements iDbTable
     if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
     if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Delete
     if ($_POST[$this->name."Cancel"]) $this->setMode("BROWSE"); // Cancel
-
+    
+    if ($_POST["go".$this->name]) $this->go($_POST["go".$this->name]);
+    
     if ($this->mode!="INSERT") $this->getCurrentRecord();
     
     if ($_POST[$this->name."Ok"]) {                               // Ok 
@@ -470,9 +478,12 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
-  public function browseForm() 
+  public function loadColumns() 
   {
-	// load list of columns for browser from list of fields
+    // this function can load only once!
+  	if ($this->loaded) return;
+    $this->loaded = true;
+  	// load list of columns for browser from list of fields
 	foreach ($this->fields as $i=>$field) {
 	  // autoincrement field
 	  if ($field->isAutoInc()) {
@@ -492,48 +503,68 @@ class cDbTable implements iDbTable
 	    array_push($this->columnNames, $field->getName());
 	  }
 	}
-	
-    // load order and filter stored in session	
-	$this->order = $_SESSION[table][$this->name][ORDER];
-    // column names
-	foreach ($this->columnNames as $i=>$columnName) {
-	  $columns .= ($columns?", ":"").$columnName;
-      // collation order
-	  if (isset($_POST[$this->name."ORDER".$columnName])) {
-		$this->setOrder($columnName);
-	  }
-	  // filter
-      if (isset($_POST[$this->name."FILTER".$columnName])) {
-      	$_SESSION[table][$this->name]["FILTER"][$columnName] = 
-      	  $_POST[$this->name."FILTER".$columnName];
-      }
-	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
-		$filter .= ($filter ? " AND " : "").
-		  "($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
-	  }
-	}
-	
-	// foreign table names
+  	
+  	// load order and filter stored in session
+  	$this->order = $_SESSION[table][$this->name][order];
+  	// column names
+  	foreach ($this->columnNames as $i=>$columnName) {
+  		$this->columns .= ($this->columns?", ":"").$columnName;
+  		// collation order
+  		if (isset($_POST[$this->name."ORDER".$columnName])) {
+  			$this->setOrder($columnName);
+  		}
+  		// filter
+  		if (isset($_POST[$this->name."FILTER".$columnName])) {
+  			$_SESSION[table][$this->name]["FILTER"][$columnName] =
+  			$_POST[$this->name."FILTER".$columnName];
+  		}
+  		if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
+  			$this->filter .= ($this->filter ? " AND " : "").
+  			"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
+  		}
+  	}
+  }
+  
+  public function buildSQL() 
+  {
+  	// foreign table names as string to SQL
+	$ftNames = "";
+	$fkConstraints = "";
 	foreach ($this->ftNames as $i=>$ftName) {
 	  $ftNames .= ", ".$ftName;
-	  $where .= ($where?" AND ":"").
+	  $fkConstraints .= ($fkConstraints?" AND ":"").
 	    "(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
 	}
-	
+  	
+  	$query =
+      "SELECT ".$this->columns.
+  	  " FROM ".$this->name.$ftNames.
+  	  ($fkConstraints || $this->filter
+  		? " WHERE ".
+  	  		  $fkConstraints.
+  	  		  ($fkConstraints && $this->filter ? " AND ": "").
+  	  		  $this->filter 
+  	  	: ""
+  	  ).
+  	  ($this->order ? " ORDER BY ".$this->order : "");
+    return $query;
+  }
+  
+  public function browseForm() 
+  {
+	$columns = $this->loadColumns();
+		
 	// create output as html table
 	$table = new cHtmlTable();
 	$table->addHeader(inputSet($this->columnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
 	$table->addHeader(buttonSet($this->columnNames, $this->name."ORDER"));
-	// build SQL
-	$query = 
-	  "SELECT ".$columns.
-	  " FROM ".$this->name.$ftNames.
-	  ($where || $filter ? " WHERE ".$where.($where && $filter ? " AND " : "").$filter : "").
-	  ($this->order ? " ORDER BY ".$this->order : "");
-	if ($dbResult = mysql_query($query)) {
+	
+	if ($dbResult = mysql_query($this->buildSQL())) {
+	  $i = 0;
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
 	  	$id = $dbRow["id".$this->name];
-		$button = new cHtmlInput("view".$this->name, "SUBMIT", $id);
+	  	$i++;
+		$button = new cHtmlInput("go".$this->name, "SUBMIT", $i);
 		$dbRow["id".$this->name] = $button->display();
 		// add row to table
 		$table->addRow($dbRow);
