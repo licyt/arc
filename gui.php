@@ -1,6 +1,6 @@
 <?php
 
-function GUI($element, $attribute, $default='') {
+function gui($element, $attribute, $default='') {
   $query = "SELECT GUIvalue FROM GUI ".
     "WHERE GUIelement=\"$element\" AND GUIattribute=\"$attribute\"";
   if ($dbResult =  mysql_query($query)) {

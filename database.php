@@ -77,7 +77,7 @@ class cDbField implements iDbField
   }
   
   public function isForeignKey() {
-    // PK is a FK if fields name concontains "_id" 
+    // fields name concontains "_id" 
     return 
       (strpos($this->properties[Field],"_id")>0);
   }
@@ -108,7 +108,7 @@ class cDbField implements iDbField
 	  $ftName = $this->foreignTableName(); 
 	  $query = 
 	    "SELECT id".$ftName.", ".
-		  $ftName."Name". 
+		  $ftName.gui("table".$ftName, "lookupField", "Name"). 
 		  ($ftName=="Status" ? ", StatusColor" : "").
 	    " FROM ".$ftName.
 		// Status - additional filter for StatusType
@@ -120,7 +120,7 @@ class cDbField implements iDbField
 	  if ($result = mysql_query($query)) {
 		while ($row = mysql_fetch_array($result))
 		$htmlControl->addOption(
-		  $row[$ftName."Name"], 
+		  $row[$ftName.gui("table".$ftName, "lookupField", "Name")], 
 		  $row["id".$ftName], 
 		  ($ftName=="Status" ? $row[StatusColor] : "")
 		);
@@ -628,11 +628,19 @@ class cDbScheme implements iDbScheme
   
   public function allDetailForms() 
   {
-    $tableTabs = new cHtmlTabControl($dbName."Admin");
+  	$tableTabs = new cHtmlTabControl($dbName."Admin");
+  	foreach ($this->tables as $name=>$table) {
+	  if ($_POST[tabButtonAdmin.$name]) {
+	  	$_SESSION[tabControl][Admin][selected] = $name;
+	  }
+  	}
 	foreach ($this->tables as $name=>$table) {
 	  $tableTabs->addTab(
-	    $name, 
-		$table->detailForm().$table->browseForm()
+        $name, 
+        ($_SESSION[tabControl][Admin][selected] == $name
+	      ? $table->detailForm().$table->browseForm()
+          : ""
+        )
 	  ); // addTab
     }
     return $tableTabs->display();
