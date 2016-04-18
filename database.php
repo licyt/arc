@@ -174,10 +174,12 @@ class cDbTable implements iDbTable
   protected $columns;
   protected $order;
   protected $filter;
+  protected $parentLimit;							// this is a subtable for a parent with given id
   
-  public function __construct($tableName="") 
+  public function __construct($tableName="", $parentLimit="") 
   {
 	$this->setName($tableName);
+	$this->parentLimit = $parentLimit;
   }
 
   public function loadFields() 
@@ -474,7 +476,32 @@ class cDbTable implements iDbTable
       $this->printFields().                          
       $this->navigator()
     );
-    return $form->display();
+    return $form->display().$this->subBrowsers();
+  }
+  
+  public function hasForeignTable($ftName) 
+  {
+  	foreach ($this->fields as $name=>$field) {
+  	  if ($field->getName() == $this->name."_id".$ftName) return true;
+  	}
+  	return false;
+  }
+  
+  public function subBrowsers() 
+  {
+  	$browsers = new cHtmlTabControl;
+  	$query = "show tables";
+  	$browsers->addTab("sb".$this->name.$this->name, $this->browseForm());
+  	if ($dbResult = mysql_query($query)) {
+  	  while ($dbRow = mysql_fetch_row($dbResult)) {
+  	  	$ftable = new cDbTable($dbRow[0], "AND (".$this->name.".id".$this->name." = ".$this->currentRecord[0].")");
+  	  	if ($ftable->hasForeignTable($this->name)) {
+  	  		$browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browseForm()); 
+  	  	}
+  	  	unset($ftable);
+  	  }
+  	}
+  	return $browsers->display();
   }
   
   public function loadColumns($useForeignFields=true) 
@@ -488,7 +515,7 @@ class cDbTable implements iDbTable
 	  if ($useForeignFields && $field->isForeignKey()) {
         // this field is a foreign key, display Name from referenced table
 	  	$ftName = $field->foreignTableName();
-		array_push($this->columnNames, $ftName."Name");
+		array_push($this->columnNames, $ftName.gui("table".$ftName, "lookupField", "Name"));
 		if ($ftName == "Status") {
 		  array_push($this->columnNames, "StatusColor");
 		}
@@ -535,7 +562,7 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name.$ftNames.
   	  ($fkConstraints || $this->filter
   		? " WHERE ".
-  	  		  $fkConstraints.
+  	  		  $fkConstraints.$this->parentLimit.
   	  		  ($fkConstraints && $this->filter ? " AND ": "").
   	  		  $this->filter 
   	  	: ""
@@ -638,7 +665,7 @@ class cDbScheme implements iDbScheme
 	  $tableTabs->addTab(
         $name, 
         ($_SESSION[tabControl][Admin][selected] == $name
-	      ? $table->detailForm().$table->browseForm()
+	      ? $table->detailForm()
           : ""
         )
 	  ); // addTab

@@ -19,6 +19,13 @@ CODE
 
 
 $_SESSION
+["table"]					- session data for a database table
+	[tableName]
+		["at"]				- position of current record
+		["order"]			- order collation for browser
+		["filter"]			- filter for browser (stored as value for each field 
+			[fieldName]
+
 
 
 $_POST
