@@ -1,0 +1,29 @@
+DATABASE
+
+table fields:
+idTable				unique record identificator autoincrement
+Table_idFTable		foreign key - identificator in foreign table
+TableField          all field names start with table name
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+CODE
+
+
+$_SESSION
+
+
+$_POST
+
+
+gui attributes:
+ENG					english text displayed for html element
+lookupField			field name in foreing table to be displayed in lookup dropdown and browser
