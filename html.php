@@ -20,6 +20,10 @@ function linkCss($cssFileName) {
   return "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssFileName\">";
 }
 
+function linkJs($jsFileName) {
+	return "<script language=\"JavaScript\" type=\"text/javascript\" src=\"".$jsFileName."\"></script>";
+}
+
 function charset($charset="UTF-8") {
   return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
 }
@@ -395,23 +399,13 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 	public function display() {
 		$size=$this->attributes[SIZE];  
 		return
-			"<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"jsDatePick_ltr.min.css\" />".
-			"<script language=\"JavaScript\" type=\"text/javascript\" src=\"jsDatePick.min.1.3.js\"></script>".
-			"<script language=\"JavaScript\" type=\"text/javascript\">".
-			"window.onload = function(){".
-			"new JsDatePick({".
-			"useMode:2,".
-			"target:\"".$this->attributes[ID]."\",".
-			"dateFormat:\"%Y-%m-%d\"".
-			"});".
-			"};".
-			"</script>".
 			"<INPUT".
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
+			" OnClick=\"jsCalendarWrapper(this);\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
@@ -429,9 +423,7 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 	public function display() {
 		$size=$this->attributes[SIZE];  
 		return
-			"<script src=\"jscolor.js\"></script>".
 			"<input  value=\"".$this->attributes[VALUE]."\"". 
-			"class=\"jscolor {closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'} ".
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
@@ -439,6 +431,8 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			" NAME=".$this->attributes[ID].
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
+			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
+			" OnChange=\"updateColor(this)\"".
 			">";
 	}
 }
