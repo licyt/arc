@@ -182,7 +182,14 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         " NAME=".$this->attributes[ID].
         $this->attributes[DISABLED].
         " VALUE=\"".$this->attributes[VALUE]."\"".                                        
-        " OnChange=\"".$this->attributes[OnChange]."\"".                                        
+        ($this->attributes[OnChange]
+          ? " OnChange=\"".$this->attributes[OnChange]."\""
+          : ""
+        ).                                        
+        ($this->attributes[OnClick]
+          ? " OnClick=\"".$this->attributes[OnClick]."\""
+          : ""
+        ).                                        
         ($size?" SIZE=$size":"").
       ">";
   }
