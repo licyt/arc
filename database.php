@@ -125,11 +125,7 @@ class cDbField implements iDbField
 		  ($ftName=="Status" ? $row[StatusColor] : "")
 		);
 	  }
-    } elseif($this->isDateTime()) {
-		  $htmlControl = new cHtmlJsDatePick;
-    } elseif ($this->isStatusColor())  {
-			$htmlControl = new cHtmlJsColorPick;
-	} else {
+    } else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}
