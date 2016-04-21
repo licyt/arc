@@ -9,6 +9,8 @@ echo
     charset().
 	linkCss("hmat.css").
 	linkCss("hideIdTags.css").
+  	linkCss("tabHeadAdminInput.css").
+  	linkCss("tabHeadAdminSpan.css").
   	linkCss("jsDatePick_ltr.min.css").
   	linkJs("jsDatePick.min.1.3.js").
   	linkJs("jscolor.js").

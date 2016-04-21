@@ -1,0 +1,259 @@
+#tabAdminProject {
+	color: #00CCFF;
+	background-color: black;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	width: 1200px;
+}
+
+/* #tabAdminCustomer { */
+/* 	color: #00CC33; */
+/* 	background-color: #00CC33; */
+/* 	border: 0 none; */
+/* 	height: 20px; */
+/* 	margin: 5px 2px 2px; */
+/* 	padding: 0px 6px 0px 6px; */
+/* } */
+#tabAdminIndustry {
+	color: #99FF66;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 0px;
+	width: 80px;
+}
+
+#tabAdminCompany {
+	color: #66FF66;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 80px;
+	width: 80px;
+}
+
+#tabAdminAccount {
+	color: #DDDDDD;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 60px;
+	left: 80px;
+	width: 80px;
+}
+
+#tabAdminAddress {
+	color: #CCCCCC;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 60px;
+	left: 160px;
+	width: 80px;
+}
+
+#tabAdminPerson {
+	color: #99FF66;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 160px;
+	width: 80px;
+}
+
+#tabAdminQuote {
+	color: #FF6600;
+	background-color: black;
+	position: absolute;
+	top: 20px;
+	left: 240px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	width: 240px;
+}
+
+#tabAdminDataSet {
+	color: #B2B2B2;
+	background-color: black;
+	position: absolute;
+	top: 40px;
+	left: 240px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	width: 120px;
+}
+
+#tabAdminPart {
+	color: #B2B2B2;
+	background-color: black;
+	position: absolute;
+	top: 60px;
+	left: 250px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	width: 100px;
+}
+
+#tabAdminPrintParameters {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	width: 120px;
+	position: absolute;
+	top: 40px;
+	left: 360px;
+}
+
+#tabAdminDemand {
+	color: #FF3333;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 20px;
+	left: 480px;
+	width: 240px;
+}
+
+#tabAdminPlatform {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 480px;
+	width: 120px;
+}
+
+#tabAdminPlatform_has_Part {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 600px;
+	width: 120px;
+}
+
+#tabAdminBuild {
+	color: #FFFF00;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 20px;
+	left: 720px;
+	width: 120px;
+}
+
+#tabAdminDeliveryNote {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 840px;
+	width: 120px;
+}
+
+#tabAdminDeliveryTransport {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 960px;
+	width: 120px;
+}
+
+#tabAdminInvoice {
+	color: #99FFFF;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 20px;
+	left: 1080px;
+	width: 120px;
+}
+
+#tabAdminNote {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 0px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabAdminStatus {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 20px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabAdminStatusLog {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 40px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabAdminGUI {
+	color: #B2B2B2;
+	background-color: black;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	position: absolute;
+	top: 60px;
+	left: 1220px;
+	width: 80px;
+}

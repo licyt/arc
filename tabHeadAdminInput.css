@@ -1,0 +1,324 @@
+/*
+-- PROJECT 00CCFF
+	-- CUSTOMER 00CC33 ???not in HTML, is replaced by COMPANY
+			-- INDUSTRY 99FF66 
+			-- COMPANY 66FF66 ???is instead of CUSTOMER
+					-- ACCOUNT DDDDDD
+					-- ADDRESS CCCCCC
+			-- PERSON 00CC00	
+	-- QUOTE FF6600
+			-- DATASET B2B2B2
+					-- PART B2B2B2
+			-- PRINTPARAMETERS B2B2B2
+	-- ORDER(DEMAND) FF3333
+			-- PLATFORM B2B2B2
+			-- PLATFORM HAS PART B2B2B2
+	-- BUILD FF0000
+			-- DELIVERY NOTE B2B2B2
+			-- DELIVERY TRANSPORT B2B2B2
+	-- INVOICE 99FFFF
+
+-- STATUS B2B2B2
+-- STATUS LOG B2B2B2
+-- GUI B2B2B2
+-- NOTE B2B2B2
+*/
+body {
+	font-family: Tahoma;
+	font-style: normal;
+	font-size: 12px;
+}
+
+span {
+	font-family: Tahoma;
+	font-style: normal;
+	font-size: 12px;
+	text-align: center;
+}
+
+#tabHeadAdmin {
+	/* 	max-width: 600px; */
+	margin: 0 auto;
+	height: 100px;
+}
+
+#tabButtonAdminProject {
+	color: black;
+	background-color: #00CCFF;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	width: 1200px;
+}
+/*
+#tabButtonAdminCustomer {
+		background-color: #00CC33;
+		    border: 0 none;
+    height: 20px;
+    margin: 5px 2px 2px;
+    padding: 0px 6px 0px 6px;
+} 
+*/
+#tabButtonAdminIndustry {
+	color: black;
+	background-color: #99FF66;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 0px;
+	width: 80px;
+}
+
+#tabButtonAdminCompany {
+	color: black;
+	background-color: #66FF66;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 80px;
+	width: 80px;
+}
+
+#tabButtonAdminAccount {
+	color: black;
+	background-color: #DDDDDD;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 60px;
+	left: 80px;
+	width: 80px;
+}
+
+#tabButtonAdminAddress {
+	color: black;
+	background-color: #CCCCCC;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 60px;
+	left: 160px;
+	width: 80px;
+}
+
+#tabButtonAdminPerson {
+	color: black;
+	background-color: #99FF66;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 160px;
+	width: 80px;
+}
+
+#tabButtonAdminQuote {
+	color: black;
+	background-color: #FF6600;
+	position: absolute;
+	top: 20px;
+	left: 240px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	width: 240px;
+}
+
+#tabButtonAdminDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	position: absolute;
+	top: 40px;
+	left: 240px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	width: 120px;
+}
+
+#tabButtonAdminPart {
+	color: black;
+	background-color: #B2B2B2;
+	position: absolute;
+	top: 60px;
+	left: 250px;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	width: 100px;
+}
+
+#tabButtonAdminPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	width: 120px;
+	position: absolute;
+	top: 40px;
+	left: 360px;
+}
+
+#tabButtonAdminDemand {
+	color: black;
+	background-color: #FF3333;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 20px;
+	left: 480px;
+	width: 240px;
+}
+
+#tabButtonAdminPlatform {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 480px;
+	width: 120px;
+}
+
+#tabButtonAdminPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 600px;
+	width: 120px;
+}
+
+#tabButtonAdminBuild {
+	color: black;
+	background-color: #FFFF00;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 20px;
+	left: 720px;
+	width: 120px;
+}
+
+#tabButtonAdminDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 840px;
+	width: 120px;
+}
+
+#tabButtonAdminDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 960px;
+	width: 120px;
+}
+
+#tabButtonAdminInvoice {
+	color: black;
+	background-color: #99FFFF;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 20px;
+	left: 1080px;
+	width: 120px;
+}
+
+#tabButtonAdminNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 0px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabButtonAdminStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 20px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabButtonAdminStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 40px;
+	left: 1220px;
+	width: 80px;
+}
+
+#tabButtonAdminGUI {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	margin: 5px 2px 2px;
+	padding: 0px 6px 0px 6px;
+	position: absolute;
+	top: 60px;
+	left: 1220px;
+	width: 80px;
+}
