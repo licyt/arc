@@ -7,19 +7,11 @@
 	border: 0 none;
 	height: 14px;
 	margin: 5px 2px 2px;
-	width: 1194px;
+	width: 1074px;
 	border-style: solid;
 	border-width: 3px;
 }
 
-/* #tabAdminCustomer { */
-/* 	color: #00CC33; */
-/* 	background-color: #00CC33; */
-/* 	border: 0 none; */
-/* 	height: 14px; */
-/* 	margin: 5px 2px 2px; */
-/* 	padding: 0px 6px 0px 6px; */
-/* } */
 #tabAdminIndustry {
 	color: black;
 	background-color: #99FF66;
@@ -109,7 +101,7 @@
 	background-color: #B2B2B2;
 	position: absolute;
 	top: 40px;
-	left: 240px;
+	left: 480px;
 	border: 0 none;
 	height: 14px;
 	margin: 5px 2px 2px;
@@ -123,7 +115,7 @@
 	background-color: #B2B2B2;
 	position: absolute;
 	top: 60px;
-	left: 250px;
+	left: 490px;
 	border: 0 none;
 	height: 14px;
 	margin: 5px 2px 2px;
@@ -141,7 +133,7 @@
 	width: 114px;
 	position: absolute;
 	top: 40px;
-	left: 354px;
+	left: 360px;
 	border-style: solid;
 	border-width: 3px;
 }
@@ -168,7 +160,7 @@
 	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
-	left: 480px;
+	left: 720px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
@@ -210,7 +202,7 @@
 	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
-	left: 840px;
+	left: 960px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
@@ -224,7 +216,7 @@
 	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
-	left: 960px;
+	left: 840px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
@@ -238,7 +230,7 @@
 	margin: 5px 2px 2px;
 	position: absolute;
 	top: 20px;
-	left: 1080px;
+	left: 960px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;

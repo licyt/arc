@@ -28,6 +28,7 @@ input {
 	background-color: #dddddd;
 	height: 20px;
 	margin-top: 5px;
+  font-size: 12px;
 }
 
 input:disabled {
@@ -36,4 +37,9 @@ input:disabled {
 
 td {
   font-size: 12px;
+}
+
+span {
+  font-size: 12px;
+  text-align: center;	
 }
