@@ -137,6 +137,13 @@ class cDbField implements iDbField
 	  	    "document.getElementById('MasterId').value=$value;"
 	  	);
 	  }
+    } elseif (($this->getName()=="StatusType") || ($this->getName()=="NoteTable")) {
+    	$htmlControl = new cHtmlSelect;
+    	$htmlControl->setSelected($value);
+    	$dbResult = mysql_query("SHOW TABLES");
+    	while ($dbRow = mysql_fetch_row($dbResult)) {
+    	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
+    	}
     } else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
@@ -265,8 +272,15 @@ class cDbTable implements iDbTable
   
   public function hasForeignTable($ftName) 
   {
-  	foreach ($this->fields as $name=>$field) {
+  	foreach ($this->fields as $i=>$field) {
   	  if ($field->getName() == $this->name."_id".$ftName) return true;
+  	}
+  	return false;
+  }
+  
+  public function hasStatusField() {
+  	foreach ($this->fields as $i=>$field) {
+  	  if ($field->getName() == $this->name."_idStatus") return true;
   	}
   	return false;
   }
@@ -596,11 +610,12 @@ class cDbTable implements iDbTable
   public function subBrowsers() 
   {
   	$browsers = new cHtmlTabControl;
-  	$query = "show tables";
   	$browsers->addTab("sb".$this->name.$this->name, $this->browseForm());
+  	
+  	$query = "show tables";
   	if ($dbResult = mysql_query($query)) {
   	  while ($dbRow = mysql_fetch_row($dbResult)) {
-  	  	$ftable = new cDbTable($dbRow[0], "AND (".$this->name.".id".$this->name." = ".$this->currentRecord[0].")");
+  	  	$ftable = new cDbTable($dbRow[0], " AND (".$this->name.".id".$this->name." = ".$this->currentRecord[0].")");
   	    $tableSwitch = new cHtmlInput("MasterTable", "HIDDEN", $dbRow[0]);
   	  	if ($ftable->hasForeignTable($this->name)) {
   	  		$browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browseForm($tableSwitch->display())); 
@@ -608,6 +623,27 @@ class cDbTable implements iDbTable
   	  	unset($ftable);
   	  }
   	}
+  	
+  	// history of statuses for current record
+  	if ($this->hasStatusField()) {
+  	  $ftable = new cDbTable("StatusLog", 
+  	  	" AND (Status.StatusType = ".$this->name.")".
+  	    " AND (StatusLog.StatusLogRowId = ".$this->currentRecordId.")"
+  	  );
+  	  $tableSwitch = new cHtmlInput("MasterTable", "HIDDEN", "Status");
+      $browsers->addTab("sb".$this->name."Status", $ftable->browseForm($tableSwitch->display()));
+  	  unset($ftable);
+  	}
+    
+    // notes for current record
+  	$ftable = new cDbTable("Note", 
+  	  " AND (Note.NoteTable = ".$this->name.")".
+	  " AND (Note.NoteRowId = ".$this->currentRecordId.")"
+	);
+  	$tableSwitch = new cHtmlInput("MasterTable", "HIDDEN", "Note");
+    $browsers->addTab("sb".$this->name."Note", $ftable->browseForm($tableSwitch->display()));
+  	unset($ftable);
+  	
   	return $browsers->display();
   }
   

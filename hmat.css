@@ -33,3 +33,7 @@ input {
 input:disabled {
 	color: black;
 }
+
+td {
+  font-size: 12px;
+}
