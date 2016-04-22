@@ -1,0 +1,590 @@
+#tabsbProjectProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbProjectQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbQuoteQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPrintParametersQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbQuoteDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPrintParametersDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDataSetDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbQuoteDemand {
+	color: black;
+	background-color: #FF3333;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDemandDemand {
+	color: black;
+	background-color: #FF3333;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusDemand {
+	color: black;
+	background-color: #FF3333;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDemandInvoice {
+	color: black;
+	background-color: #99FFFF;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbInvoiceInvoice {
+	color: black;
+	background-color: #99FFFF;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusInvoice {
+	color: black;
+	background-color: #99FFFF;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbBuildBuild {
+	color: black;
+	background-color: #FF0000;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPlatformBuild {
+	color: black;
+	background-color: #FF0000;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbInvoiceDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryNoteDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbIndustryIndustry {
+	color: black;
+	background-color: #99FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbIndustryCompany {
+	color: black;
+	background-color: #66FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyCompany {
+	color: black;
+	background-color: #66FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyAccount {
+	color: black;
+	background-color: #DDDDDD;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbAccountAccount {
+	color: black;
+	background-color: #DDDDDD;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyAddress {
+	color: black;
+	background-color: #CCCCCC;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbAddressAddress {
+	color: black;
+	background-color: #CCCCCC;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyPerson {
+	color: black;
+	background-color: #00CC00;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPersonPerson {
+	color: black;
+	background-color: #00CC00;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPrintParametersPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPrintParametersPart {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDataSetPart {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPartPart {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusPart {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPlatform_has_PartPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPlatformPlatform {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryTransportDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryNoteDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbNoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusLogStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbGUIGUI {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}

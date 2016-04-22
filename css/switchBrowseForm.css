@@ -1,0 +1,79 @@
+#browseFormProject {
+	border: 1px solid #00CCFF;
+}
+
+#browseFormQuote {
+	border: 1px solid #FF6600;
+}
+
+#browseFormDataSet {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormDemand {
+	border: 1px solid #FF3333;
+}
+
+#browseFormInvoice {
+	border: 1px solid #99FFFF;
+}
+
+#browseFormBuild {
+	border: 1px solid #FF0000;
+}
+
+#browseFormDeliveryNote {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormIndustry {
+	border: 1px solid #99FF66;
+}
+
+#browseFormCompany {
+	border: 1px solid #66FF66;
+}
+
+#browseFormAccount {
+	border: 1px solid #DDDDDD;
+}
+
+#browseFormAddress {
+	border: 1px solid #CCCCCC;
+}
+
+#browseFormPerson {
+	border: 1px solid #00CC00;
+}
+
+#browseFormPrintParameters {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormPart {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormPlatform_has_Part {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormDeliveryTransport {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormNote {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormStatus {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormStatusLog {
+	border: 1px solid #B2B2B2;
+}
+
+#browseFormGUI {
+	border: 1px solid #B2B2B2;
+}

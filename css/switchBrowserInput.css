@@ -1,0 +1,492 @@
+#tabButtonsbProjectProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+	/* 	position: absolute; */
+}
+
+#tabButtonsbCompanyProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbProjectQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbQuoteQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPrintParametersQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbQuoteDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPrintParametersDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDataSetDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbQuoteDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDemandDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDemandInvoice {
+	color: black;
+	background-color: #99FFFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbInvoiceInvoice {
+	color: black;
+	background-color: #99FFFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusInvoice {
+	color: black;
+	background-color: #99FFFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbBuildBuild {
+	color: black;
+	background-color: #FF0000;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPlatformBuild {
+	color: black;
+	background-color: #FF0000;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbInvoiceDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryNoteDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbIndustryIndustry {
+	color: black;
+	background-color: #99FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbIndustryCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbCompanyCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbCompanyAccount {
+	color: black;
+	background-color: #DDDDDD;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbAccountAccount {
+	color: black;
+	background-color: #DDDDDD;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbCompanyAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbAddressAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbCompanyPerson {
+	color: black;
+	background-color: #00CC00;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPersonPerson {
+	color: black;
+	background-color: #00CC00;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPrintParametersPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPrintParametersPart {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDataSetPart {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPartPart, #tabButtonsbStatusPart {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPlatform_has_PartPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPlatformPlatform {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryTransportDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryNoteDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbNoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusLogStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbGUIGUI {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
