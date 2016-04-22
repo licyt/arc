@@ -242,6 +242,10 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[NAME].
         $this->attributes[DISABLED].
+        ($this->attributes[OnClick]
+          ? " OnClick=\"".$this->attributes[OnClick]."\""
+          : ""
+        ).
         ($this->selectedColor
           ? " STYLE=\"background-color:#".$this->selectedColor.";\"".
 		    " OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\""
@@ -268,7 +272,7 @@ class cHtmlLabel extends cHtmlElement implements iHtmlLabel
         " ID=".$this->attributes[ID].
         " FOR=".$this->attributes[TARGET].
       ">".
-        $this->attributes[VALUE].
+        gui($this->attributes[ID], "ENG", $this->attributes[VALUE]).
       "</LABEL>";
   }
 }

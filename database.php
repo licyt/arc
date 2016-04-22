@@ -11,7 +11,7 @@ interface iDbField
 {
   public function __construct($column="");
   public function setProperties($properties); 
-  public function setTableName($name);
+  public function setTable($name);
   public function getName();
   public function isForeignKey();
   public function isDateTime();
@@ -23,8 +23,10 @@ interface iDbField
 // Declare the interface iDbTable
 interface iDbTable
 {
-  public function __construct($tableName="");
+  public function __construct($table, $parentLimit="");
   public function loadFields();
+  public function getMode();
+  public function getName();
   public function getFieldByName($fieldName); 
   public function getFieldIndex($fieldName);
   public function getCurrentRecord();
@@ -53,7 +55,7 @@ interface iDbScheme
 class cDbField implements iDbField
 {
   protected $properties = array();
-  protected $tableName;
+  protected $table = cDbTable;
   
   public function __construct($column="") 
   {
@@ -95,8 +97,8 @@ class cDbField implements iDbField
 	return substr($fieldName, strpos($fieldName, "_id")+3);
   }
   
-  public function setTableName($name) {
-	$this->tableName=$name;
+  public function setTable($table) {
+	$this->table=$table;
   }
   
   public function getHtmlControl($value="", $disabled=false)
@@ -113,7 +115,7 @@ class cDbField implements iDbField
 	    " FROM ".$ftName.
 		// Status - additional filter for StatusType
 		($ftName=="Status"
-		  ? " WHERE StatusType=\"".$this->tableName."\""
+		  ? " WHERE StatusType=\"".$this->table->getName()."\""
 		  : ""
 		);
 	  // push options
@@ -124,6 +126,16 @@ class cDbField implements iDbField
 		  $row["id".$ftName], 
 		  ($ftName=="Status" ? $row[StatusColor] : "")
 		);
+	  }
+	  // add button for parent table
+	  if ($this->table->getMode()=="BROWSE") {
+	  	$htmlButton = new cHtmlInput("", "SUBMIT", "...");
+	  	$htmlButton->setAttribute("OnClick", 
+	  	  "javascript:".
+	  		//"alert('".$this->foreignTableName()."[$value]');".
+	  	    "document.getElementById('MasterTable').value='".$this->foreignTableName()."';".
+	  	    "document.getElementById('MasterId').value=$value;"
+	  	);
 	  }
     } else {
         //use input for other fields
@@ -147,7 +159,11 @@ class cDbField implements iDbField
     
     return 
       $htmlLabel->display().
-      $htmlControl->display();
+      $htmlControl->display().
+      ($htmlButton
+        ? $htmlButton->display()
+        : ""
+      );
   }
 }
 
@@ -173,12 +189,21 @@ class cDbTable implements iDbTable
   protected $filter;
   protected $parentLimit;							// this is a subtable for a parent with given id
   
-  public function __construct($tableName="", $parentLimit="") 
+  public function __construct($table, $parentLimit="") 
   {
 	$this->parentLimit = $parentLimit;
-  	$this->setName($tableName);
+  	$this->setName($table);
   }
 
+  public function getMode() {
+    return $this->mode;	
+  }
+  
+  public function getName() 
+  {
+    return $this->name;	
+  }
+  
   public function getFieldIndex($fieldName) 
   {
 	foreach ($this->fields as $i => $field) {
@@ -267,7 +292,7 @@ class cDbTable implements iDbTable
       while ($column = mysql_fetch_assoc($result)) {
         // create/set cDbField object for each table column
         $field = new cDbField($column);
-		$field->setTableName($this->name);
+		$field->setTable($this);
         // push this new field into array of fields of this object
         array_push($this->fields, $field);
       }
@@ -314,14 +339,16 @@ class cDbTable implements iDbTable
       $this->go(0);
     }
     
-    // get currentRecordId from subBrowser
+    // get currentRecordId 
     if (isset($_POST["sb".$this->name."RowId"]) && ($_POST["sb".$this->name."RowId"]>=0)) {
       $this->currentRecordId=$_POST["sb".$this->name."RowId"];
+      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+    } elseif (isset($_POST["MasterTable"]) && ($_POST["MasterTable"]==$this->name)) {
+      $this->currentRecordId = $_POST["MasterId"];
       $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     } elseif ($_SESSION[table][$this->name][currentRecordId]) {
     	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
     }
-
   }
 
   private function assignSQL($record) 
@@ -407,6 +434,7 @@ class cDbTable implements iDbTable
 
   public function navigator() 
   {
+  	/*
     // display first button
     if (($this->mode == "BROWSE")&&($this->count > 1)&&($this->at > 1)) {
       $button = new cHtmlInput($this->name."First", "SUBMIT", "|< First");
@@ -417,6 +445,7 @@ class cDbTable implements iDbTable
       $button = new cHtmlInput($this->name."Prev", "SUBMIT", "< Prev");
       $result .= $button->display();
     }
+    */
     // display insert button
     if ($this->mode == "BROWSE") {
       $button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
@@ -441,6 +470,7 @@ class cDbTable implements iDbTable
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
       $result .= $button->display();
     }
+    /*
     // display next button
     if (($this->mode == "BROWSE")&&($this->at<($this->count-1))) {
       $button = new cHtmlInput($this->name."Next", "SUBMIT", "Next >");
@@ -451,6 +481,7 @@ class cDbTable implements iDbTable
       $button = new cHtmlInput($this->name."Last", "SUBMIT", "Last >|");
       $result .= $button->display();
     }
+    */
     return $result;
   }
 
@@ -461,13 +492,14 @@ class cDbTable implements iDbTable
     if ($_POST[$this->name."Prev"])  $this->go($_SESSION[table][$this->name][at]-1);
     if ($_POST[$this->name."Next"])  $this->go($_SESSION[table][$this->name][at]+1);
     if ($_POST[$this->name."Last"])  $this->go($this->count);
-
+    
+    if ($_POST["go".$this->name]) $this->go($_POST["go".$this->name]);
+    
+    // data manipylation buttons
     if ($_POST[$this->name."Insert"]) $this->setMode("INSERT"); // + Add
     if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
     if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Delete
     if ($_POST[$this->name."Cancel"]) $this->setMode("BROWSE"); // Cancel
-    
-    if ($_POST["go".$this->name]) $this->go($_POST["go".$this->name]);
     
     if ($_POST[$this->name."Ok"]) {                               // Ok 
 	  switch ($this->mode) {
@@ -544,13 +576,18 @@ class cDbTable implements iDbTable
 
   public function detailForm()
   {
+  	$masterTable = new cHtmlInput("MasterTable", "HIDDEN", "");
+  	$masterId = new cHtmlInput("MasterId", "HIDDEN", -1);
+  	
     $form = new cHtmlForm();
     $form->setAttribute("ID", "detailForm".$this->name);
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
       $this->name." [".$this->at."/".$this->count."] ".$this->mode.br().
-      $this->printFields().                          
+      $this->printFields().
+      $masterTable->display().
+      $masterId->display().
       $this->navigator()
     );
     return $form->display().$this->subBrowsers();
@@ -564,7 +601,7 @@ class cDbTable implements iDbTable
   	if ($dbResult = mysql_query($query)) {
   	  while ($dbRow = mysql_fetch_row($dbResult)) {
   	  	$ftable = new cDbTable($dbRow[0], "AND (".$this->name.".id".$this->name." = ".$this->currentRecord[0].")");
-  	    $tableSwitch = new cHtmlInput("switchMT", "HIDDEN", $dbRow[0]);
+  	    $tableSwitch = new cHtmlInput("MasterTable", "HIDDEN", $dbRow[0]);
   	  	if ($ftable->hasForeignTable($this->name)) {
   	  		$browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browseForm($tableSwitch->display())); 
   	  	}
@@ -652,7 +689,7 @@ class cDbScheme implements iDbScheme
   {
   	$tableTabs = new cHtmlTabControl($dbName."Admin");
   	foreach ($this->tables as $name=>$table) {
-	  if ($_POST["tabButton"."Admin".$name] || ($_POST["switchMT"]==$name)) {
+	  if ($_POST["tabButton"."Admin".$name] || ($_POST["MasterTable"]==$name)) {
 	  	$_SESSION[tabControl][Admin][selected] = $name;
 	  }
   	}
