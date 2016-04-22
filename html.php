@@ -17,7 +17,7 @@ function body($body="") {
 }
 
 function linkCss($cssFileName) {
-  return "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssFileName\">";
+  return "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/$cssFileName\">";
 }
 
 function linkJs($jsFileName) {

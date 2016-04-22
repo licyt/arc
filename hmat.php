@@ -12,6 +12,9 @@ echo
   	linkCss("tabHeadAdminInput.css").
   	linkCss("tabHeadAdminSpan.css").
   	linkCss("jsDatePick_ltr.min.css").
+  	linkCss("switchBrowserInput.css").
+  	linkCss("switchBrowserSpan.css").
+  	linkCss("switchBrowseForm.css").
   	linkJs("jsDatePick.min.1.3.js").
   	linkJs("jscolor.js").
     linkJs("global.js")  		 
