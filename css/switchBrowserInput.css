@@ -205,7 +205,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbInvoiceDeliveryNote {
+#tabButtonsbInvoiceDeliveryNote, #tabButtonsbProjectNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -447,7 +447,304 @@
 	padding: 0px;
 }
 
+#tabButtonsbQuoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDemandNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbBuildNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbInvoiceNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbIndustryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbCompanyNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPersonNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPrintParametersNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDataSetNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPlatform_has_PartNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPlatformNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryTransportNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryNoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbAccountNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbAddressNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPartNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusLogNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbGUINote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
 #tabButtonsbStatusStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbProjectStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbQuoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDemandStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbInvoiceStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDataSetStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbDeliveryNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbPartStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbStatusLogStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;

@@ -537,7 +537,371 @@
 	display: inline-block;
 }
 
+#tabsbProjectNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbQuoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDemandNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbBuildNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbInvoiceNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbIndustryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbCompanyNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPersonNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPrintParametersNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDataSetNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPlatform_has_PartNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPlatformNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryTransportNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryNoteNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbAccountNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbAddressNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPartNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusLogNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbGUINote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
 #tabsbStatusStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbProjectStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbQuoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDemandStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbInvoiceStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDataSetStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbDeliveryNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbPartStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+}
+
+#tabsbStatusLogStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
