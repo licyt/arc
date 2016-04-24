@@ -1,12 +1,12 @@
 /**
  * jscolor - JavaScript Color Picker
- *
- * @link    http://jscolor.com
- * @license For open source use: GPLv3
- *          For commercial use: JSColor Commercial License
- * @author  Jan Odvarko
+ * 
+ * @link http://jscolor.com
+ * @license For open source use: GPLv3 For commercial use: JSColor Commercial
+ *          License
+ * @author Jan Odvarko
  * @version 2.0.4
- *
+ * 
  * See usage examples at http://jscolor.com/examples/
  */
 
@@ -241,7 +241,8 @@ var jsc = {
 		} else if (document.createEventObject) {
 			var ev = document.createEventObject();
 			el.fireEvent('on' + evnt, ev);
-		} else if (el['on' + evnt]) { // alternatively use the traditional event model
+		} else if (el['on' + evnt]) { // alternatively use the traditional
+										// event model
 			el['on' + evnt]();
 		}
 	},
@@ -261,7 +262,8 @@ var jsc = {
 	},
 
 
-	// The className parameter (str) can contain multiple class names separated by whitespace
+	// The className parameter (str) can contain multiple class names separated
+	// by whitespace
 	setClass : function (elm, className) {
 		var classList = jsc.classNameToList(className);
 		for (var i = 0; i < classList.length; i += 1) {
@@ -272,7 +274,8 @@ var jsc = {
 	},
 
 
-	// The className parameter (str) can contain multiple class names separated by whitespace
+	// The className parameter (str) can contain multiple class names separated
+	// by whitespace
 	unsetClass : function (elm, className) {
 		var classList = jsc.classNameToList(className);
 		for (var i = 0; i < classList.length; i += 1) {
@@ -417,7 +420,8 @@ var jsc = {
 			if (thisObj.fixed) {
 				// Fixed elements are positioned relative to viewport,
 				// therefore we can ignore the scroll offset
-				tp = jsc.getElementPos(thisObj.targetElement, true); // target pos
+				tp = jsc.getElementPos(thisObj.targetElement, true); // target
+																		// pos
 				vp = [0, 0]; // view pos
 			} else {
 				tp = jsc.getElementPos(thisObj.targetElement); // target pos
@@ -661,8 +665,10 @@ var jsc = {
 			var thisObj = target._jscInstance;
 			jsc.detachGroupEvents('drag');
 			jsc.releaseTarget();
-			// Always dispatch changes after detaching outstanding mouse handlers,
-			// in case some user interaction will occur in user's onchange callback
+			// Always dispatch changes after detaching outstanding mouse
+			// handlers,
+			// in case some user interaction will occur in user's onchange
+			// callback
 			// that would intrude with current mouse events
 			jsc.dispatchChange(thisObj);
 		};
@@ -841,7 +847,8 @@ var jsc = {
 				vRect.style.height =
 					(height + 1) + 'px';
 
-				// Colors must be specified during every redraw, otherwise IE won't display
+				// Colors must be specified during every redraw, otherwise IE
+				// won't display
 				// a full gradient during a subsequential redraw
 				hGrad.color = '#F00';
 				hGrad.color2 = '#F00';
@@ -978,15 +985,26 @@ var jsc = {
 
 		// General options
 		//
-		this.value = null; // initial HEX color. To change it later, use methods fromString(), fromHSV() and fromRGB()
-		this.valueElement = targetElement; // element that will be used to display and input the color code
-		this.styleElement = targetElement; // element that will preview the picked color using CSS backgroundColor
-		this.required = true; // whether the associated text <input> can be left empty
-		this.refine = true; // whether to refine the entered color code (e.g. uppercase it and remove whitespace)
-		this.hash = false; // whether to prefix the HEX color code with # symbol
+		this.value = null; // initial HEX color. To change it later, use
+							// methods fromString(), fromHSV() and fromRGB()
+		this.valueElement = targetElement; // element that will be used to
+											// display and input the color code
+		this.styleElement = targetElement; // element that will preview the
+											// picked color using CSS
+											// backgroundColor
+		this.required = true; // whether the associated text <input> can be
+								// left empty
+		this.refine = true; // whether to refine the entered color code (e.g.
+							// uppercase it and remove whitespace)
+		this.hash = false; // whether to prefix the HEX color code with #
+							// symbol
 		this.uppercase = true; // whether to uppercase the color code
-		this.onFineChange = null; // called instantly every time the color changes (value can be either a function or a string with javascript code)
-		this.activeClass = 'jscolor-active'; // class to be set to the target element when a picker window is open on it
+		this.onFineChange = null; // called instantly every time the color
+									// changes (value can be either a function
+									// or a string with javascript code)
+		this.activeClass = 'jscolor-active'; // class to be set to the target
+												// element when a picker window
+												// is open on it
 		this.minS = 0; // min allowed saturation (0 - 100)
 		this.maxS = 100; // max allowed saturation (0 - 100)
 		this.minV = 0; // min allowed value (brightness) (0 - 100)
@@ -994,17 +1012,21 @@ var jsc = {
 
 		// Accessing the picked color
 		//
-		this.hsv = [0, 0, 100]; // read-only  [0-360, 0-100, 0-100]
-		this.rgb = [255, 255, 255]; // read-only  [0-255, 0-255, 0-255]
+		this.hsv = [0, 0, 100]; // read-only [0-360, 0-100, 0-100]
+		this.rgb = [255, 255, 255]; // read-only [0-255, 0-255, 0-255]
 
 		// Color Picker options
 		//
 		this.width = 181; // width of color palette (in px)
 		this.height = 101; // height of color palette (in px)
-		this.showOnClick = true; // whether to display the color picker when user clicks on its target element
-		this.mode = 'HSV'; // HSV | HVS | HS | HV - layout of the color picker controls
-		this.position = 'bottom'; // left | right | top | bottom - position relative to the target element
-		this.smartPosition = true; // automatically change picker position when there is not enough space for it
+		this.showOnClick = true; // whether to display the color picker when
+									// user clicks on its target element
+		this.mode = 'HSV'; // HSV | HVS | HS | HV - layout of the color picker
+							// controls
+		this.position = 'bottom'; // left | right | top | bottom - position
+									// relative to the target element
+		this.smartPosition = true; // automatically change picker position when
+									// there is not enough space for it
 		this.sliderSize = 16; // px
 		this.crossSize = 8; // px
 		this.closable = false; // whether to display the Close button
@@ -1026,7 +1048,8 @@ var jsc = {
         this.pointerBorderWidth = 1; // px
         this.pointerThickness = 2; // px
 		this.zIndex = 1000;
-		this.container = null; // where to append the color picker (BODY element by default)
+		this.container = null; // where to append the color picker (BODY
+								// element by default)
 
 
 		for (var opt in options) {
@@ -1079,7 +1102,8 @@ var jsc = {
 						this.exportColor(jsc.leaveValue | jsc.leaveStyle);
 
 					} else if (this.fromString(this.valueElement.value)) {
-						// managed to import color successfully from the value -> OK, don't do anything
+						// managed to import color successfully from the value
+						// -> OK, don't do anything
 					} else {
 						this.exportColor();
 					}
@@ -1178,7 +1202,8 @@ var jsc = {
 			}
 			this.hsv[2] = hsv[2]===null ? null : Math.max(0, this.minV, Math.min(100, this.maxV, hsv[2]));
 
-			// update RGB according to final HSV, as some values might be trimmed
+			// update RGB according to final HSV, as some values might be
+			// trimmed
 			var rgb = HSV_RGB(this.hsv[0], this.hsv[1], this.hsv[2]);
 			this.rgb[0] = rgb[0];
 			this.rgb[1] = rgb[1];
@@ -1273,18 +1298,22 @@ var jsc = {
 
 			var elm = this.targetElement;
 			do {
-				// If the target element or one of its parent nodes has fixed position,
+				// If the target element or one of its parent nodes has fixed
+				// position,
 				// then use fixed positioning instead
 				//
-				// Note: In Firefox, getComputedStyle returns null in a hidden iframe,
-				// that's why we need to check if the returned style object is non-empty
+				// Note: In Firefox, getComputedStyle returns null in a hidden
+				// iframe,
+				// that's why we need to check if the returned style object is
+				// non-empty
 				var currStyle = jsc.getStyle(elm);
 				if (currStyle && currStyle.position.toLowerCase() === 'fixed') {
 					this.fixed = true;
 				}
 
 				if (elm !== this.targetElement) {
-					// Ensure to attach onParentScroll only once to each parent element
+					// Ensure to attach onParentScroll only once to each parent
+					// element
 					// (multiple targetElements can share the same parent nodes)
 					//
 					// Note: It's not just offsetParents that can be scrollable,
@@ -1362,8 +1391,10 @@ var jsc = {
 
 		function drawPicker () {
 
-			// At this point, when drawing the picker, we know what the parent elements are
-			// and we can do all related DOM operations, such as registering events on them
+			// At this point, when drawing the picker, we know what the parent
+			// elements are
+			// and we can do all related DOM operations, such as registering
+			// events on them
 			// or checking their positioning
 			THIS._processParentElementsInDOM();
 
@@ -1387,10 +1418,18 @@ var jsc = {
 					sldB : document.createElement('div'), // border
 					sldM : document.createElement('div'), // mouse/touch area
 					sldGrad : jsc.createSliderGradient(),
-					sldPtrS : document.createElement('div'), // slider pointer spacer
-					sldPtrIB : document.createElement('div'), // slider pointer inner border
-					sldPtrMB : document.createElement('div'), // slider pointer middle border
-					sldPtrOB : document.createElement('div'), // slider pointer outer border
+					sldPtrS : document.createElement('div'), // slider
+																// pointer
+																// spacer
+					sldPtrIB : document.createElement('div'), // slider
+																// pointer inner
+																// border
+					sldPtrMB : document.createElement('div'), // slider
+																// pointer
+																// middle border
+					sldPtrOB : document.createElement('div'), // slider
+																// pointer outer
+																// border
 					btn : document.createElement('div'),
 					btnT : document.createElement('span') // text
 				};
@@ -1458,7 +1497,8 @@ var jsc = {
 			jsc.setBorderRadius(p.boxB, borderRadius + 'px');
 
 			// IE hack:
-			// If the element is transparent, IE will trigger the event on the elements under it,
+			// If the element is transparent, IE will trigger the event on the
+			// elements under it,
 			// e.g. on Canvas or on elements with border
 			p.padM.style.background =
 			p.sldM.style.background =
@@ -1626,7 +1666,8 @@ var jsc = {
 			// Set the new picker owner
 			jsc.picker.owner = THIS;
 
-			// The redrawPosition() method needs picker.owner to be set, that's why we call it here,
+			// The redrawPosition() method needs picker.owner to be set, that's
+			// why we call it here,
 			// after setting the owner
 			if (jsc.isElementType(container, 'body')) {
 				jsc.redrawPosition();
@@ -1740,7 +1781,8 @@ var jsc = {
 			document.getElementsByTagName('body')[0];
 		var sliderPtrSpace = 3; // px
 
-		// For BUTTON elements it's important to stop them from sending the form when clicked
+		// For BUTTON elements it's important to stop them from sending the form
+		// when clicked
 		// (e.g. in Safari)
 		if (jsc.isElementType(this.targetElement, 'button')) {
 			if (this.targetElement.onclick) {
@@ -1755,28 +1797,19 @@ var jsc = {
 		}
 
 		/*
-		var elm = this.targetElement;
-		do {
-			// If the target element or one of its offsetParents has fixed position,
-			// then use fixed positioning instead
-			//
-			// Note: In Firefox, getComputedStyle returns null in a hidden iframe,
-			// that's why we need to check if the returned style object is non-empty
-			var currStyle = jsc.getStyle(elm);
-			if (currStyle && currStyle.position.toLowerCase() === 'fixed') {
-				this.fixed = true;
-			}
-
-			if (elm !== this.targetElement) {
-				// attach onParentScroll so that we can recompute the picker position
-				// when one of the offsetParents is scrolled
-				if (!elm._jscEventsAttached) {
-					jsc.attachEvent(elm, 'scroll', jsc.onParentScroll);
-					elm._jscEventsAttached = true;
-				}
-			}
-		} while ((elm = elm.offsetParent) && !jsc.isElementType(elm, 'body'));
-		*/
+		 * var elm = this.targetElement; do { // If the target element or one of
+		 * its offsetParents has fixed position, // then use fixed positioning
+		 * instead // // Note: In Firefox, getComputedStyle returns null in a
+		 * hidden iframe, // that's why we need to check if the returned style
+		 * object is non-empty var currStyle = jsc.getStyle(elm); if (currStyle &&
+		 * currStyle.position.toLowerCase() === 'fixed') { this.fixed = true; }
+		 * 
+		 * if (elm !== this.targetElement) { // attach onParentScroll so that we
+		 * can recompute the picker position // when one of the offsetParents is
+		 * scrolled if (!elm._jscEventsAttached) { jsc.attachEvent(elm,
+		 * 'scroll', jsc.onParentScroll); elm._jscEventsAttached = true; } } }
+		 * while ((elm = elm.offsetParent) && !jsc.isElementType(elm, 'body'));
+		 */
 
 		// valueElement
 		if (this.valueElement) {
@@ -1813,15 +1846,18 @@ var jsc = {
 };
 
 
-//================================
+// ================================
 // Public properties and methods
-//================================
+// ================================
 
 
-// By default, search for all elements with class="jscolor" and install a color picker on them.
+// By default, search for all elements with class="jscolor" and install a color
+// picker on them.
 //
-// You can change what class name will be looked for by setting the property jscolor.lookupClass
-// anywhere in your HTML document. To completely disable the automatic lookup, set it to null.
+// You can change what class name will be looked for by setting the property
+// jscolor.lookupClass
+// anywhere in your HTML document. To completely disable the automatic lookup,
+// set it to null.
 //
 jsc.jscolor.lookupClass = 'jscolor';
 

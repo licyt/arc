@@ -17,7 +17,7 @@ function body($body="") {
 }
 
 function linkCss($cssFileName) {
-  return "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/$cssFileName\">";
+  return "<link rel=\"stylesheet\" type=\"text/css\" href=\"$cssFileName\">";
 }
 
 function linkJs($jsFileName) {
@@ -100,6 +100,7 @@ interface iHtmlJsDatePick {
 
 interface iHtmlJsColorPick {
   public function setAttribute($name, $value);
+  public function setColor( $color );
   public function display();	
 }   
             
@@ -416,7 +417,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			: "TEXT").
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
-			" OnClick=\"jsCalendarWrapper(this);\"".
+			" CLASS=\"isDatePick\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
@@ -428,7 +429,14 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 	// see http://jscolor.com/
 	
 	// Class constructor is same as parent's (cHtmlInput)
-	// public function __construct()
+	public function setColor( $initColor ) {
+		if( empty( $initColor ) ) {
+			$this->attributes[VALUE] = $initColor;
+		}
+		else {
+			$this->attributes[VALUE] = "2020FF";
+		}
+	}
 	
 	// display is overloaded 
 	public function display() {

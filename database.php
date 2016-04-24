@@ -144,7 +144,12 @@ class cDbField implements iDbField
     	while ($dbRow = mysql_fetch_row($dbResult)) {
     	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
     	}
-    } else {
+    } elseif($this->isDateTime()) {
+		  $htmlControl = new cHtmlJsDatePick;
+    } elseif($this->isStatusColor())  {
+			$htmlControl = new cHtmlJsColorPick;
+			$htmlControl->setColor( "2020FF" );
+	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}

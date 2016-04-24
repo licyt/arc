@@ -7,16 +7,19 @@ require_once("database.php");
 echo 
   head(
     charset().
-	linkCss("hmat.css").
-	linkCss("hideIdTags.css").
-  	linkCss("tabHeadAdminInput.css").
-  	linkCss("tabHeadAdminSpan.css").
-  	linkCss("jsDatePick_ltr.min.css").
-  	linkCss("switchBrowserInput.css").
-  	linkCss("switchBrowserSpan.css").
-  	linkCss("switchBrowseForm.css").
-  	linkJs("jsDatePick.min.1.3.js").
+	linkCss("css/hmat.css").
+	linkCss("css/hideIdTags.css").
+  	linkCss("css/tabHeadAdminInput.css").
+  	linkCss("css/tabHeadAdminSpan.css").
+  	linkCss("css/switchBrowserInput.css").
+  	linkCss("css/switchBrowserSpan.css").
+  	linkCss("css/switchBrowseForm.css").
+	linkCss("css/jquery-ui.css").
+  	linkCss("css/spectrum.css").
+	linkJs("jquery-1.12.3.min.js").
+	linkJs("jquery-ui.js").
   	linkJs("jscolor.js").
+  	linkJs("css/spectrum.js").
     linkJs("global.js")  		 
   ).
   body(
