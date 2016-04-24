@@ -19,7 +19,7 @@ echo
 	linkJs("jquery-1.12.3.min.js").
 	linkJs("jquery-ui.js").
   	linkJs("jscolor.js").
-  	linkJs("css/spectrum.js").
+  	linkJs("spectrum.js").
     linkJs("global.js")  		 
   ).
   body(
