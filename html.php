@@ -32,7 +32,7 @@ function buttonSet(array $columnNames, $setName="")
 {
   $newNames = array();
   foreach ($columnNames as $i=>$buttonName) {
-	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", $buttonName);
+	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($buttonName, "ENG", $buttonName));
 	$newNames[$i]=$button->display();
   }
   return $newNames;	
@@ -415,6 +415,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
+			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
 			" CLASS=\"isDatePick\"".
