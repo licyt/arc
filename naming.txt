@@ -1,3 +1,13 @@
+HTML Elements
+
+INPUT
+Default TYPE = "TEXT"
+
+
+
+
+
+
 DATABASE
 
 table fields:

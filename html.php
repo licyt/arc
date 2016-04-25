@@ -32,7 +32,7 @@ function buttonSet(array $columnNames, $setName="")
 {
   $newNames = array();
   foreach ($columnNames as $i=>$buttonName) {
-	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($buttonName, "ENG", $buttonName));
+	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, "ENG", $buttonName));
 	$newNames[$i]=$button->display();
   }
   return $newNames;	
@@ -311,6 +311,7 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   
   public function __construct ($name="") {
 	$this->name = $name;
+	$this->selected = "";
   }
   
   public function setSelected($tabName) {
@@ -328,7 +329,7 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   function display() {
 	// process tab switching
     foreach ($this->tabs as $tabName => $content) {
-	  if ($_POST["tabButton".$this->name.$tabName]) {
+      if ($_POST["tabButton".$this->name.$tabName]) {
 		$this->setSelected($tabName);
 	  }
 	}

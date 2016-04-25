@@ -144,12 +144,7 @@ class cDbField implements iDbField
     	while ($dbRow = mysql_fetch_row($dbResult)) {
     	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
     	}
-    } elseif($this->isDateTime()) {
-		  $htmlControl = new cHtmlJsDatePick;
-    } elseif($this->isStatusColor())  {
-			$htmlControl = new cHtmlJsColorPick;
-			$htmlControl->setColor( "2020FF" );
-	} else {
+    } else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}
@@ -280,7 +275,7 @@ class cDbTable implements iDbTable
   	foreach ($this->fields as $i=>$field) {
   	  if ($field->getName() == $this->name."_id".$ftName) return true;
   	}
-  	return false;
+  	return false; 
   }
   
   public function hasStatusField() {
@@ -603,7 +598,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-      $this->name." [".$this->at."/".$this->count."] ".$this->mode.br().
+      gui("table".$this->name, "ENG", $this->name)." [".$this->at."/".$this->count."] ".$this->mode.br().
       $this->printFields().
       $masterTable->display().
       $masterId->display().
@@ -614,7 +609,7 @@ class cDbTable implements iDbTable
   
   public function subBrowsers() 
   {
-  	$browsers = new cHtmlTabControl;
+  	$browsers = new cHtmlTabControl("sb".$this->name);
   	$browsers->addTab("sb".$this->name.$this->name, $this->browseForm());
   	
   	$query = "show tables";
@@ -680,7 +675,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-	  $this->name." [".$this->at."/".$this->count."]".br().
+	  gui($this->name, "ENG", $this->name)." [".$this->at."/".$this->count."]".br().
       $table->display().
       $sbRowId->display().
       $include
