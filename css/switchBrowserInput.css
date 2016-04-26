@@ -1,15 +1,4 @@
-#tabButtonsbProjectProject {
-	color: black;
-	background-color: #00CCFF;
-	height: 20px;
-	margin: 0px;
-	top: 0px;
-	left: 0px;
-	padding: 0px;
-	/* 	position: absolute; */
-}
-
-#tabButtonsbCompanyProject {
+#tabButtonsbProjectsbProjectProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -19,7 +8,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusProject {
+#tabButtonsbCompanysbCompanyProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -29,7 +18,17 @@
 	padding: 0px;
 }
 
-#tabButtonsbProjectQuote {
+#tabButtonsbStatussbStatusProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbProjectsbProjectQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -40,7 +39,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbQuoteQuote {
+#tabButtonsbQuotesbQuoteQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -51,7 +50,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPrintParametersQuote {
+#tabButtonsbPrintParameterssbPrintParametersQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -62,7 +61,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusQuote {
+#tabButtonsbStatussbStatusQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -73,7 +72,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbQuoteDataSet {
+#tabButtonsbQuotesbQuoteDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -84,7 +83,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPrintParametersDataSet {
+#tabButtonsbPrintParameterssbPrintParametersDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -95,7 +94,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDataSetDataSet {
+#tabButtonsbDataSetsbDataSetDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -106,7 +105,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusDataSet {
+#tabButtonsbStatussbStatusDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -117,7 +116,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbQuoteDemand {
+#tabButtonsbQuotesbQuoteDemand {
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
@@ -128,7 +127,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDemandDemand {
+#tabButtonsbDemandsbDemandDemand {
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
@@ -139,7 +138,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusDemand {
+#tabButtonsbStatussbStatusDemand {
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
@@ -150,7 +149,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDemandInvoice {
+#tabButtonsbDemandsbDemandInvoice {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -161,7 +160,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbInvoiceInvoice {
+#tabButtonsbInvoicesbInvoiceInvoice {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -172,7 +171,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusInvoice {
+#tabButtonsbStatussbStatusInvoice {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -183,7 +182,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbBuildBuild {
+#tabButtonsbBuildsbBuildBuild {
 	color: black;
 	background-color: #FF0000;
 	height: 20px;
@@ -194,7 +193,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPlatformBuild {
+#tabButtonsbPlatformsbPlatformBuild {
 	color: black;
 	background-color: #FF0000;
 	height: 20px;
@@ -205,7 +204,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbInvoiceDeliveryNote, #tabButtonsbProjectNote {
+#tabButtonsbInvoicesbInvoiceDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -216,7 +215,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryNoteDeliveryNote {
+#tabButtonsbProjectsbProjectNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -227,7 +226,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusDeliveryNote {
+#tabButtonsbDeliveryNotesbDeliveryNoteDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -238,7 +237,18 @@
 	padding: 0px;
 }
 
-#tabButtonsbIndustryIndustry {
+#tabButtonsbStatussbStatusDeliveryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbIndustrysbIndustryIndustry {
 	color: black;
 	background-color: #99FF66;
 	height: 20px;
@@ -249,7 +259,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbIndustryCompany {
+#tabButtonsbIndustrysbIndustryCompany {
 	color: black;
 	background-color: #66FF66;
 	height: 20px;
@@ -260,7 +270,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbCompanyCompany {
+#tabButtonsbCompanysbCompanyCompany {
 	color: black;
 	background-color: #66FF66;
 	height: 20px;
@@ -271,7 +281,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbCompanyAccount {
+#tabButtonsbCompanysbCompanyAccount {
 	color: black;
 	background-color: #DDDDDD;
 	height: 20px;
@@ -282,7 +292,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbAccountAccount {
+#tabButtonsbAccountsbAccountAccount {
 	color: black;
 	background-color: #DDDDDD;
 	height: 20px;
@@ -293,7 +303,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbCompanyAddress {
+#tabButtonsbCompanysbCompanyAddress {
 	color: black;
 	background-color: #CCCCCC;
 	height: 20px;
@@ -304,7 +314,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbAddressAddress {
+#tabButtonsbAddresssbAddressAddress {
 	color: black;
 	background-color: #CCCCCC;
 	height: 20px;
@@ -315,7 +325,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbCompanyPerson {
+#tabButtonsbCompanysbCompanyPerson {
 	color: black;
 	background-color: #00CC00;
 	height: 20px;
@@ -326,7 +336,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPersonPerson {
+#tabButtonsbPersonsbPersonPerson {
 	color: black;
 	background-color: #00CC00;
 	height: 20px;
@@ -337,7 +347,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPrintParametersPrintParameters {
+#tabButtonsbPrintParameterssbPrintParametersPrintParameters {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -348,7 +358,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPrintParametersPart {
+#tabButtonsbPrintParameterssbPrintParametersPart {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -359,7 +369,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDataSetPart {
+#tabButtonsbDataSetsbDataSetPart {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -370,7 +380,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPartPart, #tabButtonsbStatusPart {
+#tabButtonsbPartsbPartPart  {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -381,7 +391,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPlatform_has_PartPlatform_has_Part {
+#tabButtonsbStatussbStatusPart  {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -392,7 +402,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPlatformPlatform {
+#tabButtonsbPlatform_has_PartsbPlatform_has_PartPlatform_has_Part {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -403,7 +413,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryTransportDeliveryTransport {
+#tabButtonsbPlatformsbPlatformPlatform {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -414,7 +424,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryNoteDeliveryTransport {
+#tabButtonsbDeliveryTransportsbDeliveryTransportDeliveryTransport {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -425,7 +435,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbNoteNote {
+#tabButtonsbDeliveryNotesbDeliveryNoteDeliveryTransport {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -436,7 +446,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusNote {
+#tabButtonsbNotesbNoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -447,7 +457,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbQuoteNote {
+#tabButtonsbStatussbStatusNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -458,7 +468,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDemandNote {
+#tabButtonsbQuotesbQuoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -469,7 +479,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbBuildNote {
+#tabButtonsbDemandsbDemandNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -480,7 +490,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbInvoiceNote {
+#tabButtonsbBuildsbBuildNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -491,7 +501,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbIndustryNote {
+#tabButtonsbInvoicesbInvoiceNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -502,7 +512,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbCompanyNote {
+#tabButtonsbIndustrysbIndustryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -513,7 +523,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPersonNote {
+#tabButtonsbCompanysbCompanyNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -524,7 +534,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPrintParametersNote {
+#tabButtonsbPersonsbPersonNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -535,7 +545,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDataSetNote {
+#tabButtonsbPrintParameterssbPrintParametersNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -546,7 +556,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPlatform_has_PartNote {
+#tabButtonsbDataSetsbDataSetNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -557,7 +567,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPlatformNote {
+#tabButtonsbPlatform_has_PartsbPlatform_has_PartNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -568,7 +578,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryTransportNote {
+#tabButtonsbPlatformsbPlatformNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -579,7 +589,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryNoteNote {
+#tabButtonsbDeliveryTransportsbDeliveryTransportNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -590,7 +600,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbAccountNote {
+#tabButtonsbDeliveryNotesbDeliveryNoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -601,7 +611,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbAddressNote {
+#tabButtonsbAccountsbAccountNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -612,7 +622,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPartNote {
+#tabButtonsbAddresssbAddressNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -623,7 +633,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusLogNote {
+#tabButtonsbPartsbPartNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -634,7 +644,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbGUINote {
+#tabButtonsbStatusLogsbStatusLogNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -645,7 +655,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusStatus {
+#tabButtonsbGUIsbGUINote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -656,7 +666,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbProjectStatus {
+#tabButtonsbStatussbStatusStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -667,7 +677,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbQuoteStatus {
+#tabButtonsbProjectsbProjectStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -678,7 +688,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDemandStatus {
+#tabButtonsbQuotesbQuoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -689,7 +699,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbInvoiceStatus {
+#tabButtonsbDemandsbDemandStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -700,7 +710,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDataSetStatus {
+#tabButtonsbInvoicesbInvoiceStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -711,7 +721,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbDeliveryNoteStatus {
+#tabButtonsbDataSetsbDataSetStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -722,7 +732,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbPartStatus {
+#tabButtonsbDeliveryNotesbDeliveryNoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -733,7 +743,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbNoteStatus {
+#tabButtonsbPartsbPartStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -744,7 +754,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusLogStatus {
+#tabButtonsbNotesbNoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -755,7 +765,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusStatusLog {
+#tabButtonsbStatusLogsbStatusLogStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -766,7 +776,7 @@
 	padding: 0px;
 }
 
-#tabButtonsbStatusLogStatusLog {
+#tabButtonsbStatussbStatusStatusLog {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -777,7 +787,18 @@
 	padding: 0px;
 }
 
-#tabButtonsbGUIGUI {
+#tabButtonsbStatusLogsbStatusLogStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+#tabButtonsbGUIsbGUIGUI {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
