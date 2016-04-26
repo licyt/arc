@@ -266,8 +266,11 @@ class cDbTable implements iDbTable
   
   public function setOrder($order) 
   {
-    $this->order = $order;
-	$_SESSION[table][$this->name][order] = $order;
+    if ($_SESSION[table][$this->name][order]==$order) 
+      $this->order = $order." DESC"; 
+    else
+  	  $this->order = $order;
+    $_SESSION[table][$this->name][order] = $this->order;
   }
   
   public function hasForeignTable($ftName) 
@@ -610,7 +613,10 @@ class cDbTable implements iDbTable
   public function subBrowsers() 
   {
   	$browsers = new cHtmlTabControl("sb".$this->name);
-  	$browsers->addTab("sb".$this->name.$this->name, $this->browseForm());
+  	$browsers->addTab(
+  	  "sb".$this->name.$this->name, 
+  	  $this->browseForm()
+  	);
   	
   	$query = "show tables";
   	if ($dbResult = mysql_query($query)) {
