@@ -15,6 +15,7 @@ interface iDbField
   public function getName();
   public function isForeignKey();
   public function isDateTime();
+  public function isDate();
   public function isStatusColor();
   public function foreignTableName();
   public function getHtmlControl();
@@ -88,6 +89,10 @@ class cDbField implements iDbField
 		return ($this->properties[Type] == "datetime");
   }
   
+  public function isDate() {
+  		return ($this->properties[Type] == "date");
+  }
+  
   public function isStatusColor() {
 	return ( $this->properties[Field] == "StatusColor" );
   }
@@ -144,7 +149,13 @@ class cDbField implements iDbField
     	while ($dbRow = mysql_fetch_row($dbResult)) {
     	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
     	}
-    } else {
+    } elseif($this->isDate()) {
+		  $htmlControl = new cHtmlJsDatePick;
+    } elseif($this->isDateTime()) {
+		  $htmlControl = new cHtmlJsDateTimePick;
+    } elseif ($this->isStatusColor())  {
+			$htmlControl = new cHtmlJsColorPick;
+	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}
