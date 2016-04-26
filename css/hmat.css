@@ -39,6 +39,10 @@ td {
   font-size: 12px;
 }
 
+tr:hover {
+  background-color: silver;
+}
+
 span {
   font-size: 12px;
   text-align: center;	
