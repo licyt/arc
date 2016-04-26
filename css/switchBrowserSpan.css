@@ -11,6 +11,8 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyProject {
@@ -26,6 +28,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusProject {
@@ -41,6 +44,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbProjectsbProjectQuote {
@@ -56,6 +60,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbQuotesbQuoteQuote {
@@ -71,6 +76,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPrintParameterssbPrintParametersQuote {
@@ -86,6 +92,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusQuote {
@@ -101,6 +108,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbQuotesbQuoteDataSet {
@@ -117,6 +125,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPrintParameterssbPrintParametersDataSet {
@@ -133,6 +142,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDataSetsbDataSetDataSet {
@@ -149,6 +159,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusDataSet {
@@ -165,6 +176,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbQuotesbQuoteDemand {
@@ -181,6 +193,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDemandsbDemandDemand {
@@ -197,6 +210,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusDemand {
@@ -213,6 +227,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDemandsbDemandInvoice {
@@ -229,6 +244,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbInvoicesbInvoiceInvoice {
@@ -245,6 +261,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusInvoice {
@@ -261,6 +278,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbBuildsbBuildBuild {
@@ -274,6 +292,7 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPlatformsbPlatformBuild {
@@ -290,6 +309,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbInvoicesbInvoiceDeliveryNote {
@@ -306,6 +326,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryNotesbDeliveryNoteDeliveryNote {
@@ -322,6 +343,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusDeliveryNote {
@@ -338,6 +360,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbIndustrysbIndustryIndustry {
@@ -354,6 +377,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbIndustrysbIndustryCompany {
@@ -370,6 +394,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyCompany {
@@ -386,6 +411,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyAccount {
@@ -402,6 +428,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbAccountsbAccountAccount {
@@ -418,6 +445,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyAddress {
@@ -434,6 +462,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbAddresssbAddressAddress {
@@ -450,6 +479,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyPerson {
@@ -466,6 +496,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPersonsbPersonPerson {
@@ -482,6 +513,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPrintParameterssbPrintParametersPrintParameters {
@@ -498,6 +530,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPrintParameterssbPrintParametersPart {
@@ -514,6 +547,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDataSetsbDataSetPart {
@@ -530,6 +564,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPartsbPartPart {
@@ -546,6 +581,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusPart {
@@ -562,6 +598,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPlatform_has_PartsbPlatform_has_PartPlatform_has_Part {
@@ -578,6 +615,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPlatformsbPlatformPlatform {
@@ -594,6 +632,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryTransportsbDeliveryTransportDeliveryTransport {
@@ -610,6 +649,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryNotesbDeliveryNoteDeliveryTransport {
@@ -626,6 +666,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbNotesbNoteNote {
@@ -642,6 +683,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusNote {
@@ -658,6 +700,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbProjectsbProjectNote {
@@ -674,6 +717,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbQuotesbQuoteNote {
@@ -690,6 +734,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDemandsbDemandNote {
@@ -706,6 +751,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbBuildsbBuildNote {
@@ -722,6 +768,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbInvoicesbInvoiceNote {
@@ -738,6 +785,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbIndustrysbIndustryNote {
@@ -754,6 +802,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbCompanysbCompanyNote {
@@ -770,6 +819,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPersonsbPersonNote {
@@ -786,6 +836,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPrintParameterssbPrintParametersNote {
@@ -802,6 +853,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDataSetsbDataSetNote {
@@ -818,6 +870,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPlatform_has_PartsbPlatform_has_PartNote {
@@ -834,6 +887,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPlatformsbPlatformNote {
@@ -850,6 +904,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryTransportsbDeliveryTransportNote {
@@ -866,6 +921,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryNotesbDeliveryNoteNote {
@@ -882,6 +938,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbAccountsbAccountNote {
@@ -898,6 +955,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbAddresssbAddressNote {
@@ -914,6 +972,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPartsbPartNote {
@@ -930,6 +989,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatusLogsbStatusLogNote {
@@ -946,6 +1006,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbGUIsbGUINote {
@@ -962,6 +1023,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbGUIsbGUIGUI {
@@ -978,6 +1040,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusStatus {
@@ -994,6 +1057,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbProjectsbProjectStatus {
@@ -1010,6 +1074,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbQuotesbQuoteStatus {
@@ -1026,6 +1091,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDemandsbDemandStatus {
@@ -1042,6 +1108,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbInvoicesbInvoiceStatus {
@@ -1058,6 +1125,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDataSetsbDataSetStatus {
@@ -1074,6 +1142,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbDeliveryNotesbDeliveryNoteStatus {
@@ -1090,6 +1159,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbPartsbPartStatus {
@@ -1106,6 +1176,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbNotesbNoteStatus {
@@ -1122,6 +1193,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatusLogsbStatusLogStatus {
@@ -1138,6 +1210,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatussbStatusStatusLog {
@@ -1154,6 +1227,7 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
 
 #tabsbStatusLogsbStatusLogStatusLog {
@@ -1170,4 +1244,5 @@
 	font-size: 12px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
 }
