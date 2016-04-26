@@ -4,82 +4,82 @@
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	width: 1074px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminIndustry {
 	color: black;
 	background-color: #99FF66;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 0px;
 	width: 76px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminCompany {
 	color: black;
 	background-color: #66FF66;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 80px;
 	width: 76px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminAccount {
 	color: black;
 	background-color: #DDDDDD;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 60px;
 	left: 80px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminAddress {
 	color: black;
 	background-color: #CCCCCC;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 60px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminPerson {
 	color: black;
 	background-color: #99FF66;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminQuote {
@@ -88,12 +88,12 @@
 	position: absolute;
 	top: 20px;
 	left: 240px;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	width: 234px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminDataSet {
@@ -102,12 +102,12 @@
 	position: absolute;
 	top: 40px;
 	left: 480px;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminPart {
@@ -116,178 +116,178 @@
 	position: absolute;
 	top: 60px;
 	left: 490px;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	width: 94px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminPrintParameters {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	width: 114px;
 	position: absolute;
 	top: 40px;
 	left: 360px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminDemand {
 	color: black;
 	background-color: #FF3333;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 20px;
 	left: 480px;
 	width: 234px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminPlatform {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminPlatform_has_Part {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 600px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminBuild {
 	color: black;
 	background-color: #FFFF00;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 20px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 960px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminDeliveryTransport {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 840px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminInvoice {
 	color: black;
 	background-color: #99FFFF;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 20px;
 	left: 960px;
 	width: 114px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminNote {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 0px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminStatus {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 20px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminStatusLog {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 40px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
 
 #tabAdminGUI {
 	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 14px;
-	margin: 5px 2px 2px;
 	position: absolute;
 	top: 60px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
 	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
 }
