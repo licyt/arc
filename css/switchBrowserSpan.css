@@ -8,6 +8,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyProject {
@@ -20,6 +23,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusProject {
@@ -32,6 +38,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbProjectQuote {
@@ -44,6 +53,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbQuoteQuote {
@@ -56,6 +68,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPrintParametersQuote {
@@ -68,6 +83,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusQuote {
@@ -80,6 +98,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbQuoteDataSet {
@@ -93,6 +114,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPrintParametersDataSet {
@@ -106,6 +130,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDataSetDataSet {
@@ -119,6 +146,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusDataSet {
@@ -132,6 +162,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbQuoteDemand {
@@ -145,6 +178,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDemandDemand {
@@ -158,6 +194,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusDemand {
@@ -171,6 +210,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDemandInvoice {
@@ -184,6 +226,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbInvoiceInvoice {
@@ -197,6 +242,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusInvoice {
@@ -210,6 +258,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbBuildBuild {
@@ -236,6 +287,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbInvoiceDeliveryNote {
@@ -249,6 +303,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDeliveryNoteDeliveryNote {
@@ -262,6 +319,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusDeliveryNote {
@@ -275,6 +335,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbIndustryIndustry {
@@ -288,6 +351,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbIndustryCompany {
@@ -301,6 +367,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyCompany {
@@ -314,6 +383,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyAccount {
@@ -327,6 +399,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbAccountAccount {
@@ -340,6 +415,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyAddress {
@@ -353,6 +431,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbAddressAddress {
@@ -366,6 +447,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyPerson {
@@ -379,6 +463,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPersonPerson {
@@ -392,6 +479,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPrintParametersPrintParameters {
@@ -405,6 +495,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPrintParametersPart {
@@ -418,6 +511,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDataSetPart {
@@ -431,6 +527,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPartPart {
@@ -444,6 +543,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusPart {
@@ -457,6 +559,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPlatform_has_PartPlatform_has_Part {
@@ -470,6 +575,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPlatformPlatform {
@@ -483,6 +591,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDeliveryTransportDeliveryTransport {
@@ -496,6 +607,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDeliveryNoteDeliveryTransport {
@@ -509,6 +623,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbNoteNote {
@@ -522,6 +639,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusNote {
@@ -535,6 +655,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbProjectNote {
@@ -548,6 +671,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbQuoteNote {
@@ -561,6 +687,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDemandNote {
@@ -574,6 +703,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbBuildNote {
@@ -587,6 +719,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbInvoiceNote {
@@ -600,6 +735,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbIndustryNote {
@@ -613,6 +751,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbCompanyNote {
@@ -626,6 +767,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPersonNote {
@@ -639,6 +783,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPrintParametersNote {
@@ -652,6 +799,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDataSetNote {
@@ -665,6 +815,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPlatform_has_PartNote {
@@ -678,6 +831,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPlatformNote {
@@ -691,6 +847,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDeliveryTransportNote {
@@ -704,6 +863,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbDeliveryNoteNote {
@@ -717,6 +879,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbAccountNote {
@@ -730,6 +895,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbAddressNote {
@@ -743,6 +911,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbPartNote {
@@ -756,6 +927,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbStatusLogNote {
@@ -769,6 +943,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbGUINote {
@@ -782,162 +959,9 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
-}
-
-#tabsbStatusStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbProjectStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbQuoteStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbDemandStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbInvoiceStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbDataSetStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbDeliveryNoteStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbPartStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbNoteStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbStatusLogStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbStatusStatusLog {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-}
-
-#tabsbStatusLogStatusLog {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
 
 #tabsbGUIGUI {
@@ -951,4 +975,199 @@
 	border: 0px;
 	padding: 0px;
 	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbStatusStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbProjectStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbQuoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbDemandStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbInvoiceStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbDataSetStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbDeliveryNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbPartStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbStatusLogStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbStatusStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbStatusLogStatusLog {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
 }
