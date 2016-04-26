@@ -98,6 +98,11 @@ interface iHtmlJsDatePick {
   public function display();	
 }   
 
+interface iHtmlJsDateTimePick {
+  public function setAttribute($name, $value);
+  public function display();	
+}   
+
 interface iHtmlJsColorPick {
   public function setAttribute($name, $value);
   public function setColor( $color );
@@ -421,6 +426,42 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
+	}
+}
+
+class cHtmlJsDateTimePick extends cHtmlInput implements iHtmlJsDateTimePick
+{
+	// see http://javascriptcalendar.org/javascript-date-picker.php for meaning of various values
+
+	// Class constructor is same as parent's (cHtmlInput)
+	// public function __construct()
+
+	// display is overloaded
+	public function display() {
+		$size=$this->attributes[SIZE];
+		return
+		"<INPUT".
+		" TYPE=".($this->attributes[TYPE]
+				? $this->attributes[TYPE]
+				: "TEXT").
+				" ID=".$this->attributes[ID].
+				" NAME=".$this->attributes[ID].
+				($this->attributes[DISABLED] == " DISABLED"
+						? " DISABLED"
+						: ""
+						).
+						" VALUE=\"".$this->attributes[VALUE]."\"".
+						($this->attributes[OnChange]
+								? " OnChange=\"".$this->attributes[OnChange]."\""
+								: ""
+								).
+								($this->attributes[OnClick]
+										? " OnClick=\"".$this->attributes[OnClick]."\""
+										: ""
+										).
+										($size?" SIZE=$size":"").
+										" CLASS=\"isDateTimePick\"".
+										">";
 	}
 }
 
