@@ -216,22 +216,22 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
 	$this->selected = $value;
   }
   
-  public function addOption($option, $value, $color="#FFFFFF") {
-	$this->options[$option] = $value;
-	$this->colors[$option] = $color;
+  public function addOption($value, $option, $color="") {
+	$this->options[$value] = $option;
+	$this->colors[$value] = $color;
   }
   
   public function displayOptions() {
 	$result = "<OPTION VALUE=0></OPTION>";
-    foreach ($this->options as $option => $value) {
+    foreach ($this->options as $value => $option) {
       if ($value == $this->selected) {
-	    $this->selectedColor = $this->colors[$option];		  
+	    $this->selectedColor = $this->colors[$value];		  
 	  }
       $result.=
         "<OPTION ".
 		  (($value==$this->selected) ? " SELECTED" : "").
-		  ($this->colors[$option]
-		    ? " STYLE=\"background-color:#".$this->colors[$option].";\""
+		  ($this->colors[$value]
+		    ? " STYLE=\"background-color:#".$this->colors[$value].";\""
 		  	: ""
 		  ).
 		  " VALUE=$value>".
@@ -242,7 +242,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
   }
 
   public function display() {
-	$options = $this->displayOptions();
+  	$options = $this->displayOptions();
     return
       "<SELECT".
         " ID=".$this->attributes[ID].
@@ -370,7 +370,7 @@ class cHtmlTable
   
   // $columns is array of values
   public function addHeader($columns) {
-	array_push($this->headers, $columns);
+    array_push($this->headers, $columns);
   }
   public function addRow($columns) {
 	// var_dump( $columns );

@@ -115,7 +115,7 @@ class cDbField implements iDbField
 	  $ftName = $this->foreignTableName(); 
 	  $query = 
 	    "SELECT id".$ftName.", ".
-		  $ftName.gui("table".$ftName, "lookupField", "Name"). 
+		  gui("table".$ftName, "lookupField", $ftName."Name"). 
 		  ($ftName=="Status" ? ", StatusColor" : "").
 	    " FROM ".$ftName.
 		// Status - additional filter for StatusType
@@ -125,12 +125,13 @@ class cDbField implements iDbField
 		);
 	  // push options
 	  if ($result = mysql_query($query)) {
-		while ($row = mysql_fetch_array($result))
-		$htmlControl->addOption(
-		  $row[$ftName.gui("table".$ftName, "lookupField", "Name")], 
-		  $row["id".$ftName], 
-		  ($ftName=="Status" ? $row[StatusColor] : "")
-		);
+		while ($row = mysql_fetch_assoc($result)) {
+		  $htmlControl->addOption(
+		    $row["id".$ftName], 
+		  	$row[gui("table".$ftName, "lookupField", $ftName."Name")], 
+		  	($ftName=="Status" ? $row[StatusColor] : "")
+		  );
+        }
 	  }
 	  // add button for parent table
 	  if ($this->table->getMode()=="BROWSE") {
@@ -198,6 +199,7 @@ class cDbTable implements iDbTable
   protected $currentRecord;                        
   // browser parameters
   protected $columnNames = array();
+  protected $displayColumnNames = array();
   protected $ftNames = array();
   protected $start;									// browser starting position
   protected $rowCount;								// number of rows in browser
@@ -239,12 +241,10 @@ class cDbTable implements iDbTable
 
   public function getCurrentRecord() 
   {
-	if ($this->currentRecordId) {
-	  $query = "SELECT * FROM ".$this->name." WHERE id".$this->name."=".$this->currentRecordId;
-	  if ($result = mysql_query($query)) {
-	    $this->currentRecord = mysql_fetch_row($result);
-	  }
-	}	  
+	$query = "SELECT * FROM ".$this->name." WHERE id".$this->name."=".$this->currentRecordId;
+	if ($result = mysql_query($query)) {
+	  $this->currentRecord = mysql_fetch_row($result);
+	}
 	return $this->currentRecord;
   }  
   
@@ -331,15 +331,21 @@ class cDbTable implements iDbTable
   {
   	// empty list of columns and foreign_tables
   	foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
+  	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
   	foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
   	// load list of columns for browser from list of fields
 	foreach ($this->fields as $i=>$field) {
-	  array_push($this->columnNames, $field->getName());
+	  $fieldName = $field->getName();
+	  array_push($this->columnNames, $fieldName);
+	  if (!strpos($fieldName, "_id")) {
+	  	array_push($this->displayColumnNames, $fieldName);
+	  }
 	  if ($useForeignFields && $field->isForeignKey()) {
         // this field is a foreign key, display lookupField from referenced table
 	  	$ftName = $field->foreignTableName();
 	  	// default lookupField is Name
-		array_push($this->columnNames, $ftName.gui("table".$ftName, "lookupField", "Name"));
+		array_push($this->columnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
+		array_push($this->displayColumnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
 		// if there is a status, fetch color too
 		if ($ftName == "Status") {
 		  array_push($this->columnNames, "StatusColor");
@@ -568,10 +574,12 @@ class cDbTable implements iDbTable
 		  case "INSERT" :
 			$this->count++;
 			$this->go($this->count);
+			$this->currentRecordId = mysql_insert_id();
 			break;
 		  case "DELETE" :
 			$this->count--;
-			if ($this->at>1) $this->go($this->at-1);
+			if ($this->at>$this->count) $this->go($this->count);
+			$this->currentRecordId = 0;
 			break;
 		}
 		$this->getCurrentRecord();
@@ -580,9 +588,8 @@ class cDbTable implements iDbTable
 		if ($field = $this->getFieldByName($fieldName)) {
 		  $fieldIndex = $this->getFieldIndex($fieldName);
 		  $query=
-		    "INSERT INTO StatusLog".
-		    " SET ".
-			  "StatusLogRecNo=".$this->at.", ".
+		    "INSERT INTO StatusLog SET ".
+			  "StatusLogRowId=".$this->currentRecord[1].", ".
 			  "StatusLog_idStatus=".$this->currentRecord[$fieldIndex];
 		  if ($result=mysql_query($query)) {
 			
@@ -668,8 +675,8 @@ class cDbTable implements iDbTable
   {
 	// create output as html table
 	$table = new cHtmlTable();
-	$table->addHeader(inputSet($this->columnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
-	$table->addHeader(buttonSet($this->columnNames, $this->name."ORDER"));
+	$table->addHeader(inputSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+	$table->addHeader(buttonSet($this->displayColumnNames, $this->name."ORDER"));
 	
 	if ($dbResult = mysql_query($this->buildSQL())) {
 	  $i = 0;
