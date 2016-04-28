@@ -14,6 +14,7 @@ echo
   	linkCss("css/switchBrowserInput.css").
   	linkCss("css/switchBrowserSpan.css").
   	linkCss("css/switchBrowseForm.css").
+//   		linkCss("css/spans.css").
 	linkCss("css/jquery-ui.css").
   	linkCss("css/jquery-ui-timepicker-addon.css").
   	linkCss("css/spectrum.css").
@@ -26,7 +27,8 @@ echo
     linkJs("global.js")  		 
   ).
   body(
-    $dbScheme->allDetailForms()
+  		"<img src='img/hmat_logo.png'>".
+  		"<div>".$dbScheme->allDetailForms()."</div>"
   );
 
 echo "the end";
