@@ -1,8 +1,8 @@
 #tabAdminProject {
 	color: black;
 	background-color: #00CCFF;
-	position: absolute;
-	top: 0px;
+	position: relative;
+	top: -340px;
 	left: 0px;
 	height: 14px;
 	width: 1074px;
@@ -17,8 +17,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -140px;
 	left: 0px;
 	width: 76px;
 	border-style: solid;
@@ -32,8 +32,8 @@
 	color: black;
 	background-color: #66FF66;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -20px;
 	left: 80px;
 	width: 76px;
 	border-style: solid;
@@ -47,7 +47,7 @@
 	color: black;
 	background-color: #DDDDDD;
 	height: 14px;
-	position: absolute;
+	position: relative;
 	top: 60px;
 	left: 80px;
 	width: 74px;
@@ -62,8 +62,8 @@
 	color: black;
 	background-color: #CCCCCC;
 	height: 14px;
-	position: absolute;
-	top: 60px;
+	position: relative;
+	top: 40px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
@@ -77,8 +77,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -220px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
@@ -91,8 +91,8 @@
 #tabAdminQuote {
 	color: black;
 	background-color: #FF6600;
-	position: absolute;
-	top: 20px;
+	position: relative;
+	top: -340px;
 	left: 240px;
 	height: 14px;
 	width: 234px;
@@ -106,8 +106,8 @@
 #tabAdminDataSet {
 	color: black;
 	background-color: #B2B2B2;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -40px;
 	left: 480px;
 	height: 14px;
 	width: 114px;
@@ -121,8 +121,8 @@
 #tabAdminPart {
 	color: black;
 	background-color: #B2B2B2;
-	position: absolute;
-	top: 60px;
+	position: relative;
+	top: -180px;
 	left: 490px;
 	height: 14px;
 	width: 94px;
@@ -138,8 +138,8 @@
 	background-color: #B2B2B2;
 	height: 14px;
 	width: 114px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -280px;
 	left: 360px;
 	border-style: solid;
 	border-width: 3px;
@@ -152,8 +152,8 @@
 	color: black;
 	background-color: #FF3333;
 	height: 14px;
-	position: absolute;
-	top: 20px;
+	position: relative;
+	top: -120px;
 	left: 480px;
 	width: 234px;
 	border-style: solid;
@@ -167,8 +167,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -240px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
@@ -182,8 +182,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -260px;
 	left: 600px;
 	width: 114px;
 	border-style: solid;
@@ -197,8 +197,8 @@
 	color: black;
 	background-color: #FFFF00;
 	height: 14px;
-	position: absolute;
-	top: 20px;
+	position: relative;
+	top: -20px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
@@ -212,8 +212,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -60px;
 	left: 960px;
 	width: 114px;
 	border-style: solid;
@@ -227,8 +227,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -80px;
 	left: 840px;
 	width: 114px;
 	border-style: solid;
@@ -242,8 +242,8 @@
 	color: black;
 	background-color: #99FFFF;
 	height: 14px;
-	position: absolute;
-	top: 20px;
+	position: relative;
+	top: -180px;
 	left: 960px;
 	width: 114px;
 	border-style: solid;
@@ -257,8 +257,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 0px;
+	position: relative;
+	top: -220px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
@@ -272,8 +272,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 20px;
+	position: relative;
+	top: -360px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
@@ -287,8 +287,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 40px;
+	position: relative;
+	top: -360px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
@@ -302,8 +302,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
-	top: 60px;
+	position: relative;
+	top: -100px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
