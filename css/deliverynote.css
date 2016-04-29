@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
-	position: relative;
-	top: -60px;
+	position: absolute;
+	top: 40px;
 	left: 960px;
 	width: 120px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: relative;
-	top: -60px;
+	position: absolute;
+	top: 40px;
 	left: 960px;
 	width: 114px;
 	border-style: solid;
@@ -151,5 +151,5 @@
 	#DeliveryNoteORDERInvoiceName, #DeliveryNoteORDERDeliveryNoteIssued,
 	#DeliveryNoteORDERDeliveryNoteSigned, #DeliveryNoteORDERShippingAddress
 	{
-	background-color: #FF00EA;
+
 }

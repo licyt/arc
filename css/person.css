@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 20px;
-	position: relative;
-	top: -220px;
+	position: absolute;
+	top: 40px;
 	left: 160px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 14px;
-	position: relative;
-	top: -220px;
+	position: absolute;
+	top: 40px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
@@ -92,5 +92,5 @@
 #PersonORDERidPerson, #PersonORDERPersonName, #PersonORDERPersonSurname,
 	#PersonORDERCompanyName, #PersonORDERPersonPostition,
 	#PersonORDERPersonPhone, #PersonORDERPersonEmail {
-	background-color: #FF00EA;
+
 }

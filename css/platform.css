@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
-	position: relative;
-	top: -240px;
+	position: absolute;
+	top: 40px;
 	left: 720px;
 	width: 120px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: relative;
-	top: -240px;
+	position: absolute;
+	top: 40px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
@@ -119,5 +119,5 @@
 }
 
 #PlatformORDERidPlatform, #PlatformORDERPlatformName {
-	background-color: #FF00EA;
+
 }

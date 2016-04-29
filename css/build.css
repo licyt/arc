@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #FFFF00;
 	height: 20px;
-	position: relative;
-	top: -20px;
+	position: absolute;
+	top: 20px;
 	left: 720px;
 	width: 120px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #FFFF00;
 	height: 14px;
-	position: relative;
-	top: -20px;
+	position: absolute;
+	top: 20px;
 	left: 720px;
 	width: 114px;
 	border-style: solid;
@@ -95,5 +95,5 @@
 #BuildORDERidBuild, #BuildORDERPlatformName, #BuildORDERBuildRequested,
 	#BuildORDERBuildPrintJobStart, #BuildORDERBuildPrintJobEnd,
 	#BuildORDERStatusName {
-	background-color: #FF00EA;
+
 }

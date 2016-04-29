@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #CCCCCC;
 	height: 20px;
-	position: relative;
-	top: 40px;
+	position: absolute;
+	top: 60px;
 	left: 160px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #CCCCCC;
 	height: 14px;
-	position: relative;
-	top: 40px;
+	position: absolute;
+	top: 60px;
 	left: 160px;
 	width: 74px;
 	border-style: solid;
@@ -93,5 +93,5 @@
 	#AddressORDERAddressName, #AddressORDERAddressStreet,
 	#AddressORDERAddressNumber, #AddressORDERAddressZip,
 	#AddressORDERAddressCity, #AddressORDERAddressCountry {
-	background-color: #FF00EA;
+
 }

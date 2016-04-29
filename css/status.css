@@ -1,15 +1,15 @@
 /*           All that belongs to the status           */
 #StatusORDERidStatus, #StatusORDERStatusType, #StatusORDERStatusName,
 	#StatusORDERStatusColor {
-	background-color: #FF00EA;
+
 }
 
 #tabButtonAdminStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
-	position: relative;
-	top: -360px;
+	position: absolute;
+	top: 20px;
 	left: 1220px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -21,8 +21,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: relative;
-	top: -360px;
+	position: absolute;
+	top: 20px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;

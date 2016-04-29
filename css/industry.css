@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 20px;
-	position: relative;
-	top: -140px;
+	position: absolute;
+	top: 40px;
 	left: 0px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #99FF66;
 	height: 14px;
-	position: relative;
-	top: -140px;
+	position: absolute;
+	top: 40px;
 	left: 0px;
 	width: 76px;
 	border-style: solid;
@@ -120,5 +120,5 @@
 
 #IndustryORDERidIndustry, #IndustryORDERIndustryShortcut,
 	#IndustryORDERIndustryName {
-	background-color: #FF00EA;
+
 }

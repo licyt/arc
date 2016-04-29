@@ -3,7 +3,7 @@
 	color: black;
 	background-color: #DDDDDD;
 	height: 20px;
-	position: relative;
+	position: absolute;
 	top: 60px;
 	left: 80px;
 	width: 80px;
@@ -16,7 +16,7 @@
 	color: black;
 	background-color: #DDDDDD;
 	height: 14px;
-	position: relative;
+	position: absolute;
 	top: 60px;
 	left: 80px;
 	width: 74px;
@@ -93,5 +93,5 @@
 	#AccountORDERCompanyName, #AccountORDERAccountBank,
 	#AccountORDERAccountBankCode, #AccountORDERAccountVAT,
 	#AccountORDERAccountSWIFT, #AccountORDERAccountIBAN {
-	background-color: #FF00EA;
+
 }

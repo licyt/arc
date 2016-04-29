@@ -3,8 +3,8 @@
 #tabButtonAdminProject {
 	color: black;
 	background-color: #00CCFF;
-	position: relative;
-	top: -340px;
+	position: absolute;
+	top: 0px;
 	left: 0px;
 	height: 20px;
 	width: 1080px;
@@ -16,8 +16,8 @@
 #tabAdminProject {
 	color: black;
 	background-color: #00CCFF;
-	position: relative;
-	top: -340px;
+	position: absolute;
+	top: 0px;
 	left: 0px;
 	height: 14px;
 	width: 1074px;
@@ -149,5 +149,5 @@
 #ProjectORDERidProject, #ProjectORDERCompanyName,
 	#ProjectORDERProjectName, #ProjectORDERStatusName,
 	#ProjectORDERProjectStartDate, #ProjectORDERProjectPriority {
-	background-color: #FF00EA;
+
 }

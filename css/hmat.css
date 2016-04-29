@@ -54,6 +54,11 @@ body {
   font-size: 12px;
 }
 
+.goButtons {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
 #tabHeadAdmin {
 	margin: 0 auto;
 	height: 100px;

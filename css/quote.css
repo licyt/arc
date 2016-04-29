@@ -3,7 +3,7 @@
 #QuoteORDERidQuote, #QuoteORDERProjectName, #QuoteORDERStatusName,
 	#QuoteORDERPrintParametersTechnology, #QuoteORDERQuoteLeadTime,
 	#QuoteORDERQuotePrice, #QuoteORDERQuoteDateSent {
-	background-color: #FF00EA;
+
 }
 
 #browseFormQuote {
@@ -157,8 +157,8 @@
 #tabAdminQuote {
 	color: black;
 	background-color: #FF6600;
-	position: relative;
-	top: -340px;
+	position: absolute;
+	top: 20px;
 	left: 240px;
 	height: 14px;
 	width: 234px;
@@ -173,8 +173,8 @@
 	font-size: 12px;
 	color: black;
 	background-color: #FF6600;
-	position: relative;
-	top: -340px;
+	position: absolute;
+	top: 20px;
 	left: 240px;
 	height: 20px;
 	width: 240px;

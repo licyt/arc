@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
-	position: relative;
-	top: -120px;
+	position: absolute;
+	top: 20px;
 	left: 480px;
 	width: 240px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #FF3333;
 	height: 14px;
-	position: relative;
-	top: -120px;
+	position: absolute;
+	top: 20px;
 	left: 480px;
 	width: 234px;
 	border-style: solid;
@@ -151,5 +151,5 @@
 	#DemandORDERDemandDateReceived, #DemandORDERDemandDateConfirmed,
 	#DemandORDERDemandPostProcessStart, #DemandORDERDemandPostProcessEnd,
 	#DemandORDERDemandCheckedBy, #DemandORDERDemandCheckDate {
-	background-color: #FF00EA;
+
 }

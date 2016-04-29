@@ -35,8 +35,10 @@ echo
 	linkJs("js/datepicker.js")
   ).
   body(
-  		"<img src='img/hmat_logo.png'>".
-  		"<div>".$dbScheme->allDetailForms()."</div>"
+  		"<div style='position:absolute'>".
+  			"<img style='position:absolute;top:0px;left:1090px;' src='img/hmat_logo.png'>".
+  			$dbScheme->allDetailForms().
+  		"</div>"
   );
 
 echo "the end";

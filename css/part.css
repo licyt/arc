@@ -2,8 +2,8 @@
 #tabButtonAdminPart {
 	color: black;
 	background-color: #B2B2B2;
-	position: relative;
-	top: -180px;
+	position: absolute;
+	top: 60px;
 	left: 490px;
 	height: 20px;
 	width: 100px;
@@ -15,8 +15,8 @@
 #tabAdminPart {
 	color: black;
 	background-color: #B2B2B2;
-	position: relative;
-	top: -180px;
+	position: absolute;
+	top: 60px;
 	left: 490px;
 	height: 14px;
 	width: 94px;
@@ -122,5 +122,5 @@
 	#PartORDERPrintParametersTechnology, #PartORDERPartFileName,
 	#PartORDERPartQuoteFileName, #PartORDERPartAMFileName,
 	#PartORDERPartFinish, #PartORDERPartQuantity {
-	background-color: #FF00EA;
+
 }

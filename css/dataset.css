@@ -2,8 +2,8 @@
 #tabButtonAdminDataSet {
 	color: black;
 	background-color: #B2B2B2;
-	position: relative;
-	top: -40px;
+	position: absolute;
+	top: 40px;
 	left: 480px;
 	height: 20px;
 	width: 120px;
@@ -15,8 +15,8 @@
 #tabAdminDataSet {
 	color: black;
 	background-color: #B2B2B2;
-	position: relative;
-	top: -40px;
+	position: absolute;
+	top: 40px;
 	left: 480px;
 	height: 14px;
 	width: 114px;
@@ -150,5 +150,5 @@
 #DataSetORDERidDataSet, #DataSetORDERStatusName,
 	#DataSetORDERPrintParametersTechnology, #DataSetORDERQuotePrice,
 	#DataSetORDERDataSetName, #DataSetORDERDataSetDate {
-	background-color: #FF00EA;
+
 }

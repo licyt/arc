@@ -3,8 +3,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
-	position: relative;
-	top: -220px;
+	position: absolute;
+	top: 0px;
 	left: 1220px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -16,8 +16,8 @@
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
-	position: relative;
-	top: -220px;
+	position: absolute;
+	top: 0px;
 	left: 1220px;
 	width: 74px;
 	border-style: solid;
@@ -91,5 +91,5 @@
 
 #NoteORDERidNote, #NoteORDERNoteText, #NoteORDERStatusName,
 	#NoteORDERNoteTime, #NoteORDERNoteTable, #NoteORDERNoteRowId {
-	background-color: #FF00EA;
+
 }
