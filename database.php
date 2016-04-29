@@ -152,10 +152,10 @@ class cDbField implements iDbField
     	}
     } elseif($this->isDate()) {
 		  $htmlControl = new cHtmlJsDatePick;
-    } elseif($this->isDateTime()) {
-		  $htmlControl = new cHtmlJsDateTimePick;
     } elseif ($this->isStatusColor())  {
 			$htmlControl = new cHtmlJsColorPick;
+	} elseif ($this->isDateTime())  {
+			$htmlControl = new cHtmlJsDateTimePick;
 	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;

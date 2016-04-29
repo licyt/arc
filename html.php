@@ -419,10 +419,16 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
-			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
+			(($this->attributes["DISABLED"]=="DISABLED")
+					? " DISABLED"
+					: ""
+			).					
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
-			" CLASS=\"isDatePick\"".
+			(($this->attributes["DISABLED"]==" DISABLED")
+					? ""
+					: " CLASS=\"datepicker\""
+			).
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
@@ -460,7 +466,6 @@ class cHtmlJsDateTimePick extends cHtmlInput implements iHtmlJsDateTimePick
 										: ""
 										).
 										($size?" SIZE=$size":"").
-										" CLASS=\"isDateTimePick\"".
 										">";
 	}
 }
@@ -492,7 +497,7 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
-			" OnChange=\"updateColor(this)\"".
+// 			" OnChange=\"updateColor(this)\"".
 			">";
 	}
 }
