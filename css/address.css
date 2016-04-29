@@ -1,0 +1,97 @@
+/*           All that belongs to the address           */
+#tabButtonAdminAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 20px;
+	position: relative;
+	top: 40px;
+	left: 160px;
+	width: 80px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 14px;
+	position: relative;
+	top: 40px;
+	left: 160px;
+	width: 74px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormAddress {
+	border: 1px solid #CCCCCC;
+}
+
+#tabButtonsbAddresssbAddressNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbAddresssbAddressAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbAddresssbAddressNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbAddresssbAddressAddress {
+	color: black;
+	background-color: #CCCCCC;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#AddressORDERidAddress, #AddressORDERCompanyName,
+	#AddressORDERAddressName, #AddressORDERAddressStreet,
+	#AddressORDERAddressNumber, #AddressORDERAddressZip,
+	#AddressORDERAddressCity, #AddressORDERAddressCountry {
+	background-color: #FF00EA;
+}

@@ -1,0 +1,185 @@
+/*           All that belongs to the printparameters           */
+#tabButtonAdminPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	width: 120px;
+	position: relative;
+	top: -280px;
+	left: 360px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	height: 14px;
+	width: 114px;
+	position: relative;
+	top: -280px;
+	left: 360px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormPrintParameters {
+	border: 1px solid #B2B2B2;
+}
+
+#tabButtonsbPrintParameterssbPrintParametersPart {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbPrintParameterssbPrintParametersNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbPrintParameterssbPrintParametersQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbPrintParameterssbPrintParametersPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbPrintParameterssbPrintParametersDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPrintParameterssbPrintParametersPart {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPrintParameterssbPrintParametersNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPrintParameterssbPrintParametersQuote {
+	color: black;
+	background-color: #FF6600;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPrintParameterssbPrintParametersPrintParameters {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPrintParameterssbPrintParametersDataSet {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#PrintParametersORDERidPrintParameters,
+	#PrintParametersORDERPrintParametersTechnology,
+	#PrintParametersORDERPrintParametersMaterial,
+	#PrintParametersORDERPrintParametersResolution,
+	#PrintParametersORDERPrintParametersLayer,
+	#PrintParametersORDERPrintParametersFinish {
+	background-color: #FF00EA;
+}

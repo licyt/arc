@@ -1,0 +1,95 @@
+/*           All that belongs to the platform_has_part           */
+#tabButtonAdminPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	position: relative;
+	top: -260px;
+	left: 600px;
+	width: 120px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	height: 14px;
+	position: relative;
+	top: -260px;
+	left: 600px;
+	width: 114px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormPlatform_has_Part {
+	border: 1px solid #B2B2B2;
+}
+
+#tabButtonsbPlatform_has_PartsbPlatform_has_PartPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbPlatform_has_PartsbPlatform_has_PartNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPlatform_has_PartsbPlatform_has_PartPlatform_has_Part {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbPlatform_has_PartsbPlatform_has_PartNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#Platform_has_PartORDERPlatformName, #Platform_has_PartORDERPartName,
+	#Platform_has_PartORDERPartQuantity {
+	background-color: #FF00EA;
+}

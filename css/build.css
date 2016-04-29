@@ -1,0 +1,99 @@
+/*           All that belongs to the build           */
+#tabButtonAdminBuild {
+	color: black;
+	background-color: #FFFF00;
+	height: 20px;
+	position: relative;
+	top: -20px;
+	left: 720px;
+	width: 120px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminBuild {
+	color: black;
+	background-color: #FFFF00;
+	height: 14px;
+	position: relative;
+	top: -20px;
+	left: 720px;
+	width: 114px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormBuild {
+	border: 1px solid #FF0000;
+}
+
+#tabButtonsbBuildsbBuildNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbBuildsbBuildBuild {
+	color: black;
+	background-color: #FF0000;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbBuildsbBuildNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#tabsbBuildsbBuildBuild {
+	color: black;
+	background-color: #FF0000;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+}
+
+#BuildORDERidBuild, #BuildORDERPlatformName, #BuildORDERBuildRequested,
+	#BuildORDERBuildPrintJobStart, #BuildORDERBuildPrintJobEnd,
+	#BuildORDERStatusName {
+	background-color: #FF00EA;
+}

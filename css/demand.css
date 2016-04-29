@@ -1,0 +1,155 @@
+/*           All that belongs to the demand           */
+#tabButtonAdminDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 20px;
+	position: relative;
+	top: -120px;
+	left: 480px;
+	width: 240px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 14px;
+	position: relative;
+	top: -120px;
+	left: 480px;
+	width: 234px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormDemand {
+	border: 1px solid #FF3333;
+}
+
+#tabButtonsbDemandsbDemandNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbDemandsbDemandStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbDemandsbDemandDemand {
+	color: black;
+	background-color: #FF3333;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbDemandsbDemandInvoice {
+	color: black;
+	background-color: #99FFFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbDemandsbDemandNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbDemandsbDemandStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbDemandsbDemandDemand {
+	color: black;
+	background-color: #FF3333;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbDemandsbDemandInvoice {
+	color: black;
+	background-color: #99FFFF;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#DemandORDERidDemand, #DemandORDERStatusName, #DemandORDERQuotePrice,
+	#DemandORDERDemandDateReceived, #DemandORDERDemandDateConfirmed,
+	#DemandORDERDemandPostProcessStart, #DemandORDERDemandPostProcessEnd,
+	#DemandORDERDemandCheckedBy, #DemandORDERDemandCheckDate {
+	background-color: #FF00EA;
+}

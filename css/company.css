@@ -1,0 +1,211 @@
+/*           All that belongs to the company           */
+#tabButtonAdminCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 20px;
+	position: relative;
+	top: -20px;
+	left: 80px;
+	width: 80px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 14px;
+	position: relative;
+	top: -20px;
+	left: 80px;
+	width: 76px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormCompany {
+	border: 1px solid #66FF66;
+}
+
+#tabButtonsbCompanysbCompanyAccount {
+	color: black;
+	background-color: #DDDDDD;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbCompanysbCompanyAddress {
+	color: black;
+	background-color: #CCCCCC;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbCompanysbCompanyPerson {
+	color: black;
+	background-color: #00CC00;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbCompanysbCompanyNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbCompanysbCompanyProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	margin: 0px;
+	top: 0px;
+	left: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbCompanysbCompanyCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyAccount {
+	color: black;
+	background-color: #DDDDDD;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyAddress {
+	color: black;
+	background-color: #CCCCCC;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyPerson {
+	color: black;
+	background-color: #00CC00;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyProject {
+	color: black;
+	background-color: #00CCFF;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbCompanysbCompanyCompany {
+	color: black;
+	background-color: #66FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#CompanyORDERidCompany, #CompanyORDERCompanyName,
+	#CompanyORDERIndustryName, #CompanyORDERCompanyICO,
+	#CompanyORDERCompanyDIC, #CompanyORDERCompanyDRC,
+	#CompanyORDERCompanyWebsite {
+	background-color: #FF00EA;
+}

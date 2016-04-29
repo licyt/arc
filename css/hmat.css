@@ -53,3 +53,9 @@ body {
   font-family: "Tahoma";
   font-size: 12px;
 }
+
+#tabHeadAdmin {
+	margin: 0 auto;
+	height: 100px;
+	display: block;
+}

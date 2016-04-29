@@ -1,0 +1,124 @@
+/*           All that belongs to the industry           */
+#tabButtonAdminIndustry {
+	color: black;
+	background-color: #99FF66;
+	height: 20px;
+	position: relative;
+	top: -140px;
+	left: 0px;
+	width: 80px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminIndustry {
+	color: black;
+	background-color: #99FF66;
+	height: 14px;
+	position: relative;
+	top: -140px;
+	left: 0px;
+	width: 76px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormIndustry {
+	border: 1px solid #99FF66;
+}
+
+#tabButtonsbIndustrysbIndustryIndustry {
+	color: black;
+	background-color: #99FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbIndustrysbIndustryNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbIndustrysbIndustryCompany {
+	color: black;
+	background-color: #66FF66;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbIndustrysbIndustryIndustry {
+	color: black;
+	background-color: #99FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbIndustrysbIndustryNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbIndustrysbIndustryCompany {
+	color: black;
+	background-color: #66FF66;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#IndustryORDERidIndustry, #IndustryORDERIndustryShortcut,
+	#IndustryORDERIndustryName {
+	background-color: #FF00EA;
+}

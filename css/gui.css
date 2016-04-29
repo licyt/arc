@@ -1,0 +1,95 @@
+/*           All that belongs to the GUI           */
+#tabButtonAdminGUI {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	position: relative;
+	top: -100px;
+	left: 1220px;
+	width: 80px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminGUI {
+	color: black;
+	background-color: #B2B2B2;
+	height: 14px;
+	position: relative;
+	top: -100px;
+	left: 1220px;
+	width: 74px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormGUI {
+	border: 1px solid #B2B2B2;
+}
+
+#tabButtonsbGUIsbGUINote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbGUIsbGUIGUI {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbGUIsbGUINote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbGUIsbGUIGUI {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+}
+
+#GUIORDERidGUI, #GUIORDERGUIelement, #GUIORDERGUIattribute,
+	#GUIORDERGUIvalue {
+	background-color: #FF00EA;
+}
