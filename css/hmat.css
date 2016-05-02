@@ -35,6 +35,9 @@ input:disabled {
 	color: black;
 }
 
+th {
+  text-align: left;
+}
 td {
   font-size: 12px;
 }

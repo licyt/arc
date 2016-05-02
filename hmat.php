@@ -31,13 +31,14 @@ echo
   	linkCss("css/gui.css").
   	linkCss("css/statuslog.css").
 	linkCss("css/datepicker.css").
+  	
   	linkJs("js/jscolor.js").
 	linkJs("js/datepicker.js")
   ).
   body(
   		"<div style='position:absolute'>".
   			"<img style='position:absolute;top:0px;left:1090px;' src='img/hmat_logo.png'>".
-  			$dbScheme->allDetailForms().
+  			$dbScheme->admin().
   		"</div>"
   );
 

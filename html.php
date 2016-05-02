@@ -35,6 +35,7 @@ function buttonSet(array $columnNames, $setName="")
 	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, "ENG", $buttonName));
 	$newNames[$i]=$button->display();
   }
+  //$newNames[0]="";
   return $newNames;	
 }
 
@@ -46,6 +47,7 @@ function inputSet(array $columnNames, $setName="", $values)
 	$filter->setAttribute("OnChange", "this.form.submit()");
 	$newNames[$i]=$filter->display();
   }
+  //$newNames[0]="";
   return $newNames;
 }
 
@@ -145,7 +147,7 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
   }
 }
 
-// implement interface iHtmlDiv
+// implement interface iHtmlSpan
 class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 { 
   public function __construct ($id="") {
@@ -156,7 +158,8 @@ class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 	  return
 	    "<SPAN ".
 		  " ID=".$this->attributes[ID].
-		">".
+		  " NAME=".$this->attributes[ID].
+		  ">".
 		  $this->attributes[CONTENT].
 		"</SPAN>";
   }
@@ -197,7 +200,11 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
           : ""
         ).                                        
         ($size?" SIZE=$size":"").
-      ">";
+        ($this->attributes["CLASS"]
+  		  ? " CLASS=\"".$this->attributes["CLASS"]."\""
+  		  : ""
+  		).
+        ">";
   }
 }
 
@@ -391,11 +398,20 @@ class cHtmlTable
 	  $html = "";
 	  foreach ($row as $columnName=>$value) {
 	  	unset($style);
+	  	
 	  	if ($columnName == "StatusName") {
 	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
 	  	}
 	  	if ($columnName == "StatusColor") continue;
+	  	
 	  	if (strpos($columnName, "_id")) continue;
+	  	
+	  	if ($columnName == "sbColSpan") continue;
+	  	if ($columnName == "subBrowser") {
+	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+	  		continue;
+	  	}
+	  	
 	  	$html.="<TD $style>$value</TD>";
 	  }
 	  $table.="<TR>$html</TR>";
@@ -419,16 +435,10 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
-			(($this->attributes["DISABLED"]=="DISABLED")
-					? " DISABLED"
-					: ""
-			).					
+			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
-			(($this->attributes["DISABLED"]==" DISABLED")
-					? ""
-					: " CLASS=\"datepicker\""
-			).
+			" CLASS=\"isDatePick\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
@@ -466,6 +476,7 @@ class cHtmlJsDateTimePick extends cHtmlInput implements iHtmlJsDateTimePick
 										: ""
 										).
 										($size?" SIZE=$size":"").
+										" CLASS=\"isDateTimePick\"".
 										">";
 	}
 }
@@ -497,7 +508,7 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
-// 			" OnChange=\"updateColor(this)\"".
+			" OnChange=\"updateColor(this)\"".
 			">";
 	}
 }
