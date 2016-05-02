@@ -1,3 +1,18 @@
+// Cumulates the relative offsets into an absolute.
+var cumulativeOffset = function(element) {
+    var top = 0, left = 0;
+    do {
+        top += element.offsetTop  || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while(element);
+
+    return {
+        top: top,
+        left: left
+    };
+};
+
 // Converts date into ISO format YYYY-MM-DD
 function getISODateString(dateTime) {
 	return ( dateTime.getFullYear() +
@@ -182,8 +197,6 @@ function createCalendar(div, month) {
 			var td = tr.insertCell(-1);
 			var inp = document.createElement('input');
 			inp.type = 'button';
-//			inp.onclick = function(){ console.log("HAHA"); };
-//			console.log(inp.onclick);
 			td.appendChild(inp);
 			inp.value = date.getDate();
 			inp.onclick = chooseDate;
@@ -250,7 +263,7 @@ function showDatePicker(idOfTextbox) {
 	// id in the div
 
 	// allign wrt parent
-	div.style.left = textbox.offsetLeft;
+	div.style.left = cumulativeOffset(textbox).left;
 
 	createCalendar(div, date); // Create the calendar
 	insertAfter(div, textbox); // Add the box to screen just after the textbox

@@ -435,10 +435,14 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
-			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
+			(($this->attributes["DISABLED"] == "DISABLED")
+					? " DISABLED"
+					: " CLASS=\"datepicker\""
+			).
+// 			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
-			" CLASS=\"isDatePick\"".
+// 			" CLASS=\"isDatePick\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
