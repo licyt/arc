@@ -136,12 +136,6 @@ class cDbField implements iDbField
 	  // add button for parent table
 	  if ($this->table->getMode()=="BROWSE") {
 	  	$htmlButton = new cHtmlInput("", "SUBMIT", "...");
-	  	$htmlButton->setAttribute("OnClick", 
-	  	  "javascript:".
-	  		//"alert('".$this->foreignTableName()."[$value]');".
-	  	    "document.getElementById('MasterTable').value='".$this->foreignTableName()."';".
-	  	    "document.getElementById('MasterId').value=$value;"
-	  	);
 	  }
     } elseif (($this->getName()=="StatusType") || ($this->getName()=="NoteTable")) {
     	$htmlControl = new cHtmlSelect;
@@ -347,6 +341,7 @@ class cDbTable implements iDbTable
 	  	$ftName = $field->foreignTableName();
 	  	// default lookupField is Name
 		array_push($this->columnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
+		// do not display this column if it is a lookup from parent browser
 		if (is_null($this->parent) || ($ftName!=$this->parent->name))
           array_push($this->displayColumnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
 		// if there is a status, fetch color too
@@ -377,11 +372,9 @@ class cDbTable implements iDbTable
     }
     
     // get currentRecordId 
-    if (isset($_POST["sb".$this->name."RowId"]) && ($_POST["sb".$this->name."RowId"]>=0)) {
+    if (isset($_POST["go".$this->name])) {
+      $this->setMode("BROWSE");
       $this->currentRecordId=$_POST["sb".$this->name."RowId"];
-      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
-    } elseif (isset($_POST["MasterTable"]) && ($_POST["MasterTable"]==$this->name)) {
-      $this->currentRecordId = $_POST["MasterId"];
       $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     } elseif ($_SESSION[table][$this->name][currentRecordId]) {
     	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
@@ -480,7 +473,7 @@ class cDbTable implements iDbTable
   }
   
   public function addButton() {
-  	$button = new cHtmlInput($this->name."Insert", "SUBMIT", "+ Add");
+  	$button = new cHtmlInput($this->name."Insert", "SUBMIT", gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert"));
   	return $button->display();
   }
 
@@ -497,12 +490,18 @@ class cDbTable implements iDbTable
       $result .= $button->display();
     }
     // display ok & cancel buttons
-    if (($this->mode == "UPDATE") ||
+    if (($this->mode == "INSERT") ||
+    	($this->mode == "UPDATE") ||
 		($this->mode == "DELETE")) {
       $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
       $result .= $button->display();
+      if (!is_null($this->parent)) {
+      	$parrentName = $this->name."_id".$this->parent->name;
+      	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->currentRecordId);
+      	$result .= $parentId->display();
+      }
     }
     return $result;
   }
@@ -512,7 +511,10 @@ class cDbTable implements iDbTable
     if ($_POST["go".$this->name]) $this->go($_POST["go".$this->name]);
     
     // data manipulation buttons
-    if ($_POST[$this->name."Insert"]) $this->setMode("INSERT"); // + Add
+    if ($_POST[$this->name."Insert"]) {							// + Add
+    	$this->setMode("INSERT");
+    	$this->currentRecordId=-1;
+    }
     if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
     if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Del
     if ($_POST[$this->name."Cancel"]) $this->setMode("BROWSE"); // Cancel
@@ -590,7 +592,7 @@ class cDbTable implements iDbTable
     return $result;   
   }
 
-  public function editColumns()
+  public function editColumns($rowIndex=0)
   {
   	// display fields as controls in a row of a html table
   	$result = array();
@@ -606,13 +608,17 @@ class cDbTable implements iDbTable
   	      $result[$columnName] = $htmlControl;
   	  	}
   	  	if ($field->getName()=="id".$this->name) {
-  	  	  $input = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
-  	  	  $id = $input->display();
-  	  	  if (!is_null($this->parent)) { 
-  	  	  	$input = new cHtmlInput($this->name."_id".$this->parent->name, "HIDDEN", $this->parent->currentRecordId);
-  	  	  	$parentId = $input->display();
-  	  	  }
-  	  	  $result[$columnName] = $this->manipulator().$id.$parentId;
+	      $button = new cHtmlInput("go".$this->name, "SUBMIT", $rowIndex);
+		  $button->setAttribute("CLASS","goButtons");
+		  $button->setAttribute("OnClick", 
+		    "javascript:".
+		  	  "document.getElementById('sb".$this->name."RowId').value=-1;"
+		  );
+		  $input = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
+  	  	  $result[$columnName] = 
+  	  	    $button->display().
+  	  	    $this->manipulator().
+  	  	    $input->display();
   	  	}
   	  } else {
   	  	//$result[$columnName] = "";
@@ -628,18 +634,55 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-      gui("table".$this->name, "ENG", $this->name)." [".$this->at."/".$this->count."] ".$this->mode.br().
+      gui("table".$this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."] ".$this->mode.br().
       $this->printFields()
     );
     return $form->display();
   }
   
+
+protected function orderSet(array $columnNames, $setName="") 
+{
+  $newNames = array();
+  foreach ($columnNames as $i=>$buttonName) {
+	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
+	$newNames[$i]=$button->display();
+  }
+  //$newNames[0]="";
+  return $newNames;	
+}
+
+protected function filterSet(array $columnNames, $setName="", $values)
+{
+  $newNames = array();
+  
+  if ($this->mode=="INSERT") {
+ 	$input = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
+  	$id = $input->display();
+  	$newNames = $this->editColumns();
+  	$newNames["id".$this->name] = $this->manipulator().$id.$parentId;
+    return $newNames;
+  }
+  
+  foreach ($columnNames as $i=>$inputName) {
+  	if ($inputName=="id".$this->name) {
+  	  $newNames[$i]=$this->addButton();
+  	} else {
+	  $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
+	  $filter->setAttribute("OnChange", "this.form.submit()");
+	  $filter->setAttribute("CLASS", "filter");
+	  $newNames[$i]=$filter->display();
+  	}
+  }
+  //$newNames[0]="";
+  return $newNames;
+}
   public function browseForm($include="") 
   {
 	// create output as html table
 	$table = new cHtmlTable();
-	$table->addHeader(inputSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
-	$table->addHeader(buttonSet($this->displayColumnNames, $this->name."ORDER"));
+	$table->addHeader($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
 	
 	if ($dbResult = mysql_query($this->buildSQL())) {
 	  $i = 0;
@@ -648,7 +691,7 @@ class cDbTable implements iDbTable
 	  	$i++;
 	  	if ($id==$this->currentRecordId) {
         // current record is editable
-	  	  $table->addRow($this->editColumns());
+	  	  $table->addRow($this->editColumns($i));
 	  	  // sub-browsers for current record
 	  	  $sbRow = array();
 	  	  $sbRow["sbIndent"]="";
@@ -666,6 +709,11 @@ class cDbTable implements iDbTable
 		  $button->setAttribute("CLASS","goButtons");
 		  // replace id value with button
 		  $dbRow["id".$this->name] = $button->display();
+		  // hide column for lookupField if it is a lookup into parent table 
+		  if (isset($this->parent)) {
+		  	$ftName = $this->parent->name;
+            unset($dbRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
+		  }
 		  // add row to table
 		  $table->addRow($dbRow);
 	  	}
@@ -680,7 +728,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-	  //gui($this->name, "ENG", $this->name)." [".$this->at."/".$this->count."]".br().
+	  //gui($this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."]".br().
       $table->display().
       $sbRowId->display().
       $include
@@ -761,7 +809,7 @@ class cDbScheme implements iDbScheme
   {
   	$tableTabs = new cHtmlTabControl($dbName."Admin");
   	foreach ($this->tables as $name=>$table) {
-	  if ($_POST["tabButton"."Admin".$name] || ($_POST["MasterTable"]==$name)) {
+	  if ($_POST["tabButton"."Admin".$name]) {
 	  	$_SESSION[tabControl][Admin][selected] = $name;
 	  }
   	}
