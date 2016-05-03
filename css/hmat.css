@@ -67,3 +67,8 @@ body {
 	height: 100px;
 	display: block;
 }
+
+.filter {
+	background-color: white;
+	border: 1px solid lightgray;
+}
