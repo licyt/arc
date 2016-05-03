@@ -28,29 +28,6 @@ function charset($charset="UTF-8") {
   return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
 }
  
-function buttonSet(array $columnNames, $setName="") 
-{
-  $newNames = array();
-  foreach ($columnNames as $i=>$buttonName) {
-	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, "ENG", $buttonName));
-	$newNames[$i]=$button->display();
-  }
-  //$newNames[0]="";
-  return $newNames;	
-}
-
-function inputSet(array $columnNames, $setName="", $values)
-{
-  $newNames = array();
-  foreach ($columnNames as $i=>$inputName) {
-	$filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
-	$filter->setAttribute("OnChange", "this.form.submit()");
-	$newNames[$i]=$filter->display();
-  }
-  //$newNames[0]="";
-  return $newNames;
-}
-
 // ------------------------------------------------------ I N T E R F A C E
 // common ancestor for all Html elements on a page
 interface iHtmlElement {
@@ -285,7 +262,7 @@ class cHtmlLabel extends cHtmlElement implements iHtmlLabel
         " ID=".$this->attributes[ID].
         " FOR=".$this->attributes[TARGET].
       ">".
-        gui($this->attributes[ID], "ENG", $this->attributes[VALUE]).
+        gui($this->attributes[ID], $GLOBALS[lang], $this->attributes[VALUE]).
       "</LABEL>";
   }
 }
@@ -352,10 +329,10 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 	foreach ($this->tabs as $tabName => $content) {
 	  if ($tabName == $this->selected) {
 		$button = new cHtmlSpan("tab".$this->name.$tabName);
-		$button->setAttribute("CONTENT", GUI("tabButton".$this->name.$tabName, "ENG", $tabName));
+		$button->setAttribute("CONTENT", gui("tab".$this->name.$tabName, $GLOBALS[lang], $tabName));
 		$body->setAttribute("CONTENT", $content);
 	  } else {
-        $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", GUI("tabButton".$this->name.$tabName, "ENG", $tabName));
+        $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
 	  }
       $switch.=$button->display();
 	}
@@ -435,13 +412,14 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
-			(($this->attributes["DISABLED"] === " DISABLED")
+			(($this->attributes["DISABLED"] == "DISABLED")
 					? " DISABLED"
-					: ""
+					: " CLASS=\"datepicker\""
 			).
+// 			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
- 			" CLASS=\"datepicker\"".
+// 			" CLASS=\"isDatePick\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
