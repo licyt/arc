@@ -3,4 +3,6 @@
   $dbUser       = 'root';
   $dbPassword   = 'mindfold';
   $dbName       = 'hmat_dev';
+  
+  $lang 		= 'ENG';
 ?>
