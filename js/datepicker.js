@@ -73,10 +73,13 @@ function chooseDate(e) {
 		createCalendar(div, new Date(targ.getAttribute('date')));
 		return;
 	}
-	textbox.value = targ.getAttribute('date'); // Set the selected date
-	// set previous sibling's value and value attribute
-	document.getElementById(div.previousElementSibling.id).setAttribute("value",textbox.value);
-	document.getElementById(div.previousElementSibling.id).value = textbox.value;
+    // Set the selected date
+	// set previous sibling's value and value attribute only if not disabled
+	if( document.getElementById(div.previousElementSibling.id).getAttribute("disabled") != "" ) {
+		textbox.value = targ.getAttribute('date');
+		document.getElementById(div.previousElementSibling.id).setAttribute("value",textbox.value);
+		document.getElementById(div.previousElementSibling.id).value = textbox.value;
+	}
 	div.parentNode.removeChild(div); // Remove the dropdown box now
 }
 
