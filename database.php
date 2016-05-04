@@ -333,9 +333,13 @@ class cDbTable implements iDbTable
 	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
 	  array_push($this->columnNames, $fieldName);
-	  if (!strpos($fieldName, "_id")) {
-        array_push($this->displayColumnNames, $fieldName);
+	  if (strpos($fieldName, "_id") || (($fieldName=="StatusLogRowId")&& !is_null($this->parent))) {
+	  	// do not display foreign index field
+	  	// do not display StatusLogRowId in subBrowser (table with defined parent)
+	  } else {
+ 	  	array_push($this->displayColumnNames, $fieldName);
 	  }
+	  // foreign key lookup fields
 	  if ($useForeignFields && $field->isForeignKey()) {
         // this field is a foreign key, display lookupField from referenced table
 	  	$ftName = $field->foreignTableName();
@@ -514,6 +518,7 @@ class cDbTable implements iDbTable
     if ($_POST[$this->name."Insert"]) {							// + Add
     	$this->setMode("INSERT");
     	$this->currentRecordId=-1;
+    	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
     if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
     if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Del
@@ -531,7 +536,7 @@ class cDbTable implements iDbTable
           // assign field values 
           foreach ($this->fields as $i => $field) {
             $fieldName = $field->getName();
-            if ($fieldName != "id".$this->name) {
+            if (($fieldName != "id".$this->name) && ($_POST[$fieldName] != "")) {
               $assign .= ($assign ? ", " : "").
                 $fieldName." = \"".$_POST[$fieldName]."\"";
             } 
