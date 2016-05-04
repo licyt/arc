@@ -237,11 +237,11 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
           : ""
         ).
         ($this->selectedColor
-          ? " STYLE=\"background-color:#".$this->selectedColor.";\"".
-		    " OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\""
+          ? " STYLE=\"background-color:#".$this->selectedColor.";\""
           : ""
         ).
-      ">".
+		" OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\"".
+        ">".
         $options.
       "</SELECT>";
   }
@@ -412,13 +412,14 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 			" TYPE=".($this->attributes[TYPE]
 			? $this->attributes[TYPE]
 			: "TEXT").
-			(($this->attributes["DISABLED"] === " DISABLED")
+			(($this->attributes["DISABLED"] == "DISABLED")
 					? " DISABLED"
-					: ""
+					: " CLASS=\"datepicker\""
 			).
+// 			" DISABLED=\"".($this->attributes["DISABLED"]==" DISABLED"?"YES":"NO")."\"".
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
- 			" CLASS=\"datepicker\"".
+// 			" CLASS=\"isDatePick\"".
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			">";
