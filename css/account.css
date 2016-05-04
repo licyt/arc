@@ -41,6 +41,7 @@
 	border: 0px;
 	padding: 0px;
 	margin: 0px 2px 0px 0px;
+	text-decoration: underline;
 }
 
 #tabButtonsbAccountsbAccountAccount {
@@ -53,6 +54,7 @@
 	border: 0px;
 	padding: 0px;
 	margin: 0px 2px 0px 0px;
+	text-decoration: underline;
 }
 
 #tabsbAccountsbAccountNote {
@@ -70,6 +72,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
+	text-decoration: underline;
 }
 
 #tabsbAccountsbAccountAccount {
@@ -87,6 +90,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
+	text-decoration: underline;
 }
 
 #AccountORDERidAccount, #AccountORDERAccountName,

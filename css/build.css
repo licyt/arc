@@ -72,6 +72,7 @@
 	margin: 0px 2px 0px 0px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	text-decoration: underline;
 }
 
 #tabsbBuildsbBuildBuild {
@@ -90,6 +91,7 @@
 	margin: 0px 2px 0px 0px;
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
+	text-decoration: underline;
 }
 
 #BuildORDERidBuild, #BuildORDERPlatformName, #BuildORDERBuildRequested,
