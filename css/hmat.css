@@ -14,13 +14,12 @@ select {
 	font-size: 12px;
 	height: 16px;
 	margin: 0px;
+	padding: 0px;
+	border: 1px;
 }
 
 select:disabled {
 	color: black;
-	padding: 0px;
-	border: 1px;
-	margin: 0px;
 }
 
 input {
