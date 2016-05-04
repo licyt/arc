@@ -28,10 +28,22 @@
 }
 
 #browseFormBuild {
-	border: 1px solid #FF0000;
+	border: 1px solid #FFFF00;
 }
 
 #tabButtonsbBuildsbBuildNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbBuildsbBuildStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -93,6 +105,26 @@
 	padding: 0px 4px 0px 4px;
 	font-style: italic;
 }
+
+#tabsbBuildsbBuildStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	font-style: italic;
+}
+
 
 #BuildORDERidBuild, #BuildORDERPlatformName, #BuildORDERBuildRequested,
 	#BuildORDERBuildPrintJobStart, #BuildORDERBuildPrintJobEnd,
