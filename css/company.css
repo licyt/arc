@@ -117,7 +117,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbCompanysbCompanyAddress {
@@ -135,7 +135,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbCompanysbCompanyPerson {
@@ -153,7 +153,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbCompanysbCompanyNote {
@@ -171,7 +171,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbCompanysbCompanyProject {
@@ -188,7 +188,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbCompanysbCompanyCompany {
@@ -206,12 +206,12 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #CompanyORDERidCompany, #CompanyORDERCompanyName,
 	#CompanyORDERIndustryName, #CompanyORDERCompanyICO,
 	#CompanyORDERCompanyDIC, #CompanyORDERCompanyDRC,
 	#CompanyORDERCompanyWebsite {
-
+	
 }

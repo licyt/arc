@@ -70,7 +70,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbPlatform_has_PartsbPlatform_has_PartNote {
@@ -88,10 +88,10 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #Platform_has_PartORDERPlatformName, #Platform_has_PartORDERPartName,
 	#Platform_has_PartORDERPartQuantity {
-
+	
 }

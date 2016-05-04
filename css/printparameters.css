@@ -106,7 +106,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbPrintParameterssbPrintParametersNote {
@@ -124,7 +124,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbPrintParameterssbPrintParametersQuote {
@@ -141,7 +141,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbPrintParameterssbPrintParametersPrintParameters {
@@ -159,7 +159,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbPrintParameterssbPrintParametersDataSet {
@@ -177,7 +177,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #PrintParametersORDERidPrintParameters,
@@ -186,5 +186,5 @@
 	#PrintParametersORDERPrintParametersResolution,
 	#PrintParametersORDERPrintParametersLayer,
 	#PrintParametersORDERPrintParametersFinish {
-
+	
 }

@@ -1,7 +1,7 @@
 /*           All that belongs to the status           */
 #StatusORDERidStatus, #StatusORDERStatusType, #StatusORDERStatusName,
 	#StatusORDERStatusColor {
-
+	
 }
 
 #tabButtonAdminStatus {
@@ -170,7 +170,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusStatusLog {
@@ -188,7 +188,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusProject {
@@ -205,7 +205,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusQuote {
@@ -222,7 +222,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusDataSet {
@@ -240,7 +240,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusDemand {
@@ -258,7 +258,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusInvoice {
@@ -276,7 +276,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusDeliveryNote {
@@ -294,7 +294,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusPart {
@@ -312,7 +312,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbStatussbStatusNote {
@@ -330,5 +330,5 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }

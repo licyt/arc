@@ -41,7 +41,7 @@
 	border: 0px;
 	padding: 0px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabButtonsbAccountsbAccountAccount {
@@ -54,7 +54,7 @@
 	border: 0px;
 	padding: 0px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbAccountsbAccountNote {
@@ -72,7 +72,7 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #tabsbAccountsbAccountAccount {
@@ -90,12 +90,12 @@
 	font-family: "Tahoma";
 	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	text-decoration: underline;
+	font-style: italic;
 }
 
 #AccountORDERidAccount, #AccountORDERAccountName,
 	#AccountORDERCompanyName, #AccountORDERAccountBank,
 	#AccountORDERAccountBankCode, #AccountORDERAccountVAT,
 	#AccountORDERAccountSWIFT, #AccountORDERAccountIBAN {
-
+	
 }
