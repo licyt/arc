@@ -379,6 +379,7 @@ class cHtmlTable
 	foreach ($this->rows as $rowIndex=>$row) {
 	  $html = "";
 	  $onClick = "";
+	  $class = "";
 	  foreach ($row as $columnName=>$value) {
 	  	unset($style);
 	  	
@@ -395,13 +396,14 @@ class cHtmlTable
 	  	
 	  	if ($columnName == "sbColSpan") continue;
 	  	if ($columnName == "subBrowser") {
+	  		$class = " CLASS=\"subBrowserRow\"";
 	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
 	  		continue;
 	  	}
 	  	
 	  	$html.="<TD $style>$value</TD>";
 	  }
-	  $table.="<TR $onClick>$html</TR>";
+	  $table.="<TR $class $onClick>$html</TR>";
 	}
 	// display footers
   	foreach ($this->footers as $footer) {

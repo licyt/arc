@@ -134,9 +134,11 @@ class cDbField implements iDbField
         }
 	  }
 	  // add button for parent table
+	  /*
 	  if ($this->table->getMode()=="BROWSE") {
 	  	$htmlButton = new cHtmlInput("", "SUBMIT", "...");
 	  }
+	  */
     } elseif (($this->getName()=="StatusType") || ($this->getName()=="NoteTable")) {
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
@@ -682,7 +684,10 @@ class cDbTable implements iDbTable
 	$table = new cHtmlTable();
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
 	$table->addHeader($this->insertRow());
-	$table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+	// add filter only for master browser
+	if (!isset($this->parent)) {
+	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+	}
 	
 	if ($dbResult = mysql_query($this->buildSQL())) {
 	  $i = 0;

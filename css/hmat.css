@@ -45,6 +45,10 @@ tr:hover {
   background-color: silver;
 }
 
+.subBrowserRow:hover {
+  background-color: transparent;
+}
+
 span {
   font-size: 12px;
   text-align: center;	
