@@ -164,13 +164,6 @@ class cDbField implements iDbField
     $htmlControl->setAttribute("DISABLED", ($disabled?" DISABLED":""));
     $htmlControl->setAttribute("VALUE", $value);
     
-    /*/ create  label
-	$htmlLabel = new cHtmlLabel;
-	$htmlLabel->setAttribute("ID", "Label".$this->properties[Field]);
-	$htmlLabel->setAttribute("TARGET", $this->properties[Field]);
-	$htmlLabel->setAttribute("VALUE", $this->properties[Field]);
-	*/
-    
     return 
       //$htmlLabel->display().
       $htmlControl->display().
@@ -374,15 +367,6 @@ class cDbTable implements iDbTable
 	  // or set position to 0 by default
       $this->go(0);
     }
-    
-    // get currentRecordId 
-    if (isset($_POST["go".$this->name])) {
-      $this->setMode("BROWSE");
-      $this->currentRecordId=$_POST["sb".$this->name."RowId"];
-      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
-    } elseif ($_SESSION[table][$this->name][currentRecordId]) {
-    	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
-    }
   }
   
   protected function parentLimit() 
@@ -477,7 +461,8 @@ class cDbTable implements iDbTable
   }
   
   public function addButton() {
-  	$button = new cHtmlInput($this->name."Insert", "SUBMIT", gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert"));
+  	$button = new cHtmlInput($this->name."Insert", "SUBMIT", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
+    $button->setAttribute("CLASS", "InsertButton");
   	return $button->display();
   }
 
@@ -485,21 +470,25 @@ class cDbTable implements iDbTable
   {
     // display update button
     if (($this->mode == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput($this->name."Update", "SUBMIT", "* Edit");
+      $button = new cHtmlInput($this->name."Update", "SUBMIT", "o");
+      $button->setAttribute("CLASS", "UpdateButton");
       $result .= $button->display();
     }
     // display delete button
     if (($this->mode == "BROWSE")&&($this->at)) {
-      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x Del");
+      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x");
+      $button->setAttribute("CLASS", "DeleteButton");
       $result .= $button->display();
     }
     // display ok & cancel buttons
     if (($this->mode == "INSERT") ||
     	($this->mode == "UPDATE") ||
 		($this->mode == "DELETE")) {
-      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "Ok");
+      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
+      $button->setAttribute("CLASS", "OkButton");
       $result .= $button->display();
-      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "Cancel");
+      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
+      $button->setAttribute("CLASS", "CancelButton");
       $result .= $button->display();
       if (!is_null($this->parent)) {
       	$parrentName = $this->name."_id".$this->parent->name;
@@ -512,7 +501,14 @@ class cDbTable implements iDbTable
 
   public function respondToPost() 
   {
-    if ($_POST["go".$this->name]) $this->go($_POST["go".$this->name]);
+    // get currentRecordId 
+    if (isset($_POST["id".$this->name])) {
+      //$this->setMode("BROWSE");
+      $this->currentRecordId=$_POST["id".$this->name];
+      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+    } elseif ($_SESSION[table][$this->name][currentRecordId]) {
+    	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
+    }
     
     // data manipulation buttons
     if ($_POST[$this->name."Insert"]) {							// + Add
@@ -597,7 +593,7 @@ class cDbTable implements iDbTable
     return $result;   
   }
 
-  public function editColumns($rowIndex=0)
+  public function editColumns($id=0)
   {
   	// display fields as controls in a row of a html table
   	$result = array();
@@ -613,17 +609,7 @@ class cDbTable implements iDbTable
   	      $result[$columnName] = $htmlControl;
   	  	}
   	  	if ($field->getName()=="id".$this->name) {
-	      $button = new cHtmlInput("go".$this->name, "SUBMIT", $rowIndex);
-		  $button->setAttribute("CLASS","goButtons");
-		  $button->setAttribute("OnClick", 
-		    "javascript:".
-		  	  "document.getElementById('sb".$this->name."RowId').value=-1;"
-		  );
-		  $input = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
-  	  	  $result[$columnName] = 
-  	  	    $button->display().
-  	  	    $this->manipulator().
-  	  	    $input->display();
+  	  	  $result[$columnName] = $this->manipulator();
   	  	}
   	  } else {
   	  	//$result[$columnName] = "";
@@ -645,49 +631,58 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
-
-protected function orderSet(array $columnNames, $setName="") 
-{
-  $newNames = array();
-  foreach ($columnNames as $i=>$buttonName) {
-	$button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
-	$newNames[$i]=$button->display();
-  }
-  //$newNames[0]="";
-  return $newNames;	
-}
-
-protected function filterSet(array $columnNames, $setName="", $values)
-{
-  $newNames = array();
-  
-  if ($this->mode=="INSERT") {
- 	$input = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
-  	$id = $input->display();
-  	$newNames = $this->editColumns();
-  	$newNames["id".$this->name] = $this->manipulator().$id.$parentId;
+  protected function insertRow() 
+  {
+    $newNames = array();
+    switch ($this->mode) {
+      case "BROWSE":
+      	$newNames["id".$this->name] = $this->addButton();
+      	break;
+  	  case "INSERT":
+        $input = new cHtmlInput("id".$this->name, "HIDDEN", -1);
+  	    $id = $input->display();
+  	    $newNames = $this->editColumns();
+  	    $newNames["id".$this->name] = $this->manipulator().$id.$parentId;
+  	    break;
+    }
     return $newNames;
   }
   
-  foreach ($columnNames as $i=>$inputName) {
-  	if ($inputName=="id".$this->name) {
-  	  $newNames[$i]=$this->addButton();
-  	} else {
-	  $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
-	  $filter->setAttribute("OnChange", "this.form.submit()");
-	  $filter->setAttribute("CLASS", "filter");
-	  $newNames[$i]=$filter->display();
-  	}
+  protected function orderSet(array $columnNames, $setName="") 
+  {
+    $newNames = array();
+    foreach ($columnNames as $i=>$buttonName) {
+      $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
+      $newNames[$i]=$button->display();
+    }
+    //$newNames[0]="";
+    return $newNames;	
   }
-  //$newNames[0]="";
-  return $newNames;
-}
+
+  protected function filterSet(array $columnNames, $setName="", $values)
+  {
+    $newNames = array();
+    foreach ($columnNames as $i=>$inputName) {
+  	  if ($inputName=="id".$this->name) {
+  	    $newNames[$i]="";
+  	  } else {
+	    $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
+	    $filter->setAttribute("OnChange", "this.form.submit()");
+	    $filter->setAttribute("CLASS", "filter");
+	    $newNames[$i]=$filter->display();
+  	  }
+    }
+    //$newNames[0]="";
+    return $newNames;
+  }
+ 
   public function browseForm($include="") 
   {
 	// create output as html table
 	$table = new cHtmlTable();
-	$table->addHeader($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
+	$table->addHeader($this->insertRow());
+	$table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
 	
 	if ($dbResult = mysql_query($this->buildSQL())) {
 	  $i = 0;
@@ -695,8 +690,8 @@ protected function filterSet(array $columnNames, $setName="", $values)
 	  	$id = $dbRow["id".$this->name];
 	  	$i++;
 	  	if ($id==$this->currentRecordId) {
-        // current record is editable
-	  	  $table->addRow($this->editColumns($i));
+          // current record is editable
+	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for current record
 	  	  $sbRow = array();
 	  	  $sbRow["sbIndent"]="";
@@ -705,20 +700,18 @@ protected function filterSet(array $columnNames, $setName="", $values)
 	  	  $table->addRow($sbRow);
 	  	} else {
 	  	// other records
-	      $button = new cHtmlInput("go".$this->name, "SUBMIT", $i);
-		  $button->setAttribute("OnClick", 
-		    "javascript:".
-		  	  "document.getElementById('sb".$this->name."RowId').value=$id;".
-		  	  "this.form.action='#".$this->name."$id';"
-		  );
-		  $button->setAttribute("CLASS","goButtons");
-		  // replace id value with button
-		  $dbRow["id".$this->name] = $button->display();
+	  	  $js="javascript:".
+		  	"document.getElementById('id".$this->name."').value=$id;".
+		  	"document.browseForm".$this->name.".action='#".$this->name."$id';".
+	  	    "document.browseForm".$this->name.".submit();";
+		  $dbRow["id".$this->name] = "";
 		  // hide column for lookupField if it is a lookup into parent table 
 		  if (isset($this->parent)) {
 		  	$ftName = $this->parent->name;
             unset($dbRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
 		  }
+		  // add javascript to onClick event of this row
+		  $dbRow[onClick] = $js;
 		  // add row to table
 		  $table->addRow($dbRow);
 	  	}
@@ -726,7 +719,7 @@ protected function filterSet(array $columnNames, $setName="", $values)
       mysql_free_result($dbResult);
 	}
 	
-	$sbRowId = new cHtmlInput("sb".$this->name."RowId", "HIDDEN", -1);
+	$RowId = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
 	// include table in form
     $form = new cHtmlForm();
     $form->setAttribute("ID", "browseForm".$this->name);
@@ -735,7 +728,7 @@ protected function filterSet(array $columnNames, $setName="", $values)
     $form->setAttribute("CONTENT", 
 	  //gui($this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."]".br().
       $table->display().
-      $sbRowId->display().
+      $RowId->display().
       $include
     );
     return $form->display();

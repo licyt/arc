@@ -350,6 +350,7 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 class cHtmlTable 
 {
   protected $headers = array();
+  protected $footers = array();
   protected $rows  = array();
   
   // $columns is array of values
@@ -359,6 +360,10 @@ class cHtmlTable
   public function addRow($columns) {
 	// var_dump( $columns );
 	array_push($this->rows, $columns);
+  }
+  // $columns is array of values
+  public function addFooter($columns) {
+    array_push($this->footers, $columns);
   }
   public function display() {
   	$table = "";
@@ -373,9 +378,14 @@ class cHtmlTable
 	// display rows 
 	foreach ($this->rows as $rowIndex=>$row) {
 	  $html = "";
+	  $onClick = "";
 	  foreach ($row as $columnName=>$value) {
 	  	unset($style);
 	  	
+	  	if ($columnName == "onClick") {
+	  		$onClick = "onClick=\"$value\"";
+	  		continue;
+	  	} 
 	  	if ($columnName == "StatusName") {
 	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
 	  	}
@@ -390,6 +400,14 @@ class cHtmlTable
 	  	}
 	  	
 	  	$html.="<TD $style>$value</TD>";
+	  }
+	  $table.="<TR $onClick>$html</TR>";
+	}
+	// display footers
+  	foreach ($this->footers as $footer) {
+	  $html = "";
+	  foreach ($footer as $value) {
+	  	$html.="<TH>$value</TH>";
 	  }
 	  $table.="<TR>$html</TR>";
 	}

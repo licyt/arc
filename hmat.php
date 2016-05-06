@@ -42,7 +42,6 @@ echo
   		"</div>"
   );
 
-echo "the end";
 
 //print_r($_SESSION);  //debug
 //print_r($_POST);
