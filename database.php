@@ -163,7 +163,12 @@ class cDbField implements iDbField
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
-    $htmlControl->setAttribute("DISABLED", ($disabled?" DISABLED":""));
+    $htmlControl->setAttribute("DISABLED", 
+      ($disabled
+        ?" READONLY OnClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
+      	:""
+      )
+    );
     $htmlControl->setAttribute("VALUE", $value);
     
     return 
@@ -510,6 +515,13 @@ class cDbTable implements iDbTable
       $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     } elseif ($_SESSION[table][$this->name][currentRecordId]) {
     	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
+    }
+    
+    // # button - collapse tree 
+    if (isset($_POST[$this->name.ORDERid.$this->name])) {
+    	$this->currentRecordId=-1;
+    	$this->setMode(BROWSE); 
+    	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
     
     // data manipulation buttons
