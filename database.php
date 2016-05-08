@@ -471,13 +471,13 @@ class cDbTable implements iDbTable
   public function manipulator() 
   {
     // display update button
-    if (($this->mode == "BROWSE")&&($this->at)) {
+    if (($this->mode == "BROWSE")&&($this->currentRecordId>0)) {
       $button = new cHtmlInput($this->name."Update", "SUBMIT", "o");
       $button->setAttribute("CLASS", "UpdateButton");
       $result .= $button->display();
     }
     // display delete button
-    if (($this->mode == "BROWSE")&&($this->at)) {
+    if (($this->mode == "BROWSE")&&($this->currentRecordId>0)) {
       $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x");
       $button->setAttribute("CLASS", "DeleteButton");
       $result .= $button->display();
@@ -610,12 +610,10 @@ class cDbTable implements iDbTable
   	  	} else {
   	      $result[$columnName] = $htmlControl;
   	  	}
-  	  	if ($field->getName()=="id".$this->name) {
-  	  	  $result[$columnName] = $this->manipulator();
-  	  	}
-  	  } else {
-  	  	//$result[$columnName] = "";
   	  }
+   	  if ($columnName=="id".$this->name) {
+  	    $result[$columnName] = $this->manipulator();
+   	  }
   	}
   	return $result;
   }
