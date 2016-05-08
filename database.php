@@ -165,7 +165,7 @@ class cDbField implements iDbField
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
     $htmlControl->setAttribute("DISABLED", 
       ($disabled
-        ?" READONLY OnClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
+        ?" OnClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
       	:""
       )
     );
