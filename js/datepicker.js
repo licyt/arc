@@ -338,7 +338,13 @@ onDOMReady(function() {
 		var className = allElements[i].className;
 		if (className == 'datepicker' || className.indexOf('datepicker ') != -1
 				|| className.indexOf(' datepicker') != -1) {
-			// Found one! Now lets add a datepicker next to it
+			// Found one! 
+			// First check if the date is null (0000-00-00) if yes set the value to empty
+			console.log(allElements[i].getAttribute("value"));
+			if( allElements[i].getAttribute("value") === "0000-00-00" ) {
+				allElements[i].setAttribute( "value" , "" );
+			}
+			// Now lets add a datepicker next to it
 			var a = document.createElement('a');
 			a.href = '#';
 			a.className = "datepickershow";
