@@ -159,6 +159,10 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
 
   public function display() {
     $size=$this->attributes[SIZE];  
+    if( $this->attributes["VALUE"] === "0000-00-00" ) {
+    	$this->attributes["VALUE"] = "";
+    }
+    
     return 
       "<INPUT".
         " TYPE=".($this->attributes[TYPE]
@@ -181,7 +185,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
   		  ? " CLASS=\"".$this->attributes["CLASS"]."\""
   		  : ""
   		).
-        ">";
+  		">";
   }
 }
 
