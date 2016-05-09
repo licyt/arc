@@ -159,10 +159,6 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
 
   public function display() {
     $size=$this->attributes[SIZE];  
-    if( $this->attributes["VALUE"] === "0000-00-00" ) {
-    	$this->attributes["VALUE"] = "";
-    }
-    
     return 
       "<INPUT".
         " TYPE=".($this->attributes[TYPE]
@@ -172,8 +168,8 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         " NAME=".$this->attributes[ID].
         $this->attributes[DISABLED].
         " VALUE=\"".$this->attributes[VALUE]."\"".                                        
-        ($this->attributes[OnChange]
-          ? " OnChange=\"".$this->attributes[OnChange]."\""
+        ($this->attributes[onChange]
+          ? " onChange=\"".$this->attributes[onChange]."\""
           : ""
         ).                                        
         ($this->attributes[OnClick]
@@ -183,6 +179,10 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         ($size?" SIZE=$size":"").
         ($this->attributes["CLASS"]
   		  ? " CLASS=\"".$this->attributes["CLASS"]."\""
+  		  : ""
+  		).
+        ($this->attributes["STYLE"]
+  		  ? " STYLE=\"".$this->attributes["STYLE"]."\""
   		  : ""
   		).
   		">";
@@ -244,7 +244,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
           ? " STYLE=\"background-color:#".$this->selectedColor.";\""
           : ""
         ).
-		" OnChange=\"this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;\"".
+		" onChange=\"".$this->attributes[onChange]."\"".
         ">".
         $options.
       "</SELECT>";
@@ -387,10 +387,14 @@ class cHtmlTable
 	  foreach ($row as $columnName=>$value) {
 	  	unset($style);
 	  	
+	  	if ($columnName == "onKeyPress") {
+	  		$onKeyPress = "onKeyPress=\"$value\"";
+	  		continue;
+	  	} 
 	  	if ($columnName == "onClick") {
 	  		$onClick = "onClick=\"$value\"";
 	  		continue;
-	  	} 
+	  	}
 	  	if ($columnName == "StatusName") {
 	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
 	  	}
@@ -410,7 +414,7 @@ class cHtmlTable
 	  	
 	  	$html.="<TD $style>$value</TD>";
 	  }
-	  $table.="<TR $class $onClick>$html</TR>";
+	  $table.="<TR $class $onClick $onKeyPress>$html</TR>";
 	}
 	// display footers
   	foreach ($this->footers as $footer) {
@@ -461,30 +465,31 @@ class cHtmlJsDateTimePick extends cHtmlInput implements iHtmlJsDateTimePick
 
 	// display is overloaded
 	public function display() {
-		$size=$this->attributes[SIZE];
-		return
-		"<INPUT".
+	  $size=$this->attributes[SIZE];
+	  return 
+	  "<INPUT".
 		" TYPE=".($this->attributes[TYPE]
-				? $this->attributes[TYPE]
-				: "TEXT").
-				" ID=".$this->attributes[ID].
-				" NAME=".$this->attributes[ID].
-				($this->attributes[DISABLED] == " DISABLED"
-						? " DISABLED"
-						: ""
-						).
-						" VALUE=\"".$this->attributes[VALUE]."\"".
-						($this->attributes[OnChange]
-								? " OnChange=\"".$this->attributes[OnChange]."\""
-								: ""
-								).
-								($this->attributes[OnClick]
-										? " OnClick=\"".$this->attributes[OnClick]."\""
-										: ""
-										).
-										($size?" SIZE=$size":"").
-										" CLASS=\"isDateTimePick\"".
-										">";
+		  ? $this->attributes[TYPE]
+		  : "TEXT"
+		).
+		" ID=".$this->attributes[ID].
+		" NAME=".$this->attributes[ID].
+		($this->attributes[DISABLED] == " DISABLED"
+		  ? " DISABLED"
+		  : ""
+		).
+		" VALUE=\"".$this->attributes[VALUE]."\"".
+		($this->attributes[onChange]
+		  ? " onChange=\"".$this->attributes[onChange]."\""
+		  : ""
+		).
+		($this->attributes[OnClick]
+		  ? " OnClick=\"".$this->attributes[OnClick]."\""
+		  : ""
+	    ).
+		($size?" SIZE=$size":"").
+		" CLASS=\"isDateTimePick\"".
+	  ">";
 	}
 }
 
@@ -494,29 +499,30 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 	
 	// Class constructor is same as parent's (cHtmlInput)
 	public function setColor( $initColor ) {
-		if( empty( $initColor ) ) {
-			$this->attributes[VALUE] = $initColor;
-		}
-		else {
-			$this->attributes[VALUE] = "2020FF";
-		}
+	  if( empty( $initColor ) ) {
+		$this->attributes[VALUE] = $initColor;
+	  } else {
+		$this->attributes[VALUE] = "2020FF";
+	  }
 	}
 	
 	// display is overloaded 
 	public function display() {
 		$size=$this->attributes[SIZE];  
 		return
-			"<input  value=\"".$this->attributes[VALUE]."\"". 
+		  "<input".
+		    " value=\"".$this->attributes[VALUE]."\"". 
 			" TYPE=".($this->attributes[TYPE]
-			? $this->attributes[TYPE]
-			: "TEXT").
+			  ? $this->attributes[TYPE]
+			  : "TEXT").
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			($size?" SIZE=$size":"").
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
-			" OnChange=\"updateColor(this)\"".
-			">";
+			" onChange=\"updateColor(this)\"".
+		  ">";
 	}
 }
+
 ?>
