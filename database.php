@@ -254,6 +254,7 @@ class cDbTable implements iDbTable
   
   function setMode($mode) 
   {
+  	if ($mode=="BROWSE") $mode="UPDATE";
     $this->mode = strtoupper($mode);
     $_SESSION[table][$this->name][mode] = $this->mode;
   }
@@ -482,7 +483,7 @@ class cDbTable implements iDbTable
       $result .= $button->display();
     }
     // display delete button
-    if (($this->mode == "BROWSE")&&($this->currentRecordId>0)) {
+    if (($this->mode == "UPDATE")&&($this->currentRecordId>0)) {
       $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x");
       $button->setAttribute("CLASS", "DeleteButton");
       $result .= $button->display();
