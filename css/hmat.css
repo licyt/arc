@@ -78,6 +78,7 @@ body {
 
 .ReservedButton {
 	background-color: transparent;
+	display: none;
 }
 
 .InsertButton {
