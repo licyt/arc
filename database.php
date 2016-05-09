@@ -525,16 +525,16 @@ class cDbTable implements iDbTable
     }
     
     // data manipulation buttons
-    if ($_POST[$this->name."Insert"]) {							// + Add
+    if ($_POST[$this->name."Insert"]) {									// + Add
     	$this->setMode("INSERT");
     	$this->currentRecordId=-1;
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
-    if ($_POST[$this->name."Update"]) $this->setMode("UPDATE"); // * Edit
-    if ($_POST[$this->name."Delete"]) $this->setMode("DELETE"); // x Del
-    if ($_POST[$this->name."Cancel"]) $this->setMode("BROWSE"); // Cancel
+    if ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }		// * Edit
+    elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  // x Del
+    else { $this->setMode("BROWSE"); }							     	// Cancel
     
-    if ($_POST[$this->name."Ok"]) {                               // Ok 
+    if ($_POST[$this->name."Ok"]) {                               		// Ok 
 	  switch ($this->mode) {
         // build SQL 
 		case "DELETE" :
@@ -647,15 +647,15 @@ class cDbTable implements iDbTable
   {
     $newNames = array();
     switch ($this->mode) {
-      case "BROWSE":
-      	$newNames["id".$this->name] = $this->addButton();
-      	break;
   	  case "INSERT":
         $input = new cHtmlInput("id".$this->name, "HIDDEN", -1);
   	    $id = $input->display();
   	    $newNames = $this->editColumns();
   	    $newNames["id".$this->name] = $this->manipulator().$id.$parentId;
   	    break;
+  	  default :
+      	$newNames["id".$this->name] = $this->addButton();
+      	break;
     }
     return $newNames;
   }

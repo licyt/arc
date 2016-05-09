@@ -84,6 +84,7 @@ body {
 .UpdateButton {
 	color: white;
 	background-color: red;
+	display: none;
 }
 
 .DeleteButton {
@@ -99,4 +100,5 @@ body {
 .CancelButton {
 	color: red;
 	background-color: white;
+	display: none;
 }
