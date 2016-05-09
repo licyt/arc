@@ -467,6 +467,13 @@ class cDbTable implements iDbTable
 		
 	}
   }
+
+  public function reservedButton() {
+  	$button = new cHtmlInput($this->name."Reserved", "SUBMIT", " ");
+  	$button->setAttribute("CLASS", "ReservedButton");
+  	$button->setAttribute("DISABLED", "DISABLED");
+  	return $button->display();
+  }
   
   public function addButton() {
   	$button = new cHtmlInput($this->name."Insert", "SUBMIT", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
@@ -492,12 +499,18 @@ class cDbTable implements iDbTable
     if (($this->mode == "INSERT") ||
     	($this->mode == "UPDATE") ||
 		($this->mode == "DELETE")) {
-      $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
+      
+			$button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
       $button->setAttribute("CLASS", "OkButton");
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
       $button->setAttribute("CLASS", "CancelButton");
       $result .= $button->display();
+      
+      if ($this->mode == "INSERT") {
+      	$result .= $this->reservedButton();
+      }
+      
       if (!is_null($this->parent)) {
       	$parrentName = $this->name."_id".$this->parent->name;
       	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->currentRecordId);
@@ -656,7 +669,7 @@ class cDbTable implements iDbTable
   	    $newNames["id".$this->name] = $this->manipulator().$id;
   	    break;
   	  default :
-      	$newNames["id".$this->name] = $this->addButton();
+      	$newNames["id".$this->name] = $this->addButton().$this->reservedButton();
       	break;
     }
     return $newNames;

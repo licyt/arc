@@ -76,6 +76,10 @@ body {
 	border: 1px solid lightgray;
 }
 
+.ReservedButton {
+	background-color: transparent;
+}
+
 .InsertButton {
 	color: white;
 	background-color: blue;
