@@ -93,12 +93,37 @@ body {
 }
 
 .OkButton {
-	color: green;
-	background-color: white;
+	color: white;
+	background-color: green;
 }
 
 .CancelButton {
 	color: red;
 	background-color: white;
 	display: none;
+}
+
+.BROWSE {
+	background-color: gray;
+}
+.BROWSE:hover {
+	background-color: gray;
+}
+.INSERT {
+	background-color: blue;
+}
+.INSERT:hover {
+	background-color: blue;
+}
+.UPDATE {
+	background-color: green;
+}
+.UPDATE:hover {
+	background-color: green;
+}
+.DELETE {
+	background-color: red;
+}
+.DELETE:hover {
+	background-color: red;
 }

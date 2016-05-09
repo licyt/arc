@@ -530,11 +530,10 @@ class cDbTable implements iDbTable
     	$this->currentRecordId=-1;
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
-    if ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }		// * Edit
+    elseif ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }		// * Edit
     elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  // x Del
-    else { $this->setMode("BROWSE"); }							     	// Cancel
     
-    if ($_POST[$this->name."Ok"]) {                               		// Ok 
+    elseif ($_POST[$this->name."Ok"]) {                               		// Ok 
 	  switch ($this->mode) {
         // build SQL 
 		case "DELETE" :
@@ -596,7 +595,8 @@ class cDbTable implements iDbTable
 		// return to BROWSE mode
 	    $this->setMode("BROWSE");
 	  } 
-    }	  
+    }
+    else { $this->setMode("BROWSE"); }							     	// Cancel
   }
   
   public function printFields() {
@@ -627,6 +627,7 @@ class cDbTable implements iDbTable
   	    $result[$columnName] = $this->manipulator();
    	  }
   	}
+  	$result["CLASS"] = $this->mode; 
   	return $result;
   }
   
@@ -651,7 +652,7 @@ class cDbTable implements iDbTable
         $input = new cHtmlInput("id".$this->name, "HIDDEN", -1);
   	    $id = $input->display();
   	    $newNames = $this->editColumns();
-  	    $newNames["id".$this->name] = $this->manipulator().$id.$parentId;
+  	    $newNames["id".$this->name] = $this->manipulator().$id;
   	    break;
   	  default :
       	$newNames["id".$this->name] = $this->addButton();
@@ -693,7 +694,7 @@ class cDbTable implements iDbTable
 	// create output as html table
 	$table = new cHtmlTable();
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
-	$table->addHeader($this->insertRow());
+	$table->addRow($this->insertRow());
 	// add filter only for master browser
 	if (!isset($this->parent)) {
 	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));

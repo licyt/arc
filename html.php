@@ -400,6 +400,9 @@ class cHtmlTable
 	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
 	  		continue;
 	  	}
+	  	if ($columnName == "CLASS") {
+	  		$class = " CLASS=\"".$value."\"";
+	  	}
 	  	
 	  	$html.="<TD $style>$value</TD>";
 	  }
