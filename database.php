@@ -109,10 +109,15 @@ class cDbField implements iDbField
   public function getHtmlControl($value="", $disabled=false)
   {
     if ($this->isForeignKey()) {
+	  $ftName = $this->foreignTableName(); 
       // use select for foreign keys
       $htmlControl = new cHtmlSelect;
 	  $htmlControl->setSelected($value);
-	  $ftName = $this->foreignTableName(); 
+	  if ($ftName=="Status") {
+	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
+	  }
+	  $js .= "document.getElementById('".$this->table->getName()."Ok').click();";
+	  $htmlControl->setAttribute("onChange", $js);
 	  $query = 
 	    "SELECT id".$ftName.", ".
 		  gui("table".$ftName, "lookupField", $ftName."Name"). 
@@ -133,12 +138,6 @@ class cDbField implements iDbField
 		  );
         }
 	  }
-	  // add button for parent table
-	  /*
-	  if ($this->table->getMode()=="BROWSE") {
-	  	$htmlButton = new cHtmlInput("", "SUBMIT", "...");
-	  }
-	  */
     } elseif (($this->getName()=="StatusType") || ($this->getName()=="NoteTable")) {
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
@@ -147,16 +146,16 @@ class cDbField implements iDbField
     	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
     	}
     } elseif($this->isDate()) {
-		  $htmlControl = new cHtmlJsDatePick;
+		$htmlControl = new cHtmlJsDatePick;
     } elseif($this->isDateTime()) {
-		  $htmlControl = new cHtmlJsDateTimePick;
+		$htmlControl = new cHtmlJsDateTimePick;
     } elseif ($this->isStatusColor())  {
-			$htmlControl = new cHtmlJsColorPick;
+		$htmlControl = new cHtmlJsColorPick;
 	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}
-
+	
     // set input size based on dbField type
     $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
     
@@ -165,19 +164,14 @@ class cDbField implements iDbField
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
     $htmlControl->setAttribute("DISABLED", 
       ($disabled
-        ?" OnClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
+        ?" onClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
       	:""
       )
     );
     $htmlControl->setAttribute("VALUE", $value);
     
     return 
-      //$htmlLabel->display().
-      $htmlControl->display().
-      ($htmlButton
-        ? $htmlButton->display()
-        : ""
-      );
+      $htmlControl->display();
   }
 }
 
@@ -500,16 +494,21 @@ class cDbTable implements iDbTable
     	($this->mode == "UPDATE") ||
 		($this->mode == "DELETE")) {
       
-			$button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
+	  $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
       $button->setAttribute("CLASS", "OkButton");
+      if ($this->mode == "UPDATE") {
+      	$button->setAttribute("STYLE", "display:none;");
+      }
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
       $button->setAttribute("CLASS", "CancelButton");
       $result .= $button->display();
       
+      /*
       if ($this->mode == "INSERT") {
       	$result .= $this->reservedButton();
       }
+      */
       
       if (!is_null($this->parent)) {
       	$parrentName = $this->name."_id".$this->parent->name;
@@ -641,7 +640,8 @@ class cDbTable implements iDbTable
   	    $result[$columnName] = $this->manipulator();
    	  }
   	}
-  	$result["CLASS"] = $this->mode; 
+  	$result["CLASS"] = $this->mode;
+  	$result["onKeyPress"] = "if (event && event.keyCode==13) {document.getElementById('".$this->name."Ok').click();}"; 
   	return $result;
   }
   
@@ -694,7 +694,7 @@ class cDbTable implements iDbTable
   	    $newNames[$i]="";
   	  } else {
 	    $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
-	    $filter->setAttribute("OnChange", "this.form.submit()");
+	    $filter->setAttribute("onChange", "this.form.submit()");
 	    $filter->setAttribute("CLASS", "filter");
 	    $newNames[$i]=$filter->display();
   	  }
