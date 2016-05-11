@@ -1,4 +1,5 @@
 <?php
+// 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
 // html wrapper functions add tags and attributes
 function br($count=1) {
@@ -93,7 +94,14 @@ interface iHtmlJsColorPick {
 // this is a common ancestor for all html controls
 class cHtmlElement  {
   protected $attributes = array();
-    
+  
+  public function add($name) {
+  	return
+	  ($this->attributes[$name] 
+  	    ? " $name=\"".$this->attributes[$name]."\""
+  	    : ""
+  	  );
+  }
   public function setAttribute($name, $value) {
     $this->attributes[$name] = $value;
   }
@@ -118,6 +126,7 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 	  return
 	    "<DIV ".
 		  " ID=".$this->attributes[ID].
+		  $this->add(onClick).
 		">".
 		  $this->attributes[CONTENT].
 		"</DIV>";
@@ -479,14 +488,8 @@ class cHtmlJsDateTimePick extends cHtmlInput implements iHtmlJsDateTimePick
 		  : ""
 		).
 		" VALUE=\"".$this->attributes[VALUE]."\"".
-		($this->attributes[onChange]
-		  ? " onChange=\"".$this->attributes[onChange]."\""
-		  : ""
-		).
-		($this->attributes[OnClick]
-		  ? " OnClick=\"".$this->attributes[OnClick]."\""
-		  : ""
-	    ).
+		$this->add(onChange).
+		$this->add(onClick).
 		($size?" SIZE=$size":"").
 		" CLASS=\"isDateTimePick\"".
 	  ">";
@@ -518,11 +521,28 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			" ID=".$this->attributes[ID].
 			" NAME=".$this->attributes[ID].
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
-			($size?" SIZE=$size":"").
+			$this->add(SIZE).
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
 			" onChange=\"updateColor(this)\"".
 		  ">";
 	}
+}
+
+class cHtmlA extends cHtmlElement
+{
+  public function __construct($path="") {
+  	$this->setAttribute("HREF", $path);
+  	$this->setAttribute("TEXT", basename($path));
+  }
+  public function display() {
+  	return 
+  	  "<A".
+  	    $this->add(HREF).
+  	    $this->add(onClick).
+  	  ">".
+  	    $this->attributes[TEXT].
+  	  "</A>";
+  }
 }
 
 ?>

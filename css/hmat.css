@@ -1,5 +1,28 @@
+body {
+  font-family: "Tahoma";
+  font-size: 12px;
+}
+
 form {
 	margin-bottom:0px;
+}
+
+tr:hover {
+  background-color: silver;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  font-size: 12px;
+}
+
+span {
+  font-size: 12px;
+  text-align: center;	
+  font-family: "Tahoma";
 }
 
 label {
@@ -34,30 +57,17 @@ input:disabled {
 	color: black;
 }
 
-th {
-  text-align: left;
-}
-td {
-  font-size: 12px;
+a {
+	background-color: white;
+	color: black;
+	padding: 1px 3px 1px 3px;
 }
 
-tr:hover {
-  background-color: silver;
-}
+
+
 
 .subBrowserRow:hover {
   background-color: transparent;
-}
-
-span {
-  font-size: 12px;
-  text-align: center;	
-  font-family: "Tahoma";
-}
-
-body {
-  font-family: "Tahoma";
-  font-size: 12px;
 }
 
 .goButtons {
@@ -65,10 +75,10 @@ body {
 	margin-bottom: 0px;
 }
 
-#tabHeadAdmin {
-	margin: 0 auto;
-	height: 100px;
-	display: block;
+.logo {
+  position:absolute;
+  top:0px;
+  left:1090px;
 }
 
 .filter {
@@ -131,4 +141,23 @@ body {
 }
 .DELETE:hover {
 	background-color: red;
+}
+
+
+
+#tabHeadAdmin {
+	margin: 0 auto;
+	height: 100px;
+	display: block;
+}
+
+#fileBrowser {
+	display: none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100px;
+	height: 100px;
+	z-index: 1000;
+	background-color: yellow;
 }

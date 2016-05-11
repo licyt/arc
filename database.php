@@ -1,4 +1,5 @@
 <?php
+// 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
 // ------------------------------------------------------ C O N S T A N T S
 
 include_once("./dbConfig.php");
@@ -153,6 +154,9 @@ class cDbField implements iDbField
 		$htmlControl = new cHtmlJsDateTimePick;
     } elseif ($this->isStatusColor())  {
 		$htmlControl = new cHtmlJsColorPick;
+	} elseif (gui($this->getName(), "type")=="path") {
+		$htmlControl = new cHtmlDiv;
+		$htmlControl->setAttribute("onClick", "browseFile(this);");
 	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
@@ -499,7 +503,7 @@ class cDbTable implements iDbTable
 	  $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
       $button->setAttribute("CLASS", "OkButton");
       if ($this->mode == "UPDATE") {
-      	$button->setAttribute("STYLE", "display:none;");
+      	//$button->setAttribute("STYLE", "display:none;");
       }
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
@@ -809,6 +813,7 @@ class cDbScheme implements iDbScheme
   {
     if ($this->dbLink = mysql_connect($dbServerName, $dbUser, $dbPassword)) 
     {
+      $_SESSION[dbLink] = $this->dbLink;
     } 
     else echo 'Not connected : ' . mysql_error();
   }

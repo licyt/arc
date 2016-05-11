@@ -1,4 +1,5 @@
 <?php
+// 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
 session_start();
 
@@ -33,14 +34,18 @@ echo
   	linkCss("css/statuslog.css").
 	linkCss("css/datepicker.css").
   	
+  	linkJs("js/hmat.js").
+  	linkJs("js/ajax.js").
+  	
   	linkJs("js/jscolor.js").
-	linkJs("js/datepicker.js")
+  	linkJs("js/datepicker.js")
   ).
-  body(
-  		"<div style='position:absolute'>".
-  			"<img style='position:absolute;top:0px;left:1090px;' src='img/hmat_logo.png'>".
-  			$dbScheme->admin().
-  		"</div>"
+  body( 
+	"<div style='position:absolute'>".
+  	  "<div id='fileBrowser'></div>".
+      "<img class='logo' src='img/hmat_logo.png'>".
+	  $dbScheme->admin().
+    "</div>"
   );
 
 
