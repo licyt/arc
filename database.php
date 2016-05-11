@@ -116,8 +116,10 @@ class cDbField implements iDbField
 	  if ($ftName=="Status") {
 	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	  }
-	  $js .= "document.getElementById('".$this->table->getName()."Ok').click();";
-	  $htmlControl->setAttribute("onChange", $js);
+	  if ($this->mode=="UPDATE") {
+	  	$js .= "document.getElementById('".$this->table->getName()."Ok').click();";
+	  }
+	  if ($js) $htmlControl->setAttribute("onChange", $js);
 	  $query = 
 	    "SELECT id".$ftName.", ".
 		  gui("table".$ftName, "lookupField", $ftName."Name"). 
