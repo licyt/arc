@@ -51,6 +51,7 @@ input {
    background-color: #dddddd;
    height: 16px;
    margin: 0px;
+   max-width: 200px;
 }
 
 input:disabled {
@@ -63,7 +64,9 @@ a {
 	padding: 1px 3px 1px 3px;
 }
 
-
+img {
+  border: 0px;
+}
 
 
 .subBrowserRow:hover {
@@ -156,8 +159,9 @@ a {
 	position: absolute;
 	left: 0px;
 	top: 0px;
-	width: 100px;
+	width: 200px;
 	height: 100px;
 	z-index: 1000;
-	background-color: yellow;
+	background-color: white;
+	overflow-y: scroll;
 }
