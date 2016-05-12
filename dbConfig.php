@@ -1,6 +1,6 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
-  $dbServerName = 'wendelstein';
+$dbServerName = 'wendelstein';
   $dbName       = 'hmat_dev';
   $dbUser       = 'root';
   $dbPassword   = 'mindfold';
@@ -8,7 +8,7 @@
   $dbAjaxUser 	= 'root';
   $dbAjaxPassword = 'mindfold';
   
-  $RepositoryPath = "./datafiles/";
+  $RepositoryPath = "/datafiles/";
   
   $lang 		= 'ENG';
 ?>
