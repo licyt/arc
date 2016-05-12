@@ -45,7 +45,8 @@ echo
   	  "<div id='fileBrowser'></div>".
       "<img class='logo' src='img/hmat_logo.png'>".
 	  $dbScheme->admin().
-    "</div>"
+    "</div>",
+  	"onLoad();"
   );
 
 
