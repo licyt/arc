@@ -76,14 +76,12 @@ function Ajax(request, params) {
 		           	fileBrowser.style.left=pos.x+"px";
 		            fileBrowser.style.textAlign="left";
 		          }
-		              /*
 		              if (pos.y>winH/2) {
 		                fileBrowser.style.top=(pos.y-help.offsetHeight-3)+"px";
 		              } else {
 		                fileBrowser.style.top=(pos.y+element.offsetHeight+3)+"px";
 		              }
-		              */
-		          fileBrowser.style.top=(pos.y+element.offsetHeight+3)+"px";
+		          fileBrowser.style.top=(pos.y+element.offsetHeight)+"px";
 		        }
 	          }
               show(fileBrowser.id);
@@ -106,7 +104,6 @@ function Ajax(request, params) {
 
 
 function browseFile(element) {
-  //clearTimeout(timeHelp);
   var params=new Array();
   params[0]=element.id;
   params[1]=element.value;
