@@ -154,13 +154,17 @@ class cDbField implements iDbField
 		$htmlControl = new cHtmlJsDateTimePick;
     } elseif ($this->isStatusColor())  {
 		$htmlControl = new cHtmlJsColorPick;
-	} elseif (gui($this->getName(), "type")=="path") {
-		$htmlControl = new cHtmlDiv;
-		$htmlControl->setAttribute("onClick", "browseFile(this);");
 	} else {
         //use input for other fields
 		$htmlControl = new cHtmlInput;
 	}
+	
+	switch (gui($this->getName(), "type")) {
+	  case "path":
+ 	    $htmlControl->setAttribute("onFocus", "browseFile(this);");
+ 	    $htmlControl->setAttribute("onBlur", "hide('fileBrowser');");
+	    break;
+	}	
 	
     // set input size based on dbField type
     $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
