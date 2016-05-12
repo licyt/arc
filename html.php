@@ -13,8 +13,8 @@ function head($head="") {
   return "<head>$head</head>";
 }
 
-function body($body="") {
-  return "<body>$body</body>";
+function body($body="", $onLoad="") {
+  return "<body onLoad='$onLoad;'>$body</body>";
 }
 
 function linkCss($cssFileName) {
@@ -170,31 +170,21 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
     $size=$this->attributes[SIZE];  
     return 
       "<INPUT".
+        " ID=".$this->attributes[ID].
+        " NAME=".$this->attributes[ID].
         " TYPE=".($this->attributes[TYPE]
           ? $this->attributes[TYPE]
           : "TEXT").
-        " ID=".$this->attributes[ID].
-        " NAME=".$this->attributes[ID].
         $this->attributes[DISABLED].
-        " VALUE=\"".$this->attributes[VALUE]."\"".                                        
-        ($this->attributes[onChange]
-          ? " onChange=\"".$this->attributes[onChange]."\""
-          : ""
-        ).                                        
-        ($this->attributes[OnClick]
-          ? " OnClick=\"".$this->attributes[OnClick]."\""
-          : ""
-        ).                                        
-        ($size?" SIZE=$size":"").
-        ($this->attributes["CLASS"]
-  		  ? " CLASS=\"".$this->attributes["CLASS"]."\""
-  		  : ""
-  		).
-        ($this->attributes["STYLE"]
-  		  ? " STYLE=\"".$this->attributes["STYLE"]."\""
-  		  : ""
-  		).
-  		">";
+        $this->add(VALUE).
+        $this->add(onChange).
+        $this->add(onClick).
+        $this->add(onFocus).
+        $this->add(onBlur).
+        $this->add(SIZE).
+        $this->add("CLASS").
+        $this->add(STYLE).
+  	  ">";
   }
 }
 
@@ -542,6 +532,19 @@ class cHtmlA extends cHtmlElement
   	  ">".
   	    $this->attributes[TEXT].
   	  "</A>";
+  }
+}
+
+class cHtmlImg extends cHtmlElement
+{
+  public function __construct($src="") {
+  	$this->setAttribute(SRC, $src);
+  }
+  public function display() {
+  	return 
+  	  "<IMG ".
+  	    $this->add(SRC).
+  	  ">";
   }
 }
 
