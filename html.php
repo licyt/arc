@@ -125,7 +125,7 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
   public function display() {
 	  return
 	    "<DIV ".
-		  " ID=".$this->attributes[ID].
+		  $this->add(ID).
 		  $this->add(onClick).
 		">".
 		  $this->attributes[CONTENT].
@@ -544,6 +544,7 @@ class cHtmlImg extends cHtmlElement
   	return 
   	  "<IMG ".
   	    $this->add(SRC).
+  	    $this->add(onClick).
   	  ">";
   }
 }

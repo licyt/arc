@@ -118,7 +118,7 @@ class cDbField implements iDbField
 	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	  }
 	  if ($this->mode=="UPDATE") {
-	  	$js .= "document.getElementById('".$this->table->getName()."Ok').click();";
+	  	$js .= "elementById('".$this->table->getName()."Ok').click();";
 	  }
 	  if ($js) $htmlControl->setAttribute("onChange", $js);
 	  $query = 
@@ -162,7 +162,6 @@ class cDbField implements iDbField
 	switch (gui($this->getName(), "type")) {
 	  case "path":
  	    $htmlControl->setAttribute("onFocus", "browseFile(this);");
- 	    $htmlControl->setAttribute("onBlur", "hide('fileBrowser');");
 	    break;
 	}	
 	
@@ -174,7 +173,7 @@ class cDbField implements iDbField
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
     $htmlControl->setAttribute("DISABLED", 
       ($disabled
-        ?" onClick=\"javascript:document.getElementById('".$this->table->getName()."Update').click();\""
+        ?" onClick=\"javascript:elementById('".$this->table->getName()."Update').click();\""
       	:""
       )
     );
@@ -651,7 +650,7 @@ class cDbTable implements iDbTable
    	  }
   	}
   	$result["CLASS"] = $this->mode;
-  	$result["onKeyPress"] = "if (event && event.keyCode==13) {document.getElementById('".$this->name."Ok').click();}"; 
+  	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}"; 
   	return $result;
   }
   
@@ -741,7 +740,7 @@ class cDbTable implements iDbTable
 	  	} else {
 	  	// other records
 	  	  $js="javascript:".
-		  	"document.getElementById('id".$this->name."').value=$id;".
+		  	"elementById('id".$this->name."').value=$id;".
 		  	"document.browseForm".$this->name.".action='#".$this->name."$id';".
 	  	    "document.browseForm".$this->name.".submit();";
 		  $dbRow["id".$this->name] = "";

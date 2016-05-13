@@ -7,16 +7,34 @@ require_once("database.php");
 //var_dump($_REQUEST);
 
 function listDir($path) {
-  echo $path;
+  //echo $path;
+  $dirName = pathinfo($path, PATHINFO_DIRNAME);
+  $baseName = pathinfo($path, PATHINFO_BASENAME);
+  $extension = pathinfo($path, PATHINFO_EXTENSION);
+  if (is_dir($path)) {
+    $directory = scandir($path);
+  } else {
+  	$directory = scandir($dirName);
+  }
+
   $elementId = $_REQUEST[param0];
-  $directory = scandir($path);
   $div = new cHtmlDiv;
-  foreach ($directory as $file) {
-  	if (is_dir($file)) {
+  
+  foreach ($directory as $fileName) {
+  	if (($fileName == ".") || 
+  	   (($path == $GLOBALS['RepositoryDir']) && ($fileName == ".."))) 
+  	    continue;
+  	$fullName = $path."/".$fileName;
+  	if (is_dir($fullName)) {
   	  $img = new cHtmlImg("./img/folder.gif");
   	}
-  	$div->setAttribute(onClick, "document.getElementById('$elementId').value='$file'");
-    $div->setAttribute("CONTENT", (is_dir($file) ? $img->display() : "").$file);
+  	$js=
+      "e=elementById('$elementId');".
+      (is_dir($path) ? "" : "updatePath(e, '..');").
+      "updatePath(e, '$fileName');".
+  	  (is_file($fullName) ? "hide('fileBrowser');" : "browseFile(e);");
+  	$div->setAttribute("onClick", $js);
+    $div->setAttribute("CONTENT", (is_dir($fullName) ? $img->display() : "").$fileName);
     $result.=$div->display();
   }
   return $result;
@@ -24,7 +42,9 @@ function listDir($path) {
 
 if (isset($_REQUEST[browseFile])) {
   $SCRIPT_DIRECTORY = pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME);
-  echo listDir($SCRIPT_DIRECTORY.$RepositoryPath);
+  $RepositoryDir = $SCRIPT_DIRECTORY.$RepositoryPath;
+  $filePath = $RepositoryDir.$_REQUEST[param1];
+  echo listDir($filePath); 
 }
 
 ?>

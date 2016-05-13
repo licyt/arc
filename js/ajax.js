@@ -99,9 +99,19 @@ function Ajax(request, params) {
   xmlHttp.send(null);
 }
 
-
-
-
+function updatePath(element, path) {
+  oldvalue = element.value;
+  if (path=="..") {
+	lastSlashPos = oldvalue.lastIndexOf('/')
+	if (lastSlashPos > -1) {
+	  element.value = oldvalue.slice(0, lastSlashPos);
+	} else {
+	  element.value = "";
+	}
+  } else {
+	element.value = (oldvalue ? oldvalue+"/" : "")+path;
+  }
+}
 
 function browseFile(element) {
   var params=new Array();

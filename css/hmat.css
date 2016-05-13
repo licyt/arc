@@ -165,3 +165,7 @@ img {
 	background-color: white;
 	overflow-y: scroll;
 }
+#fileBrowser div:hover {
+	color:white;
+	background-color: black;
+}
