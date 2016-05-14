@@ -178,7 +178,7 @@ img {
 	width: 200px;
 	height: 100px;
 	z-index: 1000;
-	background-color: white;
+	background-color: lightgray;
 	overflow-y: scroll;
 }
 #fileBrowser div:hover {

@@ -68,20 +68,8 @@ function Ajax(request, params) {
               fileBrowser.innerHTML=xmlHttp.responseText;
               if (element=elementById(params[0])) {
 	            if (pos=getAbsolutePosition(element)) {
-		          if (pos.x>winW/2) {
-		          	fileBrowser.style.left=(pos.x+element.offsetWidth-
-		           	fileBrowser.offsetWidth)+"px";
-		           	fileBrowser.style.textAlign="right";
-		          } else {
-		           	fileBrowser.style.left=pos.x+"px";
-		            fileBrowser.style.textAlign="left";
-		          }
-		              if (pos.y>winH/2) {
-		                fileBrowser.style.top=(pos.y-help.offsetHeight-3)+"px";
-		              } else {
-		                fileBrowser.style.top=(pos.y+element.offsetHeight+3)+"px";
-		              }
-		          fileBrowser.style.top=(pos.y+element.offsetHeight)+"px";
+    	          fileBrowser.style.left=(pos.x-8)+"px";
+		          fileBrowser.style.top=(pos.y+element.offsetHeight-5)+"px";
 		        }
 	          }
               show(fileBrowser.id);
