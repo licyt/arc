@@ -99,18 +99,22 @@ function Ajax(request, params) {
   xmlHttp.send(null);
 }
 
-function updatePath(element, path) {
-  oldvalue = element.value;
+function updatePath(elementId, path) {
+  input = elementById(elementId);
+  a = elementById(elementId+"Link");
+  oldtext = a.text;
   if (path=="..") {
-	lastSlashPos = oldvalue.lastIndexOf('/')
+	lastSlashPos = oldtext.lastIndexOf('/')
 	if (lastSlashPos > -1) {
-	  element.value = oldvalue.slice(0, lastSlashPos);
+	  a.text = oldtext.slice(0, lastSlashPos);
 	} else {
-	  element.value = "";
+	  a.text = "";
 	}
   } else {
-	element.value = (oldvalue ? oldvalue+"/" : "")+path;
+	a.text = (oldtext ? oldtext+"/" : "")+path;
   }
+  a.href = './datafiles/'+a.text;
+  input.value = a.text;
 }
 
 function browseFile(element) {

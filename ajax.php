@@ -24,14 +24,14 @@ function listDir($path) {
   	if (($fileName == ".") || 
   	   (($path == $GLOBALS['RepositoryDir']) && ($fileName == ".."))) 
   	    continue;
-  	$fullName = $path."/".$fileName;
+  	$fullName = (is_dir($path)?$path:$dirName)."/".$fileName;
   	if (is_dir($fullName)) {
   	  $img = new cHtmlImg("./img/folder.gif");
   	}
   	$js=
       "e=elementById('$elementId');".
-      (is_dir($path) ? "" : "updatePath(e, '..');").
-      "updatePath(e, '$fileName');".
+      (is_dir($path) ? "" : "updatePath('$elementId', '..');").
+      "updatePath('$elementId', '$fileName');".
   	  (is_file($fullName) ? "hide('fileBrowser');" : "browseFile(e);");
   	$div->setAttribute("onClick", $js);
     $div->setAttribute("CONTENT", (is_dir($fullName) ? $img->display() : "").$fileName);

@@ -58,11 +58,6 @@ input:disabled {
 	color: black;
 }
 
-a {
-	background-color: white;
-	color: black;
-	padding: 1px 3px 1px 3px;
-}
 
 img {
   border: 0px;
@@ -78,7 +73,7 @@ img {
 	margin-bottom: 0px;
 }
 
-.logo {
+#logo {
   position:absolute;
   top:0px;
   left:1090px;
@@ -146,7 +141,28 @@ img {
 	background-color: red;
 }
 
+.cHtmlFilePath {
+ width: 200px; 
+}
 
+.cHtmlFilePath a {
+   display: inline-block;
+	background-color: white;
+	color: black;
+	padding: 0px 3px 0px 3px;
+	margin: 0px 0px 0px 0px;
+	max-width: 170px;
+	max-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	height: 16px;
+}
+
+.cHtmlFilePath input {
+	display: inline;
+	width: 0px;
+}
 
 #tabHeadAdmin {
 	margin: 0 auto;
@@ -168,4 +184,13 @@ img {
 #fileBrowser div:hover {
 	color:white;
 	background-color: black;
+}
+
+.openFileBrowserButton {
+   float: right;
+   display: inline-block;
+	width: 16px;
+	height: 16px;
+	z-index: 10;
+	background-image: url(../img/openFB.png);
 }

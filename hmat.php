@@ -43,7 +43,7 @@ echo
   body( 
 	"<div style='position:absolute'>".
   	  "<div id='fileBrowser'></div>".
-      "<img class='logo' src='img/hmat_logo.png'>".
+      "<img id='logo' src='img/hmat_logo.png'>".
 	  $dbScheme->admin().
     "</div>",
   	"onLoad();"

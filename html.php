@@ -127,6 +127,7 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 	    "<DIV ".
 		  $this->add(ID).
 		  $this->add(onClick).
+		  $this->add("CLASS").
 		">".
 		  $this->attributes[CONTENT].
 		"</DIV>";
@@ -522,13 +523,15 @@ class cHtmlA extends cHtmlElement
 {
   public function __construct($path="") {
   	$this->setAttribute("HREF", $path);
-  	$this->setAttribute("TEXT", basename($path));
+  	$this->setAttribute("TEXT", $path);
   }
   public function display() {
   	return 
   	  "<A".
+  	    $this->add(ID).
   	    $this->add(HREF).
   	    $this->add(onClick).
+  	    $this->add(TARGET).
   	  ">".
   	    $this->attributes[TEXT].
   	  "</A>";
@@ -546,6 +549,33 @@ class cHtmlImg extends cHtmlElement
   	    $this->add(SRC).
   	    $this->add(onClick).
   	  ">";
+  }
+}
+
+class cHtmlFilePath extends cHtmlElement
+{
+  public function __construct($path) {
+  	$this->setAttribute(PATH, $path);
+  }
+  public function display() {
+  	$id=$this->attributes[ID];
+  	$a = new cHtmlA($this->attributes[PATH]);
+  	$a->setAttribute(HREF, ".".$GLOBALS['RepositoryPath'].$this->attributes[PATH]);
+  	$a->setAttribute(TARGET, "EXT");
+  	$a->setAttribute(ID, $id."Link");
+  	$input = new cHtmlInput($id, "TEXT", $this->attributes[PATH]);
+  	$button = new cHtmlDiv($id."Button");
+  	$button->setAttribute("CLASS", "openFileBrowserButton");
+  	$js = 
+      "el=elementById('fileBrowser');".
+      "if (el.style.display=='block') {hide(el.id);}".
+  	  "else {browseFile(elementById('$id'));}"; 
+  	$button->setAttribute(onClick, $js);
+  	$div = new cHtmlDiv($id."Wrap");
+  	$div->setAttribute("CLASS", "cHtmlFilePath");
+  	$div->setAttribute(CONTENT, $input->display().$a->display().$button->display());
+  	return 
+  	  $div->display();
   }
 }
 
