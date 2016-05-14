@@ -110,37 +110,63 @@ class cDbField implements iDbField
   public function getHtmlControl($value="", $disabled=false)
   {
     if ($this->isForeignKey()) {
-	  $ftName = $this->foreignTableName(); 
-      // use select for foreign keys
-      $htmlControl = new cHtmlSelect;
-	  $htmlControl->setSelected($value);
-	  if ($ftName=="Status") {
-	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
-	  }
-	  if ($this->mode=="UPDATE") {
-	  	$js .= "elementById('".$this->table->getName()."Ok').click();";
-	  }
-	  if ($js) $htmlControl->setAttribute("onChange", $js);
-	  $query = 
-	    "SELECT id".$ftName.", ".
-		  gui("table".$ftName, "lookupField", $ftName."Name"). 
-		  ($ftName=="Status" ? ", StatusColor" : "").
-	    " FROM ".$ftName.
-		// Status - additional filter for StatusType
-		($ftName=="Status"
-		  ? " WHERE StatusType=\"".$this->table->getName()."\""
-		  : ""
-		);
-	  // push options
-	  if ($result = mysql_query($query)) {
-		while ($row = mysql_fetch_assoc($result)) {
-		  $htmlControl->addOption(
-		    $row["id".$ftName], 
-		  	$row[gui("table".$ftName, "lookupField", $ftName."Name")], 
-		  	($ftName=="Status" ? $row[StatusColor] : "")
+	  $ftName = $this->foreignTableName();
+	  if( $this->foreignTableName() === "Company" ) {
+	  	$ftName = $this->foreignTableName();
+	  	$ftColumnName = gui("table".$ftName, "lookupField", $ftName."Name");
+	  	$sql=
+	  	  "SELECT id".$ftName.",".$ftColumnName.
+	  	  " FROM ".$ftName.
+	  	  " ORDER BY ".$ftColumnName." ASC";
+	  	$optionList = Array();
+	  	if( $result = mysql_query($sql) ) {
+	  	  while( $row = mysql_fetch_row($result) ) {
+			array_push($optionList,$row); 
+	  	  }
+	  	}
+	  	$htmlControl = new cHtmlSuggest;
+	  	$htmlControl->setOptions($optionList,$ftColumnName);
+	  	$htmlControl->setAttribute("ID",$this->properties[Field]);
+	  	$htmlControl->setAttribute("IDVISIBLE",$ftColumnName);
+	  	$htmlControl->setAttribute("IDLIST","suggestList".$ftColumnName);
+	  	$htmlControl->setAttribute("CLASS", "suggestHidden");
+	  	$htmlControl->setAttribute("CLASSVISIBLE", "suggestVisible");
+	  	$htmlControl->setAttribute("AUTOCOMPLETE", "OFF");
+	  	$htmlControl->setAttribute("OnFocus", "setupSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
+	  	$htmlControl->setAttribute("OnKeyUp","updateSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
+	  	$htmlControl->setAttribute("OnSelect","sanitizeSuggestValues('".$ftColumnName."','".$this->properties[Field]."')");
+	  } else {
+        // use select for foreign keys
+        $htmlControl = new cHtmlSelect;
+	    $htmlControl->setSelected($value);
+	    if ($ftName=="Status") {
+	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
+	    }
+	    if ($this->mode=="UPDATE") {
+	  	  $js .= "elementById('".$this->table->getName()."Ok').click();";
+	    }
+	    if ($js) $htmlControl->setAttribute("onChange", $js);
+	    $query = 
+	      "SELECT id".$ftName.", ".
+		    gui("table".$ftName, "lookupField", $ftName."Name"). 
+		    ($ftName=="Status" ? ", StatusColor" : "").
+	      " FROM ".$ftName.
+		  // Status - additional filter for StatusType
+		  ($ftName=="Status"
+		    ? " WHERE StatusType=\"".$this->table->getName()."\""
+		    : ""
 		  );
-        }
-	  }
+	    // push options
+	    if ($result = mysql_query($query)) {
+		  while ($row = mysql_fetch_assoc($result)) {
+		    $htmlControl->addOption(
+		      $row["id".$ftName], 
+		  	  $row[gui("table".$ftName, "lookupField", $ftName."Name")], 
+		  	  ($ftName=="Status" ? $row[StatusColor] : "")
+		    );
+          }
+	    }
+      }
     } elseif (($this->getName()=="StatusType") || ($this->getName()=="NoteTable")) {
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);

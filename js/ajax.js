@@ -9,7 +9,7 @@ function Unpack(params) {
   var result="";
   for (name in params) {
     //alert(name+"="+params[name]); // trace parameters
-    result=result+"&param"+name+"="+params[name];
+    result=result+"&"+name+"="+params[name];
   }
   return result;
 }
@@ -57,16 +57,16 @@ function Ajax(request, params) {
         case 4: // The request is complete
           switch (request) {
             case "alert": // ========================================== alert
-              // params[0] - id of element which will get focus after alert
+              // params[elementId] - id of element which will get focus after alert
               alert(xmlHttp.responseText);
-              elementById(params[0]).focus();
+              elementById(params['elementId']).focus();
               break;
             case "browseFile": // =============================================== file browser
-              // params[0] - id of element which is being browsed
-              // params[1] - path
+              // params[elementId] - id of element which is being browsed
+              // params[filePath] - path
               var fileBrowser=elementById("fileBrowser");
               fileBrowser.innerHTML=xmlHttp.responseText;
-              if (element=elementById(params[0])) {
+              if (element=elementById(params['elementId'])) {
 	            if (pos=getAbsolutePosition(element)) {
     	          fileBrowser.style.left=(pos.x-8)+"px";
 		          fileBrowser.style.top=(pos.y+element.offsetHeight-5)+"px";
@@ -74,6 +74,17 @@ function Ajax(request, params) {
 	          }
               show(fileBrowser.id);
               break;
+//            case "suggest":
+//              if(searchType == "fullsearch") {
+//				document.getElementById(params['datalistId']).innerHTML = request.responseText;
+//			  }
+//			  if(searchType == "idsearch") {
+//				var cutOfLastChar = String(request.responseText);
+//				cutOfLastChar = cutOfLastChar.substr(0,cutOfLastChar.length-1);
+//				document.getElementById(callerId).setAttribute("value", cutOfLastChar);
+//				document.getElementById(callerId).value = cutOfLastChar;
+//			  }
+//			  break;
         } // switch request
       } // switch readyState
     } // function
@@ -107,7 +118,7 @@ function updatePath(elementId, path) {
 
 function browseFile(element) {
   var params=new Array();
-  params[0]=element.id;
-  params[1]=element.value;
+  params['elementId']=element.id;
+  params['filePath']=element.value;
   Ajax("browseFile", params);
 }

@@ -8,7 +8,7 @@ var version=parseFloat(b_version)
 var winW;
 var winH;
 
-function onLoad() {
+function myLoad() {
   // determine size of browser window
   if (parseInt(navigator.appVersion)>3) {
     if (browser=="Netscape") {
@@ -22,6 +22,8 @@ function onLoad() {
     }
   }
 }
+
+window.attachEvent('onload', myLoad() );
 
 function elementById(id) {
   return document.getElementById(id);
@@ -46,4 +48,3 @@ function getAbsolutePosition(element) {
 	  return coord;
 	}
 }
-

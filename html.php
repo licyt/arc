@@ -14,7 +14,7 @@ function head($head="") {
 }
 
 function body($body="", $onLoad="") {
-  return "<body onLoad='$onLoad;'>$body</body>";
+  return "<body onLoad=\"".$onLoad."\">$body</body>";
 }
 
 function linkCss($cssFileName) {
@@ -87,7 +87,14 @@ interface iHtmlJsColorPick {
   public function setAttribute($name, $value);
   public function setColor( $color );
   public function display();	
-}   
+}
+
+interface iHtmlSuggest {
+	public function __construct($id="", $type="", $value="");
+	public function setOptions($optArray,$optionsName);
+	public function getOptions();
+	public function display();
+}
             
 // -------------------------------------------  I M P L E M E N T A T I O N
 
@@ -577,6 +584,94 @@ class cHtmlFilePath extends cHtmlElement
   	return 
   	  $div->display();
   }
+}
+
+class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
+{
+	protected $options = "";
+	
+	public function __construct ($id="", $type="", $value="") {
+		$this->setAttribute("ID", $id);
+		$this->setAttribute("TYPE", $type);
+		$this->setAttribute("VALUE", $value);
+		$this->options = null; 
+	}
+
+	public function setOptions($optArray,$optionsName) {
+		$this->options = "";
+		foreach( $optArray as $var ) {
+			$this->options .= 
+			  "<option value=\"".$var[0]."\"".
+			  " name=\"options".$optionsName."\"".
+			  " >".$var[1]."</option>";
+		}
+	}
+	
+	public function getOptions() {
+		return $this->options;
+	}
+	
+	public function display() {
+		$size=$this->attributes[SIZE];
+		return
+		// hidden input
+		"<INPUT ID=".$this->attributes[ID].
+		" TYPE=\"TEXT\" HIDDEN".
+		" VALUE=\"".$this->attributes[VALUE]."\"".
+		($this->attributes["CLASS"]
+				? " CLASS=".$this->attributes["CLASS"]
+				: ""
+		).
+		">".
+		"</INPUT>".
+		// visible input
+		"<INPUT".
+		" TYPE=".($this->attributes[TYPE]
+			? $this->attributes[TYPE]
+			: "TEXT").
+		" ID=".$this->attributes[IDVISIBLE].
+		" NAME=".$this->attributes[IDVISIBLE].
+		($size?" SIZE=$size":"").
+		$this->attributes[DISABLED].
+		" VALUE=\"".$this->attributes[VALUEVISIBLE]."\"".
+		($this->attributes["AUTOCOMPLETE"]
+			? " AUTOCOMPLETE=\"".$this->attributes["AUTOCOMPLETE"]."\""
+			: ""
+		).
+		($this->attributes["CLASSVISIBLE"]
+			? " CLASS=\"".$this->attributes["CLASSVISIBLE"]."\""
+			: ""
+		).
+		($this->attributes["OnLoad"]
+			? " OnLoad=\"".$this->attributes["OnLoad"]."\""
+			: ""
+		).
+		($this->attributes["OnFocus"]
+			? " OnFocus=\"".$this->attributes["OnFocus"]."\""
+			: ""
+		).
+		($this->attributes["OnBlur"]
+			? " OnBlur=\"".$this->attributes["OnBlur"]."\""
+	 		: ""
+		).
+		($this->attributes["OnKeyUp"]
+			? " OnKeyUp=\"".$this->attributes["OnKeyUp"]."\""
+			: ""
+		).
+		($this->attributes["OnSelect"]
+			? " OnSelect=\"".$this->attributes["OnSelect"]."\""
+			: ""
+		).
+		($this->attributes["OnInput"]
+			? " OnInput=\"".$this->attributes["OnInput"]."\""
+			: ""
+		).
+		" LIST=\"suggestList".$this->attributes[IDVISIBLE]."\"".
+		">".
+		"<DATALIST ID=".$this->attributes[IDLIST].">".
+		($this->getOptions()).
+		"</DATALIST>";
+	}
 }
 
 ?>

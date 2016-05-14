@@ -340,7 +340,7 @@ onDOMReady(function() {
 				|| className.indexOf(' datepicker') != -1) {
 			// Found one! 
 			// First check if the date is null (0000-00-00) if yes set the value to empty
-			console.log(allElements[i].getAttribute("value"));
+//			console.log(allElements[i].getAttribute("value"));
 			if( allElements[i].getAttribute("value") === "0000-00-00" ) {
 				allElements[i].setAttribute( "value" , "" );
 			}

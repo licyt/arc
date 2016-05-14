@@ -34,11 +34,13 @@ echo
   	linkCss("css/statuslog.css").
 	linkCss("css/datepicker.css").
   	
-  	linkJs("js/hmat.js").
-  	linkJs("js/ajax.js").
-  	
   	linkJs("js/jscolor.js").
-  	linkJs("js/datepicker.js")
+  	linkJs("js/datepicker.js").
+  	
+    linkJs("js/hmat.js").
+  	linkJs("js/cHtmlSuggest.js").
+  	linkJs("js/ajax.js")
+  	
   ).
   body( 
 	"<div style='position:absolute'>".
@@ -46,7 +48,7 @@ echo
       "<img id='logo' src='img/hmat_logo.png'>".
 	  $dbScheme->admin().
     "</div>",
-  	"onLoad();"
+  	"myLoad()"
   );
 
 
