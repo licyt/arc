@@ -141,6 +141,7 @@ class cDbField implements iDbField
 	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."')");
+	  	$htmlControl->setAttribute("onBlur","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  } else {
         // use select for foreign keys
         $htmlControl = new cHtmlSelect;
