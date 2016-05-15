@@ -1,32 +1,32 @@
 // Hides and shows options in the datalist according to the value in the visible input
 function updateSuggestList(hiddenId,visibleId,listId) {
 	var visiblevalue = document.getElementById(visibleId).value;
-	var dlchildren = document.getElementsByName("options"+visibleId);
+	var dlchildren = document.getElementsByName(visibleId+"Options");
 
 	// If INPUT field has no characters do fast show/hide
 	if( visiblevalue == "" ) {
 		for( i = 0; i < dlchildren.length; i++ ) {
-			dlchildren[i].disabled = false;
-//			dlchildren[i].style.display = 'inline';
+			dlchildren[i].style.display = 'inline';
 		}
 	} else { // slow show/hide
 		for( i = 0; i < dlchildren.length; i++ ) {
-			if( String(dlchildren[i].innerHTML).search(visiblevalue) == 0 ) {
-				dlchildren[i].disabled = false;
-				document.getElementById(hiddenId).setAttribute("value",dlchildren[i].value);
+			if( String(dlchildren[i].text).search(visiblevalue) == 0 ) {
+				dlchildren[i].style.display = 'inline';
+				document.getElementById(hiddenId).setAttribute("value",dlchildren[i].getAttribute("data-value"));
 			} else {
-				dlchildren[i].disabled = true;
+				dlchildren[i].style.display = 'none';
 				document.getElementById(hiddenId).setAttribute("value","-1");
 			}
 		}
 	}
+	document.getElementById(visibleId).setAttribute("value",visiblevalue);
 }
 
-// Use for OnFocus event to check all values and to configure 3 tags accordingly
+// Use for OnClick event to check all values and to configure 3 tags accordingly
 function setupSuggestList(hiddenId,visibleId,listId)
 {
 	var hiddenvalue = document.getElementById(hiddenId).getAttribute("value");
-	var dlchildren = document.getElementsByName("options"+visibleId);
+	var dlchildren = document.getElementsByName(visibleId+"Options");
 	var visibleText = document.getElementById(visibleId).value;
 	
 	// clean up "" and make it equal to -1
@@ -38,32 +38,29 @@ function setupSuggestList(hiddenId,visibleId,listId)
 	// enable/disable datalist options according to hiddenvalue
 	if( hiddenvalue == -1 ) {
 		for( i = 0; i < dlchildren.length; i++ ) {
-			dlchildren[i].disable = false;
-//			dlchildren[i].style.display = 'inline';
+			dlchildren[i].style.display = 'inline';
 		}
 	} else {
 		for( i = 0; i < dlchildren.length; i++ ) {
 			if( dlchildren[i].value == hiddenvalue ) {
-				dlchildren[i].disable = false;
-//				dlchildren[i].style.display = 'inline';
-				document.getElementById(visibleId).value = dlchildren[i].innerHTML; 
+				dlchildren[i].style.display = 'inline';
+				document.getElementById(visibleId).value = dlchildren[i].text; 
 			} else {
-				dlchildren[i].disable = true;
-//				dlchildren[i].style.display = 'none';
+				dlchildren[i].style.display = 'none';
 			}
 		}
 	}
 }
 
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
-function sanitizeSuggestValues( visibleId, hiddenId ) {
+function sanitizeSuggestValues( hiddenId , visibleId ) {
 	var val = document.getElementById(visibleId).value;
-	var dlchildren = document.getElementsByName("options"+visibleId);
+	var dlchildren = document.getElementsByName(visibleId+"Options");
 
 	for( i = 0; i < dlchildren.length; i++ ) {
-		if( dlchildren[i].value == val ) {
-			document.getElementById(hiddenId).setAttribute("value",val);
-			document.getElementById(visibleId).value = dlchildren[i].innerHTML;
+		if( dlchildren[i].text == val ) {
+			document.getElementById(hiddenId).setAttribute("value",dlchildren[i].getAttribute("data-value"));
+			document.getElementById(visibleId).setAttribute("value",dlchildren[i].text);
 		}
 	}
 }

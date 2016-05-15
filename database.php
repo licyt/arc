@@ -132,15 +132,15 @@ class cDbField implements iDbField
 	  	$optionList = Array();
 	  	if( $result = mysql_query($sql) ) {
 	  	  while( $row = mysql_fetch_assoc($result) ) {
-			$optionList[$row["id".$this->table->getName()]] = $row[$lookupField]; 
+			$optionList[$row["id".$this->foreignTableName()]] = $row[$lookupField]; 
 	  	  }
 	  	}
-	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value);
-	  	$htmlControl->setOptions($optionList, $ftColumnName);
+	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value, $optionList[$value]);
+	  	$htmlControl->setOptions($optionList, $lookupField);
 	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
-	  	$htmlControl->setAttribute("onFocus", "setupSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
-	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
-	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$ftColumnName."','".$this->properties[Field]."')");
+	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
+	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
+	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."')");
 	  } else {
         // use select for foreign keys
         $htmlControl = new cHtmlSelect;
@@ -603,7 +603,7 @@ class cDbTable implements iDbTable
             $fieldName = $field->getName();
             if (($fieldName != "id".$this->name)) {
               // value is not set for suggested field
-              if ((gui($fieldName, "type") == "suggest") && (!$_POST[$fieldName])) {
+              if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
               	// insert new value to foreign table and get new id
               	$_POST[$fieldName] = $field->insertForeignKey();
               }
