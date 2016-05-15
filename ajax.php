@@ -46,36 +46,4 @@ if (isset($_REQUEST[browseFile])) {
   $filePath = $RepositoryDir.$_REQUEST[filePath];
   echo listDir($filePath); 
 }
-
-// if( isset($_REQUEST[suggest]) ) {
-// 	$params["tableName"] = $_REQUEST["tableName"];
-// 	$params["columnName"] = $_REQUEST["columnName"];
-// 	$hint = "";
-	
-// 	$con = mysqli_connect($dbServerName,$dbAjaxUser,$dbAjaxPassword,$dbName);
-// 	if (!$con) {
-// 		die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
-// 	}
-// 	$sql=
-// 	  "SELECT id".$params["tableName"].",".$params["columnName"].
-// 	  " FROM ".$params["tableName"].
-// 	  " ORDER BY ".$params["columnName"]." ASC";
-// 	$result = mysqli_query($con,$sql);
-// 	while(($string = $result->fetch_row())) {
-// 		if($hint === "") {
-// 			$hint =
-// 			"<option value=\"".$string[0].
-// 			"\" name=\"options".$params["columnName"]."\"".
-// 			" >".$string[1]."</option>";
-// 		} else {
-// 			$hint .=
-// 			"<option value=\"".$string[0].
-// 			"\" name=\"options".$params["columnName"]."\"".
-// 			" >".$string[1]."</option>";
-// 		}
-// 	}
-// 	mysqli_close($con);
-// 	echo $hint;
-// }
-
 ?>
