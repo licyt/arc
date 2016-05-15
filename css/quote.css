@@ -182,6 +182,7 @@
 	left: 240px;
 	height: 20px;
 	width: 240px;
+	max-width: 240px;
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 0px;
 	display: block;
