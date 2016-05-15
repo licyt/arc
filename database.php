@@ -86,6 +86,17 @@ class cDbField implements iDbField
       (strpos($this->properties[Field],"_id")>0);
   }
   
+  public function insertForeignKey() {
+  	$ftName = $this->foreignTableName();
+  	$lookupField = gui($ftName, "lookupField", $ftName."Name");
+  	$query = "INSERT INTO $ftName SET $lookupField = \"".$_POST[$lookupField]."\"";
+  	if ($dbResult = mysql_query($query)) {
+  	  return mysql_insert_id();
+  	} else {
+  	  return 0;
+  	}
+  }
+  
   public function isDateTime() {
 		return ($this->properties[Type] == "datetime");
   }
@@ -111,30 +122,25 @@ class cDbField implements iDbField
   {
     if ($this->isForeignKey()) {
 	  $ftName = $this->foreignTableName();
-	  if( $this->foreignTableName() === "Company" ) {
+	  if(gui($this->getName(), "type")=="suggest") {
 	  	$ftName = $this->foreignTableName();
-	  	$ftColumnName = gui("table".$ftName, "lookupField", $ftName."Name");
+	  	$lookupField = gui("table".$ftName, "lookupField", $ftName."Name");
 	  	$sql=
-	  	  "SELECT id".$ftName.",".$ftColumnName.
+	  	  "SELECT id".$ftName.",".$lookupField.
 	  	  " FROM ".$ftName.
-	  	  " ORDER BY ".$ftColumnName." ASC";
+	  	  " ORDER BY ".$lookupField." ASC";
 	  	$optionList = Array();
 	  	if( $result = mysql_query($sql) ) {
-	  	  while( $row = mysql_fetch_row($result) ) {
-			array_push($optionList,$row); 
+	  	  while( $row = mysql_fetch_assoc($result) ) {
+			$optionList[$row["id".$this->table->getName()]] = $row[$lookupField]; 
 	  	  }
 	  	}
-	  	$htmlControl = new cHtmlSuggest;
-	  	$htmlControl->setOptions($optionList,$ftColumnName);
-	  	$htmlControl->setAttribute("ID",$this->properties[Field]);
-	  	$htmlControl->setAttribute("IDVISIBLE",$ftColumnName);
-	  	$htmlControl->setAttribute("IDLIST","suggestList".$ftColumnName);
-	  	$htmlControl->setAttribute("CLASS", "suggestHidden");
-	  	$htmlControl->setAttribute("CLASSVISIBLE", "suggestVisible");
-	  	$htmlControl->setAttribute("AUTOCOMPLETE", "OFF");
-	  	$htmlControl->setAttribute("OnFocus", "setupSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
-	  	$htmlControl->setAttribute("OnKeyUp","updateSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
-	  	$htmlControl->setAttribute("OnSelect","sanitizeSuggestValues('".$ftColumnName."','".$this->properties[Field]."')");
+	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value);
+	  	$htmlControl->setOptions($optionList, $ftColumnName);
+	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
+	  	$htmlControl->setAttribute("onFocus", "setupSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
+	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$ftColumnName."','suggestList".$ftColumnName."')");
+	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$ftColumnName."','".$this->properties[Field]."')");
 	  } else {
         // use select for foreign keys
         $htmlControl = new cHtmlSelect;
@@ -595,7 +601,12 @@ class cDbTable implements iDbTable
           // assign field values 
           foreach ($this->fields as $i => $field) {
             $fieldName = $field->getName();
-            if (($fieldName != "id".$this->name) && ($_POST[$fieldName] != "")) {
+            if (($fieldName != "id".$this->name)) {
+              // value is not set for suggested field
+              if ((gui($fieldName, "type") == "suggest") && (!$_POST[$fieldName])) {
+              	// insert new value to foreign table and get new id
+              	$_POST[$fieldName] = $field->insertForeignKey();
+              }
               $assign .= ($assign ? ", " : "").
                 $fieldName." = \"".$_POST[$fieldName]."\"";
             } 
