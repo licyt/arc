@@ -23,8 +23,6 @@ function myLoad() {
   }
 }
 
-window.attachEvent('onload', myLoad() );
-
 function elementById(id) {
   return document.getElementById(id);
 }
