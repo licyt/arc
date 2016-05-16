@@ -98,11 +98,15 @@ class cDbField implements iDbField
   }
   
   public function isDateTime() {
-		return ($this->properties[Type] == "datetime");
+	return ($this->properties[Type] == "datetime");
+  }
+  
+  public function isTimeStamp() {
+  	return ($this->properties["Default"] == "CURRENT_TIMESTAMP");
   }
   
   public function isDate() {
-  		return ($this->properties[Type] == "date");
+  	return ($this->properties[Type] == "date");
   }
   
   public function isStatusColor() {
@@ -222,6 +226,7 @@ class cDbField implements iDbField
 // Implement the interface iDbTable
 class cDbTable implements iDbTable
 {
+  protected $scheme;
   protected $name;  
   protected $parent;
   public $fields = array();   
@@ -242,9 +247,10 @@ class cDbTable implements iDbTable
   protected $order;
   protected $filter;
   
-  public function __construct($table, $parent=null) 
+  public function __construct($table, $scheme=null, $parent=null) 
   {
-	$this->parent = $parent;
+	$this->scheme = $scheme;
+  	$this->parent = $parent;
   	$this->setName($table);
   }
 
@@ -281,6 +287,10 @@ class cDbTable implements iDbTable
 	return $this->currentRecord;
   }  
   
+  public function getCurrentRecordId() {
+  	return $this->currentRecordId;
+  }
+  
   public function getNumRecords() 
   {
     // number of records in this table
@@ -302,11 +312,6 @@ class cDbTable implements iDbTable
     // initialize table from database
     $this->name = $name;
     $this->loadFields();
-	$this->loadColumns();
-    $this->loadSession();
-	$this->respondToPost();
-	$this->getNumRecords();
-    if ($this->mode!="INSERT") $this->getCurrentRecord();
   }
   
   public function setOrder($order) 
@@ -372,9 +377,14 @@ class cDbTable implements iDbTable
 	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
 	  array_push($this->columnNames, $fieldName);
-	  if (strpos($fieldName, "_id") || (($fieldName=="StatusLogRowId")&& !is_null($this->parent))) {
+	  if (strpos($fieldName, "_id") 
+	  || (($fieldName=="StatusLogRowId")&& !is_null($this->parent))
+	  || (($fieldName=="NoteTable") && (isset($this->parent)))
+	  || (($fieldName=="NoteRowId") && (isset($this->parent))))
+	  {
 	  	// do not display foreign index field
 	  	// do not display StatusLogRowId in subBrowser (table with defined parent)
+	  	// do not display NoteTable and NoteRowId (when Notes are displayed in subBrowser)
 	  } else {
  	  	array_push($this->displayColumnNames, $fieldName);
 	  }
@@ -441,20 +451,22 @@ class cDbTable implements iDbTable
   	$this->order = $_SESSION[table][$this->name][order];
   	// column names
   	foreach ($this->columnNames as $i=>$columnName) {
-  		$this->columns .= ($this->columns?", ":"").$columnName;
-  		// collation order
-  		if ($_POST[$this->name."ORDER".$columnName]!="") {
-  			$this->setOrder($columnName);
-  		}
-  		// filter
-  		if (isset($_POST[$this->name."FILTER".$columnName])) {
-  			$_SESSION[table][$this->name]["FILTER"][$columnName] =
-  			$_POST[$this->name."FILTER".$columnName];
-  		}
-  		if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
-  			$this->filter .= ($this->filter ? " AND " : "").
-  			"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
-  		}
+  	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
+  	  	continue;
+  	  $this->columns .= ($this->columns?", ":"").$columnName;
+  	  // collation order
+  	  if ($_POST[$this->name."ORDER".$columnName]!="") {
+  	  	$this->setOrder($columnName);
+  	  }
+  	  // filter
+  	  if (isset($_POST[$this->name."FILTER".$columnName])) {
+  		$_SESSION[table][$this->name]["FILTER"][$columnName] =
+  		$_POST[$this->name."FILTER".$columnName];
+  	  }
+  	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
+  		$this->filter .= ($this->filter ? " AND " : "").
+  		"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
+  	  }
   	}
   	
   	// foreign table names as string to SQL
@@ -469,6 +481,7 @@ class cDbTable implements iDbTable
   	$query =
       "SELECT ".$this->columns.
   	  " FROM ".$this->name.$ftNames.
+  	  // foreign key constraints 
   	  ($fkConstraints || $this->filter
   		? " WHERE ".
   	  	  ($fkConstraints 
@@ -480,6 +493,14 @@ class cDbTable implements iDbTable
   	  	  $this->filter 
   	  	: ""
   	  ).
+  	  // restrict table note 
+  	  (($this->name=="Note") && (isset($this->parent))
+  	  	? " WHERE ".
+  	  	  "(NoteTable = \"".$this->parent->getName()."\") AND ".
+  	  	  "(NoteRowId = ".$this->parent->getCurrentRecordId().")"
+  	  	: ""
+  	  ).
+  	  // set colation order
   	  ($this->order //&& strpos($this->columns, $this->order) 
   	    ? " ORDER BY ".$this->order 
   	  	: ""
@@ -562,7 +583,103 @@ class cDbTable implements iDbTable
     }
     return $result;
   }
-
+  
+  private function commitSQL() {
+  	// build SQL
+  	switch ($this->mode) {
+  	  case "DELETE" :
+  		$query = 
+  		  "DELETE FROM ".$this->name.
+  		  " WHERE id".$this->name."=".$_POST["id".$this->name];
+  		  break;
+  		case "INSERT" :
+  		case "UPDATE" :
+  		  // assign field values
+  		  foreach ($this->fields as $i => $field) {
+  			$fieldName = $field->getName();
+  			// skip id and any timestamps
+  			if ($fieldName == "id".$this->name) continue;
+  			if ($field->isTimeStamp()) continue;
+  			// if value is not set for suggested field
+  			if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
+  			  // insert new value to foreign table and get new id
+  			  $_POST[$fieldName] = $field->insertForeignKey();
+  			}
+  			// special behaviour for table "Note"
+  			if ($this->name == "Note") {
+  			  switch ($fieldName) {
+  				case "NoteTable":
+  				  // set NoteType to parent table name
+  				  if (isset($this->parent))
+  					$_POST[$fieldName] = $this->parent->getName();
+  				  break;
+  				case "NoteRowId":
+  				  // set NodeRecordId to CurrentRecordId in parent table
+  				  if (isset($this->parent))
+  					$_POST[$fieldName] = $this->parent->getCurrentRecordId();
+  				  else
+  					$_POST[$fieldName] = 0;
+  				  break;
+  			  }
+  			}
+  			// append assignment of value
+  			$assign .= ($assign ? ", " : "").
+  			$fieldName." = \"".$_POST[$fieldName]."\"";
+  		  }
+  		  
+  		  // choose SQL keyword depending on mode
+  		  switch ($this->mode) {
+  			case "INSERT" :
+  			  $query = 
+  			    "INSERT INTO ".$this->name.
+  				" SET ".$assign;
+  			  break;
+  			case "UPDATE" :
+  			  $query = 
+  			    "UPDATE ".$this->name.
+  				" SET ".$assign.
+  				" WHERE id".$this->name."=".$_POST["id".$this->name];
+  			  break;
+  		  }
+  		break;
+  	}
+  	return $query;
+  }
+  
+  public function commit() {
+  	// execute SQL
+  	if ($result = mysql_query($this->commitSQL())) {
+  	  // adjust table position
+  	  switch ($this->mode) {
+  		case "INSERT" :
+  		  $this->count++;
+  		  $this->go($this->count);
+  		  $this->currentRecordId = mysql_insert_id();
+  		  break;
+  		case "DELETE" :
+  		  $this->count--;
+  		  if ($this->at>$this->count) $this->go($this->count);
+  			$this->currentRecordId = 0;
+  		  break;
+  	  }
+  	  $this->getCurrentRecord();
+  	  
+  	  // log any status change
+  	  $fieldName = $this->name."_idStatus";
+  	  if ($field = $this->getFieldByName($fieldName)) {
+  		$query=
+  		  "INSERT INTO StatusLog SET ".
+  		  "StatusLogRowId=".$this->currentRecord["id".$this->name].", ".
+  		  "StatusLog_idStatus=".$this->currentRecord[$fieldName];
+  		if ($result=mysql_query($query)) {
+  					
+  		}
+  	  }
+  	  // return to BROWSE mode
+  	  $this->setMode("BROWSE");
+  	}
+  }
+  
   public function respondToPost() 
   {
     // get currentRecordId 
@@ -582,81 +699,19 @@ class cDbTable implements iDbTable
     }
     
     // data manipulation buttons
-    if ($_POST[$this->name."Insert"]) {									// + Add
+    if ($_POST[$this->name."Insert"]) {														// + Add
     	$this->setMode("INSERT");
     	$this->currentRecordId=-1;
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
-    elseif ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }		// * Edit
-    elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  // x Del
+    elseif ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }						// * Edit
+    elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  					// x Del
     
-    elseif ($_POST[$this->name."Ok"]) {                               		// Ok 
-	  switch ($this->mode) {
-        // build SQL 
-		case "DELETE" :
-		  $query = "DELETE FROM ".$this->name.
-		    " WHERE id".$this->name."=".$_POST["id".$this->name];
-		  break;
-		case "INSERT" :
-		case "UPDATE" :
-          // assign field values 
-          foreach ($this->fields as $i => $field) {
-            $fieldName = $field->getName();
-            if (($fieldName != "id".$this->name)) {
-              // value is not set for suggested field
-              if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
-              	// insert new value to foreign table and get new id
-              	$_POST[$fieldName] = $field->insertForeignKey();
-              }
-              $assign .= ($assign ? ", " : "").
-                $fieldName." = \"".$_POST[$fieldName]."\"";
-            } 
-          }
-		  // choose SQL keyword depending on mode
-		  switch ($this->mode) {
-			case "INSERT" :
-              $query = "INSERT INTO ".$this->name.
-			    " SET ".$assign;
-			  break;
-			case "UPDATE" :
-			  $query = "UPDATE ".$this->name.
-			    " SET ".$assign.
-				" WHERE id".$this->name."=".$_POST["id".$this->name];
-			  break;
-		  }
-		  break;
-	  }
-
-	  // execute SQL
-	  if ($result = mysql_query($query)) {
-		// adjust table position
-		switch ($this->mode) { 
-		  case "INSERT" :
-			$this->count++;
-			$this->go($this->count);
-			$this->currentRecordId = mysql_insert_id();
-			break;
-		  case "DELETE" :
-			$this->count--;
-			if ($this->at>$this->count) $this->go($this->count);
-			$this->currentRecordId = 0;
-			break;
-		}
-		$this->getCurrentRecord();
-	    // log any status change 
-		$fieldName = $this->name."_idStatus";
-		if ($field = $this->getFieldByName($fieldName)) {
-		  $query=
-		    "INSERT INTO StatusLog SET ".
-			  "StatusLogRowId=".$this->currentRecord["id".$this->name].", ".
-			  "StatusLog_idStatus=".$this->currentRecord[$fieldName];
-		  if ($result=mysql_query($query)) {
-			
-		  }
-		}
-		// return to BROWSE mode
-	    $this->setMode("BROWSE");
-	  } 
+    																					
+    elseif ($_POST[$this->name."Ok"]){ 	// Ok
+      if ($this->scheme->getStatus()=="initialized") {
+      	$this->commit();
+      }
     }
     else { $this->setMode("BROWSE"); }							     	// Cancel
   }
@@ -674,6 +729,8 @@ class cDbTable implements iDbTable
   	// display fields as controls in a row of a html table
   	$result = array();
   	foreach ($this->columnNames as $i => $columnName) {
+  	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
+  	  	continue;
   	  if ($field = $this->getFieldByName($columnName)) {
   	  	$htmlControl = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
   	  	if ($field->isForeignKey()) {
@@ -754,7 +811,13 @@ class cDbTable implements iDbTable
  
   public function browseForm($include="") 
   {
-	// create output as html table
+	// preprocess 
+  	$this->loadColumns();
+	$this->loadSession();
+    $this->respondToPost();
+	$this->getNumRecords();
+    if ($this->mode!="INSERT") $this->getCurrentRecord();
+  	// create output as html table
 	$table = new cHtmlTable();
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
 	$table->addRow($this->insertRow());
@@ -772,11 +835,13 @@ class cDbTable implements iDbTable
           // current record is editable
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for current record
-	  	  $sbRow = array();
-	  	  $sbRow["sbIndent"]="";
-	  	  $sbRow["subBrowser"]=$this->subBrowsers();
-	  	  $sbRow["sbColSpan"]=sizeof($dbRow)-1;
-	  	  $table->addRow($sbRow);
+	  	  if ($this->name != "Note") { // skip this for notes - to avoid endless loop
+	  	    $sbRow = array();
+	  	    $sbRow["sbIndent"]="";
+	  	    $sbRow["subBrowser"]=$this->subBrowsers();
+	  	    $sbRow["sbColSpan"]=sizeof($dbRow)-1;
+	  	    $table->addRow($sbRow);
+	  	  }
 	  	} else {
 	  	// other records
 	  	  $js="javascript:".
@@ -820,7 +885,7 @@ class cDbTable implements iDbTable
   	$query = "show tables";
   	if ($dbResult = mysql_query($query)) {
   	  while ($dbRow = mysql_fetch_row($dbResult)) {
-  	  	$ftable = new cDbTable($dbRow[0], $this);
+  	  	$ftable = new cDbTable($dbRow[0], $this->scheme, $this);
   	  	if ($ftable->hasForeignTable($this->name)) {
   	  		$browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browseForm()); 
   	  	}
@@ -830,13 +895,13 @@ class cDbTable implements iDbTable
   	
   	// history of statuses for current record
   	if ($this->hasStatusField()) {
-  	  $ftable = new cDbTable("StatusLog", $this);
+  	  $ftable = new cDbTable("StatusLog", $this->scheme, $this);
       $browsers->addTab("sb".$this->name."Status", $ftable->browseForm());
   	  unset($ftable);
   	}
     
     // notes for current record
-  	$ftable = new cDbTable("Note", $this);
+  	$ftable = new cDbTable("Note", $this->scheme, $this);
     $browsers->addTab("sb".$this->name."Note", $ftable->browseForm());
   	unset($ftable);
   	
@@ -848,6 +913,7 @@ class cDbTable implements iDbTable
 //implement the interface iDbScheme
 class cDbScheme implements iDbScheme 
 {
+  protected $status = "undefined";
   protected $dbLink;
   public $tables = array();
   
@@ -857,6 +923,7 @@ class cDbScheme implements iDbScheme
     if ($this->dbLink = mysql_connect($dbServerName, $dbUser, $dbPassword)) 
     {
       $_SESSION[dbLink] = $this->dbLink;
+  	  $this->status = "connected";
     } 
     else echo 'Not connected : ' . mysql_error();
   }
@@ -864,7 +931,7 @@ class cDbScheme implements iDbScheme
   // select database schema to work with
   public function useDb ($dbName)
   {
-    if (mysql_select_db($dbName, $this->dbLink)) 
+  	if (mysql_select_db($dbName, $this->dbLink)) 
     {
       // clear old tables
       foreach ($this->tables as $name=>$table) {
@@ -875,12 +942,17 @@ class cDbScheme implements iDbScheme
       if ($result = mysql_query($query, $this->dbLink)) {
         while ($row = mysql_fetch_array($result)) {
           $tableName=$row["Tables_in_$dbName"];
-          $table = new cDbTable($tableName);
+          $table = new cDbTable($tableName, $this);
           // register all table objects in tables property of this object
           $this->tables[$tableName] = $table;
         }
       } 
     }
+    $this->status = "initialized";
+  }
+  
+  public function getStatus() {
+  	return $this->status;
   }
   
   public function admin() 
