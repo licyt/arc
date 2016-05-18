@@ -144,7 +144,7 @@ class cDbField implements iDbField
 	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
 	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."')");
+	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onBlur","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  } else {
         // use select for foreign keys
@@ -564,7 +564,7 @@ class cDbTable implements iDbTable
 	  $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
       $button->setAttribute("CLASS", "OkButton");
       if ($this->mode == "UPDATE") {
-      	//$button->setAttribute("STYLE", "display:none;");
+      	$button->setAttribute("STYLE", "display:block;");
       }
       $result .= $button->display();
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
