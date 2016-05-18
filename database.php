@@ -140,6 +140,11 @@ class cDbField implements iDbField
 	  	  }
 	  	}
 	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value, $optionList[$value]);
+		$sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
+		if( $result = mysql_query($sql) ) {
+		  $row = mysql_fetch_assoc($result);
+		  $htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
+		}
 	  	$htmlControl->setOptions($optionList, $lookupField);
 	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
 	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
@@ -207,7 +212,9 @@ class cDbField implements iDbField
 	}
 	
     // set input size based on dbField type
-    $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
+    if( !(gui($this->getName(), "type")=="suggest") ) {
+      $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
+    }
     
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);

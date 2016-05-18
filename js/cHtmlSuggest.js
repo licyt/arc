@@ -20,6 +20,7 @@ function updateSuggestList(hiddenId,visibleId,listId) {
 		}
 	}
 	document.getElementById(visibleId).setAttribute("value",visiblevalue);
+	sanitizeSuggestValues(hiddenId,visibleId,listId);
 }
 
 // Use for OnClick event to check all values and to configure 3 tags accordingly
@@ -53,7 +54,7 @@ function setupSuggestList(hiddenId,visibleId,listId)
 }
 
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
-function sanitizeSuggestValues( hiddenId , visibleId ) {
+function sanitizeSuggestValues( hiddenId , visibleId ,listId) {
 	var val = document.getElementById(visibleId).value;
 	var dlchildren = document.getElementsByName(visibleId+"Options");
 

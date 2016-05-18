@@ -10,7 +10,7 @@ var winH;
 
 window.addEventListener('load', Load, false);
 
-function rowHasChanged(el) { 
+function rowHasChanged(el) {
   // split camelCase string to words via regex 				insert spaces in-between
   FieldName = el.id.replace(/([a-z](?=[A-Z]))/g, '$1 '); 	
   // get the first word from the string						BUG! there are tables with names from more words
@@ -18,6 +18,12 @@ function rowHasChanged(el) {
   hide(TableName+"Delete");									
   show(TableName+"Ok");										
   el.style.border = "1px solid red;";
+}
+
+function suggestRowHasChanged(elId) {
+	  hide(elId+"Delete");									
+	  show(elId+"Ok");										
+	  elementById(el).style.border = "1px solid red;";
 }
 
 function Load() {

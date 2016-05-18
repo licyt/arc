@@ -182,14 +182,20 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add(onFocus).
         $this->add(onBlur).
         $this->add(onKeyUp).
+        $this->add(onKeyDown).
+        $this->add(onKeyPress).
         $this->add(onSelect).
-        " onInput=\"rowHasChanged(this)\"".
+        ($this->attributes["CLASS"] === "suggest"
+          ? $this->add(onInput)
+          : " onInput=\"rowHasChanged(this)\""
+        ).
         $this->add(SIZE).
         $this->add("CLASS").
         $this->add(STYLE).
         $this->add("LIST").
         $this->add("AUTOCOMPLETE").
-      ">".
+        $this->add(onSubmit).
+  	  ">".
       ($this->attributes["LIST"]
       	? "<DATALIST ID=\"".$this->attributes["LIST"]."\">".
       		$this->attributes[OPTIONS].
@@ -598,6 +604,7 @@ class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 	public function display() {
 		$inputHidden = new cHtmlInput($this->attributes[ID], "HIDDEN", $this->attributes[VALUE]);
 		$inputVisible = new cHtmlInput($this->attributes[SUGGESTID], "TEXT", $this->attributes[VALUEVISIBLE]);
+		$inputVisible->setAttribute("CLASS", "suggest");
 		$inputVisible->setAttribute("onClick", $this->attributes["onClick"]);
 		$inputVisible->setAttribute("onBlur", $this->attributes["onBlur"]);
 		$inputVisible->setAttribute("onKeyUp", $this->attributes["onKeyUp"]);
@@ -606,6 +613,7 @@ class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 		$inputVisible->setAttribute("LIST", $this->attributes[ID]."List");
 		$inputVisible->setAttribute("OPTIONS", $this->attributes[OPTIONS]);
 		$inputVisible->setAttribute("AUTOCOMPLETE","OFF");
+		$inputVisible->setAttribute("onInput","suggestRowHasChanged('".substr($this->attributes[ID],0,strpos($this->attributes[ID],"_id"))."')");
 		$div = new cHtmlDiv($this->attributes[ID]."Wrap");
 		$div->setAttribute("CONTENT", $inputHidden->display().$inputVisible->display());
 		return
