@@ -150,9 +150,11 @@ class cDbField implements iDbField
         // use select for foreign keys
         $htmlControl = new cHtmlSelect;
 	    $htmlControl->setSelected($value);
+	    // color background for status
 	    if ($ftName=="Status") {
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
+	    // autofire form 
 	    if ($this->mode=="UPDATE") {
 	  	  $js .= "elementById('".$this->table->getName()."Ok').click();";
 	    }
@@ -800,6 +802,7 @@ class cDbTable implements iDbTable
   	    $newNames[$i]="";
   	  } else {
 	    $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
+	    // autofire form submit
 	    $filter->setAttribute("onChange", "this.form.submit()");
 	    $filter->setAttribute("CLASS", "filter");
 	    $newNames[$i]=$filter->display();
@@ -825,7 +828,7 @@ class cDbTable implements iDbTable
 	if (!isset($this->parent)) {
 	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
 	}
-	
+	// run query on database 
 	if ($dbResult = mysql_query($this->buildSQL())) {
 	  $i = 0;
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
@@ -834,8 +837,8 @@ class cDbTable implements iDbTable
 	  	if ($id==$this->currentRecordId) {
           // current record is editable
 	  	  $table->addRow($this->editColumns($id));
-	  	  // sub-browsers for current record
-	  	  if ($this->name != "Note") { // skip this for notes - to avoid endless loop
+	  	  // sub-browsers for the current record
+	  	  if ($this->name != "Note") { // skip this for notes - to avoid endless loop!
 	  	    $sbRow = array();
 	  	    $sbRow["sbIndent"]="";
 	  	    $sbRow["subBrowser"]=$this->subBrowsers();
@@ -957,16 +960,21 @@ class cDbScheme implements iDbScheme
   
   public function admin() 
   {
+  	// display all tables from scheme as tabs
   	$tableTabs = new cHtmlTabControl($dbName."Admin");
   	foreach ($this->tables as $name=>$table) {
-	  if ($_POST["tabButton"."Admin".$name]) {
+      // check POST for any admin button
+  	  if ($_POST["tabButton"."Admin".$name]) {
+  	  	// store selected table in session
 	  	$_SESSION[tabControl][Admin][selected] = $name;
 	  }
   	}
+  	// add all table buttons 
 	foreach ($this->tables as $name=>$table) {
 	  $tableTabs->addTab(
         $name, 
         ($_SESSION[tabControl][Admin][selected] == $name
+          // browse selected table 
 	      ? $table->browseForm()
           : ""
         )

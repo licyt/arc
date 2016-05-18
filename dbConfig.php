@@ -8,7 +8,7 @@ $dbServerName = 'wendelstein';
   $dbAjaxUser 	= 'root';
   $dbAjaxPassword = 'mindfold';
   
-  $RepositoryPath = "/datafiles/"; // dependency: ajax.js.updatePath()
+  $RepositoryPath = "/datafiles/"; // dependency! ajax.js.updatePath()
   
   $lang 		= 'ENG';
 ?>

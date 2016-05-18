@@ -8,7 +8,19 @@ var version=parseFloat(b_version)
 var winW;
 var winH;
 
-function myLoad() {
+window.addEventListener('load', Load, false);
+
+function rowHasChanged(el) { 
+  // split camelCase string to words via regex 				insert spaces in-between
+  FieldName = el.id.replace(/([a-z](?=[A-Z]))/g, '$1 '); 	
+  // get the first word from the string						BUG! there are tables with names from more words
+  TableName = FieldName.substr(0, FieldName.indexOf(' '));	 	
+  hide(TableName+"Delete");									
+  show(TableName+"Ok");										
+  el.style.border = "1px solid red;";
+}
+
+function Load() {
   // determine size of browser window
   if (parseInt(navigator.appVersion)>3) {
     if (browser=="Netscape") {
@@ -21,7 +33,9 @@ function myLoad() {
       setInterval("document.recalc()",100);
     }
   }
+  // swapOkDel();
 }
+
 
 function elementById(id) {
   return document.getElementById(id);

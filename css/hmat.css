@@ -108,6 +108,7 @@ img {
 .OkButton {
 	color: white;
 	background-color: green;
+	display: none;
 }
 
 .CancelButton {
