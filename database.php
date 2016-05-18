@@ -563,7 +563,7 @@ class cDbTable implements iDbTable
       
 	  $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
       $button->setAttribute("CLASS", "OkButton");
-      if ($this->mode == "UPDATE") {
+      if ($this->mode == "DELETE") {
       	$button->setAttribute("STYLE", "display:block;");
       }
       $result .= $button->display();
