@@ -89,6 +89,11 @@ interface iHtmlJsColorPick {
   public function display();	
 }
 
+interface iHtmlSuggest {
+	public function setOptions( $optArray , $optionsName);
+	public function display();
+}
+
 // -------------------------------------------  I M P L E M E N T A T I O N
 
 // this is a common ancestor for all html controls
@@ -183,7 +188,8 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add("CLASS").
         $this->add(STYLE).
         $this->add("LIST").
-  	  ">".
+        $this->add("AUTOCOMPLETE").
+      ">".
       ($this->attributes["LIST"]
       	? "<DATALIST ID=\"".$this->attributes["LIST"]."\">".
       		$this->attributes[OPTIONS].
@@ -442,22 +448,11 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 	
 	// display is overloaded 
 	public function display() {
-		$size=$this->attributes[SIZE];  
+		$input = new cHtmlInput($this->attributes[ID], "TEXT", $this->attributes[VALUE]);
+		$input->setAttribute("SIZE", "10");
+		$input->setAttribute("CLASS", "datepicker");
 		return
-			"<INPUT".
-			" TYPE=".($this->attributes[TYPE]
-			? $this->attributes[TYPE]
-			: "TEXT").
-			(($this->attributes["DISABLED"] === " DISABLED")
-					? " DISABLED"
-					: ""
-			).
-			" ID=".$this->attributes[ID].
-			" NAME=".$this->attributes[ID].
- 			" CLASS=\"datepicker\"".
-			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
-			" SIZE=\"10\"".
-			">";
+		  $input->display();
 	}
 }
 
@@ -584,17 +579,18 @@ class cHtmlFilePath extends cHtmlElement
   }
 }
 
-class cHtmlSuggest extends cHtmlElement
+class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 {
-	public function __construct ($id="", $value="") {
+	public function __construct ($id="", $value="", $valueVisible = "") {
 		$this->setAttribute("ID", $id);
 		$this->setAttribute("SUGGESTID", $id."Suggest");
 		$this->setAttribute("VALUE", $value);
-}
+		$this->setAttribute("VALUEVISIBLE", $valueVisible);
+	}
 
-	public function setOptions($optArray) {
+	public function setOptions($optArray,$optionsName) {
 		foreach( $optArray as $value=>$suggest ) {
-		  $options .= "<option value=\"$value\">$suggest</option>";
+		  $options .= "<option data-value=\"$value\" name=\"".$optionsName."Options\">$suggest</option>";
 		}
 		$this->setAttribute("OPTIONS", $options);
 	}
@@ -602,13 +598,14 @@ class cHtmlSuggest extends cHtmlElement
 	public function display() {
 		$inputHidden = new cHtmlInput($this->attributes[ID], "HIDDEN", $this->attributes[VALUE]);
 		$inputVisible = new cHtmlInput($this->attributes[SUGGESTID], "TEXT", $this->attributes[VALUEVISIBLE]);
-		$inputVisible->setAttribute("onFocus", $this->attributes["OnFocus"]);
-		$inputVisible->setAttribute("OnBlur", $this->attributes["OnBlur"]);
-		$inputVisible->setAttribute("OnKeyUp", $this->attributes["OnKeyUp"]);
-		$inputVisible->setAttribute("OnSelect", $this->attributes["OnSelect"]);
+		$inputVisible->setAttribute("onClick", $this->attributes["onClick"]);
+		$inputVisible->setAttribute("onBlur", $this->attributes["onBlur"]);
+		$inputVisible->setAttribute("onKeyUp", $this->attributes["onKeyUp"]);
+		$inputVisible->setAttribute("onSelect", $this->attributes["onSelect"]);
 		$inputVisible->setAttribute("SIZE", $this->attributes[SIZE]);
 		$inputVisible->setAttribute("LIST", $this->attributes[ID]."List");
 		$inputVisible->setAttribute("OPTIONS", $this->attributes[OPTIONS]);
+		$inputVisible->setAttribute("AUTOCOMPLETE","OFF");
 		$div = new cHtmlDiv($this->attributes[ID]."Wrap");
 		$div->setAttribute("CONTENT", $inputHidden->display().$inputVisible->display());
 		return
