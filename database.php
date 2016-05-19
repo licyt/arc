@@ -159,8 +159,8 @@ class cDbField implements iDbField
 	    if ($ftName=="Status") {
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
-	    if ($this->mode=="UPDATE") {
-	  	  $js .= "rowHasChanged(".$this->table->getName().");";
+	    if ($this->table->getMode()=="UPDATE") {
+	  	  $js .= "rowHasChanged('".$this->table->getName()."');";
 	    }
 	    if ($js) $htmlControl->setAttribute("onChange", $js);
 	    $query = 
