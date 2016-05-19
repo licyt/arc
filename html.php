@@ -399,6 +399,7 @@ class cHtmlTable
 	  $onClick = "";
 	  $class = "";
 	  foreach ($row as $columnName=>$value) {
+	  	if ($columnName=="CLASS") continue;
 	  	unset($style);
 	  	
 	  	if ($columnName == "onKeyPress") {

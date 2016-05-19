@@ -76,6 +76,14 @@ class cDbField implements iDbField
     return $this->properties[Field];
   }
   
+  public function getType() {
+    return $this->properties[Type];
+  }
+  
+  public function getSize() {
+  	return filter_var($this->getType(), FILTER_SANITIZE_NUMBER_INT);
+  }
+  
   public function isAutoInc() {
 	return $this->properties[Extra]=="auto_increment";
   }
@@ -159,7 +167,7 @@ class cDbField implements iDbField
 	    if ($ftName=="Status") {
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
-	    if ($this->table->getMode()=="UPDATE") {
+	    if (($this->table->getMode()=="UPDATE")||($this->table->getMode()=="INSERT")) {
 	  	  $js .= "rowHasChanged('".$this->table->getName()."');";
 	    }
 	    if ($js) $htmlControl->setAttribute("onChange", $js);
@@ -493,7 +501,7 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name.$ftNames.
   	  // foreign key constraints 
   	  ($fkConstraints || $this->filter
-  		? " WHERE ".
+  		? " WHERE (id".$this->name.">0) AND ".
   	  	  ($fkConstraints 
   	  	  	? $fkConstraints.
   	  	  	  // restrict table content according to parent
@@ -508,7 +516,6 @@ class cDbTable implements iDbTable
   	  	  	  )
   	  	  	: "" // no foreign key constraints
   	  	  ).
-  	  	  ($fkConstraints && $this->filter ? " AND ": "").
   	  	  $this->filter 
   	  	: ""
   	  ).
@@ -624,6 +631,8 @@ class cDbTable implements iDbTable
   			  // insert new value to foreign table and get new id
   			  $_POST[$fieldName] = $field->insertForeignKey();
   			}
+  			// skip fields with empty values for INSERT
+  			if (($this->mode==INSERT)&&(!$_POST[$fieldName])) continue;
   			// special behaviour for table "Note"
   			if ($this->name == "Note") {
   			  switch ($fieldName) {
@@ -813,20 +822,46 @@ class cDbTable implements iDbTable
 
   protected function filterSet(array $columnNames, $setName="", $values)
   {
-    $newNames = array();
-    foreach ($columnNames as $i=>$inputName) {
-  	  if ($inputName=="id".$this->name) {
-  	    $newNames[$i]="";
+    $result = array();
+    foreach ($columnNames as $i=>$columnName) {
+  	  if ($columnName=="id".$this->name) {
+  	    $result[$i]="";
   	  } else {
-	    $filter  = new cHtmlInput($setName.$inputName, "TEXT", $values[$inputName]);
+	    $filter  = new cHtmlInput($setName.$columnName, "TEXT", $values[$columnName]);
 	    // autofire form submit
 	    $filter->setAttribute("onChange", "this.form.submit()");
 	    $filter->setAttribute("CLASS", "filter");
-	    $newNames[$i]=$filter->display();
+	    if ($field = $this->getFieldByName($columnName)) {
+	      $filter->setAttribute("SIZE", $field->getSize());
+	    }
+	    $result[$i]=$filter->display();
   	  }
     }
-    //$newNames[0]="";
-    return $newNames;
+    //$result[0]="";
+    return $result;
+
+    // display fields as controls in a row of a html table
+    $result = array();
+    foreach ($this->columnNames as $i => $columnName) {
+      if ($field = $this->getFieldByName($columnName)) {
+    	$htmlControl = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
+        if ($field->isForeignKey()) {
+    	  $ftName = $field->foreignTableName();
+          if (is_null($this->parent) || ($ftName!=$this->parent->name)) {
+    	    $result[gui("table".$ftName, "lookupField", $ftName."Name")] = $htmlControl;
+          }
+        } else {
+      	  $result[$columnName] = $htmlControl;
+        }
+      }
+      if ($columnName=="id".$this->name) {
+        $result[$columnName] = $this->manipulator();
+      }
+    }
+    $result["CLASS"] = $this->mode;
+    $result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}";
+    return $result;
+    
   }
  
   public function browseForm($include="") 

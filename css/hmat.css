@@ -7,6 +7,10 @@ form {
 	margin-bottom:0px;
 }
 
+table {
+	table-layout: fixed;
+}
+
 tr:hover {
   background-color: silver;
 }
@@ -18,6 +22,7 @@ th {
 td {
   font-size: 12px;
 }
+
 
 span {
   font-size: 12px;
@@ -39,6 +44,7 @@ select {
 	margin: 0px;
 	padding: 0px;
 	border: 1px;
+	max-width: 200px;
 }
 
 select:disabled {
