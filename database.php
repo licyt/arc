@@ -160,7 +160,7 @@ class cDbField implements iDbField
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
 	    if ($this->mode=="UPDATE") {
-	  	  $js .= "rowHasChanged();";
+	  	  $js .= "rowHasChanged(".$this->table->getName().");";
 	    }
 	    if ($js) $htmlControl->setAttribute("onChange", $js);
 	    $query = 
@@ -208,6 +208,7 @@ class cDbField implements iDbField
 	if (!isset($htmlControl)) {
 	  //use input for other fields
 	  $htmlControl = new cHtmlInput;
+	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$this->table->getName()."');");
 	}
 	
     // set input size based on dbField type

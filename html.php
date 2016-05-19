@@ -185,10 +185,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add(onKeyDown).
         $this->add(onKeyPress).
         $this->add(onSelect).
-        ($this->attributes["CLASS"] === "suggest"
-          ? $this->add(onInput)
-          : " onInput=\"rowHasChanged(this)\""
-        ).
+        $this->add(onInput).
         $this->add(SIZE).
         $this->add("CLASS").
         $this->add(STYLE).
