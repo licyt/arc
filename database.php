@@ -192,7 +192,8 @@ class cDbField implements iDbField
     	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
     	}
     } elseif($this->isDate()) {
-		$htmlControl = new cHtmlJsDatePick;
+		$htmlControl = new cHtmlJsDatePick();
+		$htmlControl->setAttribute(TableName, $this->table->getName());
     } elseif($this->isDateTime()) {
 		$htmlControl = new cHtmlJsDateTimePick;
     } elseif ($this->isStatusColor())  {

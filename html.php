@@ -454,6 +454,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 		$input = new cHtmlInput($this->attributes[ID], "TEXT", $this->attributes[VALUE]);
 		$input->setAttribute("SIZE", "10");
 		$input->setAttribute("CLASS", "datepicker");
+		$input->setAttribute("onInput", "rowHasChanged('".$this->attributes[TableName]."');");
 		return
 		  $input->display();
 	}
