@@ -494,8 +494,17 @@ class cDbTable implements iDbTable
   		? " WHERE ".
   	  	  ($fkConstraints 
   	  	  	? $fkConstraints.
-  	  	  	  (is_null($this->parent) ? "" : " AND ".$this->parentLimit()) 
-  	  	  	: ""
+  	  	  	  // restrict table content according to parent
+  	  	  	  (!is_null($this->parent) 
+  	  	  	  	? ($this->name!="StatusLog" 
+  	  	  	  		? " AND ".$this->parentLimit() 
+  	  	  	  	    : // special constraint for StatusLog
+  	  	  	  		  " AND (StatusType = \"".$this->parent->getName()."\")".
+  	  	  	  		  " AND (StatusLogRowId = ".$this->parent->getCurrentRecordId().")"
+  	  	  	  	  )
+  	  	  	    : "" // no parent
+  	  	  	  )
+  	  	  	: "" // no foreign key constraints
   	  	  ).
   	  	  ($fkConstraints && $this->filter ? " AND ": "").
   	  	  $this->filter 
@@ -503,7 +512,7 @@ class cDbTable implements iDbTable
   	  ).
   	  // restrict table note 
   	  (($this->name=="Note") && (isset($this->parent))
-  	  	? " WHERE ".
+  	  	? " WHERE ". // no fk constraints for this table
   	  	  "(NoteTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(NoteRowId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
@@ -853,7 +862,7 @@ class cDbTable implements iDbTable
 	  	  }
 	  	} else {
 	  	// other records
-	  	  $js="javascript:".
+	  	  $js=
 		  	"elementById('id".$this->name."').value=$id;".
 		  	"document.browseForm".$this->name.".action='#".$this->name."$id';".
 	  	    "document.browseForm".$this->name.".submit();";
