@@ -34,7 +34,7 @@ echo
   	linkCss("css/statuslog.css").
 	linkCss("css/datepicker.css").
   		
-  	linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google
+  	//linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google
   	
   	linkJs("js/jscolor.js").
   	linkJs("js/datepicker.js").
