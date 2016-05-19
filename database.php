@@ -159,9 +159,8 @@ class cDbField implements iDbField
 	    if ($ftName=="Status") {
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
-	    // autofire form 
 	    if ($this->mode=="UPDATE") {
-	  	  $js .= "elementById('".$this->table->getName()."Ok').click();";
+	  	  $js .= "rowHasChanged();";
 	    }
 	    if ($js) $htmlControl->setAttribute("onChange", $js);
 	    $query = 
@@ -845,7 +844,7 @@ class cDbTable implements iDbTable
           // current record is editable
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for the current record
-	  	  if ($this->name != "Note") { // skip this for notes - to avoid endless loop!
+	  	  if (($this->name != "Note")&&($this->name != "StatusLog")) { 
 	  	    $sbRow = array();
 	  	    $sbRow["sbIndent"]="";
 	  	    $sbRow["subBrowser"]=$this->subBrowsers();
