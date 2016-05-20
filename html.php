@@ -365,7 +365,7 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   }
 }
 
-class cHtmlTable 
+class cHtmlTable extends cHtmlElement
 {
   protected $headers = array();
   protected $footers = array();
@@ -410,10 +410,12 @@ class cHtmlTable
 	  		$onClick = "onClick=\"$value\"";
 	  		continue;
 	  	}
-	  	if ($columnName == "StatusName") {
-	  	  $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
+	  	if (!$this->attributes[StatusEdit]) {
+		  if ($columnName == "StatusName") {
+		    $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
+		  }
+		  if ($columnName == "StatusColor") continue;
 	  	}
-	  	if ($columnName == "StatusColor") continue;
 	  	
 	  	if (strpos($columnName, "_id")) continue;
 	  	

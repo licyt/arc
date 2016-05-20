@@ -134,27 +134,32 @@ class cDbField implements iDbField
   {
     if ($this->isForeignKey()) {
 	  $ftName = $this->foreignTableName();
+	  // suggest by tomcat
 	  if(gui($this->getName(), "type")=="suggest") {
 	  	$ftName = $this->foreignTableName();
 	  	$lookupField = gui("table".$ftName, "lookupField", $ftName."Name");
+	  	// load options from database
 	  	$sql=
-	  	  "SELECT id".$ftName.",".$lookupField.
-	  	  " FROM ".$ftName.
-	  	  " ORDER BY ".$lookupField." ASC";
+	  	"SELECT id".$ftName.",".$lookupField.
+	  	" FROM ".$ftName.
+	  	" ORDER BY ".$lookupField." ASC";
 	  	$optionList = Array();
 	  	if( $result = mysql_query($sql) ) {
-	  	  while( $row = mysql_fetch_assoc($result) ) {
-			$optionList[$row["id".$this->foreignTableName()]] = $row[$lookupField]; 
-	  	  }
+	  		while( $row = mysql_fetch_assoc($result) ) {
+	  			$optionList[$row["id".$ftName]] = $row[$lookupField];
+	  		}
 	  	}
+	  	// create and setup a html control 
 	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value, $optionList[$value]);
-		$sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
-		if( $result = mysql_query($sql) ) {
-		  $row = mysql_fetch_assoc($result);
-		  $htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
-		}
 	  	$htmlControl->setOptions($optionList, $lookupField);
+	  	// get lookup field type/size
+	  	$sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
+	  	if( $result = mysql_query($sql) ) {
+	  		$row = mysql_fetch_assoc($result);
+	  		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
+	  	}
 	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
+	  	// attach event controllerss
 	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
@@ -167,6 +172,7 @@ class cDbField implements iDbField
 	    if ($ftName=="Status") {
 	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	    }
+	    // attach onChange handler
 	    if (($this->table->getMode()=="UPDATE")||($this->table->getMode()=="INSERT")) {
 	  	  $js .= "rowHasChanged('".$this->table->getName()."');";
 	    }
@@ -595,6 +601,10 @@ class cDbTable implements iDbTable
       $button->setAttribute("CLASS", "CancelButton");
       $result .= $button->display();
       
+      $anchor = new cHtmlA("");
+      $anchor->setAttribute(ID, $this->name.$this->currentRecordId);
+      $result .= $anchor->display();
+      
       /*
       if ($this->mode == "INSERT") {
       	$result .= $this->reservedButton();
@@ -610,7 +620,7 @@ class cDbTable implements iDbTable
     return $result;
   }
   
-  private function commitSQL() {
+  protected function commitSQL() {
   	// build SQL
   	switch ($this->mode) {
   	  case "DELETE" :
@@ -623,6 +633,32 @@ class cDbTable implements iDbTable
   		  // assign field values
   		  foreach ($this->fields as $i => $field) {
   			$fieldName = $field->getName();
+  			
+  		    // special behaviour for table "Note"
+  			if ($this->name == "Note") {
+  			  $parentTable = $this->parent->getName();
+  			  if (isset($_POST["Note_id".$parentTable])) {
+	  			  switch ($fieldName) {
+	  				case "NoteTable":
+	  				  // set NoteType to parent table name
+	  				  if (isset($this->parent))
+	  					$_POST[$fieldName] = $parentTable;
+	  				  break;
+	  				case "NoteRowId":
+	  				  // set NodeRecordId to CurrentRecordId in parent table
+	  				  if (isset($this->parent))
+	  					$_POST[$fieldName] = $this->parent->getCurrentRecordId();
+	  				  else
+	  					$_POST[$fieldName] = 0;
+	  				  break;
+	  			  }
+  			  } else {
+  			  	return "";
+  			  }
+  			}
+  			
+  			// skip empty fields 
+  			if ($_POST[$fieldName]=="") continue;
   			// skip id and any timestamps
   			if ($fieldName == "id".$this->name) continue;
   			if ($field->isTimeStamp()) continue;
@@ -631,25 +667,7 @@ class cDbTable implements iDbTable
   			  // insert new value to foreign table and get new id
   			  $_POST[$fieldName] = $field->insertForeignKey();
   			}
-  			// skip fields with empty values for INSERT
-  			if (($this->mode==INSERT)&&(!$_POST[$fieldName])) continue;
-  			// special behaviour for table "Note"
-  			if ($this->name == "Note") {
-  			  switch ($fieldName) {
-  				case "NoteTable":
-  				  // set NoteType to parent table name
-  				  if (isset($this->parent))
-  					$_POST[$fieldName] = $this->parent->getName();
-  				  break;
-  				case "NoteRowId":
-  				  // set NodeRecordId to CurrentRecordId in parent table
-  				  if (isset($this->parent))
-  					$_POST[$fieldName] = $this->parent->getCurrentRecordId();
-  				  else
-  					$_POST[$fieldName] = 0;
-  				  break;
-  			  }
-  			}
+  			
   			// append assignment of value
   			$assign .= ($assign ? ", " : "").
   			$fieldName." = \"".$_POST[$fieldName]."\"";
@@ -674,7 +692,7 @@ class cDbTable implements iDbTable
   	return $query;
   }
   
-  public function commit() {
+  protected function commit() {
   	// execute SQL
   	if ($result = mysql_query($this->commitSQL())) {
   	  // adjust table position
@@ -760,14 +778,18 @@ class cDbTable implements iDbTable
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
   	  if ($field = $this->getFieldByName($columnName)) {
-  	  	$htmlControl = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
+  	  	$html = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
   	  	if ($field->isForeignKey()) {
   	  	  $ftName = $field->foreignTableName();
   	  	  if (is_null($this->parent) || ($ftName!=$this->parent->name)) {
-  	  	    $result[gui("table".$ftName, "lookupField", $ftName."Name")] = $htmlControl;
+  	  	    $result[gui("table".$ftName, "lookupField", $ftName."Name")] = $html;
   	  	  }
   	  	} else {
-  	      $result[$columnName] = $htmlControl;
+  	  	  if (($columnName=="StatusLogRowId")&&!is_null($this->parent)) {
+  	  	  	
+  	  	  } else {
+  	        $result[$columnName] = $html;
+  	  	  }
   	  	}
   	  }
    	  if ($columnName=="id".$this->name) {
@@ -874,6 +896,9 @@ class cDbTable implements iDbTable
     if ($this->mode!="INSERT") $this->getCurrentRecord();
   	// create output as html table
 	$table = new cHtmlTable();
+	if (($this->name=="Status")&&!isset($this->parent)) {
+	  $table->setAttribute("StatusEdit", true);
+	}
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
 	$table->addRow($this->insertRow());
 	// add filter only for master browser
@@ -908,6 +933,7 @@ class cDbTable implements iDbTable
 		  if (isset($this->parent)) {
 		  	$ftName = $this->parent->name;
             unset($dbRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
+            if ($this->name=="StatusLog") unset($dbRow["StatusLogRowId"]);
 		  }
 		  // add javascript to onClick event of this row
 		  $dbRow[onClick] = $js;
