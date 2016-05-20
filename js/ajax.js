@@ -4,6 +4,7 @@
 
 var xmlHttp;
 var timeOn;
+var suggestFireFlag;
 
 function Unpack(params) {
   var result="";
@@ -74,17 +75,20 @@ function Ajax(request, params) {
 	          }
               show(fileBrowser.id);
               break;
-//            case "suggest":
-//              if(searchType == "fullsearch") {
-//				document.getElementById(params['datalistId']).innerHTML = request.responseText;
-//			  }
-//			  if(searchType == "idsearch") {
-//				var cutOfLastChar = String(request.responseText);
-//				cutOfLastChar = cutOfLastChar.substr(0,cutOfLastChar.length-1);
-//				document.getElementById(callerId).setAttribute("value", cutOfLastChar);
-//				document.getElementById(callerId).value = cutOfLastChar;
-//			  }
-//			  break;
+            case "suggestSearch":
+            	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
+			  	var dlchildren = document.getElementsByName(params['destinationId']+"Options");
+			  	var flag = 0;
+			  	for( i = 0; i < dlchildren.length; i++ ) {
+				  if( dlchildren[i].text == params['searchString'] ) {
+					document.getElementById(params['hiddenId']).setAttribute("value",dlchildren[i].getAttribute("data-value"));
+				  	flag = 1;
+				  }
+			  	}
+			  	if( flag == 0 ) {
+				  document.getElementById(params['hiddenId']).setAttribute("value","-1");
+			  	}
+			  break;
         } // switch request
       } // switch readyState
     } // function
@@ -121,4 +125,29 @@ function browseFile(element) {
   params['elementId']=element.id;
   params['filePath']=element.value;
   Ajax("browseFile", params);
+}
+
+function suggestList(eventType, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
+  console.log(eventType);
+  var params = new Array();
+  params['searchType'] = "suggestSearch";
+  params['searchString'] = searchString;
+  params['tableName'] = tableName;
+  params['columnName'] = columnName;
+  params['hiddenId'] = hiddenId;
+  params['visibleId'] = visibleId;
+  params['destinationId'] = destinationId;
+  
+  if( eventType == "onFocus" ) {
+	suggestFireFlag = 1;
+    Ajax("suggestSearch", params);
+    document.getElementById(visibleId).select();
+  } 
+  if( eventType == "onKeyUp" ) {
+    if( suggestFireFlag == 0 ) {
+      Ajax("suggestSearch", params);
+    } else {
+      suggestFireFlag = 0;
+    }
+  } else {}
 }

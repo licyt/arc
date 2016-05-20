@@ -54,14 +54,18 @@ function setupSuggestList(hiddenId,visibleId,listId)
 }
 
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
-function sanitizeSuggestValues( hiddenId , visibleId ,listId) {
+function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
 	var val = document.getElementById(visibleId).value;
-	var dlchildren = document.getElementsByName(visibleId+"Options");
+	var dlchildren = document.getElementsByName(listId+"Options");
 
 	for( i = 0; i < dlchildren.length; i++ ) {
 		if( dlchildren[i].text == val ) {
 			document.getElementById(hiddenId).setAttribute("value",dlchildren[i].getAttribute("data-value"));
-			document.getElementById(visibleId).setAttribute("value",dlchildren[i].text);
+//			document.getElementById(visibleId).setAttribute("value",dlchildren[i].text);
 		}
 	}
+}
+
+function sanitizeSuggestList( listId ) {
+  document.getElementById(listId).innerHTML = "";
 }

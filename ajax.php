@@ -2,7 +2,7 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
 require_once("html.php");
-require_once("database.php");
+require_once("dbConfig.php");
 
 //var_dump($_REQUEST);
 
@@ -45,5 +45,27 @@ if (isset($_REQUEST[browseFile])) {
   $RepositoryDir = $SCRIPT_DIRECTORY.$RepositoryPath;
   $filePath = $RepositoryDir.$_REQUEST[filePath];
   echo listDir($filePath); 
+}
+
+if( $_REQUEST["searchType"] === "suggestSearch" ) {
+  $con = mysqli_connect($dbServerName,$dbAjaxUser,$dbAjaxPassword,$dbName);
+  if (!$con) {
+    die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
+  }
+  $retval = "";
+  $optionsName = "";
+  $sql=
+    "SELECT id".$_REQUEST["tableName"].",".$_REQUEST["columnName"].
+  	" FROM ".$_REQUEST["tableName"].
+  	" WHERE ".$_REQUEST["columnName"]." LIKE '".$_REQUEST["searchString"]."%'".
+  	" ORDER BY ".$_REQUEST["columnName"]." ASC";
+  $optionList = Array();
+  if( $result = mysqli_query($con,$sql) ) {
+  	while( $row = $result->fetch_assoc() ) {
+  	  $retval .= "<option data-value=\"".$row["id".$_REQUEST["tableName"]]."\" name=\"".$_REQUEST["destinationId"]."Options\">".$row[$_REQUEST["columnName"]]."</option>";
+    }
+  }
+  mysqli_close($con);
+  echo $retval;
 }
 ?>

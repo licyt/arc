@@ -160,10 +160,10 @@ class cDbField implements iDbField
 	  	}
 	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
 	  	// attach event controllerss
-	  	$htmlControl->setAttribute("onClick", "setupSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onKeyUp","updateSuggestList('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
+	  	$htmlControl->setAttribute("onFocus","suggestList('onFocus','valueSearch',this.value,'".$this->foreignTableName()."','".$lookupField."','".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
+	  	$htmlControl->setAttribute("onKeyUp","suggestList('onKeyUp','valueSearch',this.value,'".$this->foreignTableName()."','".$lookupField."','".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
 	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onBlur","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
+	  	$htmlControl->setAttribute("onBlur", "sanitizeSuggestList('".$this->properties[Field]."List')");
 	  } else {
         // use select for foreign keys
         $htmlControl = new cHtmlSelect;

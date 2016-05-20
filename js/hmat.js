@@ -15,12 +15,6 @@ function rowHasChanged(TableName) {
   show(TableName+"Ok");										
 }
 
-function suggestRowHasChanged(elId) {
-	  hide(elId+"Delete");									
-	  show(elId+"Ok");										
-	  elementById(el).style.border = "1px solid red;";
-}
-
 function Load() {
   // determine size of browser window
   if (parseInt(navigator.appVersion)>3) {
