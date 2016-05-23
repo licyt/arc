@@ -128,8 +128,8 @@ function browseFile(element) {
 }
 
 function suggestList(eventType, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
-  console.log(eventType);
   var params = new Array();
+
   params['searchType'] = "suggestSearch";
   params['searchString'] = searchString;
   params['tableName'] = tableName;
@@ -141,7 +141,7 @@ function suggestList(eventType, searchType, searchString, tableName, columnName,
   if( eventType == "onFocus" ) {
 	suggestFireFlag = 1;
     Ajax("suggestSearch", params);
-    document.getElementById(visibleId).select();
+    document.getElementById(visibleId).select();    
   } 
   if( eventType == "onKeyUp" ) {
     if( suggestFireFlag == 0 ) {
