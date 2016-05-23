@@ -164,6 +164,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
     $this->setAttribute("ID", $id);
     $this->setAttribute("TYPE", $type);
     $this->setAttribute("VALUE", $value);
+    $this->setAttribute("onFocus", "this.select()");
   }
   
   public function display() {
