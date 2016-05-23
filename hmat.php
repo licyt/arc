@@ -50,7 +50,6 @@ echo
   	  "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
 	  $dbScheme->admin().
-   	  file_get_contents('../repo/db/current').
     "</div>",
   	"Load();"
   );
