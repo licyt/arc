@@ -50,7 +50,7 @@ echo
   	  "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
 	  $dbScheme->admin().
-   	  $svn_rev=file_get_contents('../repo/db/current').
+   	  file_get_contents('../repo/db/current').
     "</div>",
   	"Load();"
   );
