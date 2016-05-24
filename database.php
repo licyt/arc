@@ -861,29 +861,6 @@ class cDbTable implements iDbTable
     }
     //$result[0]="";
     return $result;
-
-    // display fields as controls in a row of a html table
-    $result = array();
-    foreach ($this->columnNames as $i => $columnName) {
-      if ($field = $this->getFieldByName($columnName)) {
-    	$htmlControl = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
-        if ($field->isForeignKey()) {
-    	  $ftName = $field->foreignTableName();
-          if (is_null($this->parent) || ($ftName!=$this->parent->name)) {
-    	    $result[gui("table".$ftName, "lookupField", $ftName."Name")] = $htmlControl;
-          }
-        } else {
-      	  $result[$columnName] = $htmlControl;
-        }
-      }
-      if ($columnName=="id".$this->name) {
-        $result[$columnName] = $this->manipulator();
-      }
-    }
-    $result["CLASS"] = $this->mode;
-    $result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}";
-    return $result;
-    
   }
  
   public function browseForm($include="") 
