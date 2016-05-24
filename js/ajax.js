@@ -138,6 +138,7 @@ function suggestList(eventType, searchType, searchString, tableName, columnName,
   params['visibleId'] = visibleId;
   params['destinationId'] = destinationId;
   
+  // check FireFlag if set means onFocus fired and the onKeyUp should not (avoid flicking)
   if( eventType == "onFocus" ) {
 	suggestFireFlag = 1;
     Ajax("suggestSearch", params);

@@ -79,6 +79,10 @@ function chooseDate(e) {
 		textbox.value = targ.getAttribute('date');
 		document.getElementById(div.previousElementSibling.id).setAttribute("value",textbox.value);
 		document.getElementById(div.previousElementSibling.id).value = textbox.value;
+		var eventForward = document.createEvent("HTMLEvents");
+		eventForward.initEvent("change", true, false);
+		var dispacher = document.getElementById(div.previousElementSibling.id);
+		dispacher.dispatchEvent(eventForward);
 	}
 	div.parentNode.removeChild(div); // Remove the dropdown box now
 }

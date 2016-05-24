@@ -187,6 +187,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add(onKeyPress).
         $this->add(onSelect).
         $this->add(onInput).
+        $this->add(onChange).
         $this->add(SIZE).
         $this->add("CLASS").
         $this->add(STYLE).
@@ -459,6 +460,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 		$input->setAttribute("SIZE", "10");
 		$input->setAttribute("CLASS", "datepicker");
 		$input->setAttribute("onInput", "rowHasChanged('".$this->attributes[TableName]."');");
+		$input->setAttribute("onChange", "rowHasChanged('".$this->attributes[TableName]."');");
 		return
 		  $input->display();
 	}
