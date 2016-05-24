@@ -151,6 +151,66 @@
 	font-style: italic;
 }
 
+#tabsbDeliveryNotesbDeliveryNoteDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;
+}
+
+#tabButtonsbDeliveryNotesbDeliveryNoteDeliveryTransport {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;	
+}
+
+#tabsbDeliveryNotesbDeliveryNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;	
+}
+
+#tabButtonsbDeliveryNotesbDeliveryNoteStatus {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;		
+}
+
 #DeliveryNoteORDERidDeliveryNote, #DeliveryNoteORDERStatusName,
 	#DeliveryNoteORDERInvoiceName, #DeliveryNoteORDERDeliveryNoteIssued,
 	#DeliveryNoteORDERDeliveryNoteSigned, #DeliveryNoteORDERShippingAddress
