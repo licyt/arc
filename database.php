@@ -136,7 +136,6 @@ class cDbField implements iDbField
 	  $ftName = $this->foreignTableName();
 	  // suggest by tomcat
 	  if(gui($this->getName(), "type")=="suggest") {
-	  	$ftName = $this->foreignTableName();
 	  	$lookupField = gui("table".$ftName, "lookupField", $ftName."Name");
 	  	// load options from database
 	  	$sql=
@@ -253,7 +252,8 @@ class cDbTable implements iDbTable
   protected $scheme;
   protected $name;  
   protected $parent;
-  public $fields = array();   
+  public $fields = array();  
+  protected $statuses = array();
   // parameters for navigation
   protected $at;									// index of current record
   protected $count;									// total count of records
@@ -335,6 +335,7 @@ class cDbTable implements iDbTable
   {
     // initialize table from database
     $this->name = $name;
+    $this->loadStatuses();
     $this->loadFields();
   }
   
@@ -356,11 +357,24 @@ class cDbTable implements iDbTable
   	return false; 
   }
   
-  public function hasStatusField() {
-  	foreach ($this->fields as $i=>$field) {
-  	  if ($field->getName() == $this->name."_idStatus") return true;
-  	}
-  	return false;
+  public function hasStatus() {
+  	return count($this->statuses);
+  }
+  
+  public function getRecordStatus($id="0") {
+  	$query = 
+      "SELECT Status.* FROM StatusLog, Status".
+      " WHERE (StatusLog_idStatus=idStatus)".
+  	  " AND (StatusType='".$this->name."')".
+  	  " AND (StatusLogRowId=$id)".
+  	  " ORDER BY StatusLogTimestamp DESC".
+  	  " LIMIT 0,1";
+    if ($dbResult = mysql_query($query)) {
+      if ($dbRow = mysql_fetch_assoc($dbResult)) {
+      	return $dbRow;
+      }
+    }
+    return null;
   }
   
   public function go($index) 
@@ -381,7 +395,9 @@ class cDbTable implements iDbTable
       exit;
     } 
     if (mysql_num_rows($result) > 0) {
+      $i=0;
       while ($column = mysql_fetch_assoc($result)) {
+      	$i++;
         // create/set cDbField object for each table column
         $field = new cDbField($column);
 		$field->setTable($this);
@@ -389,6 +405,15 @@ class cDbTable implements iDbTable
         array_push($this->fields, $field);
       }
     }
+  }
+  
+  public function loadStatuses() {
+  	$query = "SELECT * FROM Status WHERE StatusType='".$this->name."'";
+  	if ($dbResult = mysql_query($query)) {
+ 	  while ($dbRow = mysql_fetch_assoc($dbResult)) {
+  	    $this->statuses[$dbRow[idStatus]] = $dbRow;
+  	  }
+  	}
   }
   
   public function loadColumns($useForeignFields=true) 
@@ -475,6 +500,7 @@ class cDbTable implements iDbTable
   	$this->order = $_SESSION[table][$this->name][order];
   	// column names
   	foreach ($this->columnNames as $i=>$columnName) {
+  	  if ($columnName == $this->name."_idStatus") continue;
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
   	  $this->columns .= ($this->columns?", ":"").$columnName;
@@ -796,6 +822,17 @@ class cDbTable implements iDbTable
   	    $result[$columnName] = $this->manipulator();
    	  }
   	}
+  	// append status at the end of the row
+	if ($this->hasStatus()) {
+	  $select = new cHtmlSelect();
+	  foreach ($this->statuses as $i=>$status) {
+	    $select->addOption($i, $status[StatusName], $status[StatusColor]);
+	  }
+	  $status = $this->getRecordStatus($id);
+	  $select->setSelected($status[idStatus]);
+	  $result[StatusName] = $select->display();
+	}
+	// specify css class and onKey handler for the current row
   	$result["CLASS"] = $this->mode;
   	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}"; 
   	return $result;
@@ -912,6 +949,12 @@ class cDbTable implements iDbTable
             unset($dbRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
             if ($this->name=="StatusLog") unset($dbRow["StatusLogRowId"]);
 		  }
+		  // append status at the end 
+		  if ($this->hasStatus()) {
+		  	$status=$this->getRecordStatus($id);
+		  	$dbRow[StatusName] = $status[StatusName];
+		  	$dbRow[StatusColor] = $status[StatusColor];
+		  }
 		  // add javascript to onClick event of this row
 		  $dbRow[onClick] = $js;
 		  // add row to table
@@ -952,7 +995,7 @@ class cDbTable implements iDbTable
   	}
   	
   	// history of statuses for current record
-  	if ($this->hasStatusField()) {
+  	if ($this->hasStatus()) {
   	  $ftable = new cDbTable("StatusLog", $this->scheme, $this);
       $browsers->addTab("sb".$this->name."Status", $ftable->browseForm());
   	  unset($ftable);
