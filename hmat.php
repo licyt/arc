@@ -45,11 +45,12 @@ echo
   	linkJs("js/ajax.js")
   	
   ).
-  body( 
-	"<div style='position:absolute'>".
+  body(
+  	  "<div id='svnrevision'>SVN REV:".shell_exec('svnversion')."</div>".
+  	  "<div style='position:absolute'>".
   	  "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
-	  $dbScheme->admin().
+  		$dbScheme->admin().
     "</div>",
   	"Load();"
   );

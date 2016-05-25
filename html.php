@@ -612,6 +612,7 @@ class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 		$inputVisible->setAttribute("onClick", $this->attributes["onClick"]);
 		$inputVisible->setAttribute("onBlur", $this->attributes["onBlur"]);
 		$inputVisible->setAttribute("onKeyUp", $this->attributes["onKeyUp"]);
+		$inputVisible->setAttribute("onKeyPress", $this->attributes["onKeyPress"]);
 		$inputVisible->setAttribute("onSelect", $this->attributes["onSelect"]);
 		$inputVisible->setAttribute("onFocus", $this->attributes["onFocus"]);
 		$inputVisible->setAttribute("SIZE", $this->attributes[SIZE]);

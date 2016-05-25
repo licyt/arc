@@ -127,9 +127,9 @@ function browseFile(element) {
   Ajax("browseFile", params);
 }
 
-function suggestList(eventType, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
+function suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
   var params = new Array();
-
+  
   params['searchType'] = "suggestSearch";
   params['searchString'] = searchString;
   params['tableName'] = tableName;
@@ -137,18 +137,36 @@ function suggestList(eventType, searchType, searchString, tableName, columnName,
   params['hiddenId'] = hiddenId;
   params['visibleId'] = visibleId;
   params['destinationId'] = destinationId;
-  
-  // check FireFlag if set means onFocus fired and the onKeyUp should not (avoid flicking)
-  if( eventType == "onFocus" ) {
+ 
+  // check FireFlag if set means onFocus fired and the onKeyUp should not (avoids flicking)
+  if( event.type == "focus" ) {
 	suggestFireFlag = 1;
     Ajax("suggestSearch", params);
     document.getElementById(visibleId).select();    
   } 
-  if( eventType == "onKeyUp" ) {
-    if( suggestFireFlag == 0 ) {
+  if( event.type == "keyup" ) {
+    if( suggestFireFlag == 0 && ( isValidKey(event.keyCode) ) ) {
       Ajax("suggestSearch", params);
     } else {
       suggestFireFlag = 0;
     }
-  } else {}
+  } else {} // needs to be here javascript does not support incomplete if/else statements
+}
+
+function isValidKey(key) {
+  // SEE KEYCODE TABLE: https://css-tricks.com/snippets/javascript/javascript-keycodes/
+  // 8 = backspace, 16 = shift, 32 = space, 46 = delete, 20 = caps lock, 27 = ESC
+  // 48-59 = NUMBERS, 65-90 small alphabet, 96-105 numpad
+  if( key == 8 || key == 32 || key == 46 ) {
+	  return true;
+  }
+  if( key > 47 && key < 59 ) {
+	  return true;
+  }
+  if( key > 65 && key < 90 ) {
+	  return true;
+  }
+  if( key > 96 && key < 105 ) {
+	  return true;
+  } 
 }
