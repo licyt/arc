@@ -7,6 +7,10 @@ form {
 	margin-bottom:0px;
 }
 
+table {
+	width: 100%;
+}
+
 tr:hover {
   background-color: silver;
 }
