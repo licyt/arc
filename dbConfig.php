@@ -5,9 +5,6 @@ $dbServerName = 'tokamag';
   $dbUser       = 'root';
   $dbPassword   = 'mindfold';
 
-  $dbAjaxUser 	= 'root';
-  $dbAjaxPassword = 'mindfold';
-  
   $RepositoryPath = "/datafiles/"; // dependency! ajax.js.updatePath()
   
   $lang 		= 'ENG';
