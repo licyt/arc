@@ -414,7 +414,7 @@ class cHtmlTable extends cHtmlElement
 	  	}
 	  	if (!$this->attributes[StatusEdit]) {
 		  if ($columnName == "StatusName") {
-		    $style = "STYLE=\"background-color:".$row[StatusColor].";\"";
+		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
 		  }
 		  if ($columnName == "StatusColor") continue;
 	  	}
