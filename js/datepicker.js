@@ -348,8 +348,6 @@ onDOMReady(function() {
 			if( allElements[i].getAttribute("value") === "0000-00-00" ) {
 				allElements[i].setAttribute( "value" , "" );
 			}
-			// select the input value
-			allElements[i].select();
 			// Now lets add a datepicker next to it
 			var a = document.createElement('a');
 			a.href = '#';
