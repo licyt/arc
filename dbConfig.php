@@ -1,6 +1,6 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
-$dbServerName = 'wendelstein';
+$dbServerName = 'tokamag';
   $dbName       = 'hmat_dev';
   $dbUser       = 'root';
   $dbPassword   = 'mindfold';
