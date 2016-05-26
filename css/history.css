@@ -1,10 +1,10 @@
 /*           All that belongs to the GUI           */
-#tabButtonAdminAction {
+#tabButtonAdminHistory {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
 	position: absolute;
-	top: 20px;
+	top: 40px;
 	left: 1300px;
 	width: 80px;
 	margin: 0px 0px 0px 0px;
@@ -12,12 +12,12 @@
 	display: block;
 }
 
-#tabAdminAction {
+#tabAdminHistory {
 	color: black;
 	background-color: #B2B2B2;
 	height: 14px;
 	position: absolute;
-	top: 20px;
+	top: 40px;
 	left: 1300px;
 	width: 74px;
 	border-style: solid;
@@ -27,11 +27,11 @@
 	display: block;
 }
 
-#browseFormAction {
+#browseFormHistory {
 	border: 1px solid #B2B2B2;
 }
 
-#tabButtonsbActionsbActionNote {
+#tabButtonsbHistorysbHistoryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbActionsbActionAction {
+#tabButtonsbHistorysbHistoryHistory {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbActionsbActionNote {
+#tabsbHistorysbHistoryNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -73,7 +73,7 @@
 	font-style: italic;
 }
 
-#tabsbActionsbActionAction {
+#tabsbHistorysbHistoryHistory {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
