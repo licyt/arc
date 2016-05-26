@@ -48,7 +48,7 @@ if (isset($_REQUEST[browseFile])) {
 }
 
 if( $_REQUEST["searchType"] === "suggestSearch" ) {
-  $con = mysqli_connect($dbServerName,$dbAjaxUser,$dbAjaxPassword,$dbName);
+  $con = mysqli_connect($dbServerName,$dbUser,$dbPassword,$dbName);
   if (!$con) {
     die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
   }
