@@ -1,24 +1,24 @@
-/*           All that belongs to the invoice           */
-#tabButtonAdminInvoice {
+/*           All that belongs to the Payment           */
+#tabButtonAdminPayment {
 	color: black;
-	background-color: #99FFFF;
+	background-color: #33ffff;
 	height: 20px;
 	position: absolute;
 	top: 20px;
-	left: 960px;
+	left: 1020px;
 	width: 60px;
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 0px;
 	display: block;
 }
 
-#tabAdminInvoice {
+#tabAdminPayment {
 	color: black;
-	background-color: #99FFFF;
+	background-color: #33ffff;
 	height: 14px;
 	position: absolute;
 	top: 20px;
-	left: 960px;
+	left: 1020px;
 	width: 54px;
 	border-style: solid;
 	border-width: 3px;
@@ -27,11 +27,11 @@
 	display: block;
 }
 
-#browseFormInvoice {
-	border: 1px solid #99FFFF;
+#browseFormPayment {
+	border: 1px solid #33ffff;
 }
 
-#tabButtonsbInvoicesbInvoiceDeliveryNote {
+#tabButtonsbPaymentsbPaymentDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceNote {
+#tabButtonsbPaymentsbPaymentNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceStatus {
+#tabButtonsbPaymentsbPaymentStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceInvoice {
+#tabButtonsbPaymentsbPaymentPayment {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -79,7 +79,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbInvoicesbInvoiceDeliveryNote {
+#tabsbPaymentsbPaymentDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -97,7 +97,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceNote {
+#tabsbPaymentsbPaymentNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -115,7 +115,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceStatus {
+#tabsbPaymentsbPaymentStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -133,7 +133,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceInvoice {
+#tabsbPaymentsbPaymentPayment {
 	color: black;
 	background-color: #99FFFF;
 	border: 0 none;
@@ -151,9 +151,9 @@
 	font-style: italic;
 }
 
-#InvoiceORDERidInvoice, #InvoiceORDERStatusName, #InvoiceORDERDemandName,
-	#InvoiceORDERInvoiceIssued, #InvoiceORDERInvoicePaymentTerm,
-	#InvoiceORDERInvoiceTotal, #InvoiceORDERInvoiceVAT,
-	#InvoiceORDERInvoiceType {
+#PaymentORDERidPayment, #PaymentORDERStatusName, #PaymentORDERDemandName,
+	#PaymentORDERPaymentIssued, #PaymentORDERPaymentPaymentTerm,
+	#PaymentORDERPaymentTotal, #PaymentORDERPaymentVAT,
+	#PaymentORDERPaymentType {
 	
 }
