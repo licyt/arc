@@ -89,6 +89,29 @@ function Ajax(request, params) {
 				  document.getElementById(params['hiddenId']).setAttribute("value","-1");
 			  	}
 			  break;
+            case "loadTable":
+              var table=elementById('ActionTable');
+              var td0=table.parentElement;
+              var td1=td0.nextSibling;
+              var td2=td1.nextSibling;
+              var pos=xmlHttp.responseText.indexOf('|');
+              td1.innerHTML=xmlHttp.responseText.substr(0, pos);  // list of fields
+              td2.innerHTML=xmlHttp.responseText.substr(pos+1);   // list of available commands
+              break;
+            case "loadParameters":
+              var par1=elementById('ActionParam1');
+              var td1=par1.parentElement;
+              var td2=td1.nextSibling;
+              var pos=xmlHttp.responseText.indexOf('|');
+              td1.innerHTML=xmlHttp.responseText.substr(0, pos);
+              td2.innerHTML=xmlHttp.responseText.substr(pos+1);
+              break;
+            case "loadParam2":
+              var par1=elementById('ActionParam1');
+              var td1=par1.parentElement;
+              var td2=td1.nextSibling;
+              td2.innerHTML=xmlHttp.responseText;
+              break;
         } // switch request
       } // switch readyState
     } // function
@@ -101,6 +124,8 @@ function Ajax(request, params) {
   xmlHttp.setRequestHeader('Content-Type', 'text/xml; charset=utf-8');
   xmlHttp.send(null);
 }
+
+// file browser functions
 
 function updatePath(elementId, path) {
   input = elementById(elementId);
@@ -126,6 +151,8 @@ function browseFile(element) {
   params['filePath']=element.value;
   Ajax("browseFile", params);
 }
+
+// suggest list functions by tomcat
 
 function suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
   var params = new Array();
@@ -170,3 +197,25 @@ function isValidKey(key) {
 	  return true;
   } 
 }
+
+// Action list editor functions
+
+function loadTable() {
+  var params=new Array();
+  params['table']=elementById("ActionTable").value;
+  Ajax("loadTable", params);
+}
+
+function loadParameters() {
+	  var params=new Array();
+	  params['command']=elementById("ActionCommand").value;
+	  params['table']=elementById("ActionTable").value;
+	  Ajax("loadParameters", params);
+	}
+
+function loadParam2() {
+	  var params=new Array();
+	  params['param1']=elementById("ActionParam1").value;
+	  Ajax("loadParam2", params);
+	}
+

@@ -238,7 +238,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
 		    ? " STYLE=\"background-color:#".$this->colors[$value].";\""
 		  	: ""
 		  ).
-		  " VALUE=$value>".
+		  " VALUE=\"$value\">".
 		  $option.
 		"</OPTION>";
     }
