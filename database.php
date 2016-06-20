@@ -385,16 +385,8 @@ class cDbTable implements iDbTable
     $_SESSION[table][$this->name][order] = $this->order;
   }
   
-  public function hasParentTable($tableName) 
-  {
-  	foreach ($this->fields as $i=>$field) {
-  	  if ($field->getName() == $this->name."_id".$tableName) return true;
-  	}
-  	return false; 
-  }
-  
-  public function isChildOf($tableName) {
-  	return $this->hasParentTable($tableName);
+  public function setParent($parentTable) {
+  	$this->parent = $parentTable;
   }
   
   public function loadChildren() {
@@ -406,8 +398,30 @@ class cDbTable implements iDbTable
   	}
   }
   
+  public function isChildOf($tableName) {
+  	foreach ($this->fields as $i=>$field) {
+  	  if ($field->getName() == $this->name."_id".$tableName) return true;
+  	}
+  	return false; 
+  }
+  
   public function hasChild() {
   	return count($this->children);
+  }
+  
+  public function getParentOfChildId($childTable) {
+  	$childName = $childTable->getName;
+  	$childId = $childTable->getCurrentRecordId();
+  	$query = 
+  	  "SELECT id".$this->name.
+  	  " FROM ".$this->name.", ".$childName.
+  	  " WHERE ".$childName.".".$childName."_id".$this->name."=".$this->name.".id".$this->name.
+  	  " AND ".$childName."id".$childName."=".$childId;
+  	if ($dbRes = mysql_query($query)) {
+  	  if ($dbRow = mysql_fetch_row($dbRes)) {
+  	    $this->currentRecordId = $dbRow[0];
+  	  }
+  	}
   }
   
   public function hasStatusField() {
@@ -767,7 +781,7 @@ class cDbTable implements iDbTable
   	if (!$this->hasStatusField()) return false;
   	$i = $this->name."_idStatus";
   	return 
-  	  ($this->mode == "INSERT") ||
+  	  //($this->mode == "INSERT") ||
   	  (($this->mode == "UPDATE") && ($this->lastRecord[$i] != $this->currentRecord[$i]));
   }
   
@@ -837,30 +851,26 @@ class cDbTable implements iDbTable
   }
   
   public function execAction($action) {
-  	$event = array();
   	switch ($action[ActionCommand]) {
   	  case "SET STATUS":
+  	  	// set status for this table or for its parent/grandpartent/... table 
+  	  	$targetTable = $this;
+  	  	while (isset($targetTable->parent)&&($action[ActionTable]!=$targetTable->getName())) {
+  	  	  $targetTable->parent->getParentOfChildId($targetTable);
+  	  	  $targetTable = $targetTable->parent;
+  	  	}
+  	  	
+  	  	$id = $targetTable->getCurrentRecordId();
   	  	$query = 
   	  	  "UPDATE ".$action[ActionTable].
   	  	  " SET ".$action[ActionTable]."_idStatus=".$action[ActionParam1].
-  	  	  " WHERE id".$action[ActionTable]=$this->currentRecordId;
+  	  	  " WHERE id".$action[ActionTable]."=".$id; 
   	  	if ($dbRes=mysql_query($query)) {
-  	  	  $this->logStatus();
-  	  	  $this->handleEvent($action);
-  	  	}
-  	  	return true;
-  	  case "SET PARENT STATUS":
-  	  	 
-  	  	return true;
-  	  case "CREATE CHILD":
-  	  	$query =
-  	  	  "INSERT INTO ".$action[ActionParam1].
-  	  	  " SET ".$action[ActionParam1]."_id".$action[ActionTable]."=".$this->currentRecordId;
-  	  	if ($dbRes=mysql_query($query)) {
-  	  	  $childId=mysql_insert_id();
-  	  	  $event[ActionTable] = $action[ActionParam1];
-  	  	  $event[ActionCommand] = "CREATE";
-  	  	  $this->handleEvent($event);
+  	  	  if ($action[ActionTable]==$targetTable->getName()) {
+  	  	  	$targetTable->getCurrentRecord();
+  	  	    $targetTable->logStatus();
+  	  	  } 
+  	  	  $targetTable->handleEvent($action);
   	  	}
   	  	return true;
   	}
@@ -915,6 +925,16 @@ class cDbTable implements iDbTable
   	  	  $event[ActionParam1] = $this->currentRecord[$this->name."_idStatus"];
   	  	  $this->handleEvent($event);
   	  	}
+  	  	/*
+  	  	switch ($event[ActionCommand]) {
+  	  	  case "CREATE CHILD":
+  	  	  	// CREATE CHILD event also triggers CREATE event for child table ??
+  	  	  	$action[ActionTable]=$event[ActionParam1];
+  	  	  	$action[ActionCommand]="CREATE";
+  	  	  	$this->handleEvent($action);
+  	  	  	break;
+  	  	}
+  	  	*/
   	  }
   	  
   	  // return to BROWSE mode
@@ -975,25 +995,27 @@ class cDbTable implements iDbTable
   	  	continue;
   	  
   	  // action editor
-  	  if ($columnName=="ActionField") {
-  	    $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-  	    $result[$columnName] = fieldsForAction($table, $this->currentRecord[ActionField])->display();
-  	    continue;
-  	  }
-  	  if ($columnName=="ActionCommand") {
-  	    $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-  	    $result[$columnName] = commandsForAction($table, $this->currentRecord[ActionCommand])->display();
-  	    continue;
-  	  }
-  	  if ($columnName=="ActionParam1") {
-  	    $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-  	    $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1], $this->currentRecord[ActionParam2]);
-  	    $result[ActionParam1] = $params[1]->display();
-  	    $result[ActionParam2] = $params[2]->display();
-  	  	continue;
-  	  }
-  	  if ($columnName=="ActionParam2") {
-  	  	continue;
+  	  if ($this->mode=="UPDATE") {
+        if ($columnName=="ActionField") {
+    	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
+    	  $result[$columnName] = fieldsForAction($table, $this->currentRecord[ActionField])->display();
+    	  continue;
+    	}
+    	if ($columnName=="ActionCommand") {
+    	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
+  	      $result[$columnName] = commandsForAction($table, $this->currentRecord[ActionCommand])->display();
+          continue;
+  	    }
+  	    if ($columnName=="ActionParam1") {
+  	      $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
+  	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1], $this->currentRecord[ActionParam2]);
+  	      $result[ActionParam1] = $params[1]->display();
+  	      $result[ActionParam2] = $params[2]->display();
+  	  	  continue;
+  	    }
+  	    if ($columnName=="ActionParam2") {
+  	  	  continue;
+  	    }
   	  }
   	  	
   	  // get html control for field
@@ -1082,14 +1104,29 @@ class cDbTable implements iDbTable
     //$result[0]="";
     return $result;
   }
+  
+  public function preProcess() {
+  	$this->loadColumns();
+  	$this->loadSession();
+  	$this->respondToPost();
+  	$this->getNumRecords();
+  	
+    $query = "show tables";
+  	if ($dbResult = mysql_query($query)) {
+  	  while ($dbRow = mysql_fetch_row($dbResult)) {
+  	  	if ($dbRow[0]==$this->name) continue;
+  	  	$ftable = $this->scheme->tables[$dbRow[0]];
+  	  	if ($ftable->isChildOf($this->name)) {
+  	  	  $ftable->setParent($this);
+  	  	  $ftable->preProcess(); 
+  	  	}
+  	  }
+  	}
+  }
  
   public function browse($include="") 
   {
-	// preprocess 
-  	$this->loadColumns();
-	$this->loadSession();
-    $this->respondToPost();
-	$this->getNumRecords();
+  	//$this->preProcess();
     if ($this->mode!="INSERT") $this->getCurrentRecord();
   	// create output as html table
 	$table = new cHtmlTable();
@@ -1184,11 +1221,11 @@ class cDbTable implements iDbTable
   	if ($dbResult = mysql_query($query)) {
   	  while ($dbRow = mysql_fetch_row($dbResult)) {
   	  	if ($dbRow[0]==$this->name) continue;
-  	  	$ftable = new cDbTable($dbRow[0], $this->scheme, $this);
-  	  	if ($ftable->hasParentTable($this->name)) {
-  	  		$browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browse()); 
+  	  	$ftable = $this->scheme->tables[$dbRow[0]];
+  	  	if ($ftable->isChildOf($this->name)) {
+  	  	  $ftable->setParent($this);
+  	  	  $browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browse()); 
   	  	}
-  	  	unset($ftable);
   	  }
   	}
   	
@@ -1269,6 +1306,11 @@ class cDbScheme implements iDbScheme
 	  	$_SESSION[tabControl][Admin][selected] = $name;
 	  }
   	}
+	foreach ($this->tables as $name=>$table) {
+	  if ($_SESSION[tabControl][Admin][selected] == $name) {
+	    $table->preProcess();
+	  }
+	}
   	// add all table buttons 
 	foreach ($this->tables as $name=>$table) {
 	  $tableTabs->addTab(

@@ -27,9 +27,11 @@ function commandsForAction($table /* cDbTable */, $value="") {
   if ($table->hasStatus()) {
 	$commands->addOption("SET STATUS", "SET STATUS");
   }
+  /*
   if ($table->hasParentStatus()) {
 	$commands->addOption("SET PARENT STATUS", "SET PARENT STATUS");
   }
+  */
   $commands->addOption("IS SET", "IS SET");
   $commands->setSelected($value);
   return $commands;
@@ -65,6 +67,7 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	  $params[1]->setSelected($param1);
 	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
 	  break;
+	/*
 	case "SET PARENT STATUS":
 	  $params[1] = new cHtmlSelect;
 	  $params[1]->setAttribute("ID", "ActionParam1");
@@ -80,6 +83,7 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	  $params[1]->setAttribute("onChansge", "loadParam2();");
 	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
 	  break;
+	*/
 	default: // ----------------------------------------------------------------------------- default
 	  $params[1] = new cHtmlInput("ActionParam1", "HIDDEN");
 	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
