@@ -8,4 +8,6 @@ $dbServerName = gethostbyname('tokamag.nasa.lan'); //localy resolves domain name
   $RepositoryPath = "/datafiles/"; // dependency! ajax.js.updatePath()
   
   $lang 		= 'ENG';
+  
+  
 ?>
