@@ -809,10 +809,11 @@ class cDbTable implements iDbTable
   public function getEventId($event) {
   	$query = 
   	  "SELECT idAction FROM Action".
-  	  " WHERE ActionTable=\"".$event[ActionTable]."\"".
-  	  " AND ActionCommand=\"".$event[ActionCommand]."\"".
+  	  " WHERE (ActionTable=\"".$event[ActionTable]."\")".
+  	  " AND (ActionSequence=0)".
+  	  " AND (ActionCommand=\"".$event[ActionCommand]."\")".
   	  ($event[ActionParam1]
-  	    ? " AND ActionParam1=\"".$event[ActionParam1]."\""
+  	    ? " AND (ActionParam1=\"".$event[ActionParam1]."\")"
   	  	: ""
   	  );
     return 
@@ -833,9 +834,25 @@ class cDbTable implements iDbTable
   	return false;
   }
   
+  public function logEvent($event) {
+  	$id = (($event[ActionCommand]=="DELETE")
+  	  ? $this->lastRecord["id".$this->name]
+  	  : $this->currentRecordId
+    );
+  	$query =
+  	  "INSERT INTO History SET ".
+  	  "HistoryTable='".$this->name."', ".
+  	  "HistoryRowId=".$id.", ".
+  	  "HistoryCommand='".$event[ActionCommand]."', ".
+  	  "HistorySQL='".addslashes(implode("|", $event))."'";
+  	mysql_query($query);
+  }
+  
   public function handleEvent($event) {
+  	//echo "handleEvent(".implode("|", $event).")<br>";
   	// action has been executed and created event
     array_push($this->executed, $event);
+    $this->logEvent($event);
     // search for event in Actions table
   	if ($eid = $this->getEventId($event)) {
   	  // if found get:execute:handle actions in sequence
@@ -851,28 +868,28 @@ class cDbTable implements iDbTable
   }
   
   public function execAction($action) {
+  	//echo "execAction(".implode("|", $action).")<br>";
   	switch ($action[ActionCommand]) {
   	  case "SET STATUS":
-  	  	// set status for this table or for its parent/grandpartent/... table 
+  	  	// search for target table (and recordId) 
   	  	$targetTable = $this;
   	  	while (isset($targetTable->parent)&&($action[ActionTable]!=$targetTable->getName())) {
   	  	  $targetTable->parent->getParentOfChildId($targetTable);
   	  	  $targetTable = $targetTable->parent;
   	  	}
-  	  	
-  	  	$id = $targetTable->getCurrentRecordId();
-  	  	$query = 
-  	  	  "UPDATE ".$action[ActionTable].
-  	  	  " SET ".$action[ActionTable]."_idStatus=".$action[ActionParam1].
-  	  	  " WHERE id".$action[ActionTable]."=".$id; 
-  	  	if ($dbRes=mysql_query($query)) {
-  	  	  if ($action[ActionTable]==$targetTable->getName()) {
+  	  	// target table is found
+  	  	if ($action[ActionTable]==$targetTable->getName()) {
+  	  	  $query = 
+  	  	    "UPDATE ".$action[ActionTable].
+  	  	    " SET ".$action[ActionTable]."_idStatus=".$action[ActionParam1].
+  	  	    " WHERE id".$action[ActionTable]."=".$targetTable->getCurrentRecordId(); 
+  	  	  if ($dbRes=mysql_query($query)) {
   	  	  	$targetTable->getCurrentRecord();
   	  	    $targetTable->logStatus();
-  	  	  } 
-  	  	  $targetTable->handleEvent($action);
-  	  	}
-  	  	return true;
+  	  	    $targetTable->handleEvent($action);
+  	  	    return true;
+  	  	  }
+  	    } 
   	}
   }
   
