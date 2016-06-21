@@ -10,4 +10,7 @@ $dbServerName = gethostbyname('tokamag.nasa.lan'); //localy resolves domain name
   $lang 		= 'ENG';
   
   
+  
+  
+  
 ?>
