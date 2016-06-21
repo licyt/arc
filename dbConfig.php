@@ -1,6 +1,6 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
-$dbServerName = gethostbyname('tokamag.nasa.lan'); //localy resolves domain name and uses corresponding IP
+  $dbServerName = 'tokamag.nasa.lan';
   $dbName       = 'hmat_dev';
   $dbUser       = 'root';
   $dbPassword   = 'mindfold';
