@@ -378,7 +378,7 @@ class cDbTable implements iDbTable
   public function setOrder($order) 
   {
     if ($_SESSION[table][$this->name][order]==$order) { 
-      //$this->order = $order." DESC"; 
+      $this->order = $order." DESC"; 
     } else {
   	  $this->order = $order;
     }
@@ -553,30 +553,6 @@ class cDbTable implements iDbTable
   
   protected function buildSQL() 
   {
-    $this->columns = "";
-  	$this->filter = "";
-  	// load order and filter stored in session
-  	$this->order = $_SESSION[table][$this->name][order];
-  	// column names
-  	foreach ($this->columnNames as $i=>$columnName) {
-  	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
-  	  	continue;
-  	  $this->columns .= ($this->columns?", ":"").$columnName;
-  	  // collation order
-  	  if ($_POST[$this->name."ORDER".$columnName]!="") {
-  	  	$this->setOrder($columnName);
-  	  }
-  	  // filter
-  	  if (isset($_POST[$this->name."FILTER".$columnName])) {
-  		$_SESSION[table][$this->name]["FILTER"][$columnName] =
-  		$_POST[$this->name."FILTER".$columnName];
-  	  }
-  	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
-  		$this->filter .= ($this->filter ? " AND " : "").
-  		"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
-  	  }
-  	}
-  	
   	// foreign table names as string to SQL
 	$ftNames = "";
 	$fkConstraints = "";
@@ -592,9 +568,9 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name.$ftNames.
   	  // foreign key constraints 
   	  ($fkConstraints || $this->filter
-  		? " WHERE (id".$this->name.">0) AND ".
+  		? " WHERE (id".$this->name.">0)".
   	  	  ($fkConstraints 
-  	  	  	? $fkConstraints.
+  	  	  	? " AND ".$fkConstraints.
   	  	  	  // restrict table content according to parent
   	  	  	  (!is_null($this->parent) 
   	  	  	  	? ($this->name!="StatusLog" 
@@ -607,7 +583,10 @@ class cDbTable implements iDbTable
   	  	  	  )
   	  	  	: "" // no foreign key constraints
   	  	  ).
-  	  	  $this->filter 
+  	  	  ($this->filter
+  	  	    ? " AND ".$this->filter
+  	  	  	: ""
+  	  	  )
   	  	: ""
   	  ).
   	  // restrict table note 
@@ -993,6 +972,31 @@ class cDbTable implements iDbTable
       }
     }
     else { $this->setMode("BROWSE"); }							     	// Cancel
+
+    $this->columns = "";
+  	$this->filter = "";
+  	// load order and filter stored in session
+  	$this->order = $_SESSION[table][$this->name][order];
+  	// column names
+  	foreach ($this->columnNames as $i=>$columnName) {
+  	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
+  	  	continue;
+  	  $this->columns .= ($this->columns?", ":"").$columnName;
+  	  // collation order
+  	  if ($_POST[$this->name."ORDER".$columnName]!="") {
+  	  	$this->setOrder($columnName);
+  	  }
+  	  // filter
+  	  if (isset($_POST[$this->name."FILTER".$columnName])) {
+  		$_SESSION[table][$this->name]["FILTER"][$columnName] =
+  		$_POST[$this->name."FILTER".$columnName];
+  	  }
+  	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
+  		$this->filter .= ($this->filter ? " AND " : "").
+  		"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
+  	  }
+  	}
+  	
   }
   
   public function printFields() {
