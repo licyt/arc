@@ -8,5 +8,4 @@
   $RepositoryPath = "/datafiles/"; // dependency! ajax.js.updatePath()
   
   $lang 		= 'ENG';  
-  
 ?>
