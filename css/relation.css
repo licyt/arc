@@ -1,0 +1,97 @@
+/*           All that belongs to the Relation           */
+#tabButtonAdminRelation {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	position: absolute;
+	top: 0px;
+	left: 1300px;
+	width: 80px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#tabAdminRelation {
+	color: black;
+	background-color: #B2B2B2;
+	height: 14px;
+	position: absolute;
+	top: 0px;
+	left: 1300px;
+	width: 74px;
+	border-style: solid;
+	border-width: 3px;
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	display: block;
+}
+
+#browseFormRelation {
+	border: 1px solid #B2B2B2;
+}
+
+#tabButtonsbRelationsbRelationNote {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabButtonsbRelationsbRelationRelation {
+	color: black;
+	background-color: #B2B2B2;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbRelationsbRelationNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;
+}
+
+#tabsbRelationsbRelationRelation {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;
+}
+
+#RelationORDERidRelation, #RelationORDERRelationelement, #RelationORDERRelationattribute,
+	#RelationORDERRelationvalue {
+	
+}
