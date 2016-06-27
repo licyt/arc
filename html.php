@@ -391,6 +391,7 @@ class cHtmlTable extends cHtmlElement
 	foreach ($this->headers as $header) {
 	  $html = "";
 	  foreach ($header as $value) {
+	  	if (strpos($value, "StatusColor")) continue;
 	  	$html.="<TH>$value</TH>";
 	  }
 	  $table.="<TR>$html</TR>";
@@ -429,6 +430,7 @@ class cHtmlTable extends cHtmlElement
 	  	}
 	  	if ($columnName == "CLASS") {
 	  		$class = " CLASS=\"".$value."\"";
+	  		continue;
 	  	}
 	  	
 	  	$html.="<TD $style>$value</TD>";
@@ -439,6 +441,7 @@ class cHtmlTable extends cHtmlElement
   	foreach ($this->footers as $footer) {
 	  $html = "";
 	  foreach ($footer as $value) {
+	  	if (strpos($value, "StatusColor")) continue;
 	  	$html.="<TH>$value</TH>";
 	  }
 	  $table.="<TR>$html</TR>";

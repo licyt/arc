@@ -32,6 +32,7 @@ echo
   	linkCss("css/platform.css").
   	linkCss("css/deliverytransport.css").
   	linkCss("css/gui.css").
+  	linkCss("css/relation.css").
   	linkCss("css/statuslog.css").
   	linkCss("css/action.css").
   	linkCss("css/payment.css").

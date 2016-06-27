@@ -207,6 +207,8 @@ class cDbField implements iDbField
       }
     } elseif (($this->getName()=="StatusType") 
     		|| ($this->getName()=="NoteTable") 
+    		|| ($this->getName()=="RelationLeftTable") 
+    		|| ($this->getName()=="RelationRightTable") 
     		|| ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
@@ -295,7 +297,6 @@ class cDbTable implements iDbTable
   protected $start;									// browser starting position
   protected $rowCount;								// number of rows in browser
   // build SQL substrings
-  protected $columns;
   protected $order;
   protected $filter;
   // stack of executed actions, used to avoid endless loops
@@ -304,7 +305,7 @@ class cDbTable implements iDbTable
   public function __construct($table, $scheme=null, $parent=null) 
   {
 	$this->scheme = $scheme;
-  	$this->parent = $parent;
+  	$this->setParent($parent);
   	$this->setName($table);
   }
 
@@ -385,8 +386,12 @@ class cDbTable implements iDbTable
     $_SESSION[table][$this->name][order] = $this->order;
   }
   
-  public function setParent($parentTable) {
-  	$this->parent = $parentTable;
+  public function setParent($parent) {
+  	$this->parent = $parent;
+  }
+  
+  public function getParent() {
+  	return $this->parent;
   }
   
   public function loadChildren() {
@@ -476,32 +481,18 @@ class cDbTable implements iDbTable
   {
   	// empty list of columns and foreign_tables
   	foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
-  	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
   	foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
-  	// load list of columns for browser from list of fields
+  	// load list of columns for query from list of fields
 	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
 	  array_push($this->columnNames, $fieldName);
-	  if (strpos($fieldName, "_id") 
-	  || (($fieldName=="StatusLogRowId")&& !is_null($this->parent))
-	  || (($fieldName=="NoteTable") && (isset($this->parent)))
-	  || (($fieldName=="NoteRowId") && (isset($this->parent))))
-	  {
-	  	// do not display foreign index field
-	  	// do not display StatusLogRowId in subBrowser (table with defined parent)
-	  	// do not display NoteTable and NoteRowId (when Notes are displayed in subBrowser)
-	  } else {
- 	  	array_push($this->displayColumnNames, $fieldName);
-	  }
-	  // foreign key lookup fields
+	  // add foreign key lookup fields
 	  if ($useForeignFields && $field->isForeignKey()) {
         // this field is a foreign key, display lookupField from referenced table
 	  	$ftName = $field->foreignTableName();
 	  	// default lookupField is Name
-		array_push($this->columnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
-		// do not display this column if it is a lookup from parent browser
-		if (is_null($this->parent) || ($ftName!=$this->parent->name))
-          array_push($this->displayColumnNames, gui("table".$ftName, "lookupField", $ftName."Name"));
+	  	$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
+		array_push($this->columnNames, $lookupName);
 		// if there is a status, fetch color too
 		if ($ftName == "Status") {
 		  array_push($this->columnNames, "StatusColor");
@@ -509,6 +500,37 @@ class cDbTable implements iDbTable
 		array_push($this->ftNames, $ftName);
 	  }
 	}
+  }
+  
+  public function loadDisplayColumns($useForeignFields=true) 
+  {
+  	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
+  	foreach ($this->fields as $i=>$field) {
+	  $fieldName = $field->getName();
+  	  // do not display this column if it is a lookup from parent browser
+  	  if ($useForeignFields && $field->isForeignKey()) {
+        // this field is a foreign key, display lookupField from referenced table
+	    $ftName = $field->foreignTableName();
+	  	$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
+	    if (!isset($this->parent) || ($ftName!=$this->parent->getName())) {
+  	  	  array_push($this->displayColumnNames, $lookupName);
+		}
+		// if there is a status, fetch color too
+		if ($ftName == "Status") {
+	  	  // default lookupField is Name
+		  array_push($this->displayColumnNames, "StatusColor");
+		}
+  	  } elseif (!isset($this->parent) || ( 
+  		     ($fieldName!="StatusLogRowId")
+  		     &&($fieldName!="NoteTable")
+  		     &&($fieldName!="NoteRowId")
+  		     &&($fieldName!="RelationLeftTable")
+  		     &&($fieldName!="RelationLeftId")
+  	  		)
+  		   ) {
+  	  	array_push($this->displayColumnNames, $fieldName);
+  	  }
+  	}
   }
   
   public function loadSession() 
@@ -523,7 +545,7 @@ class cDbTable implements iDbTable
     
     $this->currentRecordId=$_SESSION[table][$this->name][currentRecordId];
     $this->getCurrentRecord();
-
+    
     // get table POSITION from session 
     if ($_SESSION[table][$this->name][at]) {
       $this->at = $_SESSION[table][$this->name][at];
@@ -536,7 +558,7 @@ class cDbTable implements iDbTable
   protected function parentLimit() 
   {
   	if (is_null($this->parent)) return "";
-  	return "(".$this->parent->name.".id".$this->parent->name." = ".$this->parent->currentRecordId.")";  	
+  	return "(".$this->parent->getName().".id".$this->parent->getName()." = ".$this->parent->getCurrentRecordId().")";  	
   }
 
   protected function assignSQL($record) 
@@ -564,7 +586,7 @@ class cDbTable implements iDbTable
 	}
   	
   	$query =
-      "SELECT ".$this->columns.
+      "SELECT ".implode(", ", $this->columnNames).
   	  " FROM ".$this->name.$ftNames.
   	  // foreign key constraints 
   	  ($fkConstraints || $this->filter
@@ -594,6 +616,13 @@ class cDbTable implements iDbTable
   	  	? " WHERE ". // no fk constraints for this table
   	  	  "(NoteTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(NoteRowId = ".$this->parent->getCurrentRecordId().")"
+  	  	: ""
+  	  ).
+  	  // restrict table relation 
+  	  (($this->name=="Relation") && (isset($this->parent))
+  	  	? " WHERE ". // no fk constraints for this table
+  	  	  "(RelationLeftTable = \"".$this->parent->getName()."\") AND ".
+  	  	  "(RelationLeftId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  // set colation order
@@ -676,8 +705,8 @@ class cDbTable implements iDbTable
       */
       
       if (!is_null($this->parent)) {
-      	$parrentName = $this->name."_id".$this->parent->name;
-      	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->currentRecordId);
+      	$parrentName = $this->name."_id".$this->parent->getName();
+      	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
       	$result .= $parentId->display();
       }
     }
@@ -698,29 +727,23 @@ class cDbTable implements iDbTable
   		  foreach ($this->fields as $i => $field) {
   			$fieldName = $field->getName();
   			
-  		    // special behaviour for table "Note"
-  			if ($this->name == "Note") {
-  			  $parentTable = $this->parent->getName();
-  			  if (isset($_POST["Note_id".$parentTable])) {
-	  			  switch ($fieldName) {
-	  				case "NoteTable":
-	  				  // set NoteType to parent table name
-	  				  if (isset($this->parent))
-	  					$_POST[$fieldName] = $parentTable;
-	  				  break;
-	  				case "NoteRowId":
-	  				  // set NodeRecordId to CurrentRecordId in parent table
-	  				  if (isset($this->parent))
-	  					$_POST[$fieldName] = $this->parent->getCurrentRecordId();
-	  				  else
-	  					$_POST[$fieldName] = 0;
-	  				  break;
-	  			  }
-  			  } else {
-  			  	return "";
+  			if ($this->name=="Note") {
+  			  foreach ($_POST as $name=>$value) {
+  			    if (strpos($name, "Note_id")===0) {
+  			  	  $_POST[NoteTable] = substr($name, 7); // parent table name 
+  			  	  $_POST[NoteRowId] = $value;
+  			    }
   			  }
   			}
   			
+  			if ($this->name=="Relation") {
+  			  foreach ($_POST as $name=>$value) {
+  			    if (strpos($name, "Relation_id")===0) {
+  			      $_POST[RelationLeftTable] = substr($name, 11); // parent table name 
+  			  	  $_POST[RelationLeftId] = $value;
+  			    }
+  			  }
+  			}
   			// skip empty fields 
   			if ($_POST[$fieldName]=="") continue;
   			// skip id and any timestamps
@@ -852,9 +875,9 @@ class cDbTable implements iDbTable
   	  case "SET STATUS":
   	  	// search for target table (and recordId) 
   	  	$targetTable = $this;
-  	  	while (isset($targetTable->parent)&&($action[ActionTable]!=$targetTable->getName())) {
-  	  	  $targetTable->parent->getParentOfChildId($targetTable);
-  	  	  $targetTable = $targetTable->parent;
+  	  	while (!is_null($targetTable->getParent())&&($action[ActionTable]!=$targetTable->getName())) {
+  	  	  $targetTable->getParent()->getParentOfChildId($targetTable);
+  	  	  $targetTable = $targetTable->getParent();
   	  	}
   	  	// target table is found
   	  	if ($action[ActionTable]==$targetTable->getName()) {
@@ -972,16 +995,12 @@ class cDbTable implements iDbTable
       }
     }
     else { $this->setMode("BROWSE"); }							     	// Cancel
-
-    $this->columns = "";
-  	$this->filter = "";
+    
   	// load order and filter stored in session
+    $this->filter = "";
   	$this->order = $_SESSION[table][$this->name][order];
-  	// column names
+  	// column namess
   	foreach ($this->columnNames as $i=>$columnName) {
-  	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
-  	  	continue;
-  	  $this->columns .= ($this->columns?", ":"").$columnName;
   	  // collation order
   	  if ($_POST[$this->name."ORDER".$columnName]!="") {
   	  	$this->setOrder($columnName);
@@ -1014,7 +1033,9 @@ class cDbTable implements iDbTable
   	foreach ($this->columnNames as $i => $columnName) {
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
-  	  
+  	  if ((($columnName=="RelationLeftTable") || ($columnName=="RelationLeftId")) && (isset($this->parent)))
+  	  	continue;
+  	  	
   	  // action editor
   	  if ($this->mode=="UPDATE") {
         if ($columnName=="ActionField") {
@@ -1127,11 +1148,14 @@ class cDbTable implements iDbTable
   }
   
   public function preProcess() {
-  	$this->loadColumns();
   	$this->loadSession();
   	$this->respondToPost();
   	$this->getNumRecords();
   	
+  	if ($this->name=="Note") return;
+  	if ($this->name=="Relation") return;
+  	if ($this->name=="StatusLog") return;
+  	 
     $query = "show tables";
   	if ($dbResult = mysql_query($query)) {
   	  while ($dbRow = mysql_fetch_row($dbResult)) {
@@ -1141,21 +1165,26 @@ class cDbTable implements iDbTable
   	  	  $ftable->setParent($this);
   	  	  $ftable->preProcess(); 
   	  	}
+  	  	if (($dbRow[0]=="Note")) $ftable->setParent($this);
+  	  	if (($dbRow[0]=="Relation")) $ftable->setParent($this);
+  	  	if (($dbRow[0]=="StatusLog")) $ftable->setParent($this);
   	  }
   	}
   }
  
   public function browse($include="") 
   {
-  	//$this->preProcess();
     if ($this->mode!="INSERT") $this->getCurrentRecord();
   	// create output as html table
 	$table = new cHtmlTable();
 	if (($this->name=="Status")&&!isset($this->parent)) {
 	  $table->setAttribute("StatusEdit", true);
 	}
+	
 	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
-	$table->addRow($this->insertRow());
+	if (($this->name!="StatusLog") && ($this->name!="History")) {
+	  $table->addRow($this->insertRow());
+	}
 	// add filter only for master browser
 	if (!isset($this->parent)) {
 	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
@@ -1170,7 +1199,7 @@ class cDbTable implements iDbTable
           // --------------------------------------------------------- current record is editable
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for the current record
-	  	  if (($this->name != "Note")&&($this->name != "StatusLog")) { 
+	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
 	  	    $sbRow = array();
 	  	    $sbRow["sbIndent"]="";
 	  	    $sbRow["subBrowser"]=$this->subBrowsers();
@@ -1204,16 +1233,21 @@ class cDbTable implements iDbTable
 		  	}
 		  }
 		  
+		  // hide columns not included in displayColumnNames
+		  foreach ($this->displayColumnNames as $dcn) {
+		  	$displayRow[$dcn] = $dbRow[$dcn];
+		  }
+		  
 		  // hide column for lookupField if it is a lookup into parent table 
 		  if (isset($this->parent)) {
 		  	$ftName = $this->parent->name;
-            unset($dbRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
-            if ($this->name=="StatusLog") unset($dbRow["StatusLogRowId"]);
+            //unset($displayRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
+            if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
 		  }
 		  // add javascript to onClick event of this row
-		  $dbRow[onClick] = $js;
+		  $displayRow[onClick] = $js;
 		  // add row to table
-		  $table->addRow($dbRow);
+		  $table->addRow($displayRow);
 	  	}
 	  }
       mysql_free_result($dbResult);
@@ -1244,23 +1278,31 @@ class cDbTable implements iDbTable
   	  	if ($dbRow[0]==$this->name) continue;
   	  	$ftable = $this->scheme->tables[$dbRow[0]];
   	  	if ($ftable->isChildOf($this->name)) {
-  	  	  $ftable->setParent($this);
+  	  	  //$ftable->setParent($this);    // this was already set in preProcess()
   	  	  $browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browse()); 
   	  	}
   	  }
   	}
   	
-  	// history of statuses for current record
+  	// relations for current record
+  	$ftable = $this->scheme->tables["Relation"];
+  	$ftable->setParent($this);
+  	$browsers->addTab("sb".$this->name."Relation", $ftable->browse());
+  	unset($ftable);
+  	
+  	// notes for current record
+  	$ftable = $this->scheme->tables["Note"];
+  	$ftable->setParent($this);
+  	$browsers->addTab("sb".$this->name."Note", $ftable->browse());
+  	unset($ftable);
+  	
+    // history of statuses for current record
   	if ($this->hasStatusField()) {
-  	  $ftable = new cDbTable("StatusLog", $this->scheme, $this);
+  	  $ftable = $this->scheme->tables["StatusLog"];
+  	  $ftable->setParent($this);
       $browsers->addTab("sb".$this->name."Status", $ftable->browse());
   	  unset($ftable);
   	}
-    
-    // notes for current record
-  	$ftable = new cDbTable("Note", $this->scheme, $this);
-    $browsers->addTab("sb".$this->name."Note", $ftable->browse());
-  	unset($ftable);
   	
   	return $browsers->display();
   }
@@ -1322,16 +1364,25 @@ class cDbScheme implements iDbScheme
   	$tableTabs = new cHtmlTabControl($dbName."Admin");
   	foreach ($this->tables as $name=>$table) {
       // check POST for any admin button
-  	  if ($_POST["tabButton"."Admin".$name]) {
+  	  if ($_POST["tabButtonAdmin".$name]) {
   	  	// store selected table in session
 	  	$_SESSION[tabControl][Admin][selected] = $name;
 	  }
   	}
-	foreach ($this->tables as $name=>$table) {
-	  if ($_SESSION[tabControl][Admin][selected] == $name) {
-	    $table->preProcess();
-	  }
-	}
+  	
+  	foreach ($this->tables as $name=>$table) {
+  	  $table->loadColumns();
+  	}
+  	
+  	$this->tables[$_SESSION[tabControl][Admin][selected]]->preProcess();
+  	$this->tables[Note]->preProcess(); 
+  	$this->tables[Relation]->preProcess();
+  	
+  	foreach ($this->tables as $name=>$table) {
+  	  $table->loadDisplayColumns();
+  	}
+  	 
+  	 
   	// add all table buttons 
 	foreach ($this->tables as $name=>$table) {
 	  $tableTabs->addTab(
