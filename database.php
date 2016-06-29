@@ -6,6 +6,7 @@ include_once("./dbConfig.php");
 require_once 'gui.php';
 require_once("html.php");
 require_once 'action.php';
+require_once 'relation.php';
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -219,6 +220,12 @@ class cDbField implements iDbField
     	if ($this->getName()=="ActionTable") {
     	  $htmlControl->setAttribute("onChange", "loadTable();");
     	}
+        if ($this->getName()=="RelationRightTable") {
+    	  $htmlControl->setAttribute("onChange", "loadRightRows();");
+    	}
+        if ($this->getName()=="RelationLeftTable") {
+    	  $htmlControl->setAttribute("onChange", "loadLeftRows();");
+    	}
     } elseif ($this->getName()=="ActionCommand") { // ------------------------------ ActionCommand
        	$htmlControl = new cHtmlInput("ActionCommand", "HIDDEN");
     } elseif ($this->getName()=="ActionEvent") { // ------------------------------ ActionEvent
@@ -280,6 +287,7 @@ class cDbTable implements iDbTable
   protected $scheme;
   protected $name;  
   protected $parent; // parent browser
+  protected $relation;
   public $children = array();
   public $parents = array(); // parent tables in DB model
   public $fields = array();   
@@ -429,6 +437,12 @@ class cDbTable implements iDbTable
   	}
   }
   
+  function setRelation($value) {
+  	// $value=1 this table is on the left
+  	// $value=2 this table is on the right
+  	$this->relation=$value;
+  }
+  
   public function hasStatusField() {
   	foreach ($this->fields as $i=>$field) {
   	  if ($field->getName() == $this->name."_idStatus") return true;
@@ -507,6 +521,26 @@ class cDbTable implements iDbTable
   	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
   	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
+	  
+	  $continue=false;
+	  switch ($fieldName) {
+	  	case "RelationLeftId":
+	  	case "RelationLeftTable": 
+	  	  if ($this->relation!=1) {
+	  	  	array_push($this->displayColumnNames, $fieldName);
+	  	  }
+	  	  $continue=true;
+	  	  break;
+	  	case "RelationRightId":
+	  	case "RelationRightTable": 
+	  	  if ($this->relation!=2) {
+	  	  	array_push($this->displayColumnNames, $fieldName);
+	  	  }
+	  	  $continue=true;
+	  	  break;
+	  }
+	  if ($continue) continue; // move continue outside switch to continue next foreach iteration 
+  	  
   	  // do not display this column if it is a lookup from parent browser
   	  if ($useForeignFields && $field->isForeignKey()) {
         // this field is a foreign key, display lookupField from referenced table
@@ -524,8 +558,6 @@ class cDbTable implements iDbTable
   		     ($fieldName!="StatusLogRowId")
   		     &&($fieldName!="NoteTable")
   		     &&($fieldName!="NoteRowId")
-  		     &&($fieldName!="RelationLeftTable")
-  		     &&($fieldName!="RelationLeftId")
   	  		)
   		   ) {
   	  	array_push($this->displayColumnNames, $fieldName);
@@ -619,10 +651,16 @@ class cDbTable implements iDbTable
   	  	: ""
   	  ).
   	  // restrict table relation 
-  	  (($this->name=="Relation") && (isset($this->parent))
+  	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==1))
   	  	? " WHERE ". // no fk constraints for this table
   	  	  "(RelationLeftTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(RelationLeftId = ".$this->parent->getCurrentRecordId().")"
+  	  	: ""
+  	  ).
+  	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==2))
+  	  	? " WHERE ". // no fk constraints for this table
+  	  	  "(RelationRightTable = \"".$this->parent->getName()."\") AND ".
+  	  	  "(RelationRightId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  // set colation order
@@ -709,12 +747,17 @@ class cDbTable implements iDbTable
       	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
       	$result .= $parentId->display();
       }
+      
+      if ($this->relation) {
+      	$hidden = new cHtmlInput($this->name."Relation", "HIDDEN", $this->relation);
+      	$result .= $hidden->display;
+      }
     }
     return $result;
   }
   
   protected function commitSQL() {
-  	// build SQL
+  	// build SQL for commit
   	switch ($this->mode) {
   	  case "DELETE" :
   		$query = 
@@ -739,8 +782,14 @@ class cDbTable implements iDbTable
   			if ($this->name=="Relation") {
   			  foreach ($_POST as $name=>$value) {
   			    if (strpos($name, "Relation_id")===0) {
-  			      $_POST[RelationLeftTable] = substr($name, 11); // parent table name 
-  			  	  $_POST[RelationLeftId] = $value;
+  			      if (!isset($_POST[RelationLeftTable])) {
+	  			    $_POST[RelationLeftTable] = substr($name, 11); // left table name 
+	  			  	$_POST[RelationLeftId] = $value;
+  			      }
+  			      if (!isset($_POST[RelationRightTable])) {
+	  			    $_POST[RelationRightTable] = substr($name, 11); // right table name 
+   			  	    $_POST[RelationRightId] = $value;
+  			      }
   			    }
   			  }
   			}
@@ -972,26 +1021,29 @@ class cDbTable implements iDbTable
     	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
     }
     
+    if ($_POST[$this->name."Relation"]) {
+      $this->relation = $_POST[$this->name."Relation"]; 
+    }
+    
     // # button - collapse tree 
     if (isset($_POST[$this->name.ORDERid.$this->name])) {
     	$this->currentRecordId=-1;
     	$this->setMode(BROWSE); 
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
-    
     // data manipulation buttons
-    if ($_POST[$this->name."Insert"]) {														// + Add
+    else if ($_POST[$this->name."Insert"]) {														// + Add
     	$this->setMode("INSERT");
     	$this->currentRecordId=-1;
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
     elseif ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }						// * Edit
     elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  					// x Del
-    
-    																					
     elseif ($_POST[$this->name."Ok"]){ 	// Ok
       if ($this->scheme->getStatus()=="initialized") {
-      	$this->commit();
+                                                                        //------------------      	
+      	$this->commit();												//    C O M M I T 
+      	                                                                //------------------
       }
     }
     else { $this->setMode("BROWSE"); }							     	// Cancel
@@ -1033,7 +1085,11 @@ class cDbTable implements iDbTable
   	foreach ($this->columnNames as $i => $columnName) {
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
-  	  if ((($columnName=="RelationLeftTable") || ($columnName=="RelationLeftId")) && (isset($this->parent)))
+  	  if ((($columnName=="RelationLeftTable") || ($columnName=="RelationLeftId")) 
+  	  	&& (isset($this->parent) && ($this->relation==1)))
+  	  	continue;
+  	  if ((($columnName=="RelationRightTable") || ($columnName=="RelationRightId"))
+  	  	&& (isset($this->parent) && ($this->relation==2)))
   	  	continue;
   	  	
   	  // action editor
@@ -1057,6 +1113,14 @@ class cDbTable implements iDbTable
   	    }
   	    if ($columnName=="ActionParam2") {
   	  	  continue;
+  	    }
+  	    if ($columnName=="RelationRightId") {
+  	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRightTable], $this->currentRecord[RelationRightId]);
+  	      continue;
+  	    }
+  	    if ($columnName=="RelationLeftId") {
+  	      $result[$columnName] = loadLeftRows($this->currentRecord[RelationLeftTable], $this->currentRecord[RelationLeftId]);
+  	      continue;
   	    }
   	  }
   	  	
@@ -1233,6 +1297,36 @@ class cDbTable implements iDbTable
 		  	}
 		  }
 		  
+		  // --- Relation - load lookup value
+		  if ($this->name=="Relation") {
+		  	switch ($this->relation) {
+		  	  case 1:  
+			  	$lookupName = gui($dbRow[RelationRightTable], "lookupField", $dbRow[RelationRightTable]."Name");
+			  	$q2 = 
+			  	  "SELECT $lookupName".
+			  	  " FROM ".$dbRow[RelationRightTable].
+			  	  " WHERE id".$dbRow[RelationRightTable]."=".$dbRow[RelationRightId];
+			  	if ($dbr2=mysql_query($q2)) {
+			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
+			  	  	$dbRow[RelationRightId]=$r2[$lookupName];
+			  	  }
+			  	}
+			    break;
+		  	 case 2:  
+			  	$lookupName = gui($dbRow[RelationLeftTable], "lookupField", $dbRow[RelationLeftTable]."Name");
+			  	$q2 = 
+			  	  "SELECT $lookupName".
+			  	  " FROM ".$dbRow[RelationLeftTable].
+			  	  " WHERE id".$dbRow[RelationLeftTable]."=".$dbRow[RelationLeftId];
+			  	if ($dbr2=mysql_query($q2)) {
+			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
+			  	  	$dbRow[RelationLeftId]=$r2[$lookupName];
+			  	  }
+			  	}
+			  	break;
+		  	}
+		  }
+		  
 		  // hide columns not included in displayColumnNames
 		  foreach ($this->displayColumnNames as $dcn) {
 		  	$displayRow[$dcn] = $dbRow[$dcn];
@@ -1285,9 +1379,14 @@ class cDbTable implements iDbTable
   	}
   	
   	// relations for current record
-  	$ftable = $this->scheme->tables["Relation"];
+   	$ftable = $this->scheme->tables["Relation"];
   	$ftable->setParent($this);
-  	$browsers->addTab("sb".$this->name."Relation", $ftable->browse());
+  	$ftable->setRelation(1); // this table on the left side of the relation
+  	$ftable->loadDisplayColumns();
+  	$browsers->addTab("sb".$this->name."RelationLeft", $ftable->browse());
+  	$ftable->setRelation(2); // this table on the right side of the relation
+  	$ftable->loadDisplayColumns();
+  	$browsers->addTab("sb".$this->name."RelationRight", $ftable->browse());
   	unset($ftable);
   	
   	// notes for current record
@@ -1296,7 +1395,7 @@ class cDbTable implements iDbTable
   	$browsers->addTab("sb".$this->name."Note", $ftable->browse());
   	unset($ftable);
   	
-    // history of statuses for current record
+  	// history of statuses for current record
   	if ($this->hasStatusField()) {
   	  $ftable = $this->scheme->tables["StatusLog"];
   	  $ftable->setParent($this);

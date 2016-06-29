@@ -4,7 +4,6 @@
 
 require_once("html.php");
 require_once("database.php");
-require_once 'action.php';
 
 //var_dump($_REQUEST);
 
@@ -118,6 +117,16 @@ if (isset($_REQUEST[loadParam2])) {
   	}
   }
   echo $param2->display();
+}
+
+// ------------------------------------------------------------------------------------ loadRightRows
+if (isset($_REQUEST[loadRightRows])) {
+  echo loadRightRows($_REQUEST[table]);
+}
+
+// ------------------------------------------------------------------------------------ loadLeftRows
+if (isset($_REQUEST[loadLeftRows])) {
+	echo loadLeftRows($_REQUEST[table]);
 }
 
 

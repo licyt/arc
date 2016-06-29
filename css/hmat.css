@@ -133,16 +133,16 @@ img {
 	background-color: blue;
 }
 .INSERT:hover {
-	background-color: blue;
+	background-color: lightblue;
 }
 .UPDATE {
-	background-color: green;
+	background-color: gray;
 }
 .UPDATE:hover {
-	background-color: green;
+	background-color: lightgray;
 }
 .DELETE {
-	background-color: red;
+	background-color: black;
 }
 .DELETE:hover {
 	background-color: red;

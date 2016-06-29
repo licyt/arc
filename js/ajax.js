@@ -112,6 +112,18 @@ function Ajax(request, params) {
               var td2=td1.nextSibling;
               td2.innerHTML=xmlHttp.responseText;
               break;
+            case "loadRightRows":
+                var table=elementById('RelationRightTable');
+                var td0=table.parentElement;
+                var td1=td0.nextSibling;
+                td1.innerHTML=xmlHttp.responseText;  
+                break;
+            case "loadLeftRows":
+                var table=elementById('RelationLeftTable');
+                var td0=table.parentElement;
+                var td1=td0.nextSibling;
+                td1.innerHTML=xmlHttp.responseText;  
+                break;
         } // switch request
       } // switch readyState
     } // function
@@ -207,15 +219,27 @@ function loadTable() {
 }
 
 function loadParameters() {
-	  var params=new Array();
-	  params['command']=elementById("ActionCommand").value;
-	  params['table']=elementById("ActionTable").value;
-	  Ajax("loadParameters", params);
-	}
+  var params=new Array();
+  params['command']=elementById("ActionCommand").value;
+  params['table']=elementById("ActionTable").value;
+  Ajax("loadParameters", params);
+}
 
 function loadParam2() {
-	  var params=new Array();
-	  params['param1']=elementById("ActionParam1").value;
-	  Ajax("loadParam2", params);
-	}
+  var params=new Array();
+  params['param1']=elementById("ActionParam1").value;
+  Ajax("loadParam2", params);
+}
+
+function loadRightRows() {
+  var params=new Array();
+  params['table']=elementById("RelationRightTable").value;
+  Ajax("loadRightRows", params);
+}
+
+function loadLeftRows() {
+  var params=new Array();
+  params['table']=elementById("RelationLeftTable").value;
+  Ajax("loadLeftRows", params);
+}
 

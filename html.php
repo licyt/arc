@@ -402,7 +402,7 @@ class cHtmlTable extends cHtmlElement
 	  $onClick = "";
 	  $class = "";
 	  foreach ($row as $columnName=>$value) {
-	  	if ($columnName=="CLASS") continue;
+	  	//if ($columnName=="CLASS") continue;
 	  	unset($style);
 	  	
 	  	if ($columnName == "onKeyPress") {
