@@ -28,22 +28,10 @@
 }
 
 #browseFormRelation {
-	border: 1px solid #B2B2B2;
+	border: 2px solid #BE34BA;
 }
 
 #tabButtonsbRelationsbRelationNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonsbRelationsbRelationRelation {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -73,9 +61,31 @@
 	font-style: italic;
 }
 
-#tabsbRelationsbRelationRelation {
+#tabButtonsbDemandsbDemandRelationLeft,
+#tabButtonsbDemandsbDemandRelationRight,
+#tabButtonsbProjectsbProjectRelationLeft,
+#tabButtonsbProjectsbProjectRelationRight,
+#tabButtonsbQuotesbQuoteRelationLeft,
+#tabButtonsbQuotesbQuoteRelationRight {
 	color: black;
-	background-color: #B2B2B2;
+	background-color: #BE34BA;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px 2px 0px 0px;
+}
+
+#tabsbDemandsbDemandRelationLeft, 
+#tabsbDemandsbDemandRelationRight,
+#tabsbProjectsbProjectRelationLeft, 
+#tabsbProjectsbProjectRelationRight,
+#tabsbQuotesbQuoteRelationLeft, 
+#tabsbQuotesbQuoteRelationRight {
+	color: black;
+	background-color: #BE34BA;
 	border: 0 none;
 	height: 20px;
 	top: 0px;
@@ -91,7 +101,7 @@
 	font-style: italic;
 }
 
-#RelationORDERidRelation, #RelationORDERRelationelement, #RelationORDERRelationattribute,
+ #RelationORDERidRelation, #RelationORDERRelationelement, #RelationORDERRelationattribute,
 	#RelationORDERRelationvalue {
 	
 }

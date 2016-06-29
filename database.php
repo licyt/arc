@@ -1473,9 +1473,11 @@ class cDbScheme implements iDbScheme
   	  $table->loadColumns();
   	}
   	
-  	$this->tables[$_SESSION[tabControl][Admin][selected]]->preProcess();
-  	$this->tables[Note]->preProcess(); 
-  	$this->tables[Relation]->preProcess();
+  	if ($this->tables[$_SESSION[tabControl][Admin][selected]]) {
+      $this->tables[$_SESSION[tabControl][Admin][selected]]->preProcess();
+  	  $this->tables[Note]->preProcess(); 
+  	  $this->tables[Relation]->preProcess();
+  	}
   	
   	foreach ($this->tables as $name=>$table) {
   	  $table->loadDisplayColumns();
