@@ -96,9 +96,9 @@ class cDbField implements iDbField
   }
   
   public function isForeignKey() {
-    // fields name contains "_id" 
+    // field name does not contain table name 
     return 
-      (strpos($this->properties[Field],"_id")>0);
+      (strpos($this->properties[Field], $this->table->getName())===false);
   }
   
   public function insertForeignKey() {
@@ -624,6 +624,10 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name.
   	  $joins.
   	  " WHERE (id".$this->name.">0)".
+  	  (isset($this->parent)
+  	    ? " AND (id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
+  	    : ""
+  	  ).
   	  ($this->filter
   		? " AND ".$this->filter
   	  	: ""
@@ -631,20 +635,20 @@ class cDbTable implements iDbTable
   	  
   	  // restrict table note 
   	  (($this->name=="Note") && (isset($this->parent))
-  	  	? " WHERE ". // no fk constraints for this table
+  	  	? " AND ". 
   	  	  "(NoteTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(NoteRowId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  // restrict table relation 
   	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==1))
-  	  	? " WHERE ". // no fk constraints for this table
+  	  	? " AND ". 
   	  	  "(RelationLeftTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(RelationLeftId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==2))
-  	  	? " WHERE ". // no fk constraints for this table
+  	  	? " AND ". 
   	  	  "(RelationRightTable = \"".$this->parent->getName()."\") AND ".
   	  	  "(RelationRightId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
@@ -1079,9 +1083,9 @@ class cDbTable implements iDbTable
   	  	&& (isset($this->parent) && ($this->relation==2)))
   	  	continue;
   	  	
-  	  // action editor
   	  if ($this->mode=="UPDATE") {
-        if ($columnName=="ActionField") {
+  	    // action editor
+  	  	if ($columnName=="ActionField") {
     	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
     	  $result[$columnName] = fieldsForAction($table, $this->currentRecord[ActionField])->display();
     	  continue;
@@ -1101,6 +1105,7 @@ class cDbTable implements iDbTable
   	    if ($columnName=="ActionParam2") {
   	  	  continue;
   	    }
+  	    // relation editor
   	    if ($columnName=="RelationRightId") {
   	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRightTable], $this->currentRecord[RelationRightId]);
   	      continue;
