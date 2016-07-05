@@ -96,7 +96,7 @@ class cDbField implements iDbField
   }
   
   public function isForeignKey() {
-    // fields name concontains "_id" 
+    // fields name contains "_id" 
     return 
       (strpos($this->properties[Field],"_id")>0);
   }
@@ -403,17 +403,23 @@ class cDbTable implements iDbTable
   }
   
   public function loadChildren() {
-  	foreach ($this->scheme->tables as $table) {
-  	  if ($table->isChildOf($this->name)) {
-  	  	array_push($this->children, $table);
-  	  	array_push($table->parents, $this);
+  	$query=
+  	  "SELECT RelationRightTable".
+  	  " FROM Relation".
+  	  " WHERE (RelationLeftTable='".$this->name."')".
+  	  " AND (RelationLeftId=0) AND (RelationRightId=0)";
+  	if ($dbRes=mysql_query($query)) {
+  	  while ($dbRow=mysql_fetch_assoc($dbRes)) {
+  	  	$parent = $this->scheme->tables[$dbRow[RelationRightTable]];
+  	  	array_push($this->parents, $parent);
+  	  	array_push($parent->children, $this);
   	  }
   	}
   }
   
   public function isChildOf($tableName) {
-  	foreach ($this->fields as $i=>$field) {
-  	  if ($field->getName() == $this->name."_id".$tableName) return true;
+  	foreach ($this->parents as $name=>$parent) {
+  	  if ($parent->getName() == $tableName) return true;
   	}
   	return false; 
   }
@@ -491,28 +497,23 @@ class cDbTable implements iDbTable
     }
   }
   
-  public function loadColumns($useForeignFields=true) 
+  public function loadColumns() 
   {
-  	// empty list of columns and foreign_tables
+  	// clear list of columns and foreign_tables
   	foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
   	foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
   	// load list of columns for query from list of fields
 	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
 	  array_push($this->columnNames, $fieldName);
-	  // add foreign key lookup fields
-	  if ($useForeignFields && $field->isForeignKey()) {
-        // this field is a foreign key, display lookupField from referenced table
-	  	$ftName = $field->foreignTableName();
-	  	// default lookupField is Name
-	  	$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
-		array_push($this->columnNames, $lookupName);
-		// if there is a status, fetch color too
-		if ($ftName == "Status") {
-		  array_push($this->columnNames, "StatusColor");
-		}
+	}
+	// add columns for parents
+	foreach ($this->parents as $parent) {
+		$ftName = $parent->getName();
+		$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
 		array_push($this->ftNames, $ftName);
-	  }
+		array_push($this->columnNames, "id".$ftName);
+		array_push($this->columnNames, $lookupName);
 	}
   }
   
@@ -541,28 +542,25 @@ class cDbTable implements iDbTable
 	  }
 	  if ($continue) continue; // move continue outside switch to continue next foreach iteration 
   	  
-  	  // do not display this column if it is a lookup from parent browser
-  	  if ($useForeignFields && $field->isForeignKey()) {
-        // this field is a foreign key, display lookupField from referenced table
-	    $ftName = $field->foreignTableName();
-	  	$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
-	    if (!isset($this->parent) || ($ftName!=$this->parent->getName())) {
-  	  	  array_push($this->displayColumnNames, $lookupName);
-		}
-		// if there is a status, fetch color too
-		if ($ftName == "Status") {
-	  	  // default lookupField is Name
-		  array_push($this->displayColumnNames, "StatusColor");
-		}
-  	  } elseif (!isset($this->parent) || ( 
+  	  if (!isset($this->parent) ||  
+  	  	   ( 
   		     ($fieldName!="StatusLogRowId")
   		     &&($fieldName!="NoteTable")
   		     &&($fieldName!="NoteRowId")
-  	  		)
-  		   ) {
+  	  	   )
+  		 ) {
   	  	array_push($this->displayColumnNames, $fieldName);
   	  }
   	}
+  	// add columns for parents
+	foreach ($this->parents as $parent) {
+	  // skip parent browsers lookup
+	  if (!isset($this->parent)||($this->parent!=$parent)) {
+		$ftName = $parent->getName();
+		$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
+		array_push($this->displayColumnNames, $lookupName);
+	  }
+	}
   }
   
   public function loadSession() 
@@ -607,42 +605,30 @@ class cDbTable implements iDbTable
   
   protected function buildSQL() 
   {
-  	// foreign table names as string to SQL
-	$ftNames = "";
-	$fkConstraints = "";
-	foreach ($this->ftNames as $i=>$ftName) {
-	  if ($ftName==$this->name) continue; // skip selfparent
-	  $ftNames .= ", ".$ftName;
-	  $fkConstraints .= ($fkConstraints?" AND ":"").
-	    "(".$this->name.".".$this->name."_id".$ftName."=".$ftName.".id".$ftName.")";
-	}
+  	// lookup values from parent tables
+  	$joins=""; 										// joins
+  	$i=0;                                     		// relation index
+  	foreach ($this->parents as $parent) {
+  	  $parentName=$parent->getName();
+  	  $joins .=
+  	    " JOIN (".$parent->getName().", Relation R".$i.") ON (".
+  	    " (R".$i.".RelationLeftTable='".$this->name."') AND". 
+  	    " (R".$i.".RelationLeftId=id".$this->name.") AND ".
+  	    " (R".$i.".RelationRightTable='".$parentName."') AND". 
+  	    " (R".$i.".RelationRightId=id".$parentName."))";
+  	  $i++;
+  	}
   	
   	$query =
       "SELECT ".implode(", ", $this->columnNames).
-  	  " FROM ".$this->name.$ftNames.
-  	  // foreign key constraints 
-  	  ($fkConstraints || $this->filter
-  		? " WHERE (id".$this->name.">0)".
-  	  	  ($fkConstraints 
-  	  	  	? " AND ".$fkConstraints.
-  	  	  	  // restrict table content according to parent
-  	  	  	  (!is_null($this->parent) 
-  	  	  	  	? ($this->name!="StatusLog" 
-  	  	  	  		? " AND ".$this->parentLimit() 
-  	  	  	  	    : // special constraint for StatusLog
-  	  	  	  		  " AND (StatusType = \"".$this->parent->getName()."\")".
-  	  	  	  		  " AND (StatusLogRowId = ".$this->parent->getCurrentRecordId().")"
-  	  	  	  	  )
-  	  	  	    : "" // no parent
-  	  	  	  )
-  	  	  	: "" // no foreign key constraints
-  	  	  ).
-  	  	  ($this->filter
-  	  	    ? " AND ".$this->filter
-  	  	  	: ""
-  	  	  )
+  	  " FROM ".$this->name.
+  	  $joins.
+  	  " WHERE (id".$this->name.">0)".
+  	  ($this->filter
+  		? " AND ".$this->filter
   	  	: ""
   	  ).
+  	  
   	  // restrict table note 
   	  (($this->name=="Note") && (isset($this->parent))
   	  	? " WHERE ". // no fk constraints for this table
@@ -663,6 +649,7 @@ class cDbTable implements iDbTable
   	  	  "(RelationRightId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
+  	  
   	  // set colation order
   	  ($this->order //&& strpos($this->columns, $this->order) 
   	    ? " ORDER BY ".$this->order 

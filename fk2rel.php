@@ -1,5 +1,7 @@
 <?php
 
+exit; // remove this line if you want to run this script again
+
 // migrate foreign keys to relations
 
 require_once("database.php");
@@ -12,14 +14,15 @@ foreach ($dbScheme->tables as $table) {
   	// navigate thru all rows in table
   	while ($dbRow=mysql_fetch_assoc($dbRes)) {
   	  // go thru all columns in a row
-  	  foreach ($table->fields as $fieldName=>$field) {
+  	  foreach ($table->fields as $field) {
+  	  	$fieldName = $field->getName();
   	  	// identify foreing key by field name containing "_id"
   	  	if ($pos=strpos($fieldName, "_id")) {
   	  	  // "parent" table name follows by "id"
   	  	  $t2Name=substr($fieldName, $pos+3);
   	  	  // build SQL
   	  	  $q2=
-    	  	"INSERT INTO Relations SET ".
+    	  	"INSERT INTO Relation SET ".
   	  	    "RelationLeftTable='$tableName', ".
   	  	    "RelationLeftId=".$dbRow["id".$tableName].", ".
     	  	"RelationRightTable='$t2Name', ".
