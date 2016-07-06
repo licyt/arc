@@ -23,10 +23,10 @@ foreach ($dbScheme->tables as $table) {
   	  	  // build SQL
   	  	  $q2=
     	  	"INSERT INTO Relation SET ".
-  	  	    "RelationLeftTable='$tableName', ".
-  	  	    "RelationLeftId=".$dbRow["id".$tableName].", ".
-    	  	"RelationRightTable='$t2Name', ".
-  	  	    "RelationRightId=".$dbRow[$fieldName];
+  	  	    "RelationLObject='$tableName', ".
+  	  	    "RelationLId=".$dbRow["id".$tableName].", ".
+    	  	"RelationRObject='$t2Name', ".
+  	  	    "RelationRId=".$dbRow[$fieldName];
   	  	  // try to insert Relation
   	  	  if ($dbR2=mysql_query($q2)) {
   	  	  	// success

@@ -65,6 +65,7 @@ class cDbField implements iDbField
 {
   protected $properties = array();
   protected $table = cDbTable;
+  protected $ftable = cDBTable;
   
   public function __construct($column="") 
   {
@@ -208,8 +209,8 @@ class cDbField implements iDbField
       }
     } elseif (($this->getName()=="StatusType") 
     		|| ($this->getName()=="NoteTable") 
-    		|| ($this->getName()=="RelationLeftTable") 
-    		|| ($this->getName()=="RelationRightTable") 
+    		|| ($this->getName()=="RelationLObject") 
+    		|| ($this->getName()=="RelationRObject") 
     		|| ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
@@ -220,10 +221,10 @@ class cDbField implements iDbField
     	if ($this->getName()=="ActionTable") {
     	  $htmlControl->setAttribute("onChange", "loadTable();");
     	}
-        if ($this->getName()=="RelationRightTable") {
+        if ($this->getName()=="RelationRObject") {
     	  $htmlControl->setAttribute("onChange", "loadRightRows();");
     	}
-        if ($this->getName()=="RelationLeftTable") {
+        if ($this->getName()=="RelationLObject") {
     	  $htmlControl->setAttribute("onChange", "loadLeftRows();");
     	}
     } elseif ($this->getName()=="ActionCommand") { // ------------------------------ ActionCommand
@@ -404,13 +405,13 @@ class cDbTable implements iDbTable
   
   public function loadChildren() {
   	$query=
-  	  "SELECT RelationRightTable".
+  	  "SELECT RelationRObject".
   	  " FROM Relation".
-  	  " WHERE (RelationLeftTable='".$this->name."')".
-  	  " AND (RelationLeftId=0) AND (RelationRightId=0)";
+  	  " WHERE (RelationLObject='".$this->name."')".
+  	  " AND (RelationLId=0) AND (RelationRId=0)";
   	if ($dbRes=mysql_query($query)) {
   	  while ($dbRow=mysql_fetch_assoc($dbRes)) {
-  	  	$parent = $this->scheme->tables[$dbRow[RelationRightTable]];
+  	  	$parent = $this->scheme->tables[$dbRow[RelationRObject]];
   	  	array_push($this->parents, $parent);
   	  	array_push($parent->children, $this);
   	  }
@@ -517,7 +518,7 @@ class cDbTable implements iDbTable
 	}
   }
   
-  public function loadDisplayColumns($useForeignFields=true) 
+  public function loadDisplayColumns() 
   {
   	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
   	foreach ($this->fields as $i=>$field) {
@@ -525,15 +526,15 @@ class cDbTable implements iDbTable
 	  
 	  $continue=false;
 	  switch ($fieldName) {
-	  	case "RelationLeftId":
-	  	case "RelationLeftTable": 
+	  	case "RelationLId":
+	  	case "RelationLObject": 
 	  	  if ($this->relation!=1) {
 	  	  	array_push($this->displayColumnNames, $fieldName);
 	  	  }
 	  	  $continue=true;
 	  	  break;
-	  	case "RelationRightId":
-	  	case "RelationRightTable": 
+	  	case "RelationRId":
+	  	case "RelationRObject": 
 	  	  if ($this->relation!=2) {
 	  	  	array_push($this->displayColumnNames, $fieldName);
 	  	  }
@@ -612,10 +613,10 @@ class cDbTable implements iDbTable
   	  $parentName=$parent->getName();
   	  $joins .=
   	    " JOIN (".$parent->getName().", Relation R".$i.") ON (".
-  	    " (R".$i.".RelationLeftTable='".$this->name."') AND". 
-  	    " (R".$i.".RelationLeftId=id".$this->name.") AND ".
-  	    " (R".$i.".RelationRightTable='".$parentName."') AND". 
-  	    " (R".$i.".RelationRightId=id".$parentName."))";
+  	    " (R".$i.".RelationLObject='".$this->name."') AND". 
+  	    " (R".$i.".RelationLId=id".$this->name.") AND ".
+  	    " (R".$i.".RelationRObject='".$parentName."') AND". 
+  	    " (R".$i.".RelationRId=id".$parentName."))";
   	  $i++;
   	}
   	
@@ -643,14 +644,14 @@ class cDbTable implements iDbTable
   	  // restrict table relation 
   	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==1))
   	  	? " AND ". 
-  	  	  "(RelationLeftTable = \"".$this->parent->getName()."\") AND ".
-  	  	  "(RelationLeftId = ".$this->parent->getCurrentRecordId().")"
+  	  	  "(RelationLObject = \"".$this->parent->getName()."\") AND ".
+  	  	  "(RelationLId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==2))
   	  	? " AND ". 
-  	  	  "(RelationRightTable = \"".$this->parent->getName()."\") AND ".
-  	  	  "(RelationRightId = ".$this->parent->getCurrentRecordId().")"
+  	  	  "(RelationRObject = \"".$this->parent->getName()."\") AND ".
+  	  	  "(RelationRId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
   	  
@@ -773,13 +774,13 @@ class cDbTable implements iDbTable
   			if ($this->name=="Relation") {
   			  foreach ($_POST as $name=>$value) {
   			    if (strpos($name, "Relation_id")===0) {
-  			      if (!isset($_POST[RelationLeftTable])) {
-	  			    $_POST[RelationLeftTable] = substr($name, 11); // left table name 
-	  			  	$_POST[RelationLeftId] = $value;
+  			      if (!isset($_POST[RelationLObject])) {
+	  			    $_POST[RelationLObject] = substr($name, 11); // left table name 
+	  			  	$_POST[RelationLId] = $value;
   			      }
-  			      if (!isset($_POST[RelationRightTable])) {
-	  			    $_POST[RelationRightTable] = substr($name, 11); // right table name 
-   			  	    $_POST[RelationRightId] = $value;
+  			      if (!isset($_POST[RelationRObject])) {
+	  			    $_POST[RelationRObject] = substr($name, 11); // right table name 
+   			  	    $_POST[RelationRId] = $value;
   			      }
   			    }
   			  }
@@ -1076,10 +1077,10 @@ class cDbTable implements iDbTable
   	foreach ($this->columnNames as $i => $columnName) {
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
-  	  if ((($columnName=="RelationLeftTable") || ($columnName=="RelationLeftId")) 
+  	  if ((($columnName=="RelationLObject") || ($columnName=="RelationLId")) 
   	  	&& (isset($this->parent) && ($this->relation==1)))
   	  	continue;
-  	  if ((($columnName=="RelationRightTable") || ($columnName=="RelationRightId"))
+  	  if ((($columnName=="RelationRObject") || ($columnName=="RelationRId"))
   	  	&& (isset($this->parent) && ($this->relation==2)))
   	  	continue;
   	  	
@@ -1106,12 +1107,12 @@ class cDbTable implements iDbTable
   	  	  continue;
   	    }
   	    // relation editor
-  	    if ($columnName=="RelationRightId") {
-  	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRightTable], $this->currentRecord[RelationRightId]);
+  	    if ($columnName=="RelationRId") {
+  	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRObject], $this->currentRecord[RelationRId]);
   	      continue;
   	    }
-  	    if ($columnName=="RelationLeftId") {
-  	      $result[$columnName] = loadLeftRows($this->currentRecord[RelationLeftTable], $this->currentRecord[RelationLeftId]);
+  	    if ($columnName=="RelationLId") {
+  	      $result[$columnName] = loadLeftRows($this->currentRecord[RelationLObject], $this->currentRecord[RelationLId]);
   	      continue;
   	    }
   	  }
@@ -1119,19 +1120,13 @@ class cDbTable implements iDbTable
   	  // get html control for field
   	  if ($field = $this->getFieldByName($columnName)) {
   	  	$html = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
-  	  	if ($field->isForeignKey()) {
-  	  	  $ftName = $field->foreignTableName();
-  	  	  if (is_null($this->parent) || ($ftName!=$this->parent->name)) {
-  	  	    $result[gui("table".$ftName, "lookupField", $ftName."Name")] = $html;
-  	  	  }
-  	  	} else {
-  	  	  if (($columnName=="StatusLogRowId")&&!is_null($this->parent)) {
+  	  	if (($columnName=="StatusLogRowId")&&!is_null($this->parent)) {
   	  	  	
-  	  	  } else {
+  	  	} else {
   	        $result[$columnName] = $html;
-  	  	  }
   	  	}
   	  }
+  	  
    	  if ($columnName=="id".$this->name) {
   	    $result[$columnName] = $this->manipulator();
    	  }
@@ -1293,26 +1288,26 @@ class cDbTable implements iDbTable
 		  if ($this->name=="Relation") {
 		  	switch ($this->relation) {
 		  	  case 1:  
-			  	$lookupName = gui($dbRow[RelationRightTable], "lookupField", $dbRow[RelationRightTable]."Name");
+			  	$lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
 			  	$q2 = 
 			  	  "SELECT $lookupName".
-			  	  " FROM ".$dbRow[RelationRightTable].
-			  	  " WHERE id".$dbRow[RelationRightTable]."=".$dbRow[RelationRightId];
+			  	  " FROM ".$dbRow[RelationRObject].
+			  	  " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
 			  	if ($dbr2=mysql_query($q2)) {
 			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-			  	  	$dbRow[RelationRightId]=$r2[$lookupName];
+			  	  	$dbRow[RelationRId]=$r2[$lookupName];
 			  	  }
 			  	}
 			    break;
 		  	 case 2:  
-			  	$lookupName = gui($dbRow[RelationLeftTable], "lookupField", $dbRow[RelationLeftTable]."Name");
+			  	$lookupName = gui($dbRow[RelationLObject], "lookupField", $dbRow[RelationLObject]."Name");
 			  	$q2 = 
 			  	  "SELECT $lookupName".
-			  	  " FROM ".$dbRow[RelationLeftTable].
-			  	  " WHERE id".$dbRow[RelationLeftTable]."=".$dbRow[RelationLeftId];
+			  	  " FROM ".$dbRow[RelationLObject].
+			  	  " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
 			  	if ($dbr2=mysql_query($q2)) {
 			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-			  	  	$dbRow[RelationLeftId]=$r2[$lookupName];
+			  	  	$dbRow[RelationLId]=$r2[$lookupName];
 			  	  }
 			  	}
 			  	break;

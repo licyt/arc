@@ -2,8 +2,8 @@
 
 function loadRightRows($tableName, $value="") {
 	$rows = new cHtmlSelect();
-	$rows->setAttribute("ID", "RelationRightId");
-	$rows->setAttribute("NAME", "RelationRightId");
+	$rows->setAttribute("ID", "RelationRId");
+	$rows->setAttribute("NAME", "RelationRId");
 	$rows->setAttribute("onChange", "hide('RelationDelete');show('RelationOk');");
 	$lookupName = gui($tableName, "lookupField", $tableName."Name");
 	$query=
@@ -21,8 +21,8 @@ function loadRightRows($tableName, $value="") {
 
 function loadLeftRows($tableName, $value="") {
 	$rows = new cHtmlSelect();
-	$rows->setAttribute("ID", "RelationLeftId");
-	$rows->setAttribute("NAME", "RelationLeftId");
+	$rows->setAttribute("ID", "RelationLId");
+	$rows->setAttribute("NAME", "RelationLId");
 	$rows->setAttribute("onChange", "hide('RelationDelete');show('RelationOk');");
 	$lookupName = gui($tableName, "lookupField", $tableName."Name");
 	$query=
