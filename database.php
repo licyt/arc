@@ -245,6 +245,7 @@ class cDbField implements iDbField
       $htmlControl->setAttribute("onKeyUp","suggestList(event,'valueSearch',this.value,'".$ftName."','".$lookupField."','id".$ftName."','".$lookupField."','id".$ftName."List')");
       $htmlControl->setAttribute("onSelect","sanitizeSuggestValues('id".$ftName."','".$lookupField."','id".$ftName."List')");
   	  $htmlControl->setAttribute("onBlur", "sanitizeSuggestList('id".$ftName."List')");
+  	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
 	  $htmlControl->setSelected($value);

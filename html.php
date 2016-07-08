@@ -622,7 +622,7 @@ class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 		$inputVisible->setAttribute("LIST", $this->attributes[ID]."List");
 		$inputVisible->setAttribute("OPTIONS", $this->attributes[OPTIONS]);
 		$inputVisible->setAttribute("AUTOCOMPLETE","OFF");
-		$inputVisible->setAttribute("onInput","rowHasChanged('".substr($this->attributes[ID],0,strpos($this->attributes[ID],"_id"))."')");
+ 		$inputVisible->setAttribute("onInput", $this->attributes["onInput"]);
 		$div = new cHtmlDiv($this->attributes[ID]."Wrap");
 		$div->setAttribute("CONTENT", $inputHidden->display().$inputVisible->display());
 		return
