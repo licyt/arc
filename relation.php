@@ -38,5 +38,20 @@ function loadLeftRows($tableName, $value="") {
 	return $rows->display();
 }
 
+function getParentId($childTableName, $childId, $parentTableName) {
+  $query=
+    "SELECT RelationRId FROM Relation ".
+    "WHERE (RelationLObject='$childTableName') ".
+    "AND (RelationLId=$childId) ".
+    "AND (RelationRObject='$parentTableName')";
+  if ($dbRes=mysql_query($query)) {
+  	if ($dbRow=mysql_fetch_assoc($dbRes)) {
+  	  return $dbRow[RelationRId];
+  	} 
+  }
+  // no relation found
+  return -1;
+}
+
 
 ?>

@@ -141,77 +141,11 @@ class cDbField implements iDbField
   public function getHtmlControl($value="", $disabled=false)
   {
   	// ---------------------------------------------------------------------------- BASIC field types
-    if ($this->isForeignKey()) {
-	  $ftName = $this->foreignTableName();
-	  // -------------------------------------------------------------------------- suggest by tomcat
-	  if(gui($this->getName(), "type")=="suggest") {
-	  	$ftName = $this->foreignTableName();
-	  	$lookupField = gui("table".$ftName, "lookupField", $ftName."Name");
-	  	// load options from database
-	  	$sql=
-	  	"SELECT id".$ftName.",".$lookupField.
-	  	" FROM ".$ftName.
-	  	" ORDER BY ".$lookupField." ASC";
-	  	$optionList = Array();
-	  	if( $result = mysql_query($sql) ) {
-	  	  while( $row = mysql_fetch_assoc($result) ) {
-	  	    $optionList[$row["id".$ftName]] = $row[$lookupField];
-	  	  }
-	  	}
-	  	// create and setup a html control 
-	  	$htmlControl = new cHtmlSuggest($this->properties[Field], $value, $optionList[$value]);
-	  	$htmlControl->setOptions($optionList, $lookupField);
-	  	// get lookup field type/size
-	  	$sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
-	  	if( $result = mysql_query($sql) ) {
-	  		$row = mysql_fetch_assoc($result);
-	  		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
-	  	}
-	  	$htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
-	  	// attach event controllers
-	  	$htmlControl->setAttribute("onFocus","suggestList(event,'valueSearch',this.value,'".$this->foreignTableName()."','".$lookupField."','".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onKeyUp","suggestList(event,'valueSearch',this.value,'".$this->foreignTableName()."','".$lookupField."','".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onSelect","sanitizeSuggestValues('".$this->properties[Field]."','".$lookupField."','".$this->properties[Field]."List')");
-	  	$htmlControl->setAttribute("onBlur", "sanitizeSuggestList('".$this->properties[Field]."List')");
-      } else {
-        // ----------------------------------------------------------------- select for foreign keys
-        $htmlControl = new cHtmlSelect;
-	    $htmlControl->setSelected($value);
-	    // color background for status
-	    if ($ftName=="Status") {
-	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
-	    }
-	    // attach onChange handler
-	    if (($this->table->getMode()=="UPDATE")||($this->table->getMode()=="INSERT")) {
-	  	  $js .= "rowHasChanged('".$this->table->getName()."');";
-	    }
-	    if ($js) $htmlControl->setAttribute("onChange", $js);
-	    $query = 
-	      "SELECT id".$ftName.", ".
-		    gui("table".$ftName, "lookupField", $ftName."Name"). 
-		    ($ftName=="Status" ? ", StatusColor" : "").
-	      " FROM ".$ftName.
-		  // Status - additional filter for StatusType
-		  ($ftName=="Status"
-		    ? " WHERE StatusType=\"".$this->table->getName()."\""
-		    : ""
-		  );
-	    // push options
-	    if ($result = mysql_query($query)) {
-		  while ($row = mysql_fetch_assoc($result)) {
-		    $htmlControl->addOption(
-		      $row["id".$ftName], 
-		  	  $row[gui("table".$ftName, "lookupField", $ftName."Name")], 
-		  	  ($ftName=="Status" ? $row[StatusColor] : "")
-		    );
-          }
-	    }
-      }
-    } elseif (($this->getName()=="StatusType") 
-    		|| ($this->getName()=="NoteTable") 
-    		|| ($this->getName()=="RelationLObject") 
-    		|| ($this->getName()=="RelationRObject") 
-    		|| ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
+    if (($this->getName()=="StatusType") 
+    || ($this->getName()=="NoteTable") 
+    || ($this->getName()=="RelationLObject") 
+    || ($this->getName()=="RelationRObject") 
+    || ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
     	$dbResult = mysql_query("SHOW TABLES");
@@ -280,6 +214,76 @@ class cDbField implements iDbField
     return 
       $htmlControl->display();
   }
+  
+  public function getLookupControl($childTable, $value=-1) {
+    // -------------------------------------------------------------------------- suggest by tomcat
+    $ftName=$this->table->getName();
+    $lookupField=$this->getName();
+    if (gui($lookupField, "lookupType")=="suggest") {
+      // load options from database
+  	  $sql=
+  	    "SELECT id".$ftName.",".$lookupField.
+  	    " FROM ".$ftName.
+  	    " ORDER BY ".$lookupField." ASC";
+  	  $optionList = Array();
+  	  if( $result = mysql_query($sql) ) {
+  		while( $row = mysql_fetch_assoc($result) ) {
+  		  $optionList[$row["id".$ftName]] = $row[$lookupField];
+  		}
+  	  }
+  	  $htmlControl = new cHtmlSuggest("id".$ftName, $value, $optionList[$value]);
+  	  $htmlControl->setOptions($optionList, $lookupField);
+  	  // get lookup field type/size
+  	  $sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
+  	  if( $result = mysql_query($sql) ) {
+  		$row = mysql_fetch_assoc($result);
+  		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
+  	  }
+  	  $htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
+  	  // attach event controllers
+  	  $htmlControl->setAttribute("onFocus","suggestList(event,'valueSearch',this.value,'".$ftName."','".$lookupField."','id".$ftName."','".$lookupField."','id".$ftName."List')");
+      $htmlControl->setAttribute("onKeyUp","suggestList(event,'valueSearch',this.value,'".$ftName."','".$lookupField."','id".$ftName."','".$lookupField."','id".$ftName."List')");
+      $htmlControl->setAttribute("onSelect","sanitizeSuggestValues('id".$ftName."','".$lookupField."','id".$ftName."List')");
+  	  $htmlControl->setAttribute("onBlur", "sanitizeSuggestList('id".$ftName."List')");
+    } else {
+      $htmlControl = new cHtmlSelect;
+	  $htmlControl->setSelected($value);
+      // create javascript onChange handler
+      if ($ftName=="Status") {
+	    // color background for status
+	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
+	  }
+	  // attach onChange handler
+	  if (($childTable->getMode()=="UPDATE")||($childTable->getMode()=="INSERT")) {
+	    $js .= "rowHasChanged('".$childTable->getName()."');";
+	  }
+	  if ($js) $htmlControl->setAttribute("onChange", $js);
+	  // prepare select for lookup options
+	  $query = 
+	    "SELECT id".$ftName.", ".
+		  gui($ftName, "lookupField", $ftName."Name"). 
+		  ($ftName=="Status" ? ", StatusColor" : "").
+	    " FROM ".$ftName.
+		// Status - additional filter for StatusType
+		($ftName=="Status"
+		  ? " WHERE StatusType=\"".$childTable->getName()."\""
+		  : ""
+		);
+	  // push options
+	  if ($result = mysql_query($query)) {
+		while ($row = mysql_fetch_assoc($result)) {
+		  $htmlControl->addOption(
+		    $row["id".$ftName], 
+		    $row[gui($ftName, "lookupField", $ftName."Name")], 
+		 	($ftName=="Status" ? $row[StatusColor] : "")
+		  );
+        }
+	  }
+    }
+    
+  	return $htmlControl->display();
+  }
+  
 }
 
 // Implement the interface iDbTable
@@ -511,7 +515,7 @@ class cDbTable implements iDbTable
 	// add columns for parents
 	foreach ($this->parents as $parent) {
 		$ftName = $parent->getName();
-		$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
+		$lookupName = gui($ftName, "lookupField", $ftName."Name");
 		array_push($this->ftNames, $ftName);
 		array_push($this->columnNames, "id".$ftName);
 		array_push($this->columnNames, $lookupName);
@@ -558,7 +562,7 @@ class cDbTable implements iDbTable
 	  // skip parent browsers lookup
 	  if (!isset($this->parent)||($this->parent!=$parent)) {
 		$ftName = $parent->getName();
-		$lookupName = gui("table".$ftName, "lookupField", $ftName."Name");
+		$lookupName = gui($ftName, "lookupField", $ftName."Name");
 		array_push($this->displayColumnNames, $lookupName);
 	  }
 	}
@@ -1074,7 +1078,8 @@ class cDbTable implements iDbTable
   {
   	// display fields as controls in a row of a html table
   	$result = array();
-  	foreach ($this->columnNames as $i => $columnName) {
+  	foreach ($this->displayColumnNames as $i => $columnName) {
+  	  // skip some special columns for notes and relations when they are displayed as subbrowser
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
   	  if ((($columnName=="RelationLObject") || ($columnName=="RelationLId")) 
@@ -1125,6 +1130,12 @@ class cDbTable implements iDbTable
   	  	} else {
   	        $result[$columnName] = $html;
   	  	}
+  	  } else {
+  	  	// this column is a lookup field from another table
+  	  	$lookupTableName=iug($columnName, "lookupField", substr($columnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
+  	  	$foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($columnName);
+  	  	$parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
+  	  	$result[$columnName] = $foreignField->getLookupControl($this, $parentId);
   	  }
   	  
    	  if ($columnName=="id".$this->name) {
@@ -1143,7 +1154,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
-      gui("table".$this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."] ".$this->mode.br().
+      gui($this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."] ".$this->mode.br().
       $this->printFields()
     );
     return $form->display();
@@ -1322,7 +1333,7 @@ class cDbTable implements iDbTable
 		  // hide column for lookupField if it is a lookup into parent table 
 		  if (isset($this->parent)) {
 		  	$ftName = $this->parent->name;
-            //unset($displayRow[gui("table".$ftName, "lookupField", $ftName."Name")]);
+            //unset($displayRow[gui($ftName, "lookupField", $ftName."Name")]);
             if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
 		  }
 		  // add javascript to onClick event of this row
