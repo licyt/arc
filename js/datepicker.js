@@ -349,9 +349,6 @@ onDOMReady(function() {
 				allElements[i].setAttribute( "value" , "" );
 			}
 			// Now lets add a datepicker next to it
-			var nbsp = document.createElement('nbsp');
-			insertAfter(nbsp, allElements[i]);
-			
 			var a = document.createElement('a');
 			a.href = '#';
 			a.className = "datepickershow";
@@ -363,6 +360,9 @@ onDOMReady(function() {
 			img.title = 'Show calendar';
 			a.appendChild(img);
 			insertAfter(a, allElements[i]);
+
+			var nbsp = document.createElement("nbsp");
+			insertAfter(nbsp, allElements[i]);
 		}
 	}
 });
