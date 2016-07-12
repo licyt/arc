@@ -360,9 +360,6 @@ onDOMReady(function() {
 			img.title = 'Show calendar';
 			a.appendChild(img);
 			insertAfter(a, allElements[i]);
-
-			var nbsp = document.createElement("nbsp");
-			insertAfter(nbsp, allElements[i]);
 		}
 	}
 });
