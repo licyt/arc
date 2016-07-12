@@ -24,6 +24,9 @@ td {
   white-space: nowrap;
 }
 
+.cHtmlFilePath {
+  white-space: normal;
+}
 
 span {
   font-size: 12px;
