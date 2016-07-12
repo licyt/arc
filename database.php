@@ -148,9 +148,9 @@ class cDbField implements iDbField
     || ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
-    	$dbResult = mysql_query("SHOW TABLES");
-    	while ($dbRow = mysql_fetch_row($dbResult)) {
-    	  $htmlControl->addOption($dbRow[0], $dbRow[0]);
+    	foreach ($this->table->scheme->tables as $table) {
+    	  $tableName = $table->getName();
+    	  $htmlControl->addOption($tableName, $tableName);
     	}
     	if ($this->getName()=="ActionTable") {
     	  $htmlControl->setAttribute("onChange", "loadTable();");
@@ -423,9 +423,9 @@ class cDbTable implements iDbTable
   	}
   }
   
-  public function isChildOf($tableName) {
-  	foreach ($this->parents as $name=>$parent) {
-  	  if ($parent->getName() == $tableName) return true;
+  public function isChildOf($table) {
+  	foreach ($this->parents as $parent) {
+  	  if ($parent == $table) return true;
   	}
   	return false; 
   }
@@ -468,11 +468,20 @@ class cDbTable implements iDbTable
   
   public function hasParentStatus() {
   	foreach ($this->scheme->tables as $table) {
-  	  if ($this->isChildOf($table->getName()) && $table->hasStatus()) {
+  	  if ($this->isChildOf($table) && $table->hasStatus()) {
   		return true;
   	  }
   	}
   	return false;
+  }
+  
+  public function isSelected() {
+  	$selectedItem = "admin";
+  	$selectedPath = $selectedItem;
+  	while ($selectedItem = $_SESSION[tabControl][$selectedItem][selected]) {
+  	  $selectedPath .= "|".$selectedItem;
+  	}
+  	return strpos($selectedPath, $this->name);
   }
   
   public function go($index) 
@@ -1219,19 +1228,16 @@ class cDbTable implements iDbTable
   	if ($this->name=="Relation") return;
   	if ($this->name=="StatusLog") return;
   	 
-    $query = "show tables";
-  	if ($dbResult = mysql_query($query)) {
-  	  while ($dbRow = mysql_fetch_row($dbResult)) {
-  	  	if ($dbRow[0]==$this->name) continue;
-  	  	$ftable = $this->scheme->tables[$dbRow[0]];
-  	  	if ($ftable->isChildOf($this->name)) {
-  	  	  $ftable->setParent($this);
-  	  	  $ftable->preProcess(); 
-  	  	}
-  	  	if (($dbRow[0]=="Note")) $ftable->setParent($this);
-  	  	if (($dbRow[0]=="Relation")) $ftable->setParent($this);
-  	  	if (($dbRow[0]=="StatusLog")) $ftable->setParent($this);
+  	foreach ($this->scheme->tables as $table) {
+  	  $tableName = $table->getName();
+  	  if ($tableName==$this->name) continue;
+  	  if ($table->isChildOf($this)) {
+  	    $table->setParent($this);
+  	    $table->preProcess(); 
   	  }
+  	  if (($tableName=="Note")) $table->setParent($this);
+  	  if (($tableName=="Relation")) $table->setParent($this);
+  	  if (($tableName=="StatusLog")) $table->setParent($this);
   	}
   }
  
@@ -1365,15 +1371,17 @@ class cDbTable implements iDbTable
   {
   	$browsers = new cHtmlTabControl("sb".$this->name);
   	
-  	$query = "show tables";
-  	if ($dbResult = mysql_query($query)) {
-  	  while ($dbRow = mysql_fetch_row($dbResult)) {
-  	  	if ($dbRow[0]==$this->name) continue;
-  	  	$ftable = $this->scheme->tables[$dbRow[0]];
-  	  	if ($ftable->isChildOf($this->name)) {
-  	  	  //$ftable->setParent($this);    // this was already set in preProcess()
-  	  	  $browsers->addTab("sb".$this->name.$dbRow[0], $ftable->browse()); 
-  	  	}
+  	foreach ($this->scheme->tables as $table) {
+  	  $tableName = $table->getName();
+  	  if ($tableName==$this->name) continue;
+  	  if ($table->isChildOf($this)) {
+  	  	$browsers->addTab(
+  	  	  "sb".$this->name.$tableName, 
+  	  	  ($table->isSelected()
+  	  	    ? $table->browse()
+  	  	  	: ""
+  	  	  )
+  	  	); 
   	  }
   	}
   	
