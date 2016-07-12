@@ -9,7 +9,7 @@ echo
   head(
     charset().
 	linkCss("css/hmat.css").
-	linkCss("css/hideIdTags.css").
+	//linkCss("css/hideIdTags.css").
   	
   	linkCss("css/project.css").
   	linkCss("css/quote.css").

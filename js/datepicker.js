@@ -349,15 +349,15 @@ onDOMReady(function() {
 				allElements[i].setAttribute( "value" , "" );
 			}
 			// Now lets add a datepicker next to it
+			var nbsp = document.createElement('nbsp');
+			insertAfter(nbsp, allElements[i]);
+			
 			var a = document.createElement('a');
 			a.href = '#';
 			a.className = "datepickershow";
 			a.setAttribute('onclick', 'return showDatePicker("'
 					+ allElements[i].id + '")');
 
-			var nbsp = document.createElement('nbsp');
-			a.appendChild(nbsp);
-			
 			var img = document.createElement('img');
 			img.src = 'img/datepicker.png';
 			img.title = 'Show calendar';

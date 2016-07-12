@@ -9,7 +9,7 @@
 	border: 2px solid #FF6600;
 }
 
-#tabButtonsbQuotesbQuoteStatus {
+#tabButtonQuoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -21,7 +21,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbQuotesbQuoteQuote {
+#tabButtonQuoteQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -33,7 +33,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbQuotesbQuoteDataSet {
+#tabButtonQuoteDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -45,7 +45,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbQuotesbQuoteDemand {
+#tabButtonQuoteDemand {
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
@@ -57,7 +57,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbQuotesbQuoteNote {
+#tabButtonQuoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -69,7 +69,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbQuotesbQuoteStatus {
+#tabQuoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -87,7 +87,7 @@
 	font-style: italic;
 }
 
-#tabsbQuotesbQuoteQuote {
+#tabQuoteQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -104,7 +104,7 @@
 	font-style: italic;
 }
 
-#tabsbQuotesbQuoteDataSet {
+#tabQuoteDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -122,7 +122,7 @@
 	font-style: italic;
 }
 
-#tabsbQuotesbQuoteDemand {
+#tabQuoteDemand {
 	color: black;
 	background-color: #FF3333;
 	border: 0 none;
@@ -140,7 +140,7 @@
 	font-style: italic;
 }
 
-#tabsbQuotesbQuoteNote {
+#tabQuoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

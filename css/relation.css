@@ -31,7 +31,7 @@
 	border: 2px solid #BE34BA;
 }
 
-#tabButtonsbRelationsbRelationNote {
+#tabButtonRelationNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbRelationsbRelationNote {
+#tabRelationNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -61,12 +61,12 @@
 	font-style: italic;
 }
 
-#tabButtonsbDemandsbDemandRelationLeft,
-#tabButtonsbDemandsbDemandRelationRight,
-#tabButtonsbProjectsbProjectRelationLeft,
-#tabButtonsbProjectsbProjectRelationRight,
-#tabButtonsbQuotesbQuoteRelationLeft,
-#tabButtonsbQuotesbQuoteRelationRight {
+#tabButtonDemandRelationLeft,
+#tabButtonDemandRelationRight,
+#tabButtonProjectRelationLeft,
+#tabButtonProjectRelationRight,
+#tabButtonQuoteRelationLeft,
+#tabButtonQuoteRelationRight {
 	color: black;
 	background-color: #BE34BA;
 	height: 20px;
@@ -78,12 +78,12 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbDemandsbDemandRelationLeft, 
-#tabsbDemandsbDemandRelationRight,
-#tabsbProjectsbProjectRelationLeft, 
-#tabsbProjectsbProjectRelationRight,
-#tabsbQuotesbQuoteRelationLeft, 
-#tabsbQuotesbQuoteRelationRight {
+#tabDemandRelationLeft, 
+#tabDemandRelationRight,
+#tabProjectRelationLeft, 
+#tabProjectRelationRight,
+#tabQuoteRelationLeft, 
+#tabQuoteRelationRight {
 	color: black;
 	background-color: #BE34BA;
 	border: 0 none;

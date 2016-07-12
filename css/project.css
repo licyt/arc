@@ -33,7 +33,7 @@
 	border: 2px solid #00CCFF;
 }
 
-#tabButtonsbProjectsbProjectProject {
+#tabButtonProjectProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -44,7 +44,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbProjectsbProjectProject {
+#tabProjectProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -62,7 +62,7 @@
 	font-style: italic;
 }
 
-#tabsbProjectsbProjectQuote {
+#tabProjectQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -79,7 +79,7 @@
 	font-style: italic;
 }
 
-#tabsbProjectsbProjectNote {
+#tabProjectNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -97,7 +97,7 @@
 	font-style: italic;
 }
 
-#tabsbProjectsbProjectStatus {
+#tabProjectStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -115,7 +115,7 @@
 	font-style: italic;
 }
 
-#tabButtonsbProjectsbProjectQuote {
+#tabButtonProjectQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -127,7 +127,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbProjectsbProjectNote {
+#tabButtonProjectNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -139,7 +139,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbProjectsbProjectStatus {
+#tabButtonProjectStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;

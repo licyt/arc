@@ -476,7 +476,7 @@ class cDbTable implements iDbTable
   }
   
   public function isSelected() {
-  	$selectedItem = "admin";
+  	$selectedItem = "Admin";
   	$selectedPath = $selectedItem;
   	while ($selectedItem = $_SESSION[tabControl][$selectedItem][selected]) {
   	  $selectedPath .= "|".$selectedItem;
@@ -1369,14 +1369,14 @@ class cDbTable implements iDbTable
   
   public function subBrowsers() 
   {
-  	$browsers = new cHtmlTabControl("sb".$this->name);
+  	$browsers = new cHtmlTabControl($this->name);
   	
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
   	  if ($tableName==$this->name) continue;
   	  if ($table->isChildOf($this)) {
   	  	$browsers->addTab(
-  	  	  "sb".$this->name.$tableName, 
+  	  	  $tableName, 
   	  	  ($table->isSelected()
   	  	    ? $table->browse()
   	  	  	: ""
@@ -1390,23 +1390,23 @@ class cDbTable implements iDbTable
   	$ftable->setParent($this);
   	$ftable->setRelation(1); // this table on the left side of the relation
   	$ftable->loadDisplayColumns();
-  	$browsers->addTab("sb".$this->name."RelationLeft", $ftable->browse());
+  	$browsers->addTab("RelationLeft", $ftable->browse());
   	$ftable->setRelation(2); // this table on the right side of the relation
   	$ftable->loadDisplayColumns();
-  	$browsers->addTab("sb".$this->name."RelationRight", $ftable->browse());
+  	$browsers->addTab("RelationRight", $ftable->browse());
   	unset($ftable);
   	
   	// notes for current record
   	$ftable = $this->scheme->tables["Note"];
   	$ftable->setParent($this);
-  	$browsers->addTab("sb".$this->name."Note", $ftable->browse());
+  	$browsers->addTab("Note", $ftable->browse());
   	unset($ftable);
   	
   	// history of statuses for current record
   	if ($this->hasStatusField()) {
   	  $ftable = $this->scheme->tables["StatusLog"];
   	  $ftable->setParent($this);
-      $browsers->addTab("sb".$this->name."Status", $ftable->browse());
+      $browsers->addTab("Status", $ftable->browse());
   	  unset($ftable);
   	}
   	
@@ -1480,8 +1480,8 @@ class cDbScheme implements iDbScheme
   	  $table->loadColumns();
   	}
   	
-  	if ($this->tables[$_SESSION[tabControl][Admin][selected]]) {
-      $this->tables[$_SESSION[tabControl][Admin][selected]]->preProcess();
+  	if ($selectedTable = $this->tables[$_SESSION[tabControl][Admin][selected]]) {
+      $selectedTable->preProcess();
   	  $this->tables[Note]->preProcess(); 
   	  $this->tables[Relation]->preProcess();
   	}
