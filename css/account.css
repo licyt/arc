@@ -31,7 +31,7 @@
 	border: 2px solid #DDDDDD;
 }
 
-#tabButtonsbAccountsbAccountNote {
+#tabButtonAccountNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -44,7 +44,7 @@
 	font-style: italic;
 }
 
-#tabButtonsbAccountsbAccountAccount {
+#tabButtonAccountAccount {
 	color: black;
 	background-color: #DDDDDD;
 	height: 20px;
@@ -57,7 +57,7 @@
 	font-style: italic;
 }
 
-#tabsbAccountsbAccountNote {
+#tabAccountNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -75,7 +75,7 @@
 	font-style: italic;
 }
 
-#tabsbAccountsbAccountAccount {
+#tabAccountAccount {
 	color: black;
 	background-color: #DDDDDD;
 	border: 0 none;

@@ -31,7 +31,7 @@
 	border: 2px solid #66FF66;
 }
 
-#tabButtonsbCompanysbCompanyAccount {
+#tabButtonCompanyAccount {
 	color: black;
 	background-color: #DDDDDD;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbCompanysbCompanyAddress {
+#tabButtonCompanyAddress {
 	color: black;
 	background-color: #CCCCCC;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbCompanysbCompanyPerson {
+#tabButtonCompanyPerson {
 	color: black;
 	background-color: #00CC00;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbCompanysbCompanyNote {
+#tabButtonCompanyNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -79,7 +79,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbCompanysbCompanyProject {
+#tabButtonCompanyProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -90,7 +90,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbCompanysbCompanyCompany {
+#tabButtonCompanyCompany {
 	color: black;
 	background-color: #66FF66;
 	height: 20px;
@@ -102,7 +102,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbCompanysbCompanyAccount {
+#tabCompanyAccount {
 	color: black;
 	background-color: #DDDDDD;
 	border: 0 none;
@@ -120,7 +120,7 @@
 	font-style: italic;
 }
 
-#tabsbCompanysbCompanyAddress {
+#tabCompanyAddress {
 	color: black;
 	background-color: #CCCCCC;
 	border: 0 none;
@@ -138,7 +138,7 @@
 	font-style: italic;
 }
 
-#tabsbCompanysbCompanyPerson {
+#tabCompanyPerson {
 	color: black;
 	background-color: #00CC00;
 	border: 0 none;
@@ -156,7 +156,7 @@
 	font-style: italic;
 }
 
-#tabsbCompanysbCompanyNote {
+#tabCompanyNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -174,7 +174,7 @@
 	font-style: italic;
 }
 
-#tabsbCompanysbCompanyProject {
+#tabCompanyProject {
 	color: black;
 	background-color: #00CCFF;
 	height: 20px;
@@ -191,7 +191,7 @@
 	font-style: italic;
 }
 
-#tabsbCompanysbCompanyCompany {
+#tabCompanyCompany {
 	color: black;
 	background-color: #66FF66;
 	border: 0 none;

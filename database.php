@@ -1373,7 +1373,16 @@ class cDbTable implements iDbTable
   	
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
-  	  if ($tableName==$this->name) continue;
+  	  if ($_POST["tabButton".$browsers->getName().$tableName]) {
+		$browsers->setSelected($tableName);
+	  }
+  	  if ($_POST["tabButton".$browsers->getName()."RelationLeft"]) {
+		$browsers->setSelected("RelationLeft");
+	  }
+  	  if ($_POST["tabButton".$browsers->getName()."RelationRight"]) {
+		$browsers->setSelected("RelationRight");
+	  }
+	  if ($tableName==$this->name) continue;
   	  if ($table->isChildOf($this)) {
   	  	$browsers->addTab(
   	  	  $tableName, 
@@ -1493,7 +1502,7 @@ class cDbScheme implements iDbScheme
   	 
   	// add all table buttons 
 	foreach ($this->tables as $name=>$table) {
-	  $tableTabs->addTab(
+		$tableTabs->addTab(
         $name, 
         ($_SESSION[tabControl][Admin][selected] == $name
           // browse selected table 

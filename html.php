@@ -323,25 +323,24 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 	$this->selected = "";
   }
   
+  public function getName() {
+  	return $this->name;
+  }
+  
   public function setSelected($tabName) {
 	$this->selected = $tabName;
 	$_SESSION[tabControl][$this->name][selected] = $this->selected;
   }
   
   public function addTab($tabName, $content) {
-    $this->tabs[$tabName] = $content;
+	// process tab switching
+	$this->tabs[$tabName] = $content;
 	if ($_SESSION[tabControl][$this->name][selected] && !$this->selected)
       $this->selected = $_SESSION[tabControl][$this->name][selected];
 	if (!$this->selected) $this->setSelected($tabName);
   }
   
   function display() {
-	// process tab switching
-    foreach ($this->tabs as $tabName => $content) {
-      if ($_POST["tabButton".$this->name.$tabName]) {
-		$this->setSelected($tabName);
-	  }
-	}
 	// create html  
 	$main = new cHtmlDiv("tabControl".$this->name);
 	$head = new cHtmlDiv("tabHead".$this->name);

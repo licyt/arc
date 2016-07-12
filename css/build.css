@@ -31,7 +31,7 @@
 	border: 2px solid #FFFF00;
 }
 
-#tabButtonsbBuildsbBuildNote {
+#tabButtonBuildNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbBuildsbBuildStatus {
+#tabButtonBuildStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbBuildsbBuildBuild {
+#tabButtonBuildBuild {
 	color: black;
 	background-color: #FF0000;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbBuildsbBuildNote {
+#tabBuildNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -87,7 +87,7 @@
 	font-style: italic;
 }
 
-#tabsbBuildsbBuildBuild {
+#tabBuildBuild {
 	color: black;
 	background-color: #FF0000;
 	border: 0 none;
@@ -106,7 +106,7 @@
 	font-style: italic;
 }
 
-#tabsbBuildsbBuildStatus {
+#tabBuildStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

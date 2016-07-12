@@ -32,7 +32,7 @@
 	border: 2px solid #FF3333;
 }
 
-#tabButtonsbDemandsbDemandNote {
+#tabButtonDemandNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -44,7 +44,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbDemandsbDemandStatus {
+#tabButtonDemandStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -56,7 +56,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbDemandsbDemandDemand {
+#tabButtonDemandDemand {
 	color: black;
 	background-color: #FF3333;
 	height: 20px;
@@ -68,7 +68,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbDemandsbDemandInvoice {
+#tabButtonDemandInvoice {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -80,7 +80,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbDemandsbDemandNote {
+#tabDemandNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -98,7 +98,7 @@
 	font-style: italic;
 }
 
-#tabsbDemandsbDemandStatus {
+#tabDemandStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -116,7 +116,7 @@
 	font-style: italic;
 }
 
-#tabsbDemandsbDemandDemand {
+#tabDemandDemand {
 	color: black;
 	background-color: #FF3333;
 	border: 0 none;
@@ -134,7 +134,7 @@
 	font-style: italic;
 }
 
-#tabsbDemandsbDemandInvoice {
+#tabDemandInvoice {
 	color: black;
 	background-color: #99FFFF;
 	border: 0 none;

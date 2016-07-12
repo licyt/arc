@@ -31,7 +31,7 @@
 	border: 1px solid #B2B2B2;
 }
 
-#tabButtonsbPlatformsbPlatformBuild {
+#tabButtonPlatformBuild {
 	color: black;
 	background-color: #FF0000;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPlatformsbPlatformNote {
+#tabButtonPlatformNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPlatformsbPlatformPlatform {
+#tabButtonPlatformPlatform {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbPlatformsbPlatformBuild {
+#tabPlatformBuild {
 	color: black;
 	background-color: #FF0000;
 	border: 0 none;
@@ -85,7 +85,7 @@
 	font-style: italic;
 }
 
-#tabsbPlatformsbPlatformNote {
+#tabPlatformNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -103,7 +103,7 @@
 	font-style: italic;
 }
 
-#tabsbPlatformsbPlatformPlatform {
+#tabPlatformPlatform {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

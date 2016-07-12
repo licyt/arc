@@ -31,7 +31,7 @@
 	border: 1px solid #99FFFF;
 }
 
-#tabButtonsbInvoicesbInvoiceDeliveryNote {
+#tabButtonInvoiceDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceNote {
+#tabButtonInvoiceNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceStatus {
+#tabButtonInvoiceStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbInvoicesbInvoiceInvoice {
+#tabButtonInvoiceInvoice {
 	color: black;
 	background-color: #99FFFF;
 	height: 20px;
@@ -79,7 +79,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbInvoicesbInvoiceDeliveryNote {
+#tabInvoiceDeliveryNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -97,7 +97,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceNote {
+#tabInvoiceNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -115,7 +115,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceStatus {
+#tabInvoiceStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -133,7 +133,7 @@
 	font-style: italic;
 }
 
-#tabsbInvoicesbInvoiceInvoice {
+#tabInvoiceInvoice {
 	color: black;
 	background-color: #99FFFF;
 	border: 0 none;

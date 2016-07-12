@@ -31,7 +31,7 @@
 	border: 2px solid #CCCCCC;
 }
 
-#tabButtonsbAddresssbAddressNote {
+#tabButtonAddressNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbAddresssbAddressAddress {
+#tabButtonAddressAddress {
 	color: black;
 	background-color: #CCCCCC;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbAddresssbAddressNote {
+#tabAddressNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -73,7 +73,7 @@
 	font-style: italic;
 }
 
-#tabsbAddresssbAddressAddress {
+#tabAddressAddress {
 	color: black;
 	background-color: #CCCCCC;
 	border: 0 none;

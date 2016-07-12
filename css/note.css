@@ -31,7 +31,7 @@
 	border: 2px solid #B2B2B2;
 }
 
-#tabButtonsbNotesbNoteStatus {
+#tabButtonNoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbNotesbNoteNote {
+#tabButtonNoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbNotesbNoteStatus {
+#tabNoteStatus {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -73,7 +73,7 @@
 	font-style: italic;
 }
 
-#tabsbNotesbNoteNote {
+#tabNoteNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

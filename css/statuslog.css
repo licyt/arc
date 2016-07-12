@@ -31,7 +31,7 @@
 	border: 2px solid #B2B2B2;
 }
 
-#tabButtonsbStatusLogsbStatusLogNote {
+#tabButtonStatusLogStatusLogNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbStatusLogsbStatusLogStatus {
+#tabButtonStatusLogStatusLogStatus {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbStatusLogsbStatusLogStatusLog {
+#tabButtonStatusLogStatusLogStatusLog {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -67,25 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbStatusLogsbStatusLogNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabsbStatusLogsbStatusLogStatus {
+#tabStatusLogStatusLogNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -103,7 +85,25 @@
 	font-style: italic;
 }
 
-#tabsbStatusLogsbStatusLogStatusLog {
+#tabStatusLogStatusLogStatus {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;
+}
+
+#tabStatusLogStatusLogStatusLog {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

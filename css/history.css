@@ -31,7 +31,7 @@
 	border: 1px solid #B2B2B2;
 }
 
-#tabButtonsbHistorysbHistoryNote {
+#tabButtonHistoryNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbHistorysbHistoryHistory {
+#tabButtonHistoryHistory {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbHistorysbHistoryNote {
+#tabHistoryNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -73,7 +73,7 @@
 	font-style: italic;
 }
 
-#tabsbHistorysbHistoryHistory {
+#tabHistoryHistory {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

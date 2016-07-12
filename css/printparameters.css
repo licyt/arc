@@ -31,7 +31,7 @@
 	border: 1px solid #B2B2B2;
 }
 
-#tabButtonsbPrintParameterssbPrintParametersPart {
+#tabButtonPrintParametersPrintParametersPart {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -43,7 +43,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPrintParameterssbPrintParametersNote {
+#tabButtonPrintParametersPrintParametersNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -55,7 +55,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPrintParameterssbPrintParametersQuote {
+#tabButtonPrintParametersPrintParametersQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -67,7 +67,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPrintParameterssbPrintParametersPrintParameters {
+#tabButtonPrintParametersPrintParametersPrintParameters {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -79,7 +79,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbPrintParameterssbPrintParametersDataSet {
+#tabButtonPrintParametersPrintParametersDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -91,25 +91,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbPrintParameterssbPrintParametersPart {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabsbPrintParameterssbPrintParametersNote {
+#tabPrintParametersPrintParametersPart {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -127,7 +109,25 @@
 	font-style: italic;
 }
 
-#tabsbPrintParameterssbPrintParametersQuote {
+#tabPrintParametersPrintParametersNote {
+	color: black;
+	background-color: #B2B2B2;
+	border: 0 none;
+	height: 20px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+	display: inline-block;
+	font-size: 12px;
+	font-family: "Tahoma";
+	padding: 0px 4px 0px 4px;
+	margin: 0px 2px 0px 0px;
+	font-style: italic;
+}
+
+#tabPrintParametersPrintParametersQuote {
 	color: black;
 	background-color: #FF6600;
 	height: 20px;
@@ -144,7 +144,7 @@
 	font-style: italic;
 }
 
-#tabsbPrintParameterssbPrintParametersPrintParameters {
+#tabPrintParametersPrintParametersPrintParameters {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -162,7 +162,7 @@
 	font-style: italic;
 }
 
-#tabsbPrintParameterssbPrintParametersDataSet {
+#tabPrintParametersPrintParametersDataSet {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;

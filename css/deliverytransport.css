@@ -33,7 +33,7 @@
 
 
 
-#tabButtonsbDeliveryTransportsbDeliveryTransportNote {
+#tabButtonDeliveryTransportNote {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -45,7 +45,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabButtonsbDeliveryTransportsbDeliveryTransportDeliveryTransport {
+#tabButtonDeliveryTransportDeliveryTransport {
 	color: black;
 	background-color: #B2B2B2;
 	height: 20px;
@@ -57,7 +57,7 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#tabsbDeliveryTransportsbDeliveryTransportNote {
+#tabDeliveryTransportNote {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
@@ -75,7 +75,7 @@
 	font-style: italic;
 }
 
-#tabsbDeliveryTransportsbDeliveryTransportDeliveryTransport {
+#tabDeliveryTransportDeliveryTransport {
 	color: black;
 	background-color: #B2B2B2;
 	border: 0 none;
