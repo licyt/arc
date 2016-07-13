@@ -2,6 +2,12 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
 // ------------------------------------------------------ C O N S T A N T S
 
+function myQuery($query) {
+  $GLOBALS[queryCount]++;
+  //echo $query."<BR>";
+  return mysql_query($query);
+}
+
 include_once("./dbConfig.php");
 require_once 'gui.php';
 require_once("html.php");
@@ -106,7 +112,7 @@ class cDbField implements iDbField
   	$ftName = $this->foreignTableName();
   	$lookupField = gui($ftName, "lookupField", $ftName."Name");
   	$query = "INSERT INTO $ftName SET $lookupField = \"".$_POST[$lookupField]."\"";
-  	if ($dbResult = mysql_query($query)) {
+  	if ($dbResult = myQuery($query)) {
   	  return mysql_insert_id();
   	} else {
   	  return 0;
@@ -148,7 +154,7 @@ class cDbField implements iDbField
     || ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
-    	foreach ($this->table->scheme->tables as $table) {
+     	foreach ($this->table->scheme->tables as $table) {
     	  $tableName = $table->getName();
     	  $htmlControl->addOption($tableName, $tableName);
     	}
@@ -166,7 +172,7 @@ class cDbField implements iDbField
     } elseif ($this->getName()=="ActionEvent") { // ------------------------------ ActionEvent
         $htmlControl = new cHtmlSelect();
         $query = "SELECT idAction, ActionName FROM Action WHERE ActionSequence=0";
-        if ($dbResult=mysql_query($query)) {
+        if ($dbResult=myQuery($query)) {
           while ($dbRow=mysql_fetch_assoc($dbResult)) {
             $htmlControl->addOption($dbRow[idAction], $dbRow[ActionName]);
           }
@@ -226,7 +232,7 @@ class cDbField implements iDbField
   	    " FROM ".$ftName.
   	    " ORDER BY ".$lookupField." ASC";
   	  $optionList = Array();
-  	  if( $result = mysql_query($sql) ) {
+  	  if( $result = myQuery($sql) ) {
   		while( $row = mysql_fetch_assoc($result) ) {
   		  $optionList[$row["id".$ftName]] = $row[$lookupField];
   		}
@@ -235,7 +241,7 @@ class cDbField implements iDbField
   	  $htmlControl->setOptions($optionList, $lookupField);
   	  // get lookup field type/size
   	  $sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
-  	  if( $result = mysql_query($sql) ) {
+  	  if( $result = myQuery($sql) ) {
   		$row = mysql_fetch_assoc($result);
   		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
   	  }
@@ -271,7 +277,7 @@ class cDbField implements iDbField
 		  : ""
 		);
 	  // push options
-	  if ($result = mysql_query($query)) {
+	  if ($result = myQuery($query)) {
 		while ($row = mysql_fetch_assoc($result)) {
 		  $htmlControl->addOption(
 		    $row["id".$ftName], 
@@ -290,7 +296,7 @@ class cDbField implements iDbField
 // Implement the interface iDbTable
 class cDbTable implements iDbTable
 {
-  protected $scheme;
+  public $scheme;
   protected $name;  
   protected $parent; // parent browser
   protected $relation;
@@ -355,11 +361,13 @@ class cDbTable implements iDbTable
   	    $this->lastRecord[$fieldName] = $value;
   	  }
   	}
-  	// load currentRecord from database
-  	$query = "SELECT * FROM ".$this->name." WHERE id".$this->name."=".$this->currentRecordId;
-	if ($result = mysql_query($query)) {
-	  $this->currentRecord = mysql_fetch_assoc($result);
-	}
+  	if ($this->currentRecordId) {
+  	  // load currentRecord from database
+  	  $query = "SELECT * FROM ".$this->name." WHERE id".$this->name."=".$this->currentRecordId;
+	  if ($result = myQuery($query)) {
+	    $this->currentRecord = mysql_fetch_assoc($result);
+  	  }
+  	}
 	return $this->currentRecord;
   }  
   
@@ -370,7 +378,7 @@ class cDbTable implements iDbTable
   public function getNumRecords() 
   {
     // number of records in this table
-    if ($result = mysql_query($this->buildSQL())) {
+    if ($result = myQuery($this->buildSQL())) {
       $this->count = mysql_num_rows($result);
     }
 	return $this->count;
@@ -414,7 +422,7 @@ class cDbTable implements iDbTable
   	  " FROM Relation".
   	  " WHERE (RelationLObject='".$this->name."')".
   	  " AND (RelationLId=0) AND (RelationRId=0)";
-  	if ($dbRes=mysql_query($query)) {
+  	if ($dbRes=myQuery($query)) {
   	  while ($dbRow=mysql_fetch_assoc($dbRes)) {
   	  	$parent = $this->scheme->tables[$dbRow[RelationRObject]];
   	  	array_push($this->parents, $parent);
@@ -442,7 +450,7 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name.", ".$childName.
   	  " WHERE ".$childName.".".$childName."_id".$this->name."=".$this->name.".id".$this->name.
   	  " AND ".$childName."id".$childName."=".$childId;
-  	if ($dbRes = mysql_query($query)) {
+  	if ($dbRes = myQuery($query)) {
   	  if ($dbRow = mysql_fetch_row($dbRes)) {
   	    $this->currentRecordId = $dbRow[0];
   	  }
@@ -456,9 +464,16 @@ class cDbTable implements iDbTable
   }
   
   public function hasStatusField() {
+    // status fields (foreign keys) were removed
+  	/*
   	foreach ($this->fields as $i=>$field) {
   	  if ($field->getName() == $this->name."_idStatus") return true;
   	}
+  	*/
+    // look for table-table relation instead
+    foreach ($this->parents as $parent) {
+      if ($parent->getName()=="Status") return true;
+    }
   	return false;
   }
   
@@ -496,7 +511,7 @@ class cDbTable implements iDbTable
   	foreach ($this->fields as $i=>$field) unset($this->fields[$i]);
     // get list of fields for a table from database
     $query = "SHOW COLUMNS FROM ".$this->name;
-    $result = mysql_query($query);
+    $result = myQuery($query);
     if (!$result) {
       echo "Could not run query $query : ". mysql_error();
       exit;
@@ -524,11 +539,19 @@ class cDbTable implements iDbTable
 	}
 	// add columns for parents
 	foreach ($this->parents as $parent) {
-		$ftName = $parent->getName();
-		$lookupName = gui($ftName, "lookupField", $ftName."Name");
-		array_push($this->ftNames, $ftName);
-		array_push($this->columnNames, "id".$ftName);
-		array_push($this->columnNames, $lookupName);
+	  $ftName = $parent->getName();
+	  $lookupName = gui($ftName, "lookupField", $ftName."Name");
+	  array_push($this->ftNames, $ftName);
+	  array_push($this->columnNames, "id".$ftName);
+	  array_push($this->columnNames, $lookupName);
+	  if ($lookupName=="StatusName") {
+	  	array_push($this->columnNames, "StatusColor");
+	  }
+	}
+	if ($this->name=="StatusLog") {
+	  array_push($this->columnNames, "StatusType");
+	  array_push($this->columnNames, "StatusName");
+	  array_push($this->columnNames, "StatusColor");
 	}
   }
   
@@ -560,6 +583,7 @@ class cDbTable implements iDbTable
   	  if (!isset($this->parent) ||  
   	  	   ( 
   		     ($fieldName!="StatusLogRowId")
+  	  	   	 &&($fieldName!="StatusLog_idStatus")
   		     &&($fieldName!="NoteTable")
   		     &&($fieldName!="NoteRowId")
   	  	   )
@@ -575,6 +599,9 @@ class cDbTable implements iDbTable
 		$lookupName = gui($ftName, "lookupField", $ftName."Name");
 		array_push($this->displayColumnNames, $lookupName);
 	  }
+	}
+	if ($this->name=="StatusLog") {
+		array_push($this->displayColumnNames, "StatusName");
 	}
   }
   
@@ -634,12 +661,19 @@ class cDbTable implements iDbTable
   	  $i++;
   	}
   	
+  	if ($this->name=="StatusLog") {
+  	  $otherTables .= ", Status";
+  	}
+  	
   	$query =
       "SELECT ".implode(", ", $this->columnNames).
-  	  " FROM ".$this->name.
+  	  " FROM ".$this->name.$otherTables.
   	  $joins.
   	  " WHERE (id".$this->name.">0)".
-  	  (isset($this->parent)
+  	  (isset($this->parent)&&
+  	   ($this->name!="Relation")&&
+  	   ($this->name!="Note")&&
+  	   ($this->name!="StatusLog")
   	    ? " AND (id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
   	    : ""
   	  ).
@@ -648,6 +682,14 @@ class cDbTable implements iDbTable
   	  	: ""
   	  ).
   	  
+  	  // restrict table StatusLog 
+  	  (($this->name=="StatusLog") && (isset($this->parent))
+  	  	? " AND ". 
+  	  	  "(StatusType = \"".$this->parent->getName()."\") AND ".
+  	  	  "(StatusLog_idStatus=idStatus) AND ".
+  	  	  "(StatusLogRowId = ".$this->parent->getCurrentRecordId().")"
+  	  	: ""
+  	  ).
   	  // restrict table note 
   	  (($this->name=="Note") && (isset($this->parent))
   	  	? " AND ". 
@@ -681,7 +723,7 @@ class cDbTable implements iDbTable
 	$query = 
 	  "INSERT INTO ".$this->name.
 	  " SET ".$this->assignSQL($record);
-	if ($result = mysql_query($query)) {
+	if ($result = myQuery($query)) {
 		
 	}
   }
@@ -691,7 +733,7 @@ class cDbTable implements iDbTable
 	  "UPDATE ".$this->name.
 	  " SET ".$this->assignSQL($record).
 	  " WHERE id".$this->name."=".$record["id".$this->name];
-	if ($result = mysql_query($query)) {
+	if ($result = myQuery($query)) {
 		
 	}
   }
@@ -874,7 +916,7 @@ class cDbTable implements iDbTable
   	  	: ""
   	  );
     return 
-      (($dbRes=mysql_query($query)) && ($dbRow=mysql_fetch_assoc($dbRes))
+      (($dbRes=myQuery($query)) && ($dbRow=mysql_fetch_assoc($dbRes))
         ? $dbRow[idAction]
       	: 0
       );
@@ -902,7 +944,7 @@ class cDbTable implements iDbTable
   	  "HistoryRowId=".$id.", ".
   	  "HistoryCommand='".$event[ActionCommand]."', ".
   	  "HistorySQL='".addslashes(implode("|", $event))."'";
-  	mysql_query($query);
+  	myQuery($query);
   }
   
   public function handleEvent($event) {
@@ -914,7 +956,7 @@ class cDbTable implements iDbTable
   	if ($eid = $this->getEventId($event)) {
   	  // if found get:execute:handle actions in sequence
       $query = "SELECT * FROM Action WHERE ActionEvent=$eid ORDER BY ActionSequence ASC";
-      if ($dbRes=mysql_query($query)) {
+      if ($dbRes=myQuery($query)) {
       	while ($action=mysql_fetch_assoc($dbRes)) {
       	  if (!$this->hasExecuted($action)) {
       	  	if (!$this->execAction($action)) break;
@@ -940,7 +982,7 @@ class cDbTable implements iDbTable
   	  	    "UPDATE ".$action[ActionTable].
   	  	    " SET ".$action[ActionTable]."_idStatus=".$action[ActionParam1].
   	  	    " WHERE id".$action[ActionTable]."=".$targetTable->getCurrentRecordId(); 
-  	  	  if ($dbRes=mysql_query($query)) {
+  	  	  if ($dbRes=myQuery($query)) {
   	  	  	$targetTable->getCurrentRecord();
   	  	    $targetTable->logStatus();
   	  	    $targetTable->handleEvent($action);
@@ -957,7 +999,7 @@ class cDbTable implements iDbTable
   	  "INSERT INTO StatusLog SET ".
   	  "StatusLogRowId=".$this->currentRecord["id".$this->name].", ".
   	  "StatusLog_idStatus=".$this->currentRecord[$fieldName];
-  	  if ($result=mysql_query($query)) {
+  	  if ($result=myQuery($query)) {
   			
   	  }
   	}
@@ -965,7 +1007,7 @@ class cDbTable implements iDbTable
   
   protected function commit() {
   	// execute SQL
-  	if ($result = mysql_query($this->commitSQL())) {
+  	if ($result = myQuery($this->commitSQL())) {
   	  // adjust table position
   	  switch ($this->mode) {
   		case "INSERT" :
@@ -1259,7 +1301,7 @@ class cDbTable implements iDbTable
 	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
 	}
 	// run query on database 
-	if ($dbResult = mysql_query($this->buildSQL())) {
+	if ($dbResult = myQuery($this->buildSQL())) {
 	  $i = 0;
 	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
 	  	$id = $dbRow["id".$this->name];
@@ -1287,7 +1329,7 @@ class cDbTable implements iDbTable
 		  if ($this->name=="Action") {
 		  	if ($dbRow[ActionEvent]) {
 		  	  $query="SELECT ActionName FROM Action WHERE idAction=".$dbRow[ActionEvent];
-		  	  if (($dbRes2=mysql_query($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
+		  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
 		  	    $dbRow[ActionEvent]=$dbRow2[ActionName];
 		  	  }
 		  	} else {
@@ -1296,7 +1338,7 @@ class cDbTable implements iDbTable
 		  	// replace idStatus  with StatusName
 		  	if ($dbRow[ActionCommand]=="SET STATUS") {
 		  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
-		  	  if (($dbRes2=mysql_query($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
+		  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
 		  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
 		  	  }
 		  	}
@@ -1311,7 +1353,7 @@ class cDbTable implements iDbTable
 			  	  "SELECT $lookupName".
 			  	  " FROM ".$dbRow[RelationRObject].
 			  	  " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
-			  	if ($dbr2=mysql_query($q2)) {
+			  	if ($dbr2=myQuery($q2)) {
 			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
 			  	  	$dbRow[RelationRId]=$r2[$lookupName];
 			  	  }
@@ -1323,7 +1365,7 @@ class cDbTable implements iDbTable
 			  	  "SELECT $lookupName".
 			  	  " FROM ".$dbRow[RelationLObject].
 			  	  " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
-			  	if ($dbr2=mysql_query($q2)) {
+			  	if ($dbr2=myQuery($q2)) {
 			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
 			  	  	$dbRow[RelationLId]=$r2[$lookupName];
 			  	  }
@@ -1332,16 +1374,20 @@ class cDbTable implements iDbTable
 		  	}
 		  }
 		  
-		  // hide columns not included in displayColumnNames
+		  // display only columns included in displayColumnNames
 		  foreach ($this->displayColumnNames as $dcn) {
-		  	$displayRow[$dcn] = $dbRow[$dcn];
+		  	switch ($dcn) {
+		  	  case "StatusName":
+		  	  	$displayRow[$dcn] = "<div style=\"background-color:#".$dbRow[StatusColor]."\">".$dbRow[$dcn]."</div>";
+		  	  	break;
+		  	  default:
+		  	    $displayRow[$dcn] = $dbRow[$dcn];
+		  	}
 		  }
 		  
 		  // hide column for lookupField if it is a lookup into parent table 
 		  if (isset($this->parent)) {
-		  	$ftName = $this->parent->name;
-            //unset($displayRow[gui($ftName, "lookupField", $ftName."Name")]);
-            if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
+             if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
 		  }
 		  // add javascript to onClick event of this row
 		  $displayRow[onClick] = $js;
@@ -1447,13 +1493,14 @@ class cDbScheme implements iDbScheme
   {
   	if (mysql_select_db($dbName, $this->dbLink)) 
     {
+      loadGUI();
       // clear old tables
       foreach ($this->tables as $name=>$table) {
         unset($this->tables[$name]);
       }
       // load all tables
       $query = "SHOW TABLES";
-      if ($result = mysql_query($query, $this->dbLink)) {
+      if ($result = myQuery($query)) {
         while ($row = mysql_fetch_array($result)) {
           $tableName=$row["Tables_in_$dbName"];
           $table = new cDbTable($tableName, $this);
@@ -1465,8 +1512,8 @@ class cDbScheme implements iDbScheme
       foreach ($this->tables as $table) {
       	$table->loadChildren();
       }
+      $this->status = "initialized";
     }
-    $this->status = "initialized";
   }
   
   public function getStatus() {
@@ -1521,6 +1568,7 @@ class cDbScheme implements iDbScheme
 $dbScheme = new cDbScheme;
 $dbScheme->link($dbServerName, $dbUser, $dbPassword);
 $dbScheme->useDb($dbName);
+
 
 
 ?>

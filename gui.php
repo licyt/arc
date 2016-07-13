@@ -1,26 +1,25 @@
 <?php
 
-function gui($element, $attribute, $default='') {
-  $query = "SELECT GUIvalue FROM GUI ".
-    "WHERE GUIelement=\"$element\" AND GUIattribute=\"$attribute\"";
-  if ($dbResult =  mysql_query($query)) {
-    if ($row = mysql_fetch_assoc($dbResult)) {
-      $result = $row[GUIvalue];
-  	}
+function loadGUI() {
+  // load table GUI into global memory array
+  $query = "SELECT idGUI, GUIElement, GUIAttribute, GUIValue FROM GUI";
+  if ($dbResult =  myQuery($query)) {
+	while ($dbRow = mysql_fetch_assoc($dbResult)) {
+	  $GLOBALS[GUI][$dbRow[GUIElement]][$dbRow[GUIAttribute]] = $dbRow[GUIValue];
+	}
   }
-  return ($result?$result:$default);
+}
+
+function gui($element, $attribute, $default='') {
+  return (isset($GLOBALS[GUI][$element][$attribute])?$GLOBALS[GUI][$element][$attribute]:$default);
 }
 
 function iug($value, $attribute, $default='') {
-  $query = 
-    "SELECT GUIelement FROM GUI ".
-	"WHERE GUIvalue=\"$value\" AND GUIattribute=\"$attribute\"";
-  if ($dbResult =  mysql_query($query)) {
-	if ($row = mysql_fetch_assoc($dbResult)) {
-	  $result = $row[GUIelement];
-	}
+  foreach ($GLOBALS[GUI] as $name=>$element) {
+  	if ($element[$attribute]==$value) return $name;
   }
-  return ($result?$result:$default);
+  return $default;
 }
+
 
 ?>

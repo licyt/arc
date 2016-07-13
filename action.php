@@ -59,7 +59,7 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 		"SELECT idStatus, StatusName, StatusColor".
 		" FROM Status ".
 		" WHERE StatusType=\"".$table->getName()."\"";
-	  if ($dbRes=mysql_query($query)) {
+	  if ($dbRes=myQuery($query)) {
 	    while ($dbRow=mysql_fetch_assoc($dbRes)) {
 		  $params[1]->addOption($dbRow[idStatus], $dbRow[StatusName], $dbRow[StatusColor]);
 	    }

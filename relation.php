@@ -10,7 +10,7 @@ function loadRightRows($tableName, $value="") {
 	"SELECT id".$tableName.", ".$lookupName.
 	" FROM ".$tableName.
 	" ORDER BY ".$lookupName;
-	if ($dbRes = mysql_query($query)) {
+	if ($dbRes = myQuery($query)) {
 		while ($dbRow = mysql_fetch_row($dbRes)) {
 	  $rows->addOption($dbRow[0], $dbRow[1]);
 		}
@@ -29,7 +29,7 @@ function loadLeftRows($tableName, $value="") {
 	"SELECT id".$tableName.", ".$lookupName.
 	" FROM ".$tableName.
 	" ORDER BY ".$lookupName;
-	if ($dbRes = mysql_query($query)) {
+	if ($dbRes = myQuery($query)) {
 		while ($dbRow = mysql_fetch_row($dbRes)) {
 	  $rows->addOption($dbRow[0], $dbRow[1]);
 		}
@@ -44,7 +44,7 @@ function getParentId($childTableName, $childId, $parentTableName) {
     "WHERE (RelationLObject='$childTableName') ".
     "AND (RelationLId=$childId) ".
     "AND (RelationRObject='$parentTableName')";
-  if ($dbRes=mysql_query($query)) {
+  if ($dbRes=myQuery($query)) {
   	if ($dbRow=mysql_fetch_assoc($dbRes)) {
   	  return $dbRow[RelationRId];
   	} 

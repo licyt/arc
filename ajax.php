@@ -111,7 +111,7 @@ if (isset($_REQUEST[loadParam2])) {
   	"SELECT StatusName, StatusColor".
     " FROM Status ".
     " WHERE StatusType=\"".$_REQUEST[param1]."\"";
-  if ($dbRes=mysql_query($query)) {
+  if ($dbRes=mySQL($query)) {
   	while ($dbRow=mysql_fetch_assoc($dbRes)) {
   	  $param2->addOption($dbRow[StatusName], $dbRow[StatusName], $dbRow[StatusColor]);
   	}

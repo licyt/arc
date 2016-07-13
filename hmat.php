@@ -5,6 +5,8 @@ session_start();
 
 require_once("database.php");
 
+$admin = $dbScheme->admin();
+
 echo 
   head(
     charset().
@@ -50,11 +52,11 @@ echo
   	
   ).
   body(
-  	  "<div id='svnrevision'>SVN REV:".shell_exec('svnversion')."</div>".
+  	  "<div id='svnrevision'>SVN REV:".shell_exec('svnversion')." DB:".$dbName."[".$GLOBALS[queryCount]."]</div>".
   	  "<div style='position:absolute'>".
   	  "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
-  		$dbScheme->admin().
+  	  $admin.
     "</div>",
   	"Load();"
   );
