@@ -113,13 +113,13 @@ function Ajax(request, params) {
               td2.innerHTML=xmlHttp.responseText;
               break;
             case "loadRightRows":
-                var table=elementById('RelationRightTable');
+                var table=elementById('RelationRObject');
                 var td0=table.parentElement;
                 var td1=td0.nextSibling;
                 td1.innerHTML=xmlHttp.responseText;  
                 break;
             case "loadLeftRows":
-                var table=elementById('RelationLeftTable');
+                var table=elementById('RelationLObject');
                 var td0=table.parentElement;
                 var td1=td0.nextSibling;
                 td1.innerHTML=xmlHttp.responseText;  
@@ -233,13 +233,13 @@ function loadParam2() {
 
 function loadRightRows() {
   var params=new Array();
-  params['table']=elementById("RelationRightTable").value;
+  params['table']=elementById("RelationRObject").value;
   Ajax("loadRightRows", params);
 }
 
 function loadLeftRows() {
   var params=new Array();
-  params['table']=elementById("RelationLeftTable").value;
+  params['table']=elementById("RelationLObject").value;
   Ajax("loadLeftRows", params);
 }
 

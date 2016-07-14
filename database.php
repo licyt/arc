@@ -254,7 +254,9 @@ class cDbField implements iDbField
   	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
-	  $htmlControl->setSelected($value);
+      $htmlControl->setAttribute(ID, "id".$ftName);
+      $htmlControl->setAttribute(NAME, "id".$ftName);
+      $htmlControl->setSelected($value);
       // create javascript onChange handler
       if ($ftName=="Status") {
 	    // color background for status
@@ -585,7 +587,10 @@ class cDbTable implements iDbTable
   		     ($fieldName!="StatusLogRowId")
   	  	   	 &&($fieldName!="StatusLog_idStatus")
   		     &&($fieldName!="NoteTable")
-  		     &&($fieldName!="NoteRowId")
+  	  	   	 &&($fieldName!="NoteRowId")
+  	  	   	 &&($fieldName!="RelationType")
+  		     &&($fieldName!="RelationLType")
+  		     &&($fieldName!="RelationRType")
   	  	   )
   		 ) {
   	  	array_push($this->displayColumnNames, $fieldName);
@@ -653,7 +658,7 @@ class cDbTable implements iDbTable
   	foreach ($this->parents as $parent) {
   	  $parentName=$parent->getName();
   	  $joins .=
-  	    " JOIN (".$parent->getName().", Relation R".$i.") ON (".
+  	    " LEFT OUTER JOIN (".$parent->getName().", Relation R".$i.") ON (".
   	    " (R".$i.".RelationLObject='".$this->name."') AND". 
   	    " (R".$i.".RelationLId=id".$this->name.") AND ".
   	    " (R".$i.".RelationRObject='".$parentName."') AND". 
@@ -669,7 +674,7 @@ class cDbTable implements iDbTable
       "SELECT ".implode(", ", $this->columnNames).
   	  " FROM ".$this->name.$otherTables.
   	  $joins.
-  	  " WHERE (id".$this->name.">0)".
+  	  " WHERE (id".$this->name.">-1)".
   	  (isset($this->parent)&&
   	   ($this->name!="Relation")&&
   	   ($this->name!="Note")&&
@@ -791,7 +796,7 @@ class cDbTable implements iDbTable
       */
       
       if (!is_null($this->parent)) {
-      	$parrentName = $this->name."_id".$this->parent->getName();
+      	$parrentName = "id".$this->parent->getName();
       	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
       	$result .= $parentId->display();
       }
@@ -992,7 +997,7 @@ class cDbTable implements iDbTable
   	}
   }
   
-  function logStatus() {
+  protected function logStatus() {
   	$fieldName = $this->name."_idStatus";
   	if ($field = $this->getFieldByName($fieldName)) {
       $query=
@@ -1005,23 +1010,78 @@ class cDbTable implements iDbTable
   	}
   }
   
-  protected function commit() {
-  	// execute SQL
-  	if ($result = myQuery($this->commitSQL())) {
-  	  // adjust table position
-  	  switch ($this->mode) {
-  		case "INSERT" :
-  		  $this->count++;
-  		  $this->go($this->count);
-  		  $this->currentRecordId = mysql_insert_id();
-  		  break;
-  		case "DELETE" :
-  		  $this->count--;
-  		  if ($this->at>$this->count) $this->go($this->count);
-  			$this->currentRecordId = 0;
-  		  break;
+  protected function updateRelations() {
+  	// update relations on commit for current record
+  	// iterate through all parent tabless
+  	foreach ($this->parents as $parent) {
+  	  $parentName = $parent->getName();
+  	  $oldParentId = getParentId($this->name, $this->currentRecordId, $parentName);
+  	  $newParentId = $_POST["id".$parentName];
+  	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
+  	  if ($newParentId == -1) {
+  	  	// non existent parent value
+  	  	// INSERT new value into parent table
+  	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupField]."'")) {
+  	  	  $newParentId = mysql_insert_id();
+  	  	}
+  	  	// INSERT Relations to "undefined" parent's parents
+  	  	foreach ($parent->parents as $grandParent) {
+  	  	  myQuery(
+  	  	    "INSERT INTO Relation SET ".
+  	  	    "RelationLObject='$parentName', ".
+  	  	    "RelationLId=$newParentId, ".
+  	  	    "RelationRObject='".$grandParent->getName()."', ".
+  	  	    "RelationRId=0"
+  	  	  );
+  	  	}
   	  }
-  	  $this->getCurrentRecord();
+  	  if ($oldParentId==-1) {
+  	  	// non existing relation
+  	  	// INSERT new relation
+  	  	myQuery(
+  	  	  "INSERT INTO Relation SET ".
+  	  	  "RelationLObject='".$this->name."', ".
+  	  	  "RelationLId=".$this->currentRecordId.", ".
+  	  	  "RelationRObject='$parentName', ".
+  	  	  "RelationRId=".$newParentId
+  	  	);
+  	  } elseif ($oldParentId!=$newParentId) {
+  	  	// parent has changed
+  	    // UPDATE relation
+  	    myQuery( 
+    	  "UPDATE Relation SET RelationRId=".$newParentId.
+    	  " WHERE (RelationLObject='".$this->name."')".
+    	  " AND (RelationLId=".$this->currentRecordId.") ".
+    	  " AND (RelationRObject='$parentName')"
+  	  	);
+  	  }
+  	}
+  }
+  
+  protected function deleteRelations() {
+  	// delete relations on commit for current record
+  	myQuery(
+  	  "DELETE FROM Relation ".
+  	  "WHERE ((RelationLObject='".$this->name."') AND (RelationLId=".$this->currentRecordId.")) ".
+  	  "OR ((RelationRObject='".$this->name."') AND (RelationRId=".$this->currentRecordId."))"    
+  	);
+  }
+  
+  protected function commit() {
+  	// save changes - execute SQL
+  	if ($result = myQuery($this->commitSQL())) {
+  	  switch ($this->mode) {
+  	  	case "INSERT":
+  	  	  $this->currentRecordId = mysql_insert_id();
+  	  	  $this->getCurrentRecord();
+  	  	case "UPDATE": 
+  	  	  $this->updateRelations();
+  	  	  break;
+  	  	case "DELETE":
+  	  	  $this->deleteRelations();
+  	  	  $this->currentRecordId = 0;
+  	  	  break;
+  	  }
   	  
   	  // log any status change
   	  
