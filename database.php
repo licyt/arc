@@ -365,8 +365,7 @@ class cDbTable implements iDbTable
   	}
   	if ($this->currentRecordId) {
   	  // load currentRecord from database
-  	  $query = "SELECT * FROM ".$this->name." WHERE id".$this->name."=".$this->currentRecordId;
-	  if ($result = myQuery($query)) {
+	  if ($result = myQuery($this->buildSQL($this->currentRecordId))) {
 	    $this->currentRecord = mysql_fetch_assoc($result);
   	  }
   	}
@@ -466,21 +465,15 @@ class cDbTable implements iDbTable
   }
   
   public function hasStatusField() {
-    // status fields (foreign keys) were removed
-  	/*
-  	foreach ($this->fields as $i=>$field) {
-  	  if ($field->getName() == $this->name."_idStatus") return true;
-  	}
-  	*/
-    // look for table-table relation instead
+  	return $this->hasStatus();
+  }
+  
+  public function hasStatus() {
+    // look for this-"Status" table relation 
     foreach ($this->parents as $parent) {
       if ($parent->getName()=="Status") return true;
     }
   	return false;
-  }
-  
-  public function hasStatus() {
-  	return $this->hasStatusField();
   }
   
   public function hasParentStatus() {
@@ -650,7 +643,7 @@ class cDbTable implements iDbTable
 	return $assign;
   }
   
-  protected function buildSQL() 
+  protected function buildSQL($id=-1) 
   {
   	// lookup values from parent tables
   	$joins=""; 										// joins
@@ -674,7 +667,7 @@ class cDbTable implements iDbTable
       "SELECT ".implode(", ", $this->columnNames).
   	  " FROM ".$this->name.$otherTables.
   	  $joins.
-  	  " WHERE (id".$this->name.">-1)".
+  	  " WHERE (id".$this->name.($id>-1?"=$id":">-1").")".
   	  (isset($this->parent)&&
   	   ($this->name!="Relation")&&
   	   ($this->name!="Note")&&
@@ -688,11 +681,14 @@ class cDbTable implements iDbTable
   	  ).
   	  
   	  // restrict table StatusLog 
-  	  (($this->name=="StatusLog") && (isset($this->parent))
-  	  	? " AND ". 
-  	  	  "(StatusType = \"".$this->parent->getName()."\") AND ".
-  	  	  "(StatusLog_idStatus=idStatus) AND ".
-  	  	  "(StatusLogRowId = ".$this->parent->getCurrentRecordId().")"
+  	  ($this->name=="StatusLog"
+  	  	? " AND (StatusLog_idStatus=idStatus)". 
+  	  	  (isset($this->parent)
+  	  	    ? " AND ".
+  	  	      "(StatusType = \"".$this->parent->getName()."\") AND ".
+  	  	      "(StatusLogRowId = ".$this->parent->getCurrentRecordId().")"
+  	  	  	: ""
+  	  	  )
   	  	: ""
   	  ).
   	  // restrict table note 
@@ -798,6 +794,8 @@ class cDbTable implements iDbTable
       if (!is_null($this->parent)) {
       	$parrentName = "id".$this->parent->getName();
       	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
+      	// attribute ID must be unique therefore add prefix to it (NAME attribute remains the same as for parent)
+      	$parentId->setAttribute("ID", $this->name.$parrentName);
       	$result .= $parentId->display();
       }
       
@@ -882,11 +880,10 @@ class cDbTable implements iDbTable
   }
   
   public function statusHasChanged() {
-  	if (!$this->hasStatusField()) return false;
-  	$i = $this->name."_idStatus";
+  	if (!$this->hasStatus()) return false;
   	return 
   	  //($this->mode == "INSERT") ||
-  	  (($this->mode == "UPDATE") && ($this->lastRecord[$i] != $this->currentRecord[$i]));
+  	  (($this->mode == "UPDATE") && ($this->lastRecord["idStatus"] != $this->currentRecord["idStatus"]));
   }
   
   public function whatsUp() {
@@ -998,16 +995,11 @@ class cDbTable implements iDbTable
   }
   
   protected function logStatus() {
-  	$fieldName = $this->name."_idStatus";
-  	if ($field = $this->getFieldByName($fieldName)) {
-      $query=
-  	  "INSERT INTO StatusLog SET ".
+  	myQuery(
+      "INSERT INTO StatusLog SET ".
   	  "StatusLogRowId=".$this->currentRecord["id".$this->name].", ".
-  	  "StatusLog_idStatus=".$this->currentRecord[$fieldName];
-  	  if ($result=myQuery($query)) {
-  			
-  	  }
-  	}
+  	  "StatusLog_idStatus=".$this->currentRecord["idStatus"]  	
+  	);
   }
   
   protected function updateRelations() {
@@ -1082,9 +1074,9 @@ class cDbTable implements iDbTable
   	  	  $this->currentRecordId = 0;
   	  	  break;
   	  }
+  	  $this->getCurrentRecord();
   	  
   	  // log any status change
-  	  
   	  // ---------------------------------------------------------- event->action processing
   	  if ($event=$this->whatsUp()) {
   	  	// clear $executed 
@@ -1368,6 +1360,7 @@ class cDbTable implements iDbTable
 	  	$i++;
 	  	if ($id==$this->currentRecordId) {
           // --------------------------------------------------------- current record is editable
+          $this->currentRecord = $dbRow;
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for the current record
 	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
