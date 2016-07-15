@@ -172,7 +172,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
     return 
       "<INPUT".
         " ID=".$this->attributes[ID].
-        " NAME=".$this->attributes[ID].
+        " NAME=".($this->attributes[NAME]?$this->attributes[NAME]:$this->attributes[ID]).
         " TYPE=".($this->attributes[TYPE]
           ? $this->attributes[TYPE]
           : "TEXT").

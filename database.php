@@ -444,18 +444,8 @@ class cDbTable implements iDbTable
   }
   
   public function getParentOfChildId($childTable) {
-  	$childName = $childTable->getName;
-  	$childId = $childTable->getCurrentRecordId();
-  	$query = 
-  	  "SELECT id".$this->name.
-  	  " FROM ".$this->name.", ".$childName.
-  	  " WHERE ".$childName.".".$childName."_id".$this->name."=".$this->name.".id".$this->name.
-  	  " AND ".$childName."id".$childName."=".$childId;
-  	if ($dbRes = myQuery($query)) {
-  	  if ($dbRow = mysql_fetch_row($dbRes)) {
-  	    $this->currentRecordId = $dbRow[0];
-  	  }
-  	}
+  	$this->currentRecordId =
+ 	  getParentId($childTable->getName(), $childTable->getCurrentRecordId(), $this->name);
   }
   
   function setRelation($value) {
@@ -489,6 +479,7 @@ class cDbTable implements iDbTable
   	$selectedItem = "Admin";
   	$selectedPath = $selectedItem;
   	while ($selectedItem = $_SESSION[tabControl][$selectedItem][selected]) {
+  	  if (strpos($selectedPath, $selectedItem)) break;		// avoid loops
   	  $selectedPath .= "|".$selectedItem;
   	}
   	return strpos($selectedPath, $this->name);
@@ -578,7 +569,6 @@ class cDbTable implements iDbTable
   	  if (!isset($this->parent) ||  
   	  	   ( 
   		     ($fieldName!="StatusLogRowId")
-  	  	   	 &&($fieldName!="StatusLog_idStatus")
   		     &&($fieldName!="NoteTable")
   	  	   	 &&($fieldName!="NoteRowId")
   	  	   	 &&($fieldName!="RelationType")
@@ -586,7 +576,9 @@ class cDbTable implements iDbTable
   		     &&($fieldName!="RelationRType")
   	  	   )
   		 ) {
-  	  	array_push($this->displayColumnNames, $fieldName);
+  		if ($fieldName!="StatusLog_idStatus") {
+  	  	  array_push($this->displayColumnNames, $fieldName);
+  		}
   	  }
   	}
   	// add columns for parents
@@ -599,7 +591,8 @@ class cDbTable implements iDbTable
 	  }
 	}
 	if ($this->name=="StatusLog") {
-		array_push($this->displayColumnNames, "StatusName");
+	  array_push($this->displayColumnNames, "StatusType");
+	  array_push($this->displayColumnNames, "StatusName");
 	}
   }
   
@@ -793,9 +786,9 @@ class cDbTable implements iDbTable
       
       if (!is_null($this->parent)) {
       	$parrentName = "id".$this->parent->getName();
-      	$parentId = new cHtmlInput($parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
+      	$parentId = new cHtmlInput($this->name.$parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
       	// attribute ID must be unique therefore add prefix to it (NAME attribute remains the same as for parent)
-      	$parentId->setAttribute("ID", $this->name.$parrentName);
+      	$parentId->setAttribute("NAME", $parrentName);
       	$result .= $parentId->display();
       }
       
@@ -980,10 +973,13 @@ class cDbTable implements iDbTable
   	  	}
   	  	// target table is found
   	  	if ($action[ActionTable]==$targetTable->getName()) {
+  	  	  // update relation to status
   	  	  $query = 
-  	  	    "UPDATE ".$action[ActionTable].
-  	  	    " SET ".$action[ActionTable]."_idStatus=".$action[ActionParam1].
-  	  	    " WHERE id".$action[ActionTable]."=".$targetTable->getCurrentRecordId(); 
+  	  	    "UPDATE Relation".
+  	  	    " SET RelationRId=".$action[ActionParam1].
+  	  	    " WHERE (RelationLObject='".$action[ActionTable]."')".
+  	  	    " AND (RelationLId=".$targetTable->getCurrentRecordId().")".
+  	  	    " AND (RelationRObject='Status')";
   	  	  if ($dbRes=myQuery($query)) {
   	  	  	$targetTable->getCurrentRecord();
   	  	    $targetTable->logStatus();
@@ -1090,7 +1086,7 @@ class cDbTable implements iDbTable
   	      $this->logStatus();
   	  	  $event[ActionTable] = $this->name;
   	  	  $event[ActionCommand] = "SET STATUS";
-  	  	  $event[ActionParam1] = $this->currentRecord[$this->name."_idStatus"];
+  	  	  $event[ActionParam1] = $this->currentRecord["idStatus"];
   	  	  $this->handleEvent($event);
   	  	}
   	  	/*
@@ -1283,13 +1279,12 @@ class cDbTable implements iDbTable
   
   protected function orderSet(array $columnNames, $setName="") 
   {
-    $newNames = array();
+    $buttons = array();
     foreach ($columnNames as $i=>$buttonName) {
       $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
-      $newNames[$i]=$button->display();
+      $buttons[$i]=$button->display();
     }
-    //$newNames[0]="";
-    return $newNames;	
+    return $buttons;	
   }
 
   protected function filterSet(array $columnNames, $setName="", $values)
@@ -1360,7 +1355,7 @@ class cDbTable implements iDbTable
 	  	$i++;
 	  	if ($id==$this->currentRecordId) {
           // --------------------------------------------------------- current record is editable
-          $this->currentRecord = $dbRow;
+          //$this->currentRecord = $dbRow;
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for the current record
 	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
@@ -1472,6 +1467,7 @@ class cDbTable implements iDbTable
   	
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
+	  if ($tableName==$this->name) continue;
   	  if ($_POST["tabButton".$browsers->getName().$tableName]) {
 		$browsers->setSelected($tableName);
 	  }
@@ -1481,7 +1477,6 @@ class cDbTable implements iDbTable
   	  if ($_POST["tabButton".$browsers->getName()."RelationRight"]) {
 		$browsers->setSelected("RelationRight");
 	  }
-	  if ($tableName==$this->name) continue;
   	  if ($table->isChildOf($this)) {
   	  	$browsers->addTab(
   	  	  $tableName, 

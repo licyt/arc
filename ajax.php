@@ -2,7 +2,7 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 // 2016 (C) Rastislav Seč, rastislav.sec@gmail.com aka tomcat
 
-require_once("html.php");
+ require_once("html.php");
 require_once("database.php");
 
 //var_dump($_REQUEST);
