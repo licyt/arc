@@ -39,6 +39,16 @@ function loadLeftRows($tableName, $value="") {
 }
 
 function getParentId($childTableName, $childId, $parentTableName) {
+  // special behaviour for StatusLog which uses foreign key to status
+  if (($childTableName=="StatusLog") && ($parentTableName=="Status")) {
+  	$query="SELECT StatusLog_idStatus FROM StatusLog WHERE idStatusLog=$childId";
+    if ($dbRes=myQuery($query)) {
+  	  if ($dbRow=mysql_fetch_assoc($dbRes)) {
+  	    return $dbRow[StatusLog_idStatus];
+  	  } 
+    }
+  }
+  // default search in table Relation
   $query=
     "SELECT RelationRId FROM Relation ".
     "WHERE (RelationLObject='$childTableName') ".

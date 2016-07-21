@@ -133,6 +133,8 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 		  $this->add(ID).
 		  $this->add(onClick).
 		  $this->add("CLASS").
+		  $this->add("STYLE").
+		  $this->add("TITLE").
 		">".
 		  $this->attributes[CONTENT].
 		"</DIV>";

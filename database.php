@@ -254,12 +254,41 @@ class cDbField implements iDbField
   	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
-      $htmlControl->setAttribute(ID, "id".$ftName);
-      $htmlControl->setAttribute(NAME, "id".$ftName);
+      $htmlControl->setAttribute(ID, $this->getName());
+      $htmlControl->setAttribute(NAME, $this->getName());
       $htmlControl->setSelected($value);
-      // create javascript onChange handler
       if ($ftName=="Status") {
-	    // color background for status
+        if ($this->getName()=="StatusType") {
+          foreach ($this->table->scheme->tables as $table) {
+        	$tableName = $table->getName();
+        	$htmlControl->addOption($tableName, $tableName);
+          } 
+          $q0 = "SELECT StatusType FROM Status WHERE idStatus=$value";
+          if ($dbRes0 = myQuery($q0)) {
+          	if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
+          	  $htmlControl->setSelected($dbRow0[StatusType]);
+          	}
+          }
+        }
+        if ($this->getName()=="StatusName") {
+          $q0 = "SELECT StatusType, StatusName, StatusColor FROM Status WHERE idStatus=$value";
+          if ($dbRes0 = myQuery($q0)) {
+          	if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
+          	  $htmlControl->setSelected($dbRow0[StatusName]);
+          	}
+          }
+          $q1 = 
+            "SELECT StatusName, StatusColor ".
+            "FROM Status ".
+            "WHERE StatusType='".$dbRow0[StatusType]."' ".
+            "ORDER BY StatusName";
+          if ($dbRes1 = myQuery($q1)) {
+          	while ($dbRow1 = mysql_fetch_assoc($dbRes1)) {
+          	  $htmlControl->addOption($dbRow1[StatusName], $dbRow1[StatusName], $dbRow1[StatusColor]);
+          	}
+          }
+        }
+        // color background for status
 	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	  }
 	  // attach onChange handler
@@ -354,8 +383,12 @@ class cDbTable implements iDbTable
 	}
 	return NULL;
   }
+  
+  public function setCurrentRecordId($id) {
+  	$this->currentRecordId = $id;
+  }
 
-  public function getCurrentRecord() 
+  public function getCurrentRecord($id=null) 
   {
   	// store currentRecord values in lastRecord
   	if ($this->currentRecord) {
@@ -363,6 +396,7 @@ class cDbTable implements iDbTable
   	    $this->lastRecord[$fieldName] = $value;
   	  }
   	}
+  	if (!is_null($id)) $this->setCurrentRecordId($id);
   	if ($this->currentRecordId) {
   	  // load currentRecord from database
 	  if ($result = myQuery($this->buildSQL($this->currentRecordId))) {
@@ -837,11 +871,12 @@ class cDbTable implements iDbTable
   			    }
   			  }
   			}
+  			
   			// skip empty fields 
   			if ($_POST[$fieldName]=="") continue;
   			// skip id and any timestamps
   			if ($fieldName == "id".$this->name) continue;
-  			if ($field->isTimeStamp()) continue;
+  			// if ($field->isTimeStamp()) continue;
   			// if value is not set for suggested field
   			if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
   			  // insert new value to foreign table and get new id
@@ -851,6 +886,19 @@ class cDbTable implements iDbTable
   			// append assignment of value
   			$assign .= ($assign ? ", " : "").
   			$fieldName." = \"".$_POST[$fieldName]."\"";
+  		  }
+  		  
+  	  	  if ($this->name=="StatusLog") {
+  			$q0=
+    		  "SELECT idStatus ".
+    		  "FROM Status ".
+  			  "WHERE (StatusType='".$_POST[StatusType]."') ".
+  			  "AND (StatusName='".$_POST[StatusName]."')";
+  			if ($dbRes0 = myQuery($q0)) {
+  			  if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
+  			   $assign .= ", StatusLog_idStatus=".$dbRow0[idStatus];
+  			  }
+  			}
   		  }
   		  
   		  // choose SQL keyword depending on mode
