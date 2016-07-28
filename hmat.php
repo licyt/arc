@@ -11,6 +11,7 @@ echo
   head(
     charset().
 	linkCss("css/hmat.css").
+  	linkCss("css/gantt.css").
 	//linkCss("css/hideIdTags.css").
   	
   	linkCss("css/project.css").
@@ -47,9 +48,10 @@ echo
   	linkJs("js/datepicker.js").
   	
     linkJs("js/hmat.js").
-  	linkJs("js/cHtmlSuggest.js").
-  	linkJs("js/ajax.js")
-  	
+  	linkJs("js/ajax.js").
+  	linkJs("js/gantt.js").
+  	linkJs("js/cHtmlSuggest.js")
+  		
   ).
   body(
   	  "<div id='svnrevision'>SVN REV:".shell_exec('svnversion')." DB:".$dbName."[".$GLOBALS[queryCount]."]</div>".

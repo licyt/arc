@@ -2,7 +2,7 @@
 
 div.ganttBar {
   position: absolute;
-  height: 20px;
+  height: 5px;
   min-width: 1px;
   padding: 0px;
   border: 0px;
@@ -15,10 +15,10 @@ div.ganttBar {
 div.ganttLane {
   display: inline-block;
   position: relative;
-  height: 20px;
-  width: 800px;
+  height: 5px;
+  width: 100%;
   border-bottom: 1px solid lightgray;
-  margin: 0px;
+  margin: 0px 0px 3px 0px;
   padding: 0px;
   overflow: hidden;
 }
@@ -34,4 +34,11 @@ div.ganttLaneLabel {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+div.gantt {
+  width: 100%;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }

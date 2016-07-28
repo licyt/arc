@@ -13,6 +13,7 @@ require_once 'gui.php';
 require_once("html.php");
 require_once 'action.php';
 require_once 'relation.php';
+require_once 'gantt.php';
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -1407,10 +1408,21 @@ class cDbTable implements iDbTable
 	  	  $table->addRow($this->editColumns($id));
 	  	  // sub-browsers for the current record
 	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
-	  	    $sbRow = array();
+	  	    if ($this->hasStatus()) {
+	  	    	$sG = new statusGantt();
+						$sG->iFrom = "2016-04-14";
+						$sG->iTill = "2016-07-21";
+						$sG->statusType = $this->name;
+	  	    	$sG->statusLogRowId = $this->currentRecordId;
+	  	    	$sG->loadLanes();
+	  	    	$gantt["sbIndent"]="";
+	  	    	$gantt["sbColSpan"]=sizeof($dbRow)-1;
+	  	    	$gantt["statusGannt"] = $sG->display();
+	  	    	$table->addRow($gantt);
+	  	    }
 	  	    $sbRow["sbIndent"]="";
-	  	    $sbRow["subBrowser"]=$this->subBrowsers();
 	  	    $sbRow["sbColSpan"]=sizeof($dbRow)-1;
+	  	    $sbRow["subBrowser"] = $this->subBrowsers();
 	  	    $table->addRow($sbRow);
 	  	  }
 	  	} else {

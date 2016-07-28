@@ -132,6 +132,7 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 	    "<DIV ".
 		  $this->add(ID).
 		  $this->add(onClick).
+		  $this->add(onLoad).
 		  $this->add("CLASS").
 		  $this->add("STYLE").
 		  $this->add("TITLE").
@@ -426,6 +427,11 @@ class cHtmlTable extends cHtmlElement
 	  	if ($columnName == "sbColSpan") continue;
 	  	if ($columnName == "subBrowser") {
 	  		$class = " CLASS=\"subBrowserRow\"";
+	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+	  		continue;
+	  	}
+	  	if ($columnName == "statusGannt") {
+	  		$class = " CLASS=\"statusGannt\"";
 	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
 	  		continue;
 	  	}

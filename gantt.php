@@ -4,24 +4,32 @@ require_once 'html.php';
 require_once 'database.php';
 
 class statusGantt {
-  public $iWidth=800; /* pixels */
-  public $labelWidth=200;
+	public $iFrom;
+	public $iTill;
+  public $iWidth=300; /* pixels */
+  public $labelWidth=100;
   public $statusType;
   public $statusLogRowId;
   public $lanes = array();
   
-  public function interval($iFrom, $iTill) {
+  public function loadLanes() {
     // interval duration in seconds
-    $iDuration = strtotime($iTill)-strtotime($iFrom);
+    $iDuration = strtotime($this->iTill)-strtotime($this->iFrom);
     $iRatio = ($this->iWidth)/$iDuration; 				
-    echo $query=
-	  "SELECT StatusType, StatusLogRowId, StatusName, StatusColor, StatusLogTimeStamp ".
-	  "FROM StatusLog ".
-	  "INNER JOIN Status ON StatusLog_idStatus=idStatus ".
-	  "WHERE (StatusLogTimeStamp>='$iFrom') AND (StatusLogTimeStamp<'$iTill') ".
-	  ($this->statusType ? "AND (StatusType='".$this->statusType."') " : "").
-	  ($this->statusLogRowId ? "AND (statusLogRowId=".$this->statusLogRowId.") " : "").
-	  "ORDER BY StatusType, StatusLogRowId, StatusLogTimeStamp ";
+    $query=
+      "SELECT StatusType, StatusLogRowId, StatusName, StatusColor, StatusLogTimeStamp ".
+      "FROM StatusLog ".
+      "INNER JOIN Status ON StatusLog_idStatus=idStatus ".
+      "WHERE (1=1) ".
+        ($this->iFrom ? 
+        		"AND (StatusLogTimeStamp>='$this->iFrom') " :"").
+        ($this->iTill ? 
+        		"AND (StatusLogTimeStamp<'$this->iTill') " :"").
+        ($this->statusType ? 
+        		"AND (StatusType='".$this->statusType."') " : "").
+        ($this->statusLogRowId ? 
+        		"AND (statusLogRowId=".$this->statusLogRowId.") " : "").
+      "ORDER BY StatusType, StatusLogRowId, StatusLogTimeStamp ";
 	
     if ($dbRes=myQuery($query)) {
   	  $lastStatus = array();
@@ -37,7 +45,7 @@ class statusGantt {
   	    $endTime = strtotime($status[StatusLogTimeStamp]);
   	    $duration = $endTime - $startTime;
   	  
-  	    $left = round($iRatio * ($startTime-strtotime($iFrom)));
+  	    $left = round($iRatio * ($startTime-strtotime($this->iFrom)));
   	    $width = round($iRatio * $duration);
   	  
   	    $bar = new cHtmlDiv();
@@ -59,11 +67,17 @@ class statusGantt {
     }
   }
   
-  public function display($useLabels=true) {
+  public function display($useLabels=false) {
   	$gantt = new cHtmlDiv();
-  	$gantt->setAttribute("STYLE", "width: ".($this->iWidth+$this->labelWidth).";");
+  	$gantt->setAttribute("CLASS", "gantt");
+  	/*
+  	$gantt->setAttribute("STYLE", 
+  		    "width: ".($this->iWidth+($useLabels ? $this->labelWidth : 0)).";");
+    */
   	foreach ($this->lanes as $StatusType=>$subLanes) {
+  	  if (!$StatusType) continue;
   	  foreach ($subLanes as $StatusLogRowId=>$bars) {
+  	  	if (!$StatusLogRowId) continue;
   	  	$lane = new cHtmlDiv();
   	  	$lane->setAttribute("CLASS", "ganttLane");
   	  	$lane->setAttribute("CONTENT", $bars);
@@ -84,14 +98,4 @@ class statusGantt {
     return $gantt->display();
   }
 }
-
-$sG = new statusGantt();
-$sG->statusType = "Project";
-$sG->statusLogRowId = 1;
-$sG->interval("2016-04-14", "2016-07-21");
-
-echo 
-  head(linkCss("css/gantt.css")).
-  body($sG->display(false));
-
 ?>
