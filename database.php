@@ -752,8 +752,8 @@ class cDbTable implements iDbTable
 	  "INSERT INTO ".$this->name.
 	  " SET ".$this->assignSQL($record);
 	if ($result = myQuery($query)) {
-		
 	}
+		
   }
   
   public function update($record) {
