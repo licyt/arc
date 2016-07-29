@@ -271,24 +271,6 @@ class cDbField implements iDbField
           	}
           }
         }
-        if ($this->getName()=="StatusName") {
-          $q0 = "SELECT StatusType, StatusName, StatusColor FROM Status WHERE idStatus=$value";
-          if ($dbRes0 = myQuery($q0)) {
-          	if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
-          	  $htmlControl->setSelected($dbRow0[StatusName]);
-          	}
-          }
-          $q1 = 
-            "SELECT StatusName, StatusColor ".
-            "FROM Status ".
-            "WHERE StatusType='".$dbRow0[StatusType]."' ".
-            "ORDER BY StatusName";
-          if ($dbRes1 = myQuery($q1)) {
-          	while ($dbRow1 = mysql_fetch_assoc($dbRes1)) {
-          	  $htmlControl->addOption($dbRow1[StatusName], $dbRow1[StatusName], $dbRow1[StatusColor]);
-          	}
-          }
-        }
         // color background for status
 	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
 	  }
@@ -1053,8 +1035,8 @@ class cDbTable implements iDbTable
   	foreach ($this->parents as $parent) {
   	  $parentName = $parent->getName();
   	  $oldParentId = getParentId($this->name, $this->currentRecordId, $parentName);
-  	  $newParentId = $_POST["id".$parentName];
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
+  	  $newParentId = $_POST[$lookupField];
   	  if ($newParentId == -1) {
   	  	// non existent parent value
   	  	// INSERT new value into parent table
@@ -1282,9 +1264,12 @@ class cDbTable implements iDbTable
   	  } else {
   	  	// this column is a lookup field from another table
   	  	$lookupTableName=iug($columnName, "lookupField", substr($columnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
-  	  	$foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($columnName);
-  	  	$parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
-  	  	$result[$columnName] = $foreignField->getLookupControl($this, $parentId);
+  	  	if ($foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($columnName)) {
+  	  	  $parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
+  	  	  $result[$columnName] = $foreignField->getLookupControl($this, $parentId);
+  	  	} else {
+  	  		$result[$columnName] = "";
+  	  	}
   	  }
   	  
    	  if ($columnName=="id".$this->name) {

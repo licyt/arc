@@ -23,7 +23,7 @@ function alignLane(lane) {
     var startTime = new Date(title.slice(0, title.indexOf("->")));
     var endTime = new Date(title.slice(title.lastIndexOf("->")+2));
     var duration = endTime.getTime() - startTime.getTime();
-    lane.children[i].style.left = Math.round(iRatio * (startTime-startDate.getTime()));
+    lane.children[i].style.left = Math.round(iRatio * (startTime.getTime()-startDate.getTime()));
     lane.children[i].style.width = Math.round(iRatio * duration);
   }
 }
