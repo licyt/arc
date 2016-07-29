@@ -382,8 +382,8 @@ class cDbTable implements iDbTable
   	if (!is_null($id)) $this->setCurrentRecordId($id);
   	if ($this->currentRecordId) {
   	  // load currentRecord from database
-	  if ($result = myQuery($this->buildSQL($this->currentRecordId))) {
-	    $this->currentRecord = mysql_fetch_assoc($result);
+	    if ($result = myQuery($this->buildSQL($this->currentRecordId))) {
+	      $this->currentRecord = mysql_fetch_assoc($result);
   	  }
   	}
 	return $this->currentRecord;
@@ -906,7 +906,7 @@ class cDbTable implements iDbTable
   public function statusHasChanged() {
   	if (!$this->hasStatus()) return false;
   	return 
-  	  //($this->mode == "INSERT") ||
+  	  (($this->mode == "INSERT") && ($this->currentRecord["idStatus"])) ||
   	  (($this->mode == "UPDATE") && ($this->lastRecord["idStatus"] != $this->currentRecord["idStatus"]));
   }
   
@@ -1036,7 +1036,7 @@ class cDbTable implements iDbTable
   	  $parentName = $parent->getName();
   	  $oldParentId = getParentId($this->name, $this->currentRecordId, $parentName);
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
-  	  $newParentId = $_POST[$lookupField];
+  	  if (!($newParentId = $_POST[$lookupField])) $newParentId = $_POST["id".$parentName];
   	  if ($newParentId == -1) {
   	  	// non existent parent value
   	  	// INSERT new value into parent table
@@ -1092,7 +1092,7 @@ class cDbTable implements iDbTable
   	  switch ($this->mode) {
   	  	case "INSERT":
   	  	  $this->currentRecordId = mysql_insert_id();
-  	  	  $this->getCurrentRecord();
+  	  	  //$this->getCurrentRecord();
   	  	case "UPDATE": 
   	  	  $this->updateRelations();
   	  	  break;
