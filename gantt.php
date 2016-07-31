@@ -1,6 +1,5 @@
 <?php
 
-require_once 'html.php';
 require_once 'database.php';
 
 class statusGantt {
@@ -14,7 +13,7 @@ class statusGantt {
   
   public function loadLanes() {
     // interval duration in seconds
-    $iDuration = strtotime($this->iTill)-strtotime($this->iFrom);
+    if (!($iDuration = strtotime($this->iTill)-strtotime($this->iFrom))) return;
     $iRatio = ($this->iWidth)/$iDuration; 				
     $query=
       "SELECT StatusType, StatusLogRowId, StatusName, StatusColor, StatusLogTimeStamp ".
@@ -67,35 +66,71 @@ class statusGantt {
     }
   }
   
-  public function display($useLabels=false) {
-  	$gantt = new cHtmlDiv();
-  	$gantt->setAttribute("CLASS", "gantt");
-  	/*
-  	$gantt->setAttribute("STYLE", 
-  		    "width: ".($this->iWidth+($useLabels ? $this->labelWidth : 0)).";");
-    */
+  public function display($useLabels=false, $useDiv=false) {
   	foreach ($this->lanes as $StatusType=>$subLanes) {
   	  if (!$StatusType) continue;
   	  foreach ($subLanes as $StatusLogRowId=>$bars) {
   	  	if (!$StatusLogRowId) continue;
-  	  	$lane = new cHtmlDiv();
-  	  	$lane->setAttribute("CLASS", "ganttLane");
-  	  	$lane->setAttribute("CONTENT", $bars);
   	  	if ($useLabels) {
-  	  	  $laneLabel = new cHtmlDiv();
-  	  	  $laneLabel->setAttribute("CLASS", "ganttLaneLabel");
   	  	  $q0 = "SELECT ".$StatusType."Name FROM $StatusType WHERE id".$StatusType."=$StatusLogRowId";
   	  	  if (($dbRes0 = myQuery($q0)) && ($dbRow0 = mysql_fetch_assoc($dbRes0))) {
-  	  	    $name = $dbRow0[$StatusType."Name"];
-  	  	    $laneLabel->setAttribute("CONTENT", $StatusType.": ".$name);
-  	  	    $content .= $laneLabel->display();
+  	  	    $laneLabel = $dbRow0[$StatusType."Name"];
+  	  	  } else {
+  	  	  	$laneLabel = "";
   	  	  }
-  	  	}
-  	  	$content .= $lane->display();
+  	  	  $lanes .= 
+    	      "<TR>".
+  	  	      "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$laneLabel."</DIV>"."</TD>".
+  	  	      "<TD CLASS=\"gantt\">"."<DIV CLASS=\"ganttLane\">".$bars."</DIV>"."</TD>".
+  	        "</TR>";
+  	    } else {
+  	  	  $lanes .= 
+    	      "<DIV CLASS=\"ganttLane\">".$bars."</DIV>";
+  	    }
   	  }
   	}
-  	$gantt->setAttribute("CONTENT", $content);
-    return $gantt->display();
+    if ($useLabels) {
+      $lanes = "<TABLE CLASS=\"gantt\">".$lanes."</TABLE>";
+  	} 
+  	if ($useDiv) {
+  		$lanes = "<DIV ID=\"gantt\">".$lanes."</DIV>";
+  	}
+  	return $lanes;
   }
 }
+
+class cSlider {
+	public $min = "2016-04-01";
+	public $max = "2016-09-01";
+	public $start = "2016-05-01";
+	public $end = "2016-07-20";
+	
+	public function display() {
+		$min = strtotime($this->min);
+		$max = strtotime($this->max);
+		$start = strtotime($this->start);
+		$end = strtotime($this->end);
+		return 
+		  "<div id=\"slider\" style=\"width:1000px;\">".
+		    "<div style=\"text-align:right;width:150px;float:right;\" class=\"rightLabel\"></div>".
+		    "<DIV style=\"float:right;\" CLASS=\"nstSlider\" ".
+		        "data-range_min=\"".$min."\" data-range_max=\"".$max."\" ".
+		        "data-cur_min=\"".$start."\" data-cur_max=\"".$end."\">".
+		      "<div class=\"highlightPanel\"></div>".
+		      "<div class=\"bar\"></div>".
+		      "<div class=\"leftGrip\"></div>".
+		      "<div class=\"rightGrip\"></div>".
+		    "</DIV>".
+		    "<div style=\"text-align:left;width:150px;float:right;\" class=\"leftLabel\"></div>".
+		  "</div>";
+	}
+	
+	public function setup() {
+	  return 
+	    "<script>".
+	      file_get_contents('setupSlider.js').
+	    "</script>";
+	}
+}
+
 ?>

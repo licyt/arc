@@ -1,7 +1,13 @@
 @CHARSET "UTF-8";
 
+body {
+  font-family: "Tahoma";
+  font-size: 12px;
+}
+
 div.ganttBar {
   position: absolute;
+  top: 0px;
   height: 5px;
   min-width: 1px;
   padding: 0px;
@@ -16,17 +22,18 @@ div.ganttLane {
   display: inline-block;
   position: relative;
   height: 5px;
-  width: 100%;
+  width: 800px;
   border-bottom: 1px solid lightgray;
-  margin: 0px 0px 3px 0px;
+  margin: 0px;
   padding: 0px;
   overflow: hidden;
 }
 
 div.ganttLaneLabel {
+	font-size: 12px;
   display: inline-block;
   position: relative;
-  height: 20px;
+  height: 15px;
   width: 199px;
   border-right: 1px solid lightgray;
   margin: 0px;
@@ -36,9 +43,23 @@ div.ganttLaneLabel {
   white-space: nowrap;
 }
 
-div.gantt {
-  width: 100%;
+#gantt {
+  width: 1025px;
+  height: 700px;
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
+	overflow: scroll;
+}
+
+td.gantt {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+table.gantt {
+	width: 100%;
+	padding: 0px;
+	marging: 0px;
 }

@@ -1047,6 +1047,7 @@ class cDbTable implements iDbTable
   	  	foreach ($parent->parents as $grandParent) {
   	  	  myQuery(
   	  	    "INSERT INTO Relation SET ".
+  	  	  	"RelationType='RRCP', ".                          // Record-Record Child-Parent
   	  	    "RelationLObject='$parentName', ".
   	  	    "RelationLId=$newParentId, ".
   	  	    "RelationRObject='".$grandParent->getName()."', ".
@@ -1059,7 +1060,8 @@ class cDbTable implements iDbTable
   	  	// INSERT new relation
   	  	myQuery(
   	  	  "INSERT INTO Relation SET ".
-  	  	  "RelationLObject='".$this->name."', ".
+  	  	  "RelationType='RRCP', ".                          // Record-Record Child-Parent
+  	  		"RelationLObject='".$this->name."', ".
   	  	  "RelationLId=".$this->currentRecordId.", ".
   	  	  "RelationRObject='$parentName', ".
   	  	  "RelationRId=".$newParentId
@@ -1069,7 +1071,8 @@ class cDbTable implements iDbTable
   	    // UPDATE relation
   	    myQuery( 
     	  "UPDATE Relation SET RelationRId=".$newParentId.
-    	  " WHERE (RelationLObject='".$this->name."')".
+    	  " WHERE (RelationType='RRCP')".
+  	    " AND (RelationLObject='".$this->name."')".
     	  " AND (RelationLId=".$this->currentRecordId.") ".
     	  " AND (RelationRObject='$parentName')"
   	  	);
@@ -1081,9 +1084,10 @@ class cDbTable implements iDbTable
   	// delete relations on commit for current record
   	myQuery(
   	  "DELETE FROM Relation ".
-  	  "WHERE ((RelationLObject='".$this->name."') AND (RelationLId=".$this->currentRecordId.")) ".
-  	  "OR ((RelationRObject='".$this->name."') AND (RelationRId=".$this->currentRecordId."))"    
-  	);
+  	  "WHERE (RelationType='RRCP') ". 
+  		"AND (((RelationLObject='".$this->name."') AND (RelationLId=".$this->currentRecordId.")) ".
+  	       "OR ((RelationRObject='".$this->name."') AND (RelationRId=".$this->currentRecordId.")))"    
+   	);
   }
   
   protected function commit() {

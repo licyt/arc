@@ -31,111 +31,29 @@
 	border: 1px solid #99FFFF;
 }
 
-#tabButtonInvoiceDeliveryNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonInvoiceNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonInvoiceStatus {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
+#tabButtonInvoicePayment,
+#tabButtonInvoiceDeliveryNote,
+#tabButtonInvoiceNote,
+#tabButtonInvoiceStatus,
 #tabButtonInvoiceInvoice {
 	color: black;
-	background-color: #99FFFF;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabInvoiceDeliveryNote {
-	color: black;
 	background-color: #B2B2B2;
-	border: 0 none;
 	height: 20px;
 	top: 0px;
 	left: 0px;
 	margin: 0px;
 	border: 0px;
 	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
 	margin: 0px 2px 0px 0px;
-	font-style: italic;
 }
 
-#tabInvoiceNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabInvoiceStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
+#tabInvoicePayment,
+#tabInvoiceDeliveryNote,
+#tabInvoiceNote,
+#tabInvoiceStatus,
 #tabInvoiceInvoice {
 	color: black;
-	background-color: #99FFFF;
+	background-color: #B2B2B2;
 	border: 0 none;
 	height: 20px;
 	top: 0px;
@@ -150,6 +68,12 @@
 	margin: 0px 2px 0px 0px;
 	font-style: italic;
 }
+
+#tabButtonInvoicePayment,
+#tabInvoicePayment {
+  background-color: #33ffff;
+}
+
 
 #InvoiceORDERidInvoice, #InvoiceORDERStatusName, #InvoiceORDERDemandName,
 	#InvoiceORDERInvoiceIssued, #InvoiceORDERInvoicePaymentTerm,

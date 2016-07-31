@@ -124,6 +124,10 @@ function Ajax(request, params) {
                 var td1=td0.nextSibling;
                 td1.innerHTML=xmlHttp.responseText;  
                 break;
+            case "loadGantt":
+                var gantt=elementById('gantt');
+                gantt.innerHTML=xmlHttp.responseText;
+                break;
         } // switch request
       } // switch readyState
     } // function

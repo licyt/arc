@@ -48,6 +48,7 @@ echo
   	linkJs("js/datepicker.js").
   	
     linkJs("js/hmat.js").
+    linkJs("js/basic.js").
   	linkJs("js/ajax.js").
   	linkJs("js/gantt.js").
   	linkJs("js/cHtmlSuggest.js")

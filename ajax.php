@@ -2,8 +2,9 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 // 2016 (C) Rastislav Seč, rastislav.sec@gmail.com aka tomcat
 
- require_once("html.php");
+require_once("html.php");
 require_once("database.php");
+require_once 'gantt.php';
 
 //var_dump($_REQUEST);
 
@@ -129,5 +130,16 @@ if (isset($_REQUEST[loadLeftRows])) {
 	echo loadLeftRows($_REQUEST[table]);
 }
 
+// ------------------------------------------------------------------------------------ loadGantt
+if (isset($_REQUEST[loadGantt])) {
+	$sG = new statusGantt();
+	$sG->statusType = "Project";
+	//$sG->statusLogRowId = 1;
+	$sG->iFrom =date("Y-m-d H:i:s", $_REQUEST[leftValue]);
+	$sG->iTill =date("Y-m-d H:i:s", $_REQUEST[rightValue]);
+	$sG->iWidth = 800;
+	$sG->loadLanes();
+	echo $sG->display(true, false);
+}
 
 ?>
