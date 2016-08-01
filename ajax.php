@@ -136,7 +136,6 @@ if (isset($_REQUEST[loadLeftRows])) {
 if (isset($_REQUEST[loadGantt])) {
 	$sG = new statusGantt();
 	$sG->statusType = "Project";
-	//$sG->statusLogRowId = 1;
 	$sG->iFrom =date("Y-m-d H:i:s", $_REQUEST[leftValue]);
 	$sG->iTill =date("Y-m-d H:i:s", $_REQUEST[rightValue]);
 	$sG->iWidth = 800;

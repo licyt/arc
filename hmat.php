@@ -17,6 +17,8 @@ echo
   	linkCss("css/project.css").
   	linkCss("css/quote.css").
   	linkCss("css/status.css").
+  	linkCss("css/task.css").
+  	linkCss("css/job.css").
   	linkCss("css/note.css").
   	linkCss("css/dataset.css").
   	linkCss("css/demand.css").

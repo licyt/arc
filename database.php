@@ -889,7 +889,7 @@ class cDbTable implements iDbTable
   			case "INSERT" :
   			  $query = 
   			    "INSERT INTO ".$this->name.
-  				" SET ".$assign;
+  				($assign ? " SET ".$assign : "");
   			  break;
   			case "UPDATE" :
   			  $query = 

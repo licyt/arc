@@ -7,7 +7,6 @@ $('.nstSlider').nstSlider({
     "right_grip_selector": ".rightGrip",
     "value_bar_selector": ".bar",
     "highlight": {
-        "grip_class": "gripHighlighted",
         "panel_selector": ".highlightPanel"
     },
     "value_changed_callback": function(cause, leftValue, rightValue) {
@@ -17,10 +16,13 @@ $('.nstSlider').nstSlider({
         rd.setTime(rightValue*1000);
         $('.leftLabel').text(ld.toDateString());
         $('.rightLabel').text(rd.toDateString());
+        /*
         var params=new Array();
         params['leftValue'] = leftValue;
         params['rightValue'] = rightValue;
         Ajax('loadGantt', params);
+        */
+        alignAllLanes(ld.toDateString(), rd.toDateString());
     },
 });
 

@@ -2,19 +2,19 @@
  * 
  */
 
-function alignAllLanes() {
+function alignAllLanes(from, till) {
   var lanes = document.getElementsByClassName("ganttLane");
   var i;
   for (i = 0; i < lanes.length; i++) {
-    alignLane(lanes[i]);
+    alignLane(lanes[i], from, till);
   }
 }
 
-function alignLane(lane) {
+function alignLane(lane, from, till) {
   var firstTitle = lane.firstChild.title;
   var lastTitle = lane.lastChild.title;
-  var startDate = new Date(firstTitle.slice(0, firstTitle.indexOf("->")));
-  var endDate = new Date(lastTitle.slice(lastTitle.lastIndexOf("->")+2));
+  var startDate = new Date(typeof from !== 'undefined' ? from : firstTitle.slice(0, firstTitle.indexOf("->")));
+  var endDate = new Date(typeof till !== 'undefined' ? till : lastTitle.slice(lastTitle.lastIndexOf("->")+2));
   var iDuration = endDate.getTime() - startDate.getTime();
   var iRatio = lane.clientWidth / iDuration;
   var i;

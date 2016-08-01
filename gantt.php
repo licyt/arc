@@ -3,8 +3,8 @@
 require_once 'database.php';
 
 class statusGantt {
-	public $iFrom;
-	public $iTill;
+  public $iFrom;
+  public $iTill;
   public $iWidth=300; /* pixels */
   public $labelWidth=100;
   public $statusType;
