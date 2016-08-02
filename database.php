@@ -538,23 +538,27 @@ class cDbTable implements iDbTable
   	// load list of columns for query from list of fields
 	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
-	  array_push($this->columnNames, $fieldName);
+	  array_push($this->columnNames, "C.".$fieldName);
 	}
 	// add columns for parents
+	$i = 0;
 	foreach ($this->parents as $parent) {
 	  $ftName = $parent->getName();
 	  $lookupName = gui($ftName, "lookupField", $ftName."Name");
-	  array_push($this->ftNames, $ftName);
-	  array_push($this->columnNames, "id".$ftName);
-	  array_push($this->columnNames, $lookupName);
+	  array_push($this->ftNames, $ftName." P".$i);
+	  array_push($this->columnNames, "P".$i.".id".$ftName.
+	  		($ftName==$this->name?" as parentId".$ftName:""));
+	  array_push($this->columnNames, "P".$i.".".$lookupName.
+	  		($ftName==$this->name?" as parent".$lookupName:""));
 	  if ($lookupName=="StatusName") {
-	  	array_push($this->columnNames, "StatusColor");
+	  	array_push($this->columnNames, "P".$i.".StatusColor");
 	  }
+	  $i++;
 	}
 	if ($this->name=="StatusLog") {
-	  array_push($this->columnNames, "StatusType");
-	  array_push($this->columnNames, "StatusName");
-	  array_push($this->columnNames, "StatusColor");
+	  array_push($this->columnNames, "S.StatusType");
+	  array_push($this->columnNames, "S.StatusName");
+	  array_push($this->columnNames, "S.StatusColor");
 	}
   }
   
@@ -604,7 +608,7 @@ class cDbTable implements iDbTable
 	  if (!isset($this->parent)||($this->parent!=$parent)) {
 		$ftName = $parent->getName();
 		$lookupName = gui($ftName, "lookupField", $ftName."Name");
-		array_push($this->displayColumnNames, $lookupName);
+		array_push($this->displayColumnNames, ($ftName==$this->name?"parent":"").$lookupName);
 	  }
 	}
 	if ($this->name=="StatusLog") {
@@ -660,29 +664,32 @@ class cDbTable implements iDbTable
   	$i=0;                                     		// relation index
   	foreach ($this->parents as $parent) {
   	  $parentName=$parent->getName();
+  	  if (($this->parent)&&($parentName==$this->parent->getName())) {
+  	  	$pi=$i;
+  	  }
   	  $joins .=
-  	    " LEFT OUTER JOIN (".$parent->getName().", Relation R".$i.") ON (".
+  	    " LEFT OUTER JOIN (".$parentName." P".$i.", Relation R".$i.") ON (".
   	    " (R".$i.".RelationLObject='".$this->name."') AND". 
-  	    " (R".$i.".RelationLId=id".$this->name.") AND ".
+  	    " (R".$i.".RelationLId=C.id".$this->name.") AND ".
   	    " (R".$i.".RelationRObject='".$parentName."') AND". 
-  	    " (R".$i.".RelationRId=id".$parentName."))";
+  	    " (R".$i.".RelationRId=P".$i.".id".$parentName."))";
   	  $i++;
   	}
   	
   	if ($this->name=="StatusLog") {
-  	  $otherTables .= ", Status";
+  	  $otherTables .= ", Status S";
   	}
   	
   	$query =
       "SELECT ".implode(", ", $this->columnNames).
-  	  " FROM ".$this->name.$otherTables.
+  	  " FROM ".$this->name." C ".$otherTables.
   	  $joins.
-  	  " WHERE (id".$this->name.($id>-1?"=$id":">-1").")".
+  	  " WHERE (C.id".$this->name.($id>-1?"=$id":">-1").")".
   	  (isset($this->parent)&&
   	   ($this->name!="Relation")&&
   	   ($this->name!="Note")&&
   	   ($this->name!="StatusLog")
-  	    ? " AND (id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
+  	    ? " AND (P".$pi.".id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
   	    : ""
   	  ).
   	  ($this->filter
@@ -724,7 +731,7 @@ class cDbTable implements iDbTable
   	  
   	  // set colation order
   	  ($this->order //&& strpos($this->columns, $this->order) 
-  	    ? " ORDER BY ".$this->order 
+  	    ? " ORDER BY C.".$this->order 
   	  	: ""
   	  );
     return $query;
@@ -1267,12 +1274,16 @@ class cDbTable implements iDbTable
   	  	}
   	  } else {
   	  	// this column is a lookup field from another table
-  	  	$lookupTableName=iug($columnName, "lookupField", substr($columnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
+  	  	if (strpos($columnName, "parent")===0) {
+  	  	  $lookupTableName=$this->name;
+  	  	} else {
+  	  	  $lookupTableName=iug($columnName, "lookupField", substr($columnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
+  	  	}
   	  	if ($foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($columnName)) {
   	  	  $parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
   	  	  $result[$columnName] = $foreignField->getLookupControl($this, $parentId);
   	  	} else {
-  	  		$result[$columnName] = "";
+  	  	  $result[$columnName] = "";
   	  	}
   	  }
   	  
@@ -1420,7 +1431,6 @@ class cDbTable implements iDbTable
 		  	"elementById('id".$this->name."').value=$id;".
 		  	"document.browseForm".$this->name.".action='#".$this->name."$id';".
 	  	    "document.browseForm".$this->name.".submit();";
-		  $dbRow["id".$this->name] = "";
 		  
 		  // --- special lookup for Action/Event
 		  if ($this->name=="Action") {
@@ -1481,6 +1491,7 @@ class cDbTable implements iDbTable
 		  	    $displayRow[$dcn] = $dbRow[$dcn];
 		  	}
 		  }
+		  $displayRow["id".$this->name] = "";
 		  
 		  // hide column for lookupField if it is a lookup into parent table 
 		  if (isset($this->parent)) {
