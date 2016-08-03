@@ -1018,12 +1018,21 @@ class cDbTable implements iDbTable
   	  	    " WHERE (RelationLObject='".$action[ActionTable]."')".
   	  	    " AND (RelationLId=".$targetTable->getCurrentRecordId().")".
   	  	    " AND (RelationRObject='Status')";
-  	  	  if ($dbRes=myQuery($query)) {
-  	  	  	$targetTable->getCurrentRecord();
-  	  	    $targetTable->logStatus();
-  	  	    $targetTable->handleEvent($action);
-  	  	    return true;
-  	  	  }
+  	  	  myQuery($query);
+	  	    if (!mysql_affected_rows()) {
+	  	  	  $query =
+	  	  	    "INSERT INTO Relation SET ".
+	  	  	    "RelationType='RRCP', ".
+	  	        "RelationLObject='".$action[ActionTable]."', ".
+	  	        "RelationLId=".$targetTable->getCurrentRecordId().", ".
+	  	        "RelationRObject='Status', ".
+	  	        "RelationRId=".$action[ActionParam1];
+	  	  	  myQuery($query);
+	  	    }
+  	  	  $targetTable->getCurrentRecord();
+  	  	  $targetTable->logStatus();
+  	  	  $targetTable->handleEvent($action);
+  	  	  return true;
   	    } 
   	}
   }
@@ -1498,7 +1507,11 @@ class cDbTable implements iDbTable
 		  foreach ($this->displayColumnNames as $dcn) {
 		  	switch ($dcn) {
 		  	  case "StatusName":
-		  	  	$displayRow[$dcn] = "<div style=\"background-color:#".$dbRow[StatusColor]."\">".$dbRow[$dcn]."</div>";
+		  	  	$displayRow[$dcn] = 
+		  	  	  "<div style=\"color:".(RGBToHSL(HTMLToRGB($dbRow[StatusColor]))->lightness>128?"black":"white").
+		  		  	  	  ";background-color:#".$dbRow[StatusColor]."\">".
+		  	  	    $dbRow[$dcn].
+		  	  	  "</div>";
 		  	  	break;
 		  	  default:
 		  	    $displayRow[$dcn] = $dbRow[$dcn];

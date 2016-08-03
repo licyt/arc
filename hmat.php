@@ -3,6 +3,7 @@
 
 session_start();
 
+require_once 'color.php';
 require_once("database.php");
 
 $admin = $dbScheme->admin();

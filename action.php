@@ -40,6 +40,21 @@ function commandsForAction($table /* cDbTable */, $value="") {
 function loadParameters($table /* cDbTable */, $command /* string */, $param1="", $param2="") {
   $params = array();
   switch ($command) {
+  	case "CREATE": // ------------------------------------------------------------------ CREATE
+	  if ($table->getName()=="Job") {
+  		$params[1] = new cHtmlSelect;
+	    $params[1]->setAttribute("ID", "ActionParam1");
+	    $params[1]->setAttribute("NAME", "ActionParam1");
+	    $query = "SELECT idTask, TaskName FROM Task ORDER BY TaskName";
+	    if ($dbRes=myQuery($query)) {
+	      while ($dbRow=mysql_fetch_assoc($dbRes)) {
+	      	$params[1]->addOption($dbRow[idTask], $dbRow[TaskName]);
+	      }
+	    }
+	    $params[1]->setSelected($param1);
+	    $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
+	  }
+  	  break;
 	case "CREATE CHILD": // ----------------------------------------------------------- CREATE CHILD
 	  $params[1] = new cHtmlSelect;
 	  $params[1]->setAttribute("ID", "ActionParam1");
@@ -85,8 +100,8 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	  break;
 	*/
 	default: // ----------------------------------------------------------------------------- default
-	  $params[1] = new cHtmlInput("ActionParam1", "HIDDEN");
-	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
+	  $params[1] = new cHtmlInput("ActionParam1", "TEXT");
+	  $params[2] = new cHtmlInput("ActionParam2", "TEXT");
 	break;
   }
   return $params;
