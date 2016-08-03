@@ -1371,10 +1371,15 @@ class cDbTable implements iDbTable
   	 
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
-  	  if ($tableName==$this->name) continue;
+  	  //if ($tableName==$this->name) continue;
   	  if ($table->isChildOf($this)) {
-  	    $table->setParent($this);
-  	    $table->preProcess(); 
+  	  	if (!isset($this->parent) || ($this->parent->getName()!=$this->name)) {
+  	      $table->setParent($this);
+  	      $table->preProcess(); 
+  	      if (isset($this->parent) && ($this->parent->getName()==$this->name)) {
+  	      	$this->parent=null;
+  	      }
+  	  	} 
   	  }
   	  if (($tableName=="Note")) $table->setParent($this);
   	  if (($tableName=="Relation")) $table->setParent($this);
@@ -1409,9 +1414,10 @@ class cDbTable implements iDbTable
           // --------------------------------------------------------- current record is editable
           //$this->currentRecord = $dbRow;
 	  	  $table->addRow($this->editColumns($id));
-	  	  // sub-browsers for the current record
+	  	  // sub-data for the current record
 	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
-	  	    if ($this->hasStatus()) {
+	  	    // gantt
+	  	  	if ($this->hasStatus()) {
 	  	    	$sG = new statusGantt();
 						$sG->iFrom = "2016-04-14";
 						$sG->iTill = "2016-07-21";
@@ -1423,10 +1429,14 @@ class cDbTable implements iDbTable
 	  	    	$gantt["statusGannt"] = $sG->display();
 	  	    	$table->addRow($gantt);
 	  	    }
-	  	    $sbRow["sbIndent"]="";
-	  	    $sbRow["sbColSpan"]=sizeof($dbRow)-1;
-	  	    $sbRow["subBrowser"] = $this->subBrowsers();
-	  	    $table->addRow($sbRow);
+	  	    // sub-browsers
+	  	    if (!isset($this->parent) || ($this->name != $this->parent->getName())) {
+	  	      $sbRow["sbIndent"]="";
+	  	      $sbRow["sbColSpan"]=sizeof($dbRow)-1;
+	  	      $sbRow["subBrowser"] = $this->subBrowsers();
+	  	      $table->addRow($sbRow);
+	  	    }
+	  	    
 	  	  }
 	  	} else {
 	  	// ------------------------------------------------------------------------ other records
@@ -1530,7 +1540,7 @@ class cDbTable implements iDbTable
   	
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
-	  if ($tableName==$this->name) continue;
+	  //if ($tableName==$this->name) continue;
   	  if ($_POST["tabButton".$browsers->getName().$tableName]) {
 		$browsers->setSelected($tableName);
 	  }
@@ -1541,6 +1551,7 @@ class cDbTable implements iDbTable
 		$browsers->setSelected("RelationRight");
 	  }
   	  if ($table->isChildOf($this)) {
+  	  	$table->setParent($this);
   	  	$browsers->addTab(
   	  	  $tableName, 
   	  	  ($table->isSelected()
@@ -1548,6 +1559,9 @@ class cDbTable implements iDbTable
   	  	  	: ""
   	  	  )
   	  	); 
+  	  	if ($table->getName()==$this->name) {
+  	  	  $this->parent=null;
+  	  	}
   	  }
   	}
   	
