@@ -255,8 +255,8 @@ class cDbField implements iDbField
   	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
-      $htmlControl->setAttribute(ID, $this->getName());
-      $htmlControl->setAttribute(NAME, $this->getName());
+      $htmlControl->setAttribute(ID, ($childTable->getName()==$this->table->getName()?"parent":"").$this->getName());
+      $htmlControl->setAttribute(NAME, ($childTable->getName()==$this->table->getName()?"parent":"").$this->getName());
       $htmlControl->setSelected($value);
       if ($ftName=="Status") {
         if ($this->getName()=="StatusType") {
@@ -1038,16 +1038,19 @@ class cDbTable implements iDbTable
   
   protected function updateRelations() {
   	// update relations on commit for current record
-  	// iterate through all parent tabless
+  	// iterate through all parent tables
   	foreach ($this->parents as $parent) {
   	  $parentName = $parent->getName();
   	  $oldParentId = getParentId($this->name, $this->currentRecordId, $parentName);
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
-  	  if (!($newParentId = $_POST[$lookupField])) $newParentId = $_POST["id".$parentName];
+  	  $lookupSelf = ($parentName==$this->name ? "parent" : "");
+  	  if (!($newParentId = $_POST[$lookupSelf.$lookupField])) {
+  	  	$newParentId = $_POST[$lookupSelf.$parentName];
+  	  }
   	  if ($newParentId == -1) {
   	  	// non existent parent value
   	  	// INSERT new value into parent table
-  	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupField]."'")) {
+  	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupSelf.$lookupField]."'")) {
   	  	  $newParentId = mysql_insert_id();
   	  	}
   	  	// INSERT Relations to "undefined" parent's parents
@@ -1274,12 +1277,12 @@ class cDbTable implements iDbTable
   	  	}
   	  } else {
   	  	// this column is a lookup field from another table
+  	  	$parentColumnName = $columnName;
   	  	if (strpos($columnName, "parent")===0) {
-  	  	  $lookupTableName=$this->name;
-  	  	} else {
-  	  	  $lookupTableName=iug($columnName, "lookupField", substr($columnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
-  	  	}
-  	  	if ($foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($columnName)) {
+  	  	  $parentColumnName=substr($columnName,6);
+  	  	} 
+  	  	$lookupTableName=iug($parentColumnName, "lookupField", substr($parentColumnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
+  	  	if ($foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($parentColumnName)) {
   	  	  $parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
   	  	  $result[$columnName] = $foreignField->getLookupControl($this, $parentId);
   	  	} else {
