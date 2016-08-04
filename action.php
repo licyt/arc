@@ -107,4 +107,5 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
   return $params;
 }
 
+
 ?>

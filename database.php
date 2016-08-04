@@ -981,10 +981,9 @@ class cDbTable implements iDbTable
   }
   
   public function handleEvent($event) {
-  	//echo "handleEvent(".implode("|", $event).")<br>";
-  	// action has been executed and created event
-    array_push($this->executed, $event);
-    $this->logEvent($event);
+    //X-recursive with execAction
+  	  //echo "handleEvent(".implode("|", $event).")<br>";
+    array_push($this->executed, $event);    // must be done prior to x-recursion 
     // search for event in Actions table
   	if ($eid = $this->getEventId($event)) {
   	  // if found get:execute:handle actions in sequence
@@ -995,16 +994,18 @@ class cDbTable implements iDbTable
       	  	if (!$this->execAction($action)) break;
       	  }
       	}
+      	$this->logEvent($event);
       }
     }
   }
   
   public function execAction($action) {
-  	//echo "execAction(".implode("|", $action).")<br>";
+    //X-recursive with handleEvent()
+  	  //echo "execAction(".implode("|", $action).")<br>";
+    $targetTable = $this; // if not said otherway later
   	switch ($action[ActionCommand]) {
   	  case "SET STATUS":
   	  	// search for target table (and recordId) 
-  	  	$targetTable = $this;
   	  	while (!is_null($targetTable->getParent())&&($action[ActionTable]!=$targetTable->getName())) {
   	  	  $targetTable->getParent()->getParentOfChildId($targetTable);
   	  	  $targetTable = $targetTable->getParent();
@@ -1015,26 +1016,44 @@ class cDbTable implements iDbTable
   	  	  $query = 
   	  	    "UPDATE Relation".
   	  	    " SET RelationRId=".$action[ActionParam1].
-  	  	    " WHERE (RelationLObject='".$action[ActionTable]."')".
+  	  	    " WHERE (RelationType=\"RRCP\")".
+  	  	    " AND (RelationLObject='".$action[ActionTable]."')".
   	  	    " AND (RelationLId=".$targetTable->getCurrentRecordId().")".
   	  	    " AND (RelationRObject='Status')";
   	  	  myQuery($query);
-	  	    if (!mysql_affected_rows()) {
-	  	  	  $query =
-	  	  	    "INSERT INTO Relation SET ".
-	  	  	    "RelationType='RRCP', ".
-	  	        "RelationLObject='".$action[ActionTable]."', ".
-	  	        "RelationLId=".$targetTable->getCurrentRecordId().", ".
-	  	        "RelationRObject='Status', ".
-	  	        "RelationRId=".$action[ActionParam1];
-	  	  	  myQuery($query);
+	  	    if (!mysql_affected_rows()) { // no rows affected
+	  	      insertRRCP($action[ActionTable], $targetTable->getCurrentRecordId(), 'Status', $action[ActionParam1]);
 	  	    }
-  	  	  $targetTable->getCurrentRecord();
-  	  	  $targetTable->logStatus();
-  	  	  $targetTable->handleEvent($action);
-  	  	  return true;
-  	    } 
+  	    }
+  	    break;
+  	  case "CREATE":
+  	    $targetTable = $this->scheme->getTableByName($action[ActionTable]);
+  	    // prepare new record
+  	    switch ($action[ActionTable]) {
+  	    	case "Job":
+  	    	  // nothing special here so far
+  	    	default:
+  	    	  $record = array();
+  	    	  $record[$action[ActionTable]."Name"] = $action[ActionTable]." created by LiCyT Automation";
+  	    }
+  	    // insert record
+  	    $targetTable->insert($record);
+  	    $idTarget = mysql_insert_id();
+  	    // add relations 
+  	    switch ($action[ActionTable]) {
+  	    	case "Job":
+  	    	  // job is related to task which came as first action parameter 
+  	    	  insertRRCP("Job", $idTarget, "Task", $action[ActionParam1]);
+  	    	default:
+  	    	  // new record is created as a child of the current record of this table
+  	    	  insertRRCP($action[ActionTable], $idTarget, $this->name, $this->currentRecordId);
+  	    }
+  	    break;
   	}
+	  $targetTable->getCurrentRecord(); // refresh
+	  $targetTable->logStatus();
+	  $targetTable->handleEvent($action);
+	  return true;
   }
   
   protected function logStatus() {
@@ -1656,6 +1675,13 @@ class cDbScheme implements iDbScheme
   
   public function getStatus() {
   	return $this->status;
+  }
+  
+  public function getTableByName($tableName) {
+    foreach ($this->tables as $table) {
+      if ($table->getName()==$tableName) return $table;
+    }
+    return null;
   }
   
   public function admin() 

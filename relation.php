@@ -64,4 +64,14 @@ function getParentId($childTableName, $childId, $parentTableName) {
 }
 
 
+function insertRRCP($LObject, $LId, $RObject, $RId) {
+  $query = 
+    "INSERT INTO Relation SET ".
+    "RelationType=\"RRCP\", ".
+    "RelationLObject=\"$LObject\", ".
+    "RelationLId=$LId, ".
+    "RelationRObject=\"$RObject\", ".
+    "RelationRId=$RId";
+  return myQuery($query);
+}
 ?>
