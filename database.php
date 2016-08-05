@@ -314,6 +314,7 @@ class cDbTable implements iDbTable
   protected $name;  
   protected $parent; // parent browser
   protected $relation;
+  protected $preprocessed=false;
   public $children = array();
   public $parents = array(); // parent tables in DB model
   public $fields = array();   
@@ -380,7 +381,7 @@ class cDbTable implements iDbTable
   	  }
   	}
   	if (!is_null($id)) $this->setCurrentRecordId($id);
-  	if ($this->currentRecordId) {
+  	if ($this->currentRecordId>0) {
   	  // load currentRecord from database
 	    if ($result = myQuery($this->buildSQL($this->currentRecordId))) {
 	      $this->currentRecord = mysql_fetch_assoc($result);
@@ -399,7 +400,7 @@ class cDbTable implements iDbTable
     if ($result = myQuery($this->buildSQL())) {
       $this->count = mysql_num_rows($result);
     }
-	return $this->count;
+	  return $this->count;
   }
   
   function setMode($mode) 
@@ -1395,9 +1396,12 @@ class cDbTable implements iDbTable
   }
   
   public function preProcess() {
+    if ($this->preprocessed) return; 
+    
   	$this->loadSession();
   	$this->respondToPost();
   	$this->getNumRecords();
+  	$this->preprocessed = true;
   	
   	if ($this->name=="Note") return;
   	if ($this->name=="Relation") return;
@@ -1411,7 +1415,7 @@ class cDbTable implements iDbTable
   	      $table->setParent($this);
   	      $table->preProcess(); 
   	      if (isset($this->parent) && ($this->parent->getName()==$this->name)) {
-  	      	$this->parent=null;
+  	      	$table->setParent(null);
   	      }
   	  	} 
   	  }
