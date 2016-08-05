@@ -836,59 +836,60 @@ class cDbTable implements iDbTable
   		case "UPDATE" :
   		  // assign field values
   		  foreach ($this->fields as $i => $field) {
-  			$fieldName = $field->getName();
-  			
-  			if ($this->name=="Note") {
-  			  foreach ($_POST as $name=>$value) {
-  			    if (strpos($name, "Note_id")===0) {
-  			  	  $_POST[NoteTable] = substr($name, 7); // parent table name 
-  			  	  $_POST[NoteRowId] = $value;
-  			    }
-  			  }
-  			}
-  			
-  			if ($this->name=="Relation") {
-  			  foreach ($_POST as $name=>$value) {
-  			    if (strpos($name, "Relation_id")===0) {
-  			      if (!isset($_POST[RelationLObject])) {
-	  			    $_POST[RelationLObject] = substr($name, 11); // left table name 
-	  			  	$_POST[RelationLId] = $value;
-  			      }
-  			      if (!isset($_POST[RelationRObject])) {
-	  			    $_POST[RelationRObject] = substr($name, 11); // right table name 
-   			  	    $_POST[RelationRId] = $value;
-  			      }
-  			    }
-  			  }
-  			}
-  			
-  			// skip empty fields 
-  			if ($_POST[$fieldName]=="") continue;
-  			// skip id and any timestamps
-  			if ($fieldName == "id".$this->name) continue;
-  			// if ($field->isTimeStamp()) continue;
-  			// if value is not set for suggested field
-  			if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
-  			  // insert new value to foreign table and get new id
-  			  $_POST[$fieldName] = $field->insertForeignKey();
-  			}
-  			
-  			// append assignment of value
-  			$assign .= ($assign ? ", " : "").
-  			$fieldName." = \"".$_POST[$fieldName]."\"";
-  		  }
-  		  
-  	  	  if ($this->name=="StatusLog") {
-  			$q0=
-    		  "SELECT idStatus ".
-    		  "FROM Status ".
-  			  "WHERE (StatusType='".$_POST[StatusType]."') ".
-  			  "AND (StatusName='".$_POST[StatusName]."')";
-  			if ($dbRes0 = myQuery($q0)) {
-  			  if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
-  			   $assign .= ", StatusLog_idStatus=".$dbRow0[idStatus];
-  			  }
-  			}
+    			$fieldName = $field->getName();
+    			
+    			if ($this->name=="Note") {
+    			  foreach ($_POST as $name=>$value) {
+    			    if (strpos($name, "Note_id")===0) {
+    			  	  $_POST[NoteTable] = substr($name, 7); // parent table name 
+    			  	  $_POST[NoteRowId] = $value;
+    			    }
+    			  }
+    			}
+    			
+    			if ($this->name=="Relation") {
+    			  foreach ($_POST as $name=>$value) {
+    			    if (strpos($name, "id")===0) {
+    			      if (!isset($_POST[RelationLObject])) {
+  	  			      $_POST[RelationLObject] = substr($name, 2); // left table name 
+  	  			  	  $_POST[RelationLId] = $value;
+    			      }
+    			      if (!isset($_POST[RelationRObject])) {
+  	  			      $_POST[RelationRObject] = substr($name, 2); // right table name 
+     			  	    $_POST[RelationRId] = $value;
+    			      }
+    			    }
+    			  }
+    			}
+    			
+    			// skip empty fields 
+    			if ($_POST[$fieldName]=="") continue;
+    			// skip id and any timestamps
+    			if ($fieldName == "id".$this->name) continue;
+    			// if ($field->isTimeStamp()) continue;
+    			
+    			// if value is not set for suggested field
+    			if ((gui($fieldName, "type") == "suggest") && ($_POST[$fieldName]==-1)) {
+    			  // insert new value to foreign table and get new id
+    			  $_POST[$fieldName] = $field->insertForeignKey();
+    			}
+    			
+    			// append assignment of value
+    			$assign .= ($assign ? ", " : "").
+    			$fieldName." = \"".$_POST[$fieldName]."\"";
+    		  }
+    		  
+    	  	  if ($this->name=="StatusLog") {
+    			$q0=
+      		  "SELECT idStatus ".
+      		  "FROM Status ".
+    			  "WHERE (StatusType='".$_POST[StatusType]."') ".
+    			  "AND (StatusName='".$_POST[StatusName]."')";
+    			if ($dbRes0 = myQuery($q0)) {
+    			  if ($dbRow0 = mysql_fetch_assoc($dbRes0)) {
+    			   $assign .= ", StatusLog_idStatus=".$dbRow0[idStatus];
+    			  }
+    			}
   		  }
   		  
   		  // choose SQL keyword depending on mode

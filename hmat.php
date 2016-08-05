@@ -58,7 +58,13 @@ echo
   		
   ).
   body(
-  	  "<div id='svnrevision'>SVN REV:".shell_exec('svnversion')." DB:".$dbName."[".$GLOBALS[queryCount]."]</div>".
+      
+  	  "<div id='svnrevision'>".
+        "<span style=\"font-size:20px;\">LiCyT ".
+          "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
+        " grammaton</span>".
+        "  SVN REV:".shell_exec('svnversion')." DB:".$dbName."[".$GLOBALS[queryCount]."]".
+      "</div>".
   	  "<div style='position:absolute'>".
   	  "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
