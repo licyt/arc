@@ -418,6 +418,7 @@ class cDbTable implements iDbTable
   
   public function setOrder($order) 
   {
+    $cleanOrder = substr($order, strpos($order, ".")+1);
     if ($_SESSION[table][$this->name][order]==$order) { 
       $this->order = $order." DESC"; 
     } else {
@@ -731,7 +732,7 @@ class cDbTable implements iDbTable
   	  
   	  // set colation order
   	  ($this->order //&& strpos($this->columns, $this->order) 
-  	    ? " ORDER BY C.".$this->order 
+  	    ? " ORDER BY ".$this->order 
   	  	: ""
   	  );
     return $query;
@@ -840,15 +841,18 @@ class cDbTable implements iDbTable
     			
     			if ($this->name=="Note") {
     			  foreach ($_POST as $name=>$value) {
-    			    if (strpos($name, "Note_id")===0) {
-    			  	  $_POST[NoteTable] = substr($name, 7); // parent table name 
+    			    if ($name == "id".$this->name) continue;
+    			    if (strpos($name, "id")===0) {
+    			  	  $_POST[NoteTable] = substr($name, 2); // parent table name 
     			  	  $_POST[NoteRowId] = $value;
     			    }
     			  }
     			}
     			
     			if ($this->name=="Relation") {
+    			  $_POST[RelationType] = "RRCP";
     			  foreach ($_POST as $name=>$value) {
+    			    if ($name == "id".$this->name) continue;
     			    if (strpos($name, "id")===0) {
     			      if (!isset($_POST[RelationLObject])) {
   	  			      $_POST[RelationLObject] = substr($name, 2); // left table name 
@@ -1196,7 +1200,7 @@ class cDbTable implements iDbTable
     }
     
     // # button - collapse tree 
-    if (isset($_POST[$this->name.ORDERid.$this->name])) {
+    if (isset($_POST[$this->name."ORDERid".$this->name])) {
     	$this->currentRecordId=-1;
     	$this->setMode(BROWSE); 
     	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
@@ -1223,18 +1227,19 @@ class cDbTable implements iDbTable
   	$this->order = $_SESSION[table][$this->name][order];
   	// column namess
   	foreach ($this->columnNames as $i=>$columnName) {
+  	  $cleanColumnName = substr($columnName, strpos($columnName, ".")+1);
   	  // collation order
-  	  if ($_POST[$this->name."ORDER".$columnName]!="") {
+  	  if ($_POST[$this->name."ORDER".$cleanColumnName]!="") {
   	  	$this->setOrder($columnName);
   	  }
   	  // filter
-  	  if (isset($_POST[$this->name."FILTER".$columnName])) {
-  		$_SESSION[table][$this->name]["FILTER"][$columnName] =
-  		$_POST[$this->name."FILTER".$columnName];
+  	  if (isset($_POST[$this->name."FILTER".$cleanColumnName])) {
+  		  $_SESSION[table][$this->name]["FILTER"][$cleanColumnName] = $_POST[$this->name."FILTER".$cleanColumnName];
   	  }
-  	  if ($_SESSION[table][$this->name]["FILTER"][$columnName]) {
-  		$this->filter .= ($this->filter ? " AND " : "").
-  		"($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$columnName]."%\")";
+  	  if ($_SESSION[table][$this->name]["FILTER"][$cleanColumnName]) {
+  		  $this->filter .= 
+  		    ($this->filter ? " AND " : "").
+  		    "($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$cleanColumnName]."%\")";
   	  }
   	}
   	
