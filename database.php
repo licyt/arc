@@ -740,22 +740,30 @@ class cDbTable implements iDbTable
   }
   
   public function insert($record) {
-	$query = 
-	  "INSERT INTO ".$this->name.
-	  " SET ".$this->assignSQL($record);
-	if ($result = myQuery($query)) {
-	}
-		
+  	$query = 
+  	  "INSERT INTO ".$this->name.
+  	  " SET ".$this->assignSQL($record);
+  	if ($result = myQuery($query)) {
+  	  $this->currentRecordId = mysql_insert_id();
+  	  $this->getCurrentRecord();
+  	  return $this->currentRecordId;
+  	} else {
+  	  return false;
+  	}
   }
   
   public function update($record) {
-	$query = 
-	  "UPDATE ".$this->name.
-	  " SET ".$this->assignSQL($record).
-	  " WHERE id".$this->name."=".$record["id".$this->name];
-	if ($result = myQuery($query)) {
-		
-	}
+  	$query = 
+  	  "UPDATE ".$this->name.
+  	  " SET ".$this->assignSQL($record).
+  	  " WHERE id".$this->name."=".$record["id".$this->name];
+  	if ($result = myQuery($query)) {
+  	  $this->currentRecordId = $record["id".$this->name];
+  		$this->getCurrentRecord();
+  		return $this->currentRecordId;
+  	} else {
+  	  return false;
+  	}
   }
 
   public function reservedButton() {
@@ -972,8 +980,8 @@ class cDbTable implements iDbTable
   	return false;
   }
   
-  public function logEvent($event) {
-  	$id = (($event[ActionCommand]=="DELETE")
+  public function logAction($action) {
+  	$id = (($action[ActionCommand]=="DELETE")
   	  ? $this->lastRecord["id".$this->name]
   	  : $this->currentRecordId
     );
@@ -981,18 +989,18 @@ class cDbTable implements iDbTable
   	  "INSERT INTO History SET ".
   	  "HistoryTable='".$this->name."', ".
   	  "HistoryRowId=".$id.", ".
-  	  "HistoryCommand='".$event[ActionCommand]."', ".
-  	  "HistorySQL='".addslashes(implode("|", $event))."'";
+  	  "HistoryCommand='".$action[ActionCommand]."', ".
+  	  "HistorySQL='".addslashes(implode("|", $action))."'";
   	myQuery($query);
   }
   
   public function handleEvent($event) {
     //X-recursive with execAction
   	  //echo "handleEvent(".implode("|", $event).")<br>";
-    array_push($this->executed, $event);    // must be done prior to x-recursion 
-    // search for event in Actions table
-  	if ($eid = $this->getEventId($event)) {
-  	  // if found get:execute:handle actions in sequence
+    // search for specific event (including parameters) in Actions table
+    if ($eid = $this->getEventId($event)) {
+      array_push($this->executed, $event);    // must be done prior to x-recursion 
+      // if found get:execute:handle actions in sequence
       $query = "SELECT * FROM Action WHERE ActionEvent=$eid ORDER BY ActionSequence ASC";
       if ($dbRes=myQuery($query)) {
       	while ($action=mysql_fetch_assoc($dbRes)) {
@@ -1000,7 +1008,6 @@ class cDbTable implements iDbTable
       	  	if (!$this->execAction($action)) break;
       	  }
       	}
-      	$this->logEvent($event);
       }
     }
   }
@@ -1008,7 +1015,7 @@ class cDbTable implements iDbTable
   public function execAction($action) {
     //X-recursive with handleEvent()
   	  //echo "execAction(".implode("|", $action).")<br>";
-    $targetTable = $this; // if not said otherway later
+    $targetTable = $this; // if not said other way later
   	switch ($action[ActionCommand]) {
   	  case "SET STATUS":
   	  	// search for target table (and recordId) 
@@ -1043,8 +1050,7 @@ class cDbTable implements iDbTable
   	    	  $record[$action[ActionTable]."Name"] = $action[ActionTable]." created by LiCyT Automation";
   	    }
   	    // insert record
-  	    $targetTable->insert($record);
-  	    $idTarget = mysql_insert_id();
+  	    $idTarget = $targetTable->insert($record);
   	    // add relations 
   	    switch ($action[ActionTable]) {
   	    	case "Job":
@@ -1056,8 +1062,9 @@ class cDbTable implements iDbTable
   	    }
   	    break;
   	}
-	  $targetTable->getCurrentRecord(); // refresh
+	  //$targetTable->getCurrentRecord($idTarget); // refresh
 	  $targetTable->logStatus();
+	  $this->logAction($action);
 	  $targetTable->handleEvent($action);
 	  return true;
   }
@@ -1154,6 +1161,7 @@ class cDbTable implements iDbTable
   	  // log any status change
   	  // ---------------------------------------------------------- event->action processing
   	  if ($event=$this->whatsUp()) {
+  	    $this->logAction($event);
   	  	// clear $executed 
   	  	foreach ($this->executed as $i=>$action) {
   	  	  unset($this->executed[$i]);
@@ -1166,6 +1174,7 @@ class cDbTable implements iDbTable
   	  	  $event[ActionTable] = $this->name;
   	  	  $event[ActionCommand] = "SET STATUS";
   	  	  $event[ActionParam1] = $this->currentRecord["idStatus"];
+  	  	  $this->logAction($event);
   	  	  $this->handleEvent($event);
   	  	}
   	  	/*
