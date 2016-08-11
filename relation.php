@@ -63,6 +63,41 @@ function getParentId($childTableName, $childId, $parentTableName) {
   return -1;
 }
 
+function getChildId($childTableName, $parentTableName, $parentId) {
+  // special behaviour for StatusLog which uses foreign key to status
+  if (($childTableName=="StatusLog") && ($parentTableName=="Status")) {
+    $query="SELECT idStatusLog FROM StatusLog WHERE StatusLog_idStatus=$parentId";
+    if ($dbRes=myQuery($query)) {
+      if ($dbRow=mysql_fetch_assoc($dbRes)) {
+        return $dbRow[idStatusLog];
+      }
+    }
+  }
+  // default search in table Relation
+  $query=
+  "SELECT RelationLId FROM Relation ".
+  "WHERE (RelationLObject='$childTableName') ".
+  "AND (RelationRObject='$parentTableName') ".
+  "AND (RelationRId=$parentId) ";
+  if ($dbRes=myQuery($query)) {
+    if ($dbRow=mysql_fetch_assoc($dbRes)) {
+      return $dbRow[RelationLId];
+    }
+  }
+  // no relation found
+  return -1;
+}
+
+function updateStatus($LObject, $LId, $statusId) {
+  $query =
+    "UPDATE Relation SET ".
+      "RelationRId=$statusId".
+    " WHERE (RelationType=\"RRCP\")".
+    " AND (RelationLObject='$LObject')".
+    " AND (RelationLId=$LId)".
+    " AND (RelationRObject='Status')";
+  myQuery($query);
+}
 
 function insertRRCP($LObject, $LId, $RObject, $RId) {
   $query = 

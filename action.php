@@ -107,5 +107,37 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
   return $params;
 }
 
+function getSubTask($idTask) {
+  if ($dbRes = myQuery("SELECT * FROM Task WHERE idTask=".getChildId("Task", "Task", $idTask))) {
+    return mysql_fetch_assoc($dbRes);
+  }
+}
+
+function getNextTask($idTask) {
+  if ($dbRes = myQuery("SELECT * FROM Task WHERE idTask=$idTask")) {
+    if ($lastTask = mysql_fetch_assoc($dbRes)) {
+      $query = 
+        "SELECT idTask, TaskName, TaskSequence, TaskDuration ".
+        "FROM Task, Relation ".
+        "WHERE (idTask=RelationLId) AND (RelationType='RRCP') ".
+        "AND (RelationLObject='Task') AND (RelationRObject='Task') ".
+        "AND (RelationRId=".getParentId("Task", $idTask, "Task").") ".
+        "AND (TaskSequence>".$lastTask[TaskSequence].") ".
+        "ORDER BY TaskSequence ".
+        "LIMIT 1";
+      if ($dbR0 = myQuery($query)) {
+        return mysql_fetch_assoc($dbR0);
+      }
+    }
+  }
+}
+
+function flagsAreSet($idStatus, $flags) {
+  if ($dbRes = myQuery("SELECT StatusFlags FROM Status WHERE idStatus=$idStatus")) {
+    if ($dbRow = mysql_fetch_assoc($dbRes)) {
+      return $dbRow[StatusFlags] & $flags;    // bitwise and
+    }
+  }
+}
 
 ?>

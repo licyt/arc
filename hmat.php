@@ -58,7 +58,7 @@ echo
   		
   ).
   body(
-      
+    "<div>".
   	  "<div id='svnrevision'>".
         "<span style=\"font-size:20px;\">LiCyT ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".

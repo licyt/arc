@@ -819,7 +819,7 @@ class cDbTable implements iDbTable
       */
       
       if (!is_null($this->parent)) {
-      	$parrentName = "id".$this->parent->getName();
+      	$parrentName = gui($this->parent->getName(), "lookupField", $this->parent->getName()."Name");
       	$parentId = new cHtmlInput($this->name.$parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
       	// attribute ID must be unique therefore add prefix to it (NAME attribute remains the same as for parent)
       	$parentId->setAttribute("NAME", $parrentName);
@@ -1026,15 +1026,9 @@ class cDbTable implements iDbTable
   	  	// target table is found
   	  	if ($action[ActionTable]==$targetTable->getName()) {
   	  	  // update relation to status
-  	  	  $query = 
-  	  	    "UPDATE Relation".
-  	  	    " SET RelationRId=".$action[ActionParam1].
-  	  	    " WHERE (RelationType=\"RRCP\")".
-  	  	    " AND (RelationLObject='".$action[ActionTable]."')".
-  	  	    " AND (RelationLId=".$targetTable->getCurrentRecordId().")".
-  	  	    " AND (RelationRObject='Status')";
-  	  	  myQuery($query);
-	  	    if (!mysql_affected_rows()) { // no rows affected
+  	  	  updateStatus($action[ActionTable], $targetTable->getCurrentRecordId(), $action[ActionParam1]);
+ 	  	    if (!mysql_affected_rows()) { // no rows affected = relation doesn't exist yet
+	  	      // create relation to status
 	  	      insertRRCP($action[ActionTable], $targetTable->getCurrentRecordId(), 'Status', $action[ActionParam1]);
 	  	    }
   	    }
@@ -1054,19 +1048,56 @@ class cDbTable implements iDbTable
   	    // add relations 
   	    switch ($action[ActionTable]) {
   	    	case "Job":
-  	    	  // job is related to task which came as first action parameter 
+  	    	  // job is related to task which has come as the first action parameter 
   	    	  insertRRCP("Job", $idTarget, "Task", $action[ActionParam1]);
   	    	default:
   	    	  // new record is created as a child of the current record of this table
-  	    	  insertRRCP($action[ActionTable], $idTarget, $this->name, $this->currentRecordId);
+  	    	  if ($this->name != "Job") {
+  	    	    insertRRCP($action[ActionTable], $idTarget, $this->name, $this->currentRecordId);
+  	    	  }
   	    }
   	    break;
   	}
 	  //$targetTable->getCurrentRecord($idTarget); // refresh
-	  $targetTable->logStatus();
 	  $this->logAction($action);
+  	$targetTable->logStatus();
 	  $targetTable->handleEvent($action);
-	  return true;
+	  
+	  // Job post- processing
+	  if (($action[ActionTable]=="Job")) {
+	    switch ($action[ActionCommand]) {
+	      case "SET STATUS":
+	        $status = $action[ActionParam1];
+	        if (flagsAreSet($status, 1)) { // bit0 - terminal status (ends the job)
+  	        $parentJobId = getParentId("Job", $this->currentRecordId, "Job");
+  	        if (flagsAreSet($status, 2)) { // bit1 - success, continue to next job in sequence 
+    	        if ($nextTask = getNextTask(getParentId("Job", $this->currentRecordId, "Task"))) {
+      	        // create next job in sequence and set its relation to parent
+      	        $action[ActionTable] = "Job";
+      	        $action[ActionCommand] = "CREATE";
+    	          $action[ActionParam1] = $nextTask[idTask];    // set task for next child job
+      	        insertRRCP("Job", $this->execAction($action), "Job", $parentJobId);
+    	        } else { // this was the last job in sequence
+    	          // promote successful status to parent
+    	          updateStatus("Job", $parentJobId, $status);
+    	        }
+  	        } else { // failed job, do not continue to next job 
+  	          // promote failed status to parent
+  	          updateStatus("Job", $parentJobId, $status);
+  	        }
+	        }
+	        break;
+	      case "CREATE":
+	        // process tasks hierarchy - create child job
+	    	  if ($subTask = getSubTask($action[ActionParam1])) {
+    	      $action[ActionParam1] = $subTask[idTask];    // set task for child job
+    	      // create child job and set its relation to parent
+    	      insertRRCP("Job", $this->execAction($action), "Job", $idTarget);           
+    	    }
+    	    break;
+	    }
+	  }
+	  return $targetTable->getCurrentRecordId(); // done
   }
   
   protected function logStatus() {
@@ -1170,23 +1201,20 @@ class cDbTable implements iDbTable
   	  	$this->handleEvent($event);
   	  	// additionally handle eventual status change event
   	  	if ($this->statusHasChanged()) {
-  	      $this->logStatus();
+  	      //$this->logStatus();
   	  	  $event[ActionTable] = $this->name;
   	  	  $event[ActionCommand] = "SET STATUS";
   	  	  $event[ActionParam1] = $this->currentRecord["idStatus"];
-  	  	  $this->logAction($event);
-  	  	  $this->handleEvent($event);
+  	  	  $this->execAction($event);
   	  	}
-  	  	/*
   	  	switch ($event[ActionCommand]) {
   	  	  case "CREATE CHILD":
   	  	  	// CREATE CHILD event also triggers CREATE event for child table ??
   	  	  	$action[ActionTable]=$event[ActionParam1];
   	  	  	$action[ActionCommand]="CREATE";
-  	  	  	$this->handleEvent($action);
+  	  	  	$this->handleEvent($action); // action has been already executed, we only need to handle it
   	  	  	break;
   	  	}
-  	  	*/
   	  }
   	  
   	  // return to BROWSE mode
@@ -1281,20 +1309,20 @@ class cDbTable implements iDbTable
   	  if ($this->mode=="UPDATE") {
   	    // action editor
   	  	if ($columnName=="ActionField") {
-    	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-    	  $result[$columnName] = fieldsForAction($table, $this->currentRecord[ActionField])->display();
-    	  continue;
-    	}
-    	if ($columnName=="ActionCommand") {
-    	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
+      	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
+      	  $result[$columnName] = fieldsForAction($table, $this->currentRecord[ActionField])->display();
+      	  continue;
+      	}
+      	if ($columnName=="ActionCommand") {
+      	  $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
   	      $result[$columnName] = commandsForAction($table, $this->currentRecord[ActionCommand])->display();
           continue;
   	    }
   	    if ($columnName=="ActionParam1") {
   	      $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
   	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1], $this->currentRecord[ActionParam2]);
-  	      $result[ActionParam1] = $params[1]->display();
-  	      $result[ActionParam2] = $params[2]->display();
+  	      if ($params[1]) $result[ActionParam1] = $params[1]->display();
+  	      if ($params[2]) $result[ActionParam2] = $params[2]->display();
   	  	  continue;
   	    }
   	    if ($columnName=="ActionParam2") {
@@ -1309,7 +1337,7 @@ class cDbTable implements iDbTable
   	      $result[$columnName] = loadLeftRows($this->currentRecord[RelationLObject], $this->currentRecord[RelationLId]);
   	      continue;
   	    }
-  	  }
+    	}
   	  	
   	  // get html control for field
   	  if ($field = $this->getFieldByName($columnName)) {
@@ -1367,7 +1395,7 @@ class cDbTable implements iDbTable
   	    $newNames["id".$this->name] = $this->manipulator().$id;
   	    break;
   	  default :
-      	$newNames["id".$this->name] = $this->addButton().$this->reservedButton();
+      	$newNames["id".$this->name] = $this->addButton()/*.$this->reservedButton()*/;
       	break;
     }
     return $newNames;
