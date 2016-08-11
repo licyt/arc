@@ -97,6 +97,10 @@ function updateStatus($LObject, $LId, $statusId) {
     " AND (RelationLId=$LId)".
     " AND (RelationRObject='Status')";
   myQuery($query);
+  if (!mysql_affected_rows()) { // no rows affected = relation doesn't exist yet
+    // create relation to status iow. "insert" status
+    insertRRCP($LObject, $LId, 'Status', $statusId);
+  }
 }
 
 function insertRRCP($LObject, $LId, $RObject, $RId) {

@@ -1027,10 +1027,6 @@ class cDbTable implements iDbTable
   	  	if ($action[ActionTable]==$targetTable->getName()) {
   	  	  // update relation to status
   	  	  updateStatus($action[ActionTable], $targetTable->getCurrentRecordId(), $action[ActionParam1]);
- 	  	    if (!mysql_affected_rows()) { // no rows affected = relation doesn't exist yet
-	  	      // create relation to status
-	  	      insertRRCP($action[ActionTable], $targetTable->getCurrentRecordId(), 'Status', $action[ActionParam1]);
-	  	    }
   	    }
   	    break;
   	  case "CREATE":
