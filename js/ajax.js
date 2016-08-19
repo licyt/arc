@@ -106,12 +106,14 @@ function Ajax(request, params) {
               td1.innerHTML=xmlHttp.responseText.substr(0, pos);
               td2.innerHTML=xmlHttp.responseText.substr(pos+1);
               break;
+/*
             case "loadParam2":
               var par1=elementById('ActionParam1');
               var td1=par1.parentElement;
               var td2=td1.nextSibling;
               td2.innerHTML=xmlHttp.responseText;
               break;
+*/
             case "loadRightRows":
                 var table=elementById('RelationRObject');
                 var td0=table.parentElement;
@@ -229,11 +231,13 @@ function loadParameters() {
   Ajax("loadParameters", params);
 }
 
+/*
 function loadParam2() {
   var params=new Array();
   params['param1']=elementById("ActionParam1").value;
   Ajax("loadParam2", params);
 }
+*/
 
 function loadRightRows() {
   var params=new Array();

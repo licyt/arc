@@ -75,10 +75,10 @@ function getChildId($childTableName, $parentTableName, $parentId) {
   }
   // default search in table Relation
   $query=
-  "SELECT RelationLId FROM Relation ".
-  "WHERE (RelationLObject='$childTableName') ".
-  "AND (RelationRObject='$parentTableName') ".
-  "AND (RelationRId=$parentId) ";
+    "SELECT RelationLId FROM Relation ".
+    "WHERE (RelationLObject='$childTableName') ".
+    "AND (RelationRObject='$parentTableName') ".
+    "AND (RelationRId=$parentId) ";
   if ($dbRes=myQuery($query)) {
     if ($dbRow=mysql_fetch_assoc($dbRes)) {
       return $dbRow[RelationLId];
@@ -104,6 +104,7 @@ function updateStatus($LObject, $LId, $statusId) {
 }
 
 function insertRRCP($LObject, $LId, $RObject, $RId) {
+  //if (!$LObject || ($LId<=0) || !$RObject || ($RId<=0)) return null;
   $query = 
     "INSERT INTO Relation SET ".
     "RelationType=\"RRCP\", ".
@@ -113,4 +114,21 @@ function insertRRCP($LObject, $LId, $RObject, $RId) {
     "RelationRId=$RId";
   return myQuery($query);
 }
+
+function copyJobTarget($sourceJobId, $targetJobId) {
+  $query =
+    "SELECT RelationRObject, RelationRId ".
+    "FROM Relation ".
+    "WHERE (RelationLObject='Job') AND (RelationLId=$sourceJobId) ".
+    "AND (RelationRObject<>'Status') ".
+    "AND (RelationRObject<>'Task') ".
+    "AND (RelationRObject<>'Job') ";
+  if ($dbRes = myQuery($query)) {
+    if ($dbRow = mysql_fetch_assoc($dbRes)) {
+      insertRRCP("Job", $targetJobId, $dbRow[RelationRObject], $dbRow[RelationRId]);
+    }
+  }
+}
+
+
 ?>

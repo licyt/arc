@@ -101,9 +101,10 @@ if (isset($_REQUEST[loadTable])) {
 // --------------------------------------------------------------------------------- loadParameters
 if (isset($_REQUEST[loadParameters])) {
   $params = loadParameters($dbScheme->tables[$_REQUEST[table]], $_REQUEST[command]);
-  echo $params[1]->display()."|".$params[2]->display();
+  echo $params[1]->display()/*."|".$params[2]->display()*/;
 }
 
+/*
 // --------------------------------------------------------------------------------------- loadParam2
 if (isset($_REQUEST[loadParam2])) {
   $table = $dbScheme->tables[$_REQUEST[param1]];
@@ -121,6 +122,7 @@ if (isset($_REQUEST[loadParam2])) {
   }
   echo $param2->display();
 }
+*/
 
 // ------------------------------------------------------------------------------------ loadRightRows
 if (isset($_REQUEST[loadRightRows])) {

@@ -169,23 +169,14 @@ class cDbField implements iDbField
     	  $htmlControl->setAttribute("onChange", "loadLeftRows();");
     	}
     } elseif ($this->getName()=="ActionCommand") { // ------------------------------ ActionCommand
-       	$htmlControl = new cHtmlInput("ActionCommand", "HIDDEN");
-    } elseif ($this->getName()=="ActionEvent") { // ------------------------------ ActionEvent
-        $htmlControl = new cHtmlSelect();
-        $query = "SELECT idAction, ActionName FROM Action WHERE ActionSequence=0";
-        if ($dbResult=myQuery($query)) {
-          while ($dbRow=mysql_fetch_assoc($dbResult)) {
-            $htmlControl->addOption($dbRow[idAction], $dbRow[ActionName]);
-          }
-        }
-        $htmlControl->setSelected($value);
+      $htmlControl = new cHtmlInput("ActionCommand", "HIDDEN");
     } elseif($this->isDate()) {
-		$htmlControl = new cHtmlJsDatePick(); // --------------------------------------- DatePick
-		$htmlControl->setAttribute(TableName, $this->table->getName());
+  		$htmlControl = new cHtmlJsDatePick(); // --------------------------------------- DatePick
+  		$htmlControl->setAttribute(TableName, $this->table->getName());
     } elseif($this->isDateTime()) {
-		$htmlControl = new cHtmlJsDateTimePick; // ------------------------------------- DateTimePick
+  		$htmlControl = new cHtmlJsDateTimePick; // ------------------------------------- DateTimePick
     } elseif ($this->isStatusColor())  {
-		$htmlControl = new cHtmlJsColorPick; // ----------------------------------------- ColorPick
+	   	$htmlControl = new cHtmlJsColorPick; // ----------------------------------------- ColorPick
 	} 
 	
 	// ----------------------------------------------------------------------------- GUI field types
@@ -464,7 +455,7 @@ class cDbTable implements iDbTable
   
   public function getParentOfChildId($childTable) {
   	$this->currentRecordId =
- 	  getParentId($childTable->getName(), $childTable->getCurrentRecordId(), $this->name);
+ 	    getParentId($childTable->getName(), $childTable->getCurrentRecordId(), $this->name);
   }
   
   function setRelation($value) {
@@ -687,10 +678,10 @@ class cDbTable implements iDbTable
   	  " FROM ".$this->name." C ".$otherTables.
   	  $joins.
   	  " WHERE (C.id".$this->name.($id>-1?"=$id":">-1").")".
-  	  (isset($this->parent)&&
-  	   ($this->name!="Relation")&&
-  	   ($this->name!="Note")&&
-  	   ($this->name!="StatusLog")
+  	  (isset($this->parent)
+  	    &&($this->name!="Relation")
+  	    &&($this->name!="Note")
+  	    &&($this->name!="StatusLog")
   	    ? " AND (P".$pi.".id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
   	    : ""
   	  ).
@@ -890,9 +881,9 @@ class cDbTable implements iDbTable
     			// append assignment of value
     			$assign .= ($assign ? ", " : "").
     			$fieldName." = \"".$_POST[$fieldName]."\"";
-    		  }
+    		} // foreach 
     		  
-    	  	  if ($this->name=="StatusLog") {
+    	  if ($this->name=="StatusLog") {
     			$q0=
       		  "SELECT idStatus ".
       		  "FROM Status ".
@@ -1001,7 +992,16 @@ class cDbTable implements iDbTable
     if ($eid = $this->getEventId($event)) {
       array_push($this->executed, $event);    // must be done prior to x-recursion 
       // if found get:execute:handle actions in sequence
-      $query = "SELECT * FROM Action WHERE ActionEvent=$eid ORDER BY ActionSequence ASC";
+      $query = 
+        "SELECT * FROM Action ".
+        "WHERE idAction in (".
+          "SELECT RelationLId FROM Relation ".
+          "WHERE (RelationType=\"RRCP\") ".
+            "AND (RelationLObject=\"Action\") ".
+            "AND (RelationRObject=\"Action\") ".
+            "AND (RelationRId=$eid)".
+        ") ".
+        "ORDER BY ActionSequence ASC";
       if ($dbRes=myQuery($query)) {
       	while ($action=mysql_fetch_assoc($dbRes)) {
       	  if (!$this->hasExecuted($action)) {
@@ -1018,8 +1018,8 @@ class cDbTable implements iDbTable
     $targetTable = $this; // if not said other way later
   	switch ($action[ActionCommand]) {
   	  case "SET STATUS":
-  	  	// search for target table (and recordId) 
-  	  	while (!is_null($targetTable->getParent())&&($action[ActionTable]!=$targetTable->getName())) {
+  	  	// climb up for target table (and recordId) 
+  	  	while (($action[ActionTable]!=$targetTable->getName())&& !is_null($targetTable->getParent())) {
   	  	  $targetTable->getParent()->getParentOfChildId($targetTable);
   	  	  $targetTable = $targetTable->getParent();
   	  	}
@@ -1072,7 +1072,9 @@ class cDbTable implements iDbTable
       	        $action[ActionTable] = "Job";
       	        $action[ActionCommand] = "CREATE";
     	          $action[ActionParam1] = $nextTask[idTask];    // set task for next child job
-      	        insertRRCP("Job", $this->execAction($action), "Job", $parentJobId);
+    	          $idSubJob = $this->execAction($action);
+      	        insertRRCP("Job", $idSubJob, "Job", $parentJobId);
+      	        copyJobTarget($parentJobId, $idSubJob);
     	        } else { // this was the last job in sequence
     	          // promote successful status to parent
     	          updateStatus("Job", $parentJobId, $status);
@@ -1084,11 +1086,13 @@ class cDbTable implements iDbTable
 	        }
 	        break;
 	      case "CREATE":
-	        // process tasks hierarchy - create child job
+	        // process tasks hierarchy - create child job(s)
 	    	  if ($subTask = getSubTask($action[ActionParam1])) {
     	      $action[ActionParam1] = $subTask[idTask];    // set task for child job
-    	      // create child job and set its relation to parent
-    	      insertRRCP("Job", $this->execAction($action), "Job", $idTarget);           
+    	      // create child job and set its relation to parent job
+    	      $idSubJob = $this->execAction($action);
+    	      insertRRCP("Job", $idSubJob, "Job", $idTarget);  
+    	      copyJobTarget($idTarget, $idSubJob);
     	    }
     	    break;
 	    }
@@ -1111,9 +1115,14 @@ class cDbTable implements iDbTable
   	  $parentName = $parent->getName();
   	  $oldParentId = getParentId($this->name, $this->currentRecordId, $parentName);
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
-  	  $lookupSelf = ($parentName==$this->name ? "parent" : "");
-  	  if (!($newParentId = $_POST[$lookupSelf.$lookupField])) {
+  	  $lookupSelf = "";
+  	  if (gui($lookupField, "lookupType")=="suggest") {
+  	    $newParentId = $_POST["id".$parentName];
+  	  } elseif ($parentName==$this->name) {
+  	    $lookupSelf = "parent"; 
   	  	$newParentId = $_POST[$lookupSelf.$parentName];
+  	  } else {
+  	    $newParentId = $_POST[$lookupField]; 
   	  }
   	  if ($newParentId == -1) {
   	  	// non existent parent value
@@ -1185,9 +1194,8 @@ class cDbTable implements iDbTable
   	  }
   	  $this->getCurrentRecord();
   	  
-  	  // log any status change
   	  // ---------------------------------------------------------- event->action processing
-  	  if ($event=$this->whatsUp()) {
+  	  if ($event = $this->whatsUp()) {
   	    $this->logAction($event);
   	  	// clear $executed 
   	  	foreach ($this->executed as $i=>$action) {
@@ -1197,8 +1205,10 @@ class cDbTable implements iDbTable
   	  	$this->handleEvent($event);
   	  	// additionally handle eventual status change event
   	  	if ($this->statusHasChanged()) {
-  	      //$this->logStatus();
-  	  	  $event[ActionTable] = $this->name;
+  	      $event[ActionTable] = $this->name;
+  	  	  if ($this->name == "Job") {
+  	  	    $event[ActionField] = getParentId("Job", $this->currentRecordId, "Task");
+  	  	  }
   	  	  $event[ActionCommand] = "SET STATUS";
   	  	  $event[ActionParam1] = $this->currentRecord["idStatus"];
   	  	  $this->execAction($event);
@@ -1316,14 +1326,16 @@ class cDbTable implements iDbTable
   	    }
   	    if ($columnName=="ActionParam1") {
   	      $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-  	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1], $this->currentRecord[ActionParam2]);
+  	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1]/*, $this->currentRecord[ActionParam2]*/);
   	      if ($params[1]) $result[ActionParam1] = $params[1]->display();
-  	      if ($params[2]) $result[ActionParam2] = $params[2]->display();
+  	      /*if ($params[2]) $result[ActionParam2] = $params[2]->display();*/
   	  	  continue;
   	    }
+  	    /*
   	    if ($columnName=="ActionParam2") {
   	  	  continue;
   	    }
+  	    */
   	    // relation editor
   	    if ($columnName=="RelationRId") {
   	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRObject], $this->currentRecord[RelationRId]);
@@ -1518,21 +1530,13 @@ class cDbTable implements iDbTable
 		  
 		  // --- special lookup for Action/Event
 		  if ($this->name=="Action") {
-		  	if ($dbRow[ActionEvent]) {
-		  	  $query="SELECT ActionName FROM Action WHERE idAction=".$dbRow[ActionEvent];
-		  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
-		  	    $dbRow[ActionEvent]=$dbRow2[ActionName];
-		  	  }
-		  	} else {
-		  	  $dbRow[ActionEvent]="->";
-		  	}
-		  	// replace idStatus  with StatusName
-		  	if ($dbRow[ActionCommand]=="SET STATUS") {
-		  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
-		  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
-		  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
-		  	  }
-		  	}
+  	  	// replace idStatus  with StatusName
+  	  	if ($dbRow[ActionCommand]=="SET STATUS") {
+  	  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
+  	  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
+  	  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
+  	  	  }
+  	  	}
 		  }
 		  
 		  // --- Relation - load lookup value

@@ -5,8 +5,17 @@ function fieldsForAction($table /* cDbTable */, $value="") {
   $fields = new cHtmlSelect;
   $fields->setAttribute("ID", "ActionField");
   $fields->setAttribute("NAME", "ActionField");
-  foreach ($table->fields as $field) {
-	$fields->addOption($field->getName(), $field->getName());
+  if ($table->getName()=="Job") {
+    $query = "SELECT idTask, TaskName FROM Task ORDER BY TaskName";
+    if ($dbRes=myQuery($query)) {
+      while ($dbRow=mysql_fetch_assoc($dbRes)) {
+        $fields->addOption($dbRow[idTask], $dbRow[TaskName]);
+      }
+    }
+  } else {
+    foreach ($table->fields as $field) {
+      $fields->addOption($field->getName(), $field->getName());
+    }
   }
   $fields->setSelected($value);
   return $fields;
@@ -22,22 +31,17 @@ function commandsForAction($table /* cDbTable */, $value="") {
   $commands->addOption("UPDATE", "UPDATE");
   $commands->addOption("DELETE", "DELETE");
   if ($table->hasChild()) {
-	$commands->addOption("CREATE CHILD", "CREATE CHILD");
+	  $commands->addOption("CREATE CHILD", "CREATE CHILD");
   }
   if ($table->hasStatus()) {
-	$commands->addOption("SET STATUS", "SET STATUS");
+	  $commands->addOption("SET STATUS", "SET STATUS");
   }
-  /*
-  if ($table->hasParentStatus()) {
-	$commands->addOption("SET PARENT STATUS", "SET PARENT STATUS");
-  }
-  */
-  $commands->addOption("IS SET", "IS SET");
+  //$commands->addOption("IS SET", "IS SET");
   $commands->setSelected($value);
   return $commands;
 }
 
-function loadParameters($table /* cDbTable */, $command /* string */, $param1="", $param2="") {
+function loadParameters($table /* cDbTable */, $command /* string */, $param1="" /*, $param2=""*/) {
   $params = array();
   switch ($command) {
   	case "CREATE": // ------------------------------------------------------------------ CREATE
@@ -52,7 +56,7 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	      }
 	    }
 	    $params[1]->setSelected($param1);
-	    $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
+	    /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  }
   	  break;
 	case "CREATE CHILD": // ----------------------------------------------------------- CREATE CHILD
@@ -64,7 +68,7 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	      $params[1]->addOption($child->getName(), $child->getName());
 		}
 	  }
-	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
+	  /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  break;
 	case "SET STATUS": // --------------------------------------------------------------- SET STATUS
 	  $params[1] = new cHtmlSelect;
@@ -80,28 +84,11 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	    }
 	  }
 	  $params[1]->setSelected($param1);
-	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
+	  /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  break;
-	/*
-	case "SET PARENT STATUS":
-	  $params[1] = new cHtmlSelect;
-	  $params[1]->setAttribute("ID", "ActionParam1");
-	  $params[1]->setAttribute("NAME", "ActionParam1");
-	  if ($table->parents) {
-	    foreach ($table->parents as $parent) {
-		  if ($parent->hasStatus()) {
-			$params[1]->addOption($parent->getName(), $parent->getName());
-		  }
-		}
-	  }
-	  $params[1]->setSelected($param1);
-	  $params[1]->setAttribute("onChansge", "loadParam2();");
-	  $params[2] = new cHtmlInput("ActionParam2", "HIDDEN");
-	  break;
-	*/
 	default: // ----------------------------------------------------------------------------- default
 	  $params[1] = new cHtmlInput("ActionParam1", "TEXT");
-	  $params[2] = new cHtmlInput("ActionParam2", "TEXT");
+	  /*$params[2] = new cHtmlInput("ActionParam2", "TEXT");*/
 	break;
   }
   return $params;
