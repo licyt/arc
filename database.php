@@ -424,7 +424,10 @@ class cDbTable implements iDbTable
   }
   
   public function getParent() {
-  	return $this->parent;
+    if ($this->name=="Job") {
+      return $this->scheme->getTableByName(jobParent($this->currentRecordId)[RelationRObject]);
+    } else
+  	  return $this->parent;
   }
   
   public function loadChildren() {
@@ -949,6 +952,10 @@ class cDbTable implements iDbTable
   	  " WHERE (ActionTable=\"".$event[ActionTable]."\")".
   	  " AND (ActionSequence=0)".
   	  " AND (ActionCommand=\"".$event[ActionCommand]."\")".
+  	  ($event[ActionField]
+  	    ? " AND (ActionField=\"".$event[ActionField]."\")"
+  	  	: ""
+  	  ).
   	  ($event[ActionParam1]
   	    ? " AND (ActionParam1=\"".$event[ActionParam1]."\")"
   	  	: ""
@@ -1063,25 +1070,39 @@ class cDbTable implements iDbTable
 	  if (($action[ActionTable]=="Job")) {
 	    switch ($action[ActionCommand]) {
 	      case "SET STATUS":
-	        $status = $action[ActionParam1];
-	        if (flagsAreSet($status, 1)) { // bit0 - terminal status (ends the job)
-  	        $parentJobId = getParentId("Job", $this->currentRecordId, "Job");
-  	        if (flagsAreSet($status, 2)) { // bit1 - success, continue to next job in sequence 
-    	        if ($nextTask = getNextTask(getParentId("Job", $this->currentRecordId, "Task"))) {
-      	        // create next job in sequence and set its relation to parent
-      	        $action[ActionTable] = "Job";
-      	        $action[ActionCommand] = "CREATE";
-    	          $action[ActionParam1] = $nextTask[idTask];    // set task for next child job
-    	          $idSubJob = $this->execAction($action);
-      	        insertRRCP("Job", $idSubJob, "Job", $parentJobId);
-      	        copyJobTarget($parentJobId, $idSubJob);
-    	        } else { // this was the last job in sequence
-    	          // promote successful status to parent
-    	          updateStatus("Job", $parentJobId, $status);
+	        $parentJobId = getParentId("Job", $this->currentRecordId, "Job");
+	        if ($parentJobId>0) {
+  	        $status = $action[ActionParam1];
+  	        if (flagsAreSet($status, 1)) { // bit0 - terminal status (ends the job)
+    	        if (flagsAreSet($status, 2)) { // bit1 - success, continue to next job in sequence 
+      	        if ($nextTask = getNextTask(getParentId("Job", $this->currentRecordId, "Task"))) {
+        	        // create next job in sequence and set its relation to parent
+        	        $action[ActionTable] = "Job";
+        	        $action[ActionCommand] = "CREATE";
+      	          $action[ActionParam1] = $nextTask[idTask];    // set task for next child job
+      	          $idSubJob = $this->execAction($action);
+        	        insertRRCP("Job", $idSubJob, "Job", $parentJobId);
+        	        copyJobTarget($parentJobId, $idSubJob);
+      	        } else { // this was the last job in sequence
+      	          // promote successful status to parent
+      	          //updateStatus("Job", $parentJobId, $status);
+      	          $this->setCurrentRecordId($parentJobId);
+      	          $action[ActionTable] = "Job";
+      	          $action[ActionField] = getParentId("Job", $this->currentRecordId, "Task");
+      	          $action[ActionCommand] = "SET STATUS";
+      	          $action[ActionParam1] = $status;
+      	          $this->execAction($action);
+      	        }
+    	        } else { // failed job, do not continue to next job 
+    	          // promote failed status to parent
+    	          //updateStatus("Job", $parentJobId, $status);
+    	          $this->setCurrentRecordId($parentJobId);
+    	          $action[ActionTable] = "Job";
+    	          $action[ActionField] = getParentId("Job", $this->currentRecordId, "Task");
+    	          $action[ActionCommand] = "SET STATUS";
+    	          $action[ActionParam1] = $status;
+    	          $this->execAction($action);
     	        }
-  	        } else { // failed job, do not continue to next job 
-  	          // promote failed status to parent
-  	          updateStatus("Job", $parentJobId, $status);
   	        }
 	        }
 	        break;

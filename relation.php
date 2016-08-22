@@ -115,7 +115,7 @@ function insertRRCP($LObject, $LId, $RObject, $RId) {
   return myQuery($query);
 }
 
-function copyJobTarget($sourceJobId, $targetJobId) {
+function jobParent($sourceJobId) {
   $query =
     "SELECT RelationRObject, RelationRId ".
     "FROM Relation ".
@@ -123,12 +123,13 @@ function copyJobTarget($sourceJobId, $targetJobId) {
     "AND (RelationRObject<>'Status') ".
     "AND (RelationRObject<>'Task') ".
     "AND (RelationRObject<>'Job') ";
-  if ($dbRes = myQuery($query)) {
-    if ($dbRow = mysql_fetch_assoc($dbRes)) {
-      insertRRCP("Job", $targetJobId, $dbRow[RelationRObject], $dbRow[RelationRId]);
-    }
-  }
+  return mysql_fetch_assoc(myQuery($query));
 }
 
+function copyJobTarget($sourceJobId, $targetJobId) {
+  if ($parent = jobParent($sourceJobId)) { 
+    insertRRCP("Job", $targetJobId, $parent[RelationRObject], $parent[RelationRId]);
+  }
+}
 
 ?>
