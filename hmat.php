@@ -34,7 +34,6 @@ echo
   	linkCss("css/person.css").
   	linkCss("css/printparameters.css").
   	linkCss("css/part.css").
-  	linkCss("css/platform_has_part.css").
   	linkCss("css/platform.css").
   	linkCss("css/deliverytransport.css").
   	linkCss("css/gui.css").

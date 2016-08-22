@@ -1120,7 +1120,7 @@ class cDbTable implements iDbTable
   	    $newParentId = $_POST["id".$parentName];
   	  } elseif ($parentName==$this->name) {
   	    $lookupSelf = "parent"; 
-  	  	$newParentId = $_POST[$lookupSelf.$parentName];
+  	  	$newParentId = $_POST[$lookupSelf.$lookupField];
   	  } else {
   	    $newParentId = $_POST[$lookupField]; 
   	  }
@@ -1234,6 +1234,9 @@ class cDbTable implements iDbTable
     if (isset($_POST["id".$this->name])) {
       //$this->setMode("BROWSE");
       $this->currentRecordId=$_POST["id".$this->name];
+      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+    } elseif (isset($_POST["subid".$this->name])) {
+      $this->currentRecordId=$_POST["subid".$this->name];
       $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     } elseif ($_SESSION[table][$this->name][currentRecordId]) {
     	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
@@ -1470,138 +1473,136 @@ class cDbTable implements iDbTable
   	}
   }
  
-  public function browse($include="") 
-  {
+  public function browse($include="") {
+    $sub = (isset($this->parent)&&($this->parent->getName()==$this->name)?"sub":"");
     if ($this->mode!="INSERT") $this->getCurrentRecord();
   	// create output as html table
-	$table = new cHtmlTable();
-	if (($this->name=="Status")&&!isset($this->parent)) {
-	  $table->setAttribute("StatusEdit", true);
-	}
-	
-	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
-	if (($this->name!="StatusLog") && ($this->name!="History")) {
-	  $table->addRow($this->insertRow());
-	}
-	// add filter only for master browser
-	if (!isset($this->parent)) {
-	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
-	}
-	// run query on database 
-	if ($dbResult = myQuery($this->buildSQL())) {
-	  $i = 0;
-	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
-	  	$id = $dbRow["id".$this->name];
-	  	$i++;
-	  	if ($id==$this->currentRecordId) {
+	  $table = new cHtmlTable();
+  	if (($this->name=="Status")&&!isset($this->parent)) {
+  	  $table->setAttribute("StatusEdit", true);
+  	}
+  	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
+  	if (($this->name!="StatusLog") && ($this->name!="History")) {
+  	  $table->addRow($this->insertRow());
+  	}
+  	// add filter only for master browser
+  	if (!isset($this->parent)) {
+  	  $table->addFooter($this->filterSet($this->displayColumnNames, $this->name."FILTER", $_SESSION[table][$this->name][FILTER]));
+  	}
+  	// run query on database 
+  	if ($dbResult = myQuery($this->buildSQL())) {
+  	  $i = 0;
+  	  while ($dbRow = mysql_fetch_array($dbResult,MYSQL_ASSOC))	{
+  	  	$id = $dbRow["id".$this->name];
+  	  	$i++;
+  	  	if ($id==$this->currentRecordId) {
           // --------------------------------------------------------- current record is editable
           //$this->currentRecord = $dbRow;
-	  	  $table->addRow($this->editColumns($id));
-	  	  // sub-data for the current record
-	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
-	  	    // gantt
-	  	  	if ($this->hasStatus()) {
-	  	    	$sG = new statusGantt();
-						$sG->iFrom = "2016-04-14";
-						$sG->iTill = "2016-07-21";
-						$sG->statusType = $this->name;
-	  	    	$sG->statusLogRowId = $this->currentRecordId;
-	  	    	$sG->loadLanes();
-	  	    	$gantt["sbIndent"]="";
-	  	    	$gantt["sbColSpan"]=sizeof($dbRow)-1;
-	  	    	$gantt["statusGannt"] = $sG->display();
-	  	    	$table->addRow($gantt);
-	  	    }
-	  	    // sub-browsers
-	  	    if (!isset($this->parent) || ($this->name != $this->parent->getName())) {
-	  	      $sbRow["sbIndent"]="";
-	  	      $sbRow["sbColSpan"]=sizeof($dbRow)-1;
-	  	      $sbRow["subBrowser"] = $this->subBrowsers();
-	  	      $table->addRow($sbRow);
-	  	    }
-	  	    
-	  	  }
-	  	} else {
-	  	// ------------------------------------------------------------------------ other records
-	  	  $js=
-		  	"elementById('id".$this->name."').value=$id;".
-		  	"document.browseForm".$this->name.".action='#".$this->name."$id';".
-	  	    "document.browseForm".$this->name.".submit();";
-		  
-		  // --- special lookup for Action/Event
-		  if ($this->name=="Action") {
-  	  	// replace idStatus  with StatusName
-  	  	if ($dbRow[ActionCommand]=="SET STATUS") {
-  	  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
-  	  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
-  	  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
+  	  	  $table->addRow($this->editColumns($id));
+  	  	  // sub-data for the current record
+  	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
+  	  	    // gantt
+  	  	  	if ($this->hasStatus()) {
+  	  	    	$sG = new statusGantt();
+  						$sG->iFrom = "2016-04-14";
+  						$sG->iTill = "2016-07-21";
+  						$sG->statusType = $this->name;
+  	  	    	$sG->statusLogRowId = $this->currentRecordId;
+  	  	    	$sG->loadLanes();
+  	  	    	$gantt["sbIndent"]="";
+  	  	    	$gantt["sbColSpan"]=sizeof($dbRow)-1;
+  	  	    	$gantt["statusGannt"] = $sG->display();
+  	  	    	$table->addRow($gantt);
+  	  	    }
+  	  	    // sub-browsers
+  	  	    if (!isset($this->parent) || ($this->name != $this->parent->getName())) {
+  	  	      $sbRow["sbIndent"]="";
+  	  	      $sbRow["sbColSpan"]=sizeof($dbRow)-1;
+  	  	      $sbRow["subBrowser"] = $this->subBrowsers();
+  	  	      $table->addRow($sbRow);
+  	  	    }
   	  	  }
-  	  	}
-		  }
-		  
-		  // --- Relation - load lookup value
-		  if ($this->name=="Relation") {
-		  	switch ($this->relation) {
-		  	  case 1:  
-			  	$lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
-			  	$q2 = 
-			  	  "SELECT $lookupName".
-			  	  " FROM ".$dbRow[RelationRObject].
-			  	  " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
-			  	if ($dbr2=myQuery($q2)) {
-			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-			  	  	$dbRow[RelationRId]=$r2[$lookupName];
-			  	  }
-			  	}
-			    break;
-		  	 case 2:  
-			  	$lookupName = gui($dbRow[RelationLObject], "lookupField", $dbRow[RelationLObject]."Name");
-			  	$q2 = 
-			  	  "SELECT $lookupName".
-			  	  " FROM ".$dbRow[RelationLObject].
-			  	  " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
-			  	if ($dbr2=myQuery($q2)) {
-			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-			  	  	$dbRow[RelationLId]=$r2[$lookupName];
-			  	  }
-			  	}
-			  	break;
-		  	}
-		  }
-		  
-		  // display only columns included in displayColumnNames
-		  foreach ($this->displayColumnNames as $dcn) {
-		  	switch ($dcn) {
-		  	  case "StatusName":
-		  	  	$displayRow[$dcn] = 
-		  	  	  "<div style=\"color:".(RGBToHSL(HTMLToRGB($dbRow[StatusColor]))->lightness>128?"black":"white").
-		  		  	  	  ";background-color:#".$dbRow[StatusColor]."\">".
-		  	  	    $dbRow[$dcn].
-		  	  	  "</div>";
-		  	  	break;
-		  	  default:
-		  	    $displayRow[$dcn] = $dbRow[$dcn];
-		  	}
-		  }
-		  $displayRow["id".$this->name] = "";
-		  
-		  // hide column for lookupField if it is a lookup into parent table 
-		  if (isset($this->parent)) {
-             if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
-		  }
-		  // add javascript to onClick event of this row
-		  $displayRow[onClick] = $js;
-		  // add row to table
-		  $table->addRow($displayRow);
-	  	}
-	  }
+  	  	} else {
+  	  	// ------------------------------------------------------------------------ other records
+  	  	  $js=
+  		  	  "elementById('".$sub."id".$this->name."').value=$id;".
+  		  	  "document.".$sub."browseForm".$this->name.".action='#".$this->name."$id';".
+  	  	    "document.".$sub."browseForm".$this->name.".submit();";
+  		  
+    		  // --- special lookup for Action/Event
+    		  if ($this->name=="Action") {
+      	  	// replace idStatus  with StatusName
+      	  	if ($dbRow[ActionCommand]=="SET STATUS") {
+      	  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
+      	  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
+      	  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
+      	  	  }
+      	  	}
+    		  }
+    		  
+    		  // --- Relation - load lookup value
+    		  if ($this->name=="Relation") {
+    		  	switch ($this->relation) {
+    		  	  case 1:  
+      			  	$lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
+      			  	$q2 = 
+      			  	  "SELECT $lookupName".
+      			  	  " FROM ".$dbRow[RelationRObject].
+      			  	  " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
+      			  	if ($dbr2=myQuery($q2)) {
+      			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
+      			  	  	$dbRow[RelationRId]=$r2[$lookupName];
+      			  	  }
+      			  	}
+      			    break;
+    		  	  case 2:  
+      			  	$lookupName = gui($dbRow[RelationLObject], "lookupField", $dbRow[RelationLObject]."Name");
+      			  	$q2 = 
+      			  	  "SELECT $lookupName".
+      			  	  " FROM ".$dbRow[RelationLObject].
+      			  	  " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
+      			  	if ($dbr2=myQuery($q2)) {
+      			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
+      			  	  	$dbRow[RelationLId]=$r2[$lookupName];
+      			  	  }
+      			  	}
+      			  	break;
+    		  	} // switch
+    		  } // if
+    		  
+    		  // display only columns included in displayColumnNames
+    		  foreach ($this->displayColumnNames as $dcn) {
+    		  	switch ($dcn) {
+    		  	  case "StatusName":
+    		  	  	$displayRow[$dcn] = 
+    		  	  	  "<div style=\"color:".(RGBToHSL(HTMLToRGB($dbRow[StatusColor]))->lightness>128?"black":"white").
+    		  		  	  	  ";background-color:#".$dbRow[StatusColor]."\">".
+    		  	  	    $dbRow[$dcn].
+    		  	  	  "</div>";
+    		  	  	break;
+    		  	  default:
+    		  	    $displayRow[$dcn] = $dbRow[$dcn];
+    		  	}
+    		  }
+    		  $displayRow["id".$this->name] = "";
+    		  
+    		  // hide column for lookupField if it is a lookup into parent table 
+    		  if (isset($this->parent)) {
+            if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
+    		  }
+    		  // add javascript to onClick event of this row
+    		  $displayRow[onClick] = $js;
+    		  // add row to table
+    		  $table->addRow($displayRow);
+    	  }
+    	}
       mysql_free_result($dbResult);
-	}
+    }
 	
-	$RowId = new cHtmlInput("id".$this->name, "HIDDEN", $this->currentRecordId);
-	// include table in form
+	  $RowId = new cHtmlInput($sub."id".$this->name, "HIDDEN", $this->currentRecordId);
+	  // include table in form
     $form = new cHtmlForm();
-    $form->setAttribute("ID", "browseForm".$this->name);
+    $form->setAttribute("ID", $sub."browseForm".$this->name);
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
