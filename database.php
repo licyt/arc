@@ -1138,7 +1138,7 @@ class cDbTable implements iDbTable
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
   	  $lookupSelf = "";
   	  if (gui($lookupField, "lookupType")=="suggest") {
-  	    $newParentId = $_POST["id".$parentName];
+  	    $newParentId = $_POST[$lookupField];
   	  } elseif ($parentName==$this->name) {
   	    $lookupSelf = "parent"; 
   	  	$newParentId = $_POST[$lookupSelf.$lookupField];

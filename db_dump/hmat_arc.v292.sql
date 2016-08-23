@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 23, 2016 at 10:28 AM
+-- Generation Time: Aug 23, 2016 at 11:40 AM
 -- Server version: 5.7.13-0ubuntu0.16.04.2
 -- PHP Version: 5.6.21
 
@@ -26,220 +26,149 @@ SET time_zone = "+00:00";
 -- Table structure for table `Account`
 --
 
-DROP TABLE IF EXISTS `Account`;
-CREATE TABLE IF NOT EXISTS `Account` (
-  `idAccount` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Account` (
+  `idAccount` int(11) NOT NULL,
   `AccountName` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
   `AccountBank` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
   `AccountBankCode` int(11) DEFAULT NULL,
   `AccountVAT` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `AccountSWIFT` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
-  `AccountIBAN` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idAccount`)
+  `AccountIBAN` varchar(30) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Account`
---
-
-TRUNCATE TABLE `Account`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Action`
 --
 
-DROP TABLE IF EXISTS `Action`;
-CREATE TABLE IF NOT EXISTS `Action` (
-  `idAction` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Action` (
+  `idAction` int(11) NOT NULL,
   `ActionName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `ActionSequence` int(2) DEFAULT '0',
   `ActionTable` varchar(30) COLLATE utf8_slovak_ci DEFAULT NULL,
   `ActionField` varchar(30) COLLATE utf8_slovak_ci DEFAULT NULL,
   `ActionCommand` varchar(20) COLLATE utf8_slovak_ci DEFAULT NULL,
-  `ActionParam1` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
-  PRIMARY KEY (`idAction`)
+  `ActionParam1` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Action`
---
-
-TRUNCATE TABLE `Action`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Address`
 --
 
-DROP TABLE IF EXISTS `Address`;
-CREATE TABLE IF NOT EXISTS `Address` (
-  `idAddress` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Address` (
+  `idAddress` int(11) NOT NULL,
   `AddressName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `AddressStreet` varchar(60) CHARACTER SET utf8 DEFAULT NULL,
   `AddressNumber` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `AddressZip` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
   `AddressCity` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  `AddressCountry` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idAddress`)
+  `AddressCountry` varchar(30) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Address`
---
-
-TRUNCATE TABLE `Address`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Build`
 --
 
-DROP TABLE IF EXISTS `Build`;
-CREATE TABLE IF NOT EXISTS `Build` (
-  `idBuild` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Build` (
+  `idBuild` int(11) NOT NULL,
   `BuildName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `BuildRequested` datetime DEFAULT NULL,
   `BuildPrintJobStart` datetime DEFAULT NULL,
-  `BuildPrintJobEnd` datetime DEFAULT NULL,
-  PRIMARY KEY (`idBuild`)
+  `BuildPrintJobEnd` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Build`
---
-
-TRUNCATE TABLE `Build`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Company`
 --
 
-DROP TABLE IF EXISTS `Company`;
-CREATE TABLE IF NOT EXISTS `Company` (
-  `idCompany` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Company` (
+  `idCompany` int(11) NOT NULL,
   `CompanyName` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
   `CompanyICO` varchar(25) CHARACTER SET utf8 DEFAULT NULL,
   `CompanyDIC` varchar(25) CHARACTER SET utf8 DEFAULT NULL,
   `CompanyDRC` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
-  `CompanyWebsite` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idCompany`),
-  UNIQUE KEY `CompanyName_UNIQUE` (`CompanyName`)
+  `CompanyWebsite` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Company`
---
-
-TRUNCATE TABLE `Company`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `DataSet`
 --
 
-DROP TABLE IF EXISTS `DataSet`;
-CREATE TABLE IF NOT EXISTS `DataSet` (
-  `idDataSet` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `DataSet` (
+  `idDataSet` int(11) NOT NULL,
   `DataSetName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `DataSetFileName` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
-  `DataSetDate` date DEFAULT NULL,
-  PRIMARY KEY (`idDataSet`)
+  `DataSetDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `DataSet`
---
-
-TRUNCATE TABLE `DataSet`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `DeliveryNote`
 --
 
-DROP TABLE IF EXISTS `DeliveryNote`;
-CREATE TABLE IF NOT EXISTS `DeliveryNote` (
-  `idDeliveryNote` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `DeliveryNote` (
+  `idDeliveryNote` int(11) NOT NULL,
   `DeliveryNoteName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `DeliveryNoteIssued` date DEFAULT NULL,
   `DeliveryNoteSigned` date DEFAULT NULL,
-  `ShippingAddress` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idDeliveryNote`)
+  `ShippingAddress` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `DeliveryNote`
---
-
-TRUNCATE TABLE `DeliveryNote`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `DeliveryTransport`
 --
 
-DROP TABLE IF EXISTS `DeliveryTransport`;
-CREATE TABLE IF NOT EXISTS `DeliveryTransport` (
-  `idDeliveryTransport` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `DeliveryTransport` (
+  `idDeliveryTransport` int(11) NOT NULL,
   `DeliveryTransportName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `DeliveryTransportMethod` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `DeliveryTransportOption` varchar(10) COLLATE utf8_slovak_ci DEFAULT NULL,
   `DeliveryTransportDate` date DEFAULT NULL,
-  `DeliveryTransportPayment` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idDeliveryTransport`)
+  `DeliveryTransportPayment` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `DeliveryTransport`
---
-
-TRUNCATE TABLE `DeliveryTransport`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Demand`
 --
 
-DROP TABLE IF EXISTS `Demand`;
-CREATE TABLE IF NOT EXISTS `Demand` (
-  `idDemand` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Demand` (
+  `idDemand` int(11) NOT NULL,
   `DemandName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `DemandDateReceived` date DEFAULT NULL,
   `DemandDateConfirmed` date DEFAULT NULL,
   `DemandPostProcessStart` date DEFAULT NULL,
   `DemandPostProcessEnd` date DEFAULT NULL,
   `DemandCheckedBy` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `DemandCheckDate` date DEFAULT NULL,
-  PRIMARY KEY (`idDemand`)
+  `DemandCheckDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Demand`
---
-
-TRUNCATE TABLE `Demand`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `GUI`
 --
 
-DROP TABLE IF EXISTS `GUI`;
-CREATE TABLE IF NOT EXISTS `GUI` (
-  `idGUI` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `GUI` (
+  `idGUI` int(11) NOT NULL,
   `GUIelement` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
   `GUIattribute` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `GUIvalue` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idGUI`)
-) ENGINE=InnoDB AUTO_INCREMENT=517 DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
+  `GUIvalue` varchar(45) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `GUI`
---
-
-TRUNCATE TABLE `GUI`;
 --
 -- Dumping data for table `GUI`
 --
@@ -723,22 +652,15 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 -- Table structure for table `History`
 --
 
-DROP TABLE IF EXISTS `History`;
-CREATE TABLE IF NOT EXISTS `History` (
-  `idHistory` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `History` (
+  `idHistory` int(11) NOT NULL,
   `HistoryTable` varchar(30) COLLATE utf8_slovak_ci DEFAULT NULL,
   `HistoryRowId` int(11) DEFAULT NULL,
   `HistoryCommand` varchar(20) COLLATE utf8_slovak_ci DEFAULT NULL,
   `HistorySQL` varchar(500) COLLATE utf8_slovak_ci DEFAULT NULL,
-  `HistoryTimestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idHistory`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
+  `HistoryTimestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `History`
---
-
-TRUNCATE TABLE `History`;
 --
 -- Dumping data for table `History`
 --
@@ -839,7 +761,20 @@ INSERT INTO `History` (`idHistory`, `HistoryTable`, `HistoryRowId`, `HistoryComm
 (93, 'Task', 23, 'UPDATE', 'Task|UPDATE', '2016-08-23 10:23:32'),
 (94, 'Task', 24, 'UPDATE', 'Task|UPDATE', '2016-08-23 10:23:40'),
 (95, 'Task', 25, 'UPDATE', 'Task|UPDATE', '2016-08-23 10:23:50'),
-(96, 'Task', 26, 'UPDATE', 'Task|UPDATE', '2016-08-23 10:24:01');
+(96, 'Task', 26, 'UPDATE', 'Task|UPDATE', '2016-08-23 10:24:01'),
+(97, 'Relation', 20, 'UPDATE', 'Relation|UPDATE', '2016-08-23 10:31:53'),
+(98, 'Relation', 20, 'UPDATE', 'Relation|UPDATE', '2016-08-23 10:32:13'),
+(99, 'Relation', 20, 'UPDATE', 'Relation|UPDATE', '2016-08-23 10:32:25'),
+(100, 'Relation', 20, 'UPDATE', 'Relation|UPDATE', '2016-08-23 10:34:42'),
+(101, 'Relation', 20, 'UPDATE', 'Relation|UPDATE', '2016-08-23 11:07:06'),
+(102, 'Relation', 53, 'CREATE', 'Relation|CREATE', '2016-08-23 11:07:53'),
+(103, 'Relation', 54, 'CREATE', 'Relation|CREATE', '2016-08-23 11:08:18'),
+(104, 'Industry', 1, 'CREATE', 'Industry|CREATE', '2016-08-23 11:26:26'),
+(105, 'Industry', 2, 'CREATE', 'Industry|CREATE', '2016-08-23 11:26:37'),
+(106, 'Industry', 3, 'CREATE', 'Industry|CREATE', '2016-08-23 11:26:47'),
+(107, 'Industry', 4, 'CREATE', 'Industry|CREATE', '2016-08-23 11:26:58'),
+(108, 'Industry', 5, 'CREATE', 'Industry|CREATE', '2016-08-23 11:27:08'),
+(109, 'Industry', 6, 'CREATE', 'Industry|CREATE', '2016-08-23 11:27:18');
 
 -- --------------------------------------------------------
 
@@ -847,30 +782,32 @@ INSERT INTO `History` (`idHistory`, `HistoryTable`, `HistoryRowId`, `HistoryComm
 -- Table structure for table `Industry`
 --
 
-DROP TABLE IF EXISTS `Industry`;
-CREATE TABLE IF NOT EXISTS `Industry` (
-  `idIndustry` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Industry` (
+  `idIndustry` int(11) NOT NULL,
   `IndustryName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `IndustryShortcut` varchar(5) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`idIndustry`),
-  UNIQUE KEY `IndustryShortcut_UNIQUE` (`IndustryShortcut`),
-  UNIQUE KEY `IndustryName_UNIQUE` (`IndustryName`)
+  `IndustryShortcut` varchar(5) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
--- Truncate table before insert `Industry`
+-- Dumping data for table `Industry`
 --
 
-TRUNCATE TABLE `Industry`;
+INSERT INTO `Industry` (`idIndustry`, `IndustryName`, `IndustryShortcut`) VALUES
+(1, 'Architecture', 'ARC'),
+(2, 'Design', 'DSG'),
+(3, 'Jewelry', 'JWL'),
+(4, 'Artistic', 'ART'),
+(5, 'Automobile', 'AUT'),
+(6, '3D Print', '3DP');
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Invoice`
 --
 
-DROP TABLE IF EXISTS `Invoice`;
-CREATE TABLE IF NOT EXISTS `Invoice` (
-  `idInvoice` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Invoice` (
+  `idInvoice` int(11) NOT NULL,
   `InvoiceName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `InvoiceIssued` date DEFAULT NULL,
   `InvoicePaymentTerm` int(11) DEFAULT NULL,
@@ -878,254 +815,222 @@ CREATE TABLE IF NOT EXISTS `Invoice` (
   `InvoiceVAT` float DEFAULT '0',
   `InvoiceType` varchar(15) CHARACTER SET utf8 DEFAULT NULL,
   `InvoiceDue` date DEFAULT NULL,
-  `InvoiceIdentifier` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
-  PRIMARY KEY (`idInvoice`)
+  `InvoiceIdentifier` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Invoice`
---
-
-TRUNCATE TABLE `Invoice`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Job`
 --
 
-DROP TABLE IF EXISTS `Job`;
-CREATE TABLE IF NOT EXISTS `Job` (
-  `idJob` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Job` (
+  `idJob` int(11) NOT NULL,
   `JobName` varchar(45) DEFAULT NULL,
   `JobCreated` datetime DEFAULT CURRENT_TIMESTAMP,
   `JobStarted` datetime DEFAULT NULL,
   `JobFinished` datetime DEFAULT NULL,
   `JobDeadline` datetime DEFAULT NULL,
-  `JobPriority` int(11) DEFAULT '0',
-  PRIMARY KEY (`idJob`)
+  `JobPriority` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncate table before insert `Job`
---
-
-TRUNCATE TABLE `Job`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Material`
 --
 
-DROP TABLE IF EXISTS `Material`;
-CREATE TABLE IF NOT EXISTS `Material` (
-  `idMaterial` int(11) NOT NULL AUTO_INCREMENT,
-  `MaterialName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idMaterial`)
+CREATE TABLE `Material` (
+  `idMaterial` int(11) NOT NULL,
+  `MaterialName` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
--- Truncate table before insert `Material`
+-- Dumping data for table `Material`
 --
 
-TRUNCATE TABLE `Material`;
+INSERT INTO `Material` (`idMaterial`, `MaterialName`) VALUES
+(0, NULL),
+(1, 'thermoplastics'),
+(2, 'eutectic metals'),
+(3, 'edible material'),
+(4, 'rubbers'),
+(5, 'modeling clay'),
+(6, 'plasticine'),
+(7, 'metal clay'),
+(8, 'ceramic materials'),
+(9, 'metal alloy'),
+(10, 'cermet'),
+(11, 'metal matrix composite'),
+(12, 'ceramic matrix composite'),
+(13, 'photopolymer'),
+(14, 'powdered polymers'),
+(15, 'plaster'),
+(16, 'titanium alloys'),
+(17, 'cobalt chrome alloys'),
+(18, 'stainless steel'),
+(19, 'alluminium'),
+(20, 'thermoplatic powder'),
+(21, 'metal powders'),
+(22, 'ceramic powders'),
+(23, 'paper'),
+(24, 'metal foil'),
+(25, 'plastic film');
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Note`
 --
 
-DROP TABLE IF EXISTS `Note`;
-CREATE TABLE IF NOT EXISTS `Note` (
-  `idNote` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Note` (
+  `idNote` int(11) NOT NULL,
   `NoteText` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
   `NoteTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `NoteTable` varchar(15) CHARACTER SET utf8 DEFAULT NULL,
-  `NoteRowId` int(11) DEFAULT '0',
-  PRIMARY KEY (`idNote`)
+  `NoteRowId` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Note`
---
-
-TRUNCATE TABLE `Note`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Part`
 --
 
-DROP TABLE IF EXISTS `Part`;
-CREATE TABLE IF NOT EXISTS `Part` (
-  `idPart` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Part` (
+  `idPart` int(11) NOT NULL,
   `PartName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `PartFileName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `PartQuoteFileName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `PartAMFileName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `PartFinish` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `PartQuantity` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idPart`)
+  `PartQuantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Part`
---
-
-TRUNCATE TABLE `Part`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Payment`
 --
 
-DROP TABLE IF EXISTS `Payment`;
-CREATE TABLE IF NOT EXISTS `Payment` (
-  `idPayment` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Payment` (
+  `idPayment` int(11) NOT NULL,
   `PaymentName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `PaymentAmount` float DEFAULT NULL,
   `PaymentIdentifier` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `PaymentFlow` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `PaymentType` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
-  `PaymentDate` date DEFAULT NULL,
-  PRIMARY KEY (`idPayment`)
+  `PaymentDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Payment`
---
-
-TRUNCATE TABLE `Payment`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Person`
 --
 
-DROP TABLE IF EXISTS `Person`;
-CREATE TABLE IF NOT EXISTS `Person` (
-  `idPerson` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Person` (
+  `idPerson` int(11) NOT NULL,
   `PersonName` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `PersonSurname` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `PersonTitle` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `PersonAppend` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `PersonPostition` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `PersonPhone` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
-  `PersonEmail` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idPerson`)
+  `PersonEmail` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Person`
---
-
-TRUNCATE TABLE `Person`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Platform`
 --
 
-DROP TABLE IF EXISTS `Platform`;
-CREATE TABLE IF NOT EXISTS `Platform` (
-  `idPlatform` int(11) NOT NULL AUTO_INCREMENT,
-  `PlatformName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idPlatform`)
+CREATE TABLE `Platform` (
+  `idPlatform` int(11) NOT NULL,
+  `PlatformName` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Platform`
---
-
-TRUNCATE TABLE `Platform`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `PrintParameters`
 --
 
-DROP TABLE IF EXISTS `PrintParameters`;
-CREATE TABLE IF NOT EXISTS `PrintParameters` (
-  `idPrintParameters` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `PrintParameters` (
+  `idPrintParameters` int(11) NOT NULL,
   `PrintParametersName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `PrintParametersTechnology` varchar(60) CHARACTER SET utf8 DEFAULT NULL,
   `PrintParametersResolution` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `PrintParametersLayer` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
-  `PrintParametersFinish` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
-  PRIMARY KEY (`idPrintParameters`)
+  `PrintParametersFinish` varchar(40) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
 --
--- Truncate table before insert `PrintParameters`
+-- Dumping data for table `PrintParameters`
 --
 
-TRUNCATE TABLE `PrintParameters`;
+INSERT INTO `PrintParameters` (`idPrintParameters`, `PrintParametersName`, `PrintParametersTechnology`, `PrintParametersResolution`, `PrintParametersLayer`, `PrintParametersFinish`) VALUES
+(2, NULL, 'FDM - Fused Depositi', '', '', ''),
+(3, NULL, 'FDM - Fused Deposition Modelling', '', '', ''),
+(4, NULL, 'DIW - Direct Ink Writing', NULL, NULL, NULL),
+(5, NULL, 'SLA - Stereolitography', NULL, NULL, NULL),
+(6, NULL, 'DLP - Digital Light Processing', NULL, NULL, NULL),
+(7, NULL, '3DP - Powdered bed and inkjet head 3D printing', NULL, NULL, NULL),
+(8, NULL, 'EBM - Electron-beam Melting', NULL, NULL, NULL),
+(9, NULL, 'SLM - Selective Laser Melting', NULL, NULL, NULL),
+(10, NULL, 'SHS - Selective Heat Sintering', NULL, NULL, NULL),
+(11, NULL, 'DMLS - Direct Metal Laser Sintering', NULL, NULL, NULL),
+(12, NULL, 'LOM - Laminated Object Manufacturing', NULL, NULL, NULL),
+(13, NULL, 'DED - Direct Energy Deposition', NULL, NULL, NULL),
+(14, NULL, 'EBF - Electron beam freeform fabrication', NULL, NULL, NULL),
+(15, NULL, 'SLS - Selective Laser Sintering', NULL, NULL, NULL),
+(16, NULL, 'MC - Metal Casting', NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Project`
 --
 
-DROP TABLE IF EXISTS `Project`;
-CREATE TABLE IF NOT EXISTS `Project` (
-  `idProject` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Project` (
+  `idProject` int(11) NOT NULL,
   `ProjectName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `ProjectStartDate` date DEFAULT NULL,
   `ProjectDeadline` date DEFAULT NULL,
-  `ProjectPriority` int(11) DEFAULT '0',
-  PRIMARY KEY (`idProject`),
-  UNIQUE KEY `ProjectName_UNIQUE` (`ProjectName`)
+  `ProjectPriority` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Project`
---
-
-TRUNCATE TABLE `Project`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Quote`
 --
 
-DROP TABLE IF EXISTS `Quote`;
-CREATE TABLE IF NOT EXISTS `Quote` (
-  `idQuote` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Quote` (
+  `idQuote` int(11) NOT NULL,
   `QuoteName` varchar(45) COLLATE utf8_slovak_ci DEFAULT NULL,
   `QuoteLeadTime` time DEFAULT NULL,
   `QuoteCost` decimal(10,2) DEFAULT '0.00',
   `QuotePrice` decimal(10,2) DEFAULT '0.00',
-  `QuoteDateSent` date DEFAULT NULL,
-  PRIMARY KEY (`idQuote`)
+  `QuoteDateSent` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Quote`
---
-
-TRUNCATE TABLE `Quote`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Relation`
 --
 
-DROP TABLE IF EXISTS `Relation`;
-CREATE TABLE IF NOT EXISTS `Relation` (
-  `idRelation` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Relation` (
+  `idRelation` int(11) NOT NULL,
   `RelationType` varchar(20) COLLATE utf8_slovak_ci DEFAULT NULL,
   `RelationLObject` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `RelationLId` int(11) DEFAULT NULL,
   `RelationRObject` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `RelationRId` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idRelation`),
-  UNIQUE KEY `index2` (`RelationLObject`,`RelationLId`,`RelationRObject`,`RelationRId`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
+  `RelationRId` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Relation`
---
-
-TRUNCATE TABLE `Relation`;
 --
 -- Dumping data for table `Relation`
 --
@@ -1150,7 +1055,7 @@ INSERT INTO `Relation` (`idRelation`, `RelationType`, `RelationLObject`, `Relati
 (17, 'TTCP', 'Part', 0, 'DataSet', 0),
 (18, 'TTCP', 'DataSet', 0, 'PrintParameters', 0),
 (19, 'TTCP', 'DataSet', 0, 'Quote', 0),
-(20, 'TTCP', 'PrintParameters', 0, 'Material', 0),
+(20, 'TTCP', 'Quote', 0, 'Material', 0),
 (21, 'TTCP', 'Quote', 0, 'PrintParameters', 0),
 (22, 'TTCP', 'Account', 0, 'Company', 0),
 (23, 'TTCP', 'Address', 0, 'Company', 0),
@@ -1182,7 +1087,9 @@ INSERT INTO `Relation` (`idRelation`, `RelationType`, `RelationLObject`, `Relati
 (49, 'RRCP', 'Task', 23, 'Task', 9),
 (50, 'RRCP', 'Task', 24, 'Task', 23),
 (51, 'RRCP', 'Task', 25, 'Task', 23),
-(52, 'RRCP', 'Task', 26, 'Task', 23);
+(52, 'RRCP', 'Task', 26, 'Task', 23),
+(53, 'TTCP', 'DataSet', 0, 'Material', 0),
+(54, 'TTCP', 'Part', 0, 'Material', 0);
 
 -- --------------------------------------------------------
 
@@ -1190,21 +1097,14 @@ INSERT INTO `Relation` (`idRelation`, `RelationType`, `RelationLObject`, `Relati
 -- Table structure for table `Status`
 --
 
-DROP TABLE IF EXISTS `Status`;
-CREATE TABLE IF NOT EXISTS `Status` (
-  `idStatus` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Status` (
+  `idStatus` int(11) NOT NULL,
   `StatusType` varchar(30) CHARACTER SET utf8 DEFAULT NULL,
   `StatusName` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `StatusColor` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
-  `StatusFlags` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idStatus`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
+  `StatusFlags` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `Status`
---
-
-TRUNCATE TABLE `Status`;
 --
 -- Dumping data for table `Status`
 --
@@ -1259,40 +1159,26 @@ INSERT INTO `Status` (`idStatus`, `StatusType`, `StatusName`, `StatusColor`, `St
 -- Table structure for table `StatusLog`
 --
 
-DROP TABLE IF EXISTS `StatusLog`;
-CREATE TABLE IF NOT EXISTS `StatusLog` (
-  `idStatusLog` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `StatusLog` (
+  `idStatusLog` int(11) NOT NULL,
   `StatusLogRowId` int(11) NOT NULL,
   `StatusLog_idStatus` int(11) NOT NULL,
-  `StatusLogTimestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idStatusLog`,`StatusLogRowId`,`StatusLog_idStatus`)
+  `StatusLogTimestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Truncate table before insert `StatusLog`
---
-
-TRUNCATE TABLE `StatusLog`;
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `Task`
 --
 
-DROP TABLE IF EXISTS `Task`;
-CREATE TABLE IF NOT EXISTS `Task` (
-  `idTask` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Task` (
+  `idTask` int(11) NOT NULL,
   `TaskName` varchar(45) DEFAULT NULL,
   `TaskSequence` decimal(10,0) DEFAULT NULL,
-  `TaskDuration` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idTask`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  `TaskDuration` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Truncate table before insert `Task`
---
-
-TRUNCATE TABLE `Task`;
 --
 -- Dumping data for table `Task`
 --
@@ -1326,6 +1212,316 @@ INSERT INTO `Task` (`idTask`, `TaskName`, `TaskSequence`, `TaskDuration`) VALUES
 (26, '3.4.3. Dispatch', '30', '15 minutes'),
 (27, '4. Follow Up', '40', NULL);
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `Account`
+--
+ALTER TABLE `Account`
+  ADD PRIMARY KEY (`idAccount`);
+
+--
+-- Indexes for table `Action`
+--
+ALTER TABLE `Action`
+  ADD PRIMARY KEY (`idAction`);
+
+--
+-- Indexes for table `Address`
+--
+ALTER TABLE `Address`
+  ADD PRIMARY KEY (`idAddress`);
+
+--
+-- Indexes for table `Build`
+--
+ALTER TABLE `Build`
+  ADD PRIMARY KEY (`idBuild`);
+
+--
+-- Indexes for table `Company`
+--
+ALTER TABLE `Company`
+  ADD PRIMARY KEY (`idCompany`),
+  ADD UNIQUE KEY `CompanyName_UNIQUE` (`CompanyName`);
+
+--
+-- Indexes for table `DataSet`
+--
+ALTER TABLE `DataSet`
+  ADD PRIMARY KEY (`idDataSet`);
+
+--
+-- Indexes for table `DeliveryNote`
+--
+ALTER TABLE `DeliveryNote`
+  ADD PRIMARY KEY (`idDeliveryNote`);
+
+--
+-- Indexes for table `DeliveryTransport`
+--
+ALTER TABLE `DeliveryTransport`
+  ADD PRIMARY KEY (`idDeliveryTransport`);
+
+--
+-- Indexes for table `Demand`
+--
+ALTER TABLE `Demand`
+  ADD PRIMARY KEY (`idDemand`);
+
+--
+-- Indexes for table `GUI`
+--
+ALTER TABLE `GUI`
+  ADD PRIMARY KEY (`idGUI`);
+
+--
+-- Indexes for table `History`
+--
+ALTER TABLE `History`
+  ADD PRIMARY KEY (`idHistory`);
+
+--
+-- Indexes for table `Industry`
+--
+ALTER TABLE `Industry`
+  ADD PRIMARY KEY (`idIndustry`),
+  ADD UNIQUE KEY `IndustryShortcut_UNIQUE` (`IndustryShortcut`),
+  ADD UNIQUE KEY `IndustryName_UNIQUE` (`IndustryName`);
+
+--
+-- Indexes for table `Invoice`
+--
+ALTER TABLE `Invoice`
+  ADD PRIMARY KEY (`idInvoice`);
+
+--
+-- Indexes for table `Job`
+--
+ALTER TABLE `Job`
+  ADD PRIMARY KEY (`idJob`);
+
+--
+-- Indexes for table `Material`
+--
+ALTER TABLE `Material`
+  ADD PRIMARY KEY (`idMaterial`);
+
+--
+-- Indexes for table `Note`
+--
+ALTER TABLE `Note`
+  ADD PRIMARY KEY (`idNote`);
+
+--
+-- Indexes for table `Part`
+--
+ALTER TABLE `Part`
+  ADD PRIMARY KEY (`idPart`);
+
+--
+-- Indexes for table `Payment`
+--
+ALTER TABLE `Payment`
+  ADD PRIMARY KEY (`idPayment`);
+
+--
+-- Indexes for table `Person`
+--
+ALTER TABLE `Person`
+  ADD PRIMARY KEY (`idPerson`);
+
+--
+-- Indexes for table `Platform`
+--
+ALTER TABLE `Platform`
+  ADD PRIMARY KEY (`idPlatform`);
+
+--
+-- Indexes for table `PrintParameters`
+--
+ALTER TABLE `PrintParameters`
+  ADD PRIMARY KEY (`idPrintParameters`);
+
+--
+-- Indexes for table `Project`
+--
+ALTER TABLE `Project`
+  ADD PRIMARY KEY (`idProject`),
+  ADD UNIQUE KEY `ProjectName_UNIQUE` (`ProjectName`);
+
+--
+-- Indexes for table `Quote`
+--
+ALTER TABLE `Quote`
+  ADD PRIMARY KEY (`idQuote`);
+
+--
+-- Indexes for table `Relation`
+--
+ALTER TABLE `Relation`
+  ADD PRIMARY KEY (`idRelation`),
+  ADD UNIQUE KEY `index2` (`RelationLObject`,`RelationLId`,`RelationRObject`,`RelationRId`);
+
+--
+-- Indexes for table `Status`
+--
+ALTER TABLE `Status`
+  ADD PRIMARY KEY (`idStatus`);
+
+--
+-- Indexes for table `StatusLog`
+--
+ALTER TABLE `StatusLog`
+  ADD PRIMARY KEY (`idStatusLog`,`StatusLogRowId`,`StatusLog_idStatus`);
+
+--
+-- Indexes for table `Task`
+--
+ALTER TABLE `Task`
+  ADD PRIMARY KEY (`idTask`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `Account`
+--
+ALTER TABLE `Account`
+  MODIFY `idAccount` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Action`
+--
+ALTER TABLE `Action`
+  MODIFY `idAction` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Address`
+--
+ALTER TABLE `Address`
+  MODIFY `idAddress` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Build`
+--
+ALTER TABLE `Build`
+  MODIFY `idBuild` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Company`
+--
+ALTER TABLE `Company`
+  MODIFY `idCompany` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `DataSet`
+--
+ALTER TABLE `DataSet`
+  MODIFY `idDataSet` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `DeliveryNote`
+--
+ALTER TABLE `DeliveryNote`
+  MODIFY `idDeliveryNote` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `DeliveryTransport`
+--
+ALTER TABLE `DeliveryTransport`
+  MODIFY `idDeliveryTransport` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Demand`
+--
+ALTER TABLE `Demand`
+  MODIFY `idDemand` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `GUI`
+--
+ALTER TABLE `GUI`
+  MODIFY `idGUI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=517;
+--
+-- AUTO_INCREMENT for table `History`
+--
+ALTER TABLE `History`
+  MODIFY `idHistory` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
+--
+-- AUTO_INCREMENT for table `Industry`
+--
+ALTER TABLE `Industry`
+  MODIFY `idIndustry` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `Invoice`
+--
+ALTER TABLE `Invoice`
+  MODIFY `idInvoice` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Job`
+--
+ALTER TABLE `Job`
+  MODIFY `idJob` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Material`
+--
+ALTER TABLE `Material`
+  MODIFY `idMaterial` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+--
+-- AUTO_INCREMENT for table `Note`
+--
+ALTER TABLE `Note`
+  MODIFY `idNote` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Part`
+--
+ALTER TABLE `Part`
+  MODIFY `idPart` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Payment`
+--
+ALTER TABLE `Payment`
+  MODIFY `idPayment` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Person`
+--
+ALTER TABLE `Person`
+  MODIFY `idPerson` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Platform`
+--
+ALTER TABLE `Platform`
+  MODIFY `idPlatform` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `PrintParameters`
+--
+ALTER TABLE `PrintParameters`
+  MODIFY `idPrintParameters` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT for table `Project`
+--
+ALTER TABLE `Project`
+  MODIFY `idProject` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Quote`
+--
+ALTER TABLE `Quote`
+  MODIFY `idQuote` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Relation`
+--
+ALTER TABLE `Relation`
+  MODIFY `idRelation` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+--
+-- AUTO_INCREMENT for table `Status`
+--
+ALTER TABLE `Status`
+  MODIFY `idStatus` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+--
+-- AUTO_INCREMENT for table `StatusLog`
+--
+ALTER TABLE `StatusLog`
+  MODIFY `idStatusLog` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `Task`
+--
+ALTER TABLE `Task`
+  MODIFY `idTask` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
