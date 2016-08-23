@@ -2,8 +2,6 @@
 
 require 'gantt.php';
 
-date_default_timezone_set("Europe/Bratislava");
-
 $sG = new statusGantt();
 $sG->statusType = "Project";
 $sG->iFrom = "2016-05-01";

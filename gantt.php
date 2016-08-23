@@ -2,6 +2,8 @@
 
 require_once 'database.php';
 
+date_default_timezone_set("Europe/Bratislava");
+
 class statusGantt {
   public $iFrom;
   public $iTill;

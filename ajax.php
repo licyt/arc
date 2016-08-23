@@ -8,8 +8,6 @@ require_once 'gantt.php';
 
 //var_dump($_REQUEST);
 
-date_default_timezone_set("Europe/Bratislava");
-
 // -----------------------------------------------------------------------  list files in directory
 function listDir($path) {
   //echo $path;
