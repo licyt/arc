@@ -104,7 +104,7 @@ function updateStatus($LObject, $LId, $statusId) {
 }
 
 function insertRRCP($LObject, $LId, $RObject, $RId) {
-  //if (!$LObject || ($LId<=0) || !$RObject || ($RId<=0)) return null;
+  if (!$LObject || ($LId<=0) || !$RObject || ($RId<=0)) return null;
   $query = 
     "INSERT INTO Relation SET ".
     "RelationType=\"RRCP\", ".
