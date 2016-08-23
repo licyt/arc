@@ -857,13 +857,14 @@ class cDbTable implements iDbTable
     			  $_POST[RelationType] = ($_POST[RelationType] ? $_POST[RelationType] : "RRCP");
     			  foreach ($_POST as $name=>$value) {
     			    if ($name == "id".$this->name) continue;
-    			    if (strpos($name, "id")===0) {
+    			    if (strpos($name, "Relation")!==0) {
+    			      $tableName = iug($name, "lookupField", substr($name,0,-4)); 
     			      if (!isset($_POST[RelationLObject])) {
-  	  			      $_POST[RelationLObject] = substr($name, 2); // left table name 
+  	  			      $_POST[RelationLObject] = $tableName;
   	  			  	  $_POST[RelationLId] = $value;
     			      }
     			      if (!isset($_POST[RelationRObject])) {
-  	  			      $_POST[RelationRObject] = substr($name, 2); // right table name 
+  	  			      $_POST[RelationRObject] = $tableName; 
      			  	    $_POST[RelationRId] = $value;
     			      }
     			    }
