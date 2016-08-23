@@ -853,7 +853,7 @@ class cDbTable implements iDbTable
     			}
     			
     			if ($this->name=="Relation") {
-    			  $_POST[RelationType] = "RRCP";
+    			  $_POST[RelationType] = ($_POST[RelationType] ? $_POST[RelationType] : "RRCP");
     			  foreach ($_POST as $name=>$value) {
     			    if ($name == "id".$this->name) continue;
     			    if (strpos($name, "id")===0) {
