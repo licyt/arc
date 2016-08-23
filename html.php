@@ -192,6 +192,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add(onInput).
         $this->add(onChange).
         $this->add(SIZE).
+        $this->add(MAXLENGTH).
         $this->add("CLASS").
         $this->add(STYLE).
         $this->add("LIST").

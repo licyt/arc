@@ -196,6 +196,7 @@ class cDbField implements iDbField
     // set input size based on dbField type
     if( !(gui($this->getName(), "type")=="suggest") ) {
       $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
+      $htmlControl->setAttribute("MAXLENGTH", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
     }
     
     // set attributes derived from Field name                                       
