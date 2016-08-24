@@ -1140,7 +1140,11 @@ class cDbTable implements iDbTable
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
   	  $lookupSelf = "";
   	  if (gui($lookupField, "lookupType")=="suggest") {
-  	    $newParentId = $_POST["id".$parentName];
+  	    if (isset($this->parent)) {
+  	      $newParentId = $_POST[$lookupField];
+  	    } else {
+  	      $newParentId = $_POST["id".$parentName];
+  	    }
   	  } elseif ($parentName==$this->name) {
   	    $lookupSelf = "parent"; 
   	  	$newParentId = $_POST[$lookupSelf.$lookupField];
@@ -1168,14 +1172,7 @@ class cDbTable implements iDbTable
   	  if ($oldParentId==-1) {
   	  	// non existing relation
   	  	// INSERT new relation
-  	  	myQuery(
-  	  	  "INSERT INTO Relation SET ".
-  	  	  "RelationType='RRCP', ".                          // Record-Record Child-Parent
-  	  		"RelationLObject='".$this->name."', ".
-  	  	  "RelationLId=".$this->currentRecordId.", ".
-  	  	  "RelationRObject='$parentName', ".
-  	  	  "RelationRId=".$newParentId
-  	  	);
+  	  	insertRRCP($this->name, $this->currentRecordId, $parentName, $newParentId);
   	  } elseif ($oldParentId!=$newParentId) {
   	  	// parent has changed
   	    // UPDATE relation
