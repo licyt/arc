@@ -846,8 +846,8 @@ class cDbTable implements iDbTable
     			if ($this->name=="Note") {
     			  foreach ($_POST as $name=>$value) {
     			    if ($name == "id".$this->name) continue;
-    			    if (strpos($name, "id")===0) {
-    			  	  $_POST[NoteTable] = substr($name, 2); // parent table name 
+    			    if (strpos($name, "Note")!==0) {
+    			  	  $_POST[NoteTable] = iug($name, "lookupField", substr($name,0,-4)); // parent table name 
     			  	  $_POST[NoteRowId] = $value;
     			    }
     			  }
