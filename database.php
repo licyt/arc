@@ -872,7 +872,7 @@ class cDbTable implements iDbTable
     			}
     			
     			// skip empty fields 
-    			if ($_POST[$fieldName]=="") continue;
+    			if (($fieldName!=$this->name."Name")&&($_POST[$fieldName]=="")) continue;
     			// skip id and any timestamps
     			if ($fieldName == "id".$this->name) continue;
     			// if ($field->isTimeStamp()) continue;
