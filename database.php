@@ -1151,14 +1151,15 @@ class cDbTable implements iDbTable
   	  } else {
   	    $newParentId = $_POST[$lookupField]; 
   	  }
-  	  if ($newParentId == -1) {
+  	  if (($newParentId == -1) && ($_POST[$lookupSelf.$lookupField]!="")) {
   	  	// non existent parent value
   	  	// INSERT new value into parent table
   	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupSelf.$lookupField]."'")) {
   	  	  $newParentId = mysql_insert_id();
   	  	}
+  	  	/*
   	  	// INSERT Relations to "undefined" parent's parents
-  	  	foreach ($parent->parents as $grandParent) {
+  	  	foreach ($parent->parents as $grandParent) { 
   	  	  myQuery(
   	  	    "INSERT INTO Relation SET ".
   	  	  	"RelationType='RRCP', ".                          // Record-Record Child-Parent
@@ -1168,8 +1169,9 @@ class cDbTable implements iDbTable
   	  	    "RelationRId=0"
   	  	  );
   	  	}
+  	  	*/
   	  }
-  	  if ($oldParentId==-1) {
+  	  if (($oldParentId==-1)&&($newParentId>0)) {
   	  	// non existing relation
   	  	// INSERT new relation
   	  	insertRRCP($this->name, $this->currentRecordId, $parentName, $newParentId);
