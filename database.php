@@ -362,6 +362,7 @@ class cDbTable implements iDbTable
   
   public function setCurrentRecordId($id) {
   	$this->currentRecordId = $id;
+  	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
   }
 
   public function getCurrentRecord($id=null) 
@@ -379,7 +380,7 @@ class cDbTable implements iDbTable
 	      $this->currentRecord = mysql_fetch_assoc($result);
   	  }
   	}
-	return $this->currentRecord;
+	  return $this->currentRecord;
   }  
   
   public function getCurrentRecordId() {
@@ -458,8 +459,9 @@ class cDbTable implements iDbTable
   }
   
   public function getParentOfChildId($childTable) {
-  	$this->currentRecordId =
- 	    getParentId($childTable->getName(), $childTable->getCurrentRecordId(), $this->name);
+  	$this->setCurrentRecordId(
+ 	    getParentId($childTable->getName(), $childTable->getCurrentRecordId(), $this->name)
+  	);
   }
   
   function setRelation($value) {
@@ -624,7 +626,7 @@ class cDbTable implements iDbTable
       $this->setMode("BROWSE");
     }
     
-    $this->currentRecordId=$_SESSION[table][$this->name][currentRecordId];
+    $this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
     $this->getCurrentRecord();
     
     // get table POSITION from session 
@@ -739,7 +741,7 @@ class cDbTable implements iDbTable
   	  "INSERT INTO ".$this->name.
   	  " SET ".$this->assignSQL($record);
   	if ($result = myQuery($query)) {
-  	  $this->currentRecordId = mysql_insert_id();
+  	  $this->setCurrentRecordId(mysql_insert_id());
   	  $this->getCurrentRecord();
   	  return $this->currentRecordId;
   	} else {
@@ -753,7 +755,7 @@ class cDbTable implements iDbTable
   	  " SET ".$this->assignSQL($record).
   	  " WHERE id".$this->name."=".$record["id".$this->name];
   	if ($result = myQuery($query)) {
-  	  $this->currentRecordId = $record["id".$this->name];
+  	  $this->setCurrentRecordId($record["id".$this->name]);
   		$this->getCurrentRecord();
   		return $this->currentRecordId;
   	} else {
@@ -1204,14 +1206,14 @@ class cDbTable implements iDbTable
   	if ($result = myQuery($this->commitSQL())) {
   	  switch ($this->mode) {
   	  	case "INSERT":
-  	  	  $this->currentRecordId = mysql_insert_id();
+  	  	  $this->setCurrentRecordId(mysql_insert_id());
   	  	  //$this->getCurrentRecord();
   	  	case "UPDATE": 
   	  	  $this->updateRelations();
   	  	  break;
   	  	case "DELETE":
   	  	  $this->deleteRelations();
-  	  	  $this->currentRecordId = 0;
+  	  	  $this->setCurrentRecordId(0);
   	  	  break;
   	  }
   	  $this->getCurrentRecord();
@@ -1255,13 +1257,11 @@ class cDbTable implements iDbTable
     // get currentRecordId 
     if (isset($_POST["id".$this->name])) {
       //$this->setMode("BROWSE");
-      $this->currentRecordId=$_POST["id".$this->name];
-      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+      $this->setCurrentRecordId($_POST["id".$this->name]);
     } elseif (isset($_POST["subid".$this->name])) {
-      $this->currentRecordId=$_POST["subid".$this->name];
-      $_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+      $this->setCurrentRecordId($_POST["subid".$this->name]);
     } elseif ($_SESSION[table][$this->name][currentRecordId]) {
-    	$this->currentRecordId = $_SESSION[table][$this->name][currentRecordId];
+    	$this->setCurrentRecordId($_SESSION[table][$this->name][currentRecordId]);
     }
     
     if ($_POST[$this->name."Relation"]) {
@@ -1270,15 +1270,13 @@ class cDbTable implements iDbTable
     
     // # button - collapse tree 
     if (isset($_POST[$this->name."ORDERid".$this->name])) {
-    	$this->currentRecordId=-1;
+    	$this->setCurrentRecordId(-1);
     	$this->setMode(BROWSE); 
-    	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
     }
     // data manipulation buttons
     else if ($_POST[$this->name."Insert"]) {														// + Add
     	$this->setMode("INSERT");
-    	$this->currentRecordId=-1;
-    	$_SESSION[table][$this->name][currentRecordId] = $this->currentRecordId;
+    	$this->setCurrentRecordId(-1);
     }
     elseif ($_POST[$this->name."Update"]) { $this->setMode("UPDATE"); }						// * Edit
     elseif ($_POST[$this->name."Delete"]) { $this->setMode("DELETE");}  					// x Del
