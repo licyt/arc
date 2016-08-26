@@ -127,6 +127,11 @@ img {
 	display: none;
 }
 
+.GoButton {
+  color: white;
+  background-color: #BE34BA;
+}
+
 .BROWSE {
 	background-color: gray;
 }

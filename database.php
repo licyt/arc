@@ -147,12 +147,15 @@ class cDbField implements iDbField
   
   public function getHtmlControl($value="", $disabled=false)
   {
+  	if ($this->getName()=="NoteText") {
+  	  $htmlControl = new cHtmlText($value);
+  	  $htmlControl->setAttribute("onChange", "rowHasChanged('".$this->table->getName()."');");
   	// ---------------------------------------------------------------------------- BASIC field types
-    if (($this->getName()=="StatusType") 
-    || ($this->getName()=="NoteTable") 
-    || ($this->getName()=="RelationLObject") 
-    || ($this->getName()=="RelationRObject") 
-    || ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
+    } elseif (($this->getName()=="StatusType") 
+        || ($this->getName()=="NoteTable") 
+        || ($this->getName()=="RelationLObject") 
+        || ($this->getName()=="RelationRObject") 
+        || ($this->getName()=="ActionTable")) {   // ---------------------------- List of Tables 
     	$htmlControl = new cHtmlSelect;
     	$htmlControl->setSelected($value);
      	foreach ($this->table->scheme->tables as $table) {
@@ -177,22 +180,22 @@ class cDbField implements iDbField
   		$htmlControl = new cHtmlJsDateTimePick; // ------------------------------------- DateTimePick
     } elseif ($this->isStatusColor())  {
 	   	$htmlControl = new cHtmlJsColorPick; // ----------------------------------------- ColorPick
-	} 
-	
-	// ----------------------------------------------------------------------------- GUI field types
-	switch (gui($this->getName(), "type")) { 
-	  case "path":
- 	    $htmlControl = new cHtmlFilePath($value);
-	    break;
-	}
-	
-	// ----------------------------------------------------------------------------------- default 
-	if (!isset($htmlControl)) {
-	  //use input for other fields
-	  $htmlControl = new cHtmlInput;
-	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$this->table->getName()."');");
-	}
-	
+  	} 
+  	
+  	// ----------------------------------------------------------------------------- GUI field types
+  	switch (gui($this->getName(), "type")) { 
+  	  case "path":
+   	    $htmlControl = new cHtmlFilePath($value);
+  	    break;
+  	}
+  	
+  	// ----------------------------------------------------------------------------------- default 
+  	if (!isset($htmlControl)) {
+  	  //use input for other fields
+  	  $htmlControl = new cHtmlInput;
+  	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$this->table->getName()."');");
+  	}
+  	
     // set input size based on dbField type
     if( !(gui($this->getName(), "type")=="suggest") ) {
       $htmlControl->setAttribute("SIZE", filter_var($this->properties[Type], FILTER_SANITIZE_NUMBER_INT));
@@ -1604,7 +1607,14 @@ class cDbTable implements iDbTable
     		  	    $displayRow[$dcn] = $dbRow[$dcn];
     		  	}
     		  }
-    		  $displayRow["id".$this->name] = "";
+    		  if ($this->name=="Relation") {
+    		    $button = new cHtmlInput("GoRelation".$this->relation, "SUBMIT", ">");
+    		    $button->setAttribute("CLASS", "GoButton");
+    		    $button->setAttribute("onClick", $js);
+    		    $displayRow["idRelation"] = $button->display();  
+    		  } else {
+    		    $displayRow["id".$this->name] = "";
+    		  }
     		  
     		  // hide column for lookupField if it is a lookup into parent table 
     		  if (isset($this->parent)) {
@@ -1756,12 +1766,33 @@ class cDbScheme implements iDbScheme
   {
   	// display all tables from scheme as tabs
   	$tableTabs = new cHtmlTabControl($dbName."Admin");
-  	foreach ($this->tables as $name=>$table) {
-      // check POST for any admin button
-  	  if ($_POST["tabButtonAdmin".$name]) {
-  	  	// store selected table in session
-	  	$_SESSION[tabControl][Admin][selected] = $name;
-	  }
+  	
+  	if ($_POST["GoRelation1"]) {
+  	  $query =
+  	    "SELECT RelationRObject, RelationRId".
+  	    " FROM Relation".
+  	    " WHERE idRelation=".$_POST[idRelation];
+  	  if ($Relation = mysql_fetch_assoc(myQuery($query))) {
+  	    $_SESSION[tabControl][Admin][selected] = $Relation[RelationRObject];
+  	    $this->tables[$Relation[RelationRObject]]->setCurrentRecordId($Relation[RelationRId]);
+  	  }
+  	} elseif ($_POST["GoRelation2"]) {
+  	  $query =
+  	  "SELECT RelationLObject, RelationLId".
+  	  " FROM Relation".
+  	  " WHERE idRelation=".$_POST[idRelation];
+  	  if ($Relation = mysql_fetch_assoc(myQuery($query))) {
+  	    $_SESSION[tabControl][Admin][selected] = $Relation[RelationLObject];
+  	    $this->tables[$Relation[RelationLObject]]->setCurrentRecordId($Relation[RelationLId]);
+  	  }
+  	} else {
+    	foreach ($this->tables as $name=>$table) {
+        // check POST for any admin button
+    	  if ($_POST["tabButtonAdmin".$name]) {
+    	  	// store selected table in session
+  	  	  $_SESSION[tabControl][Admin][selected] = $name;
+  	    }
+    	}
   	}
   	
   	foreach ($this->tables as $name=>$table) {

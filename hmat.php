@@ -62,7 +62,8 @@ echo
         "<span style=\"font-size:20px;\">Life Cycle Tracker ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
         " grammaton</span>".
-        "  SVN REV:".shell_exec('svnversion')." DB:".$dbName."[".$GLOBALS[queryCount]."]".
+        " SVN:".shell_exec('svnversion').
+        " DB:".$dbName."[".$GLOBALS[queryCount]."]".
       "</div>".
   	  "<div style='position:absolute'>".
   	  "<div id='fileBrowser'></div>".

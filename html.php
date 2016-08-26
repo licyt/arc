@@ -160,6 +160,27 @@ class cHtmlSpan extends cHtmlElement implements iHtmlSpan
   }
 }
 
+class cHtmlText extends cHtmlElement {
+  public function __construct($content="", $rows=5, $cols=80) {
+    $this->setAttribute("CONTENT", $content);
+    $this->setAttribute("ROWS", $rows);
+    $this->setAttribute("COLS", $cols);
+  }
+  
+  public function display() {
+    return 
+      "<TEXTAREA ".
+        " ID=".$this->attributes[ID].
+        " NAME=".($this->attributes[NAME]?$this->attributes[NAME]:$this->attributes[ID]).
+        " ROWS=\"".$this->attributes[ROWS]."\"".
+        " COLS=\"".$this->attributes[COLS]."\"".
+        $this->add(onChange).
+      ">".
+        $this->attributes[CONTENT].
+      "</TEXTAREA>";
+  }
+}
+
 class cHtmlInput extends cHtmlElement implements iHtmlInput
 {
  
@@ -221,30 +242,30 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
   protected $colors = array();
   
   public function setSelected($value) {
-	$this->selected = $value;
+	  $this->selected = $value;
   }
   
   public function addOption($value, $option, $color="") {
-	$this->options[$value] = $option;
-	$this->colors[$value] = $color;
+	  $this->options[$value] = $option;
+	  $this->colors[$value] = $color;
   }
   
   public function displayOptions() {
-	$result = "<OPTION VALUE=0></OPTION>";
+  	$result = "<OPTION VALUE=0></OPTION>";
     foreach ($this->options as $value => $option) {
       if ($value == $this->selected) {
-	    $this->selectedColor = $this->colors[$value];		  
-	  }
-      $result.=
+      $this->selectedColor = $this->colors[$value];		  
+    }
+    $result.=
         "<OPTION ".
-		  (($value==$this->selected) ? " SELECTED" : "").
-		  ($this->colors[$value]
-		    ? " STYLE=\"background-color:#".$this->colors[$value].";\""
-		  	: ""
-		  ).
-		  " VALUE=\"$value\">".
-		  $option.
-		"</OPTION>";
+  	  (($value==$this->selected) ? " SELECTED" : "").
+  	  ($this->colors[$value]
+  	    ? " STYLE=\"background-color:#".$this->colors[$value].";\""
+  	  	: ""
+  	  ).
+  	  " VALUE=\"$value\">".
+  	  $option.
+  	"</OPTION>";
     }
     return $result;
   }
@@ -381,8 +402,8 @@ class cHtmlTable extends cHtmlElement
     array_push($this->headers, $columns);
   }
   public function addRow($columns) {
-	// var_dump( $columns );
-	array_push($this->rows, $columns);
+	  // var_dump( $columns );
+	  array_push($this->rows, $columns);
   }
   // $columns is array of values
   public function addFooter($columns) {
@@ -390,71 +411,71 @@ class cHtmlTable extends cHtmlElement
   }
   public function display() {
   	$table = "";
-	// display headers
-	foreach ($this->headers as $header) {
-	  $html = "";
-	  foreach ($header as $value) {
-	  	if (strpos($value, "StatusColor")) continue;
-	  	$html.="<TH>$value</TH>";
-	  }
-	  $table.="<TR>$html</TR>";
-	}
-	// display rows 
-	foreach ($this->rows as $rowIndex=>$row) {
-	  $html = "";
-	  $onClick = "";
-	  $class = "";
-	  foreach ($row as $columnName=>$value) {
-	  	//if ($columnName=="CLASS") continue;
-	  	unset($style);
-	  	
-	  	if ($columnName == "onKeyPress") {
-	  		$onKeyPress = "onKeyPress=\"$value\"";
-	  		continue;
-	  	} 
-	  	if ($columnName == "onClick") {
-	  		$onClick = "onClick=\"$value\"";
-	  		continue;
-	  	}
-	  	if (!$this->attributes[StatusEdit]) {
-		  if ($columnName == "StatusName") {
-		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
-		  }
-		  if ($columnName == "StatusColor") continue;
-	  	}
-	  	
-	  	if (strpos($columnName, "_id")) continue;
-	  	
-	  	if ($columnName == "sbColSpan") continue;
-	  	if ($columnName == "subBrowser") {
-	  		$class = " CLASS=\"subBrowserRow\"";
-	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
-	  		continue;
-	  	}
-	  	if ($columnName == "statusGannt") {
-	  		$class = " CLASS=\"statusGannt\"";
-	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
-	  		continue;
-	  	}
-	  	if ($columnName == "CLASS") {
-	  		$class = " CLASS=\"".$value."\"";
-	  		continue;
-	  	}
-	  	
-	  	$html.="<TD $style>$value</TD>";
-	  }
-	  $table.="<TR $class $onClick $onKeyPress>$html</TR>";
-	}
-	// display footers
+	  // display headers
+  	foreach ($this->headers as $header) {
+  	  $html = "";
+  	  foreach ($header as $value) {
+  	  	if (strpos($value, "StatusColor")) continue;
+  	  	$html.="<TH>$value</TH>";
+  	  }
+  	  $table.="<TR>$html</TR>";
+  	}
+  	// display rows 
+  	foreach ($this->rows as $rowIndex=>$row) {
+  	  $html = "";
+  	  $onClick = "";
+  	  $class = "";
+  	  foreach ($row as $columnName=>$value) {
+  	  	//if ($columnName=="CLASS") continue;
+  	  	unset($style);
+  	  	
+  	  	if ($columnName == "onKeyPress") {
+  	  		$onKeyPress = "onKeyPress=\"$value\"";
+  	  		continue;
+  	  	} 
+  	  	if ($columnName == "onClick") {
+  	  		$onClick = "onClick=\"$value\"";
+  	  		continue;
+  	  	}
+  	  	if (!$this->attributes[StatusEdit]) {
+  		  if ($columnName == "StatusName") {
+  		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
+  		  }
+  		  if ($columnName == "StatusColor") continue;
+  	  	}
+  	  	
+  	  	if (strpos($columnName, "_id")) continue;
+  	  	
+  	  	if ($columnName == "sbColSpan") continue;
+  	  	if ($columnName == "subBrowser") {
+  	  		$class = " CLASS=\"subBrowserRow\"";
+  	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+  	  		continue;
+  	  	}
+  	  	if ($columnName == "statusGannt") {
+  	  		$class = " CLASS=\"statusGannt\"";
+  	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+  	  		continue;
+  	  	}
+  	  	if ($columnName == "CLASS") {
+  	  		$class = " CLASS=\"".$value."\"";
+  	  		continue;
+  	  	}
+  	  	
+  	  	$html.="<TD $style>$value</TD>";
+  	  }
+  	  $table.="<TR $class $onClick $onKeyPress>$html</TR>";
+  	}
+  	// display footers
   	foreach ($this->footers as $footer) {
-	  $html = "";
-	  foreach ($footer as $value) {
-	  	if (strpos($value, "StatusColor")) continue;
-	  	$html.="<TH>$value</TH>";
-	  }
-	  $table.="<TR>$html</TR>";
-	}
-	return "<TABLE>$table</TABLE>";
+  	  $html = "";
+  	  foreach ($footer as $value) {
+  	  	if (strpos($value, "StatusColor")) continue;
+  	  	$html.="<TH>$value</TH>";
+  	  }
+  	  $table.="<TR>$html</TR>";
+  	}
+  	return "<TABLE>$table</TABLE>";
   }
 }
 
@@ -542,9 +563,9 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 
 class cHtmlA extends cHtmlElement
 {
-  public function __construct($path="") {
+  public function __construct($path="", $text="") {
   	$this->setAttribute("HREF", $path);
-  	$this->setAttribute("TEXT", $path);
+  	$this->setAttribute("TEXT", ($text?$text:$path));
   }
   public function display() {
   	return 
