@@ -2,18 +2,18 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
 // ------------------------------------------------------ C O N S T A N T S
 
-function myQuery($query) {
-  $GLOBALS[queryCount]++;
-  //echo $query."<BR>";
-  return mysql_query($query);
-}
-
 include_once("./dbConfig.php");
 require_once 'gui.php';
 require_once("html.php");
 require_once 'action.php';
 require_once 'relation.php';
 require_once 'gantt.php';
+
+function myQuery($query) {
+  $GLOBALS[queryCount]++;
+  //echo $query."<BR>";
+  return mysql_query($query);
+}
 
 // ------------------------------------------------------ I N T E R F A C E
 // Declare the interface iDbField
@@ -22,10 +22,12 @@ interface iDbField
   public function __construct($column="");
   public function foreignTableName();
   public function getHtmlControl($value="", $disabled=false);
+  public function getLookupControl($childTable, $value=-1);
   public function getName();
   public function getSize();
   public function getType();
   public function insertForeignKey();
+  public function isAutoInc();
   public function isDate();
   public function isDateTime();
   public function isForeignKey();
@@ -39,23 +41,30 @@ interface iDbField
 interface iDbTable
 {
   public function __construct($table, $parent=null);
-  public function loadFields();
-  public function loadChildren();
-  public function getMode();
-  public function getName();
+  public function addButton();
+  public function assignSQL($record);
+  public function browse($include="");
+  protected function buildSQL();
+  public function commit();
+  protected function commitSQL();
+  protected function deleteRelations(); 
+  public function detailForm();
+  public function getCurrentRecord();
   public function getFieldByName($fieldName); 
   public function getFieldIndex($fieldName);
-  public function getCurrentRecord();
+  public function getMode();
+  public function getName();
   public function getNumRecords();
   public function go($index);
+  public function insert($record);
+  public function loadFields();
+  public function loadChildren();
+  public function manipulator();
+  public function printFields();
+  public function respondToPost();
   public function setMode($mode);
   public function setName($name);
-  public function insert($record);
   public function update($record);
-  public function printFields();
-  public function manipulator();
-  public function respondToPost();
-  public function detailForm();
 }  
 
 // Declare the interface iDbSchema
@@ -100,7 +109,7 @@ class cDbField implements iDbField
   }
   
   public function isAutoInc() {
-	return $this->properties[Extra]=="auto_increment";
+	  return $this->properties[Extra]=="auto_increment";
   }
   
   public function isForeignKey() {
@@ -121,7 +130,7 @@ class cDbField implements iDbField
   }
   
   public function isDateTime() {
-	return ($this->properties[Type] == "datetime");
+    return ($this->properties[Type] == "datetime");
   }
   
   public function isTimeStamp() {
@@ -133,16 +142,16 @@ class cDbField implements iDbField
   }
   
   public function isStatusColor() {
-	return ( $this->properties[Field] == "StatusColor" );
+	  return ( $this->properties[Field] == "StatusColor" );
   }
   
   public function foreignTableName() {
     $fieldName = $this->getName();
-	return substr($fieldName, strpos($fieldName, "_id")+3);
+	  return substr($fieldName, strpos($fieldName, "_id")+3);
   }
   
   public function setTable($table) {
-	$this->table=$table;
+	  $this->table=$table;
   }
   
   public function getHtmlControl($value="", $disabled=false)
@@ -229,17 +238,17 @@ class cDbField implements iDbField
   	    " ORDER BY ".$lookupField." ASC";
   	  $optionList = Array();
   	  if( $result = myQuery($sql) ) {
-  		while( $row = mysql_fetch_assoc($result) ) {
-  		  $optionList[$row["id".$ftName]] = $row[$lookupField];
-  		}
+    		while( $row = mysql_fetch_assoc($result) ) {
+    		  $optionList[$row["id".$ftName]] = $row[$lookupField];
+    		}
   	  }
   	  $htmlControl = new cHtmlSuggest("id".$ftName, $value, $optionList[$value]);
   	  $htmlControl->setOptions($optionList, $lookupField);
   	  // get lookup field type/size
   	  $sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
   	  if( $result = myQuery($sql) ) {
-  		$row = mysql_fetch_assoc($result);
-  		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
+    		$row = mysql_fetch_assoc($result);
+    		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
   	  }
   	  $htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
   	  // attach event controllers
@@ -812,12 +821,6 @@ class cDbTable implements iDbTable
       $anchor->setAttribute(ID, $this->name.$this->currentRecordId);
       $result .= $anchor->display();
       
-      /*
-      if ($this->mode == "INSERT") {
-      	$result .= $this->reservedButton();
-      }
-      */
-      
       if (!is_null($this->parent)) {
       	$parrentName = gui($this->parent->getName(), "lookupField", $this->parent->getName()."Name");
       	$parentId = new cHtmlInput($this->name.$parrentName, "HIDDEN", $this->parent->getCurrentRecordId());
@@ -1092,7 +1095,6 @@ class cDbTable implements iDbTable
         	        copyJobTarget($parentJobId, $idSubJob);
       	        } else { // this was the last job in sequence
       	          // promote successful status to parent
-      	          //updateStatus("Job", $parentJobId, $status);
       	          $this->setCurrentRecordId($parentJobId);
       	          $action[ActionTable] = "Job";
       	          $action[ActionField] = getParentId("Job", $this->currentRecordId, "Task");
@@ -1102,7 +1104,6 @@ class cDbTable implements iDbTable
       	        }
     	        } else { // failed job, do not continue to next job 
     	          // promote failed status to parent
-    	          //updateStatus("Job", $parentJobId, $status);
     	          $this->setCurrentRecordId($parentJobId);
     	          $action[ActionTable] = "Job";
     	          $action[ActionField] = getParentId("Job", $this->currentRecordId, "Task");
@@ -1162,19 +1163,6 @@ class cDbTable implements iDbTable
   	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupSelf.$lookupField]."'")) {
   	  	  $newParentId = mysql_insert_id();
   	  	}
-  	  	/*
-  	  	// INSERT Relations to "undefined" parent's parents
-  	  	foreach ($parent->parents as $grandParent) { 
-  	  	  myQuery(
-  	  	    "INSERT INTO Relation SET ".
-  	  	  	"RelationType='RRCP', ".                          // Record-Record Child-Parent
-  	  	    "RelationLObject='$parentName', ".
-  	  	    "RelationLId=$newParentId, ".
-  	  	    "RelationRObject='".$grandParent->getName()."', ".
-  	  	    "RelationRId=0"
-  	  	  );
-  	  	}
-  	  	*/
   	  }
   	  if (($oldParentId==-1)&&($newParentId>0)) {
   	  	// non existing relation
@@ -1352,16 +1340,10 @@ class cDbTable implements iDbTable
   	    }
   	    if ($columnName=="ActionParam1") {
   	      $table = $this->scheme->tables[$this->currentRecord[ActionTable]];
-  	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1]/*, $this->currentRecord[ActionParam2]*/);
+  	      $params = loadParameters($table, $this->currentRecord[ActionCommand], $this->currentRecord[ActionParam1]);
   	      if ($params[1]) $result[ActionParam1] = $params[1]->display();
-  	      /*if ($params[2]) $result[ActionParam2] = $params[2]->display();*/
   	  	  continue;
   	    }
-  	    /*
-  	    if ($columnName=="ActionParam2") {
-  	  	  continue;
-  	    }
-  	    */
   	    // relation editor
   	    if ($columnName=="RelationRId") {
   	      $result[$columnName] = loadRightRows($this->currentRecord[RelationRObject], $this->currentRecord[RelationRId]);
@@ -1429,7 +1411,7 @@ class cDbTable implements iDbTable
   	    $newNames["id".$this->name] = $this->manipulator().$id;
   	    break;
   	  default :
-      	$newNames["id".$this->name] = $this->addButton()/*.$this->reservedButton()*/;
+      	$newNames["id".$this->name] = $this->addButton();
       	break;
     }
     return $newNames;

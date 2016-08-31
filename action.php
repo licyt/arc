@@ -1,7 +1,7 @@
 <?php
 
 // load list of fields in htmlSelect
-function fieldsForAction($table /* cDbTable */, $value="") {
+function fieldsForAction($table, $value="") {
   $fields = new cHtmlSelect;
   $fields->setAttribute("ID", "ActionField");
   $fields->setAttribute("NAME", "ActionField");
@@ -22,7 +22,7 @@ function fieldsForAction($table /* cDbTable */, $value="") {
 }
 
 // load list of available commands
-function commandsForAction($table /* cDbTable */, $value="") {
+function commandsForAction($table, $value="") {
   $commands = new cHtmlSelect;
   $commands->setAttribute("ID", "ActionCommand");
   $commands->setAttribute("NAME", "ActionCommand");
@@ -41,7 +41,7 @@ function commandsForAction($table /* cDbTable */, $value="") {
   return $commands;
 }
 
-function loadParameters($table /* cDbTable */, $command /* string */, $param1="" /*, $param2=""*/) {
+function loadParameters($table, $command, $param1="" ) {
   $params = array();
   switch ($command) {
   	case "CREATE": // ------------------------------------------------------------------ CREATE
@@ -56,7 +56,6 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	      }
 	    }
 	    $params[1]->setSelected($param1);
-	    /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  }
   	  break;
 	case "CREATE CHILD": // ----------------------------------------------------------- CREATE CHILD
@@ -68,7 +67,6 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	      $params[1]->addOption($child->getName(), $child->getName());
 		}
 	  }
-	  /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  break;
 	case "SET STATUS": // --------------------------------------------------------------- SET STATUS
 	  $params[1] = new cHtmlSelect;
@@ -84,11 +82,9 @@ function loadParameters($table /* cDbTable */, $command /* string */, $param1=""
 	    }
 	  }
 	  $params[1]->setSelected($param1);
-	  /*$params[2] = new cHtmlInput("ActionParam2", "HIDDEN");*/
 	  break;
 	default: // ----------------------------------------------------------------------------- default
 	  $params[1] = new cHtmlInput("ActionParam1", "TEXT");
-	  /*$params[2] = new cHtmlInput("ActionParam2", "TEXT");*/
 	break;
   }
   return $params;
