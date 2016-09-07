@@ -28,7 +28,7 @@
 }
 
 #browseFormPerson {
-	border: 1px solid #00CC00;
+	border: 1px solid #99FF66;
 }
 
 #tabButtonPersonNote {
@@ -95,4 +95,14 @@
 	#PersonORDERCompanyName, #PersonORDERPersonPostition,
 	#PersonORDERPersonPhone, #PersonORDERPersonEmail {
 	
+}
+
+#browseFormPerson tr {
+  background-color: #99FF66;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+#browseFormPerson tr:hover {
+  background-color: white;
 }

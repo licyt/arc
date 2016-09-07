@@ -145,15 +145,18 @@ class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 // implement interface iHtmlSpan
 class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 { 
-  public function __construct ($id="") {
-	$this->setAttribute("ID", $id);
+  public function __construct ($id="", $content="") {
+	  $this->setAttribute("ID", $id);
+	  $this->setAttribute("CONTENT", $content);
   }
 	
   public function display() {
 	  return
-	    "<SPAN ".
-		  " ID=".$this->attributes[ID].
-		  " NAME=".$this->attributes[ID].
+	    "<SPAN".
+		    " ID=".$this->attributes[ID].
+		    " NAME=".$this->attributes[ID].
+        $this->add(onClick).
+        $this->add("CLASS").
 		  ">".
 		  $this->attributes[CONTENT].
 		"</SPAN>";
@@ -277,8 +280,8 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
         " ID=".$this->attributes[ID].
         " NAME=".$this->attributes[NAME].
         $this->attributes[DISABLED].
-        ($this->attributes[OnClick]
-          ? " OnClick=\"".$this->attributes[OnClick]."\""
+        ($this->attributes[onClick]
+          ? " onClick=\"".$this->attributes[onClick]."\""
           : ""
         ).
         ($this->selectedColor
@@ -344,8 +347,8 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   protected $selected;
   
   public function __construct ($name="") {
-	$this->name = $name;
-	$this->selected = "";
+  	$this->name = $name;
+  	$this->selected = "";
   }
   
   public function getName() {
@@ -353,41 +356,47 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   }
   
   public function setSelected($tabName) {
-	$this->selected = $tabName;
-	$_SESSION[tabControl][$this->name][selected] = $this->selected;
+  	$this->selected = $tabName;
+  	$_SESSION[tabControl][$this->name][selected] = $this->selected;
   }
   
   public function addTab($tabName, $content) {
-	// process tab switching
-	$this->tabs[$tabName] = $content;
-	if ($_SESSION[tabControl][$this->name][selected] && !$this->selected)
+  	// process tab switching
+  	$this->tabs[$tabName] = $content;
+  	if ($_SESSION[tabControl][$this->name][selected] && !$this->selected)
       $this->selected = $_SESSION[tabControl][$this->name][selected];
-	if (!$this->selected) $this->setSelected($tabName);
+	  if (!$this->selected) $this->setSelected($tabName);
   }
   
   function display() {
-	// create html  
-	$main = new cHtmlDiv("tabControl".$this->name);
-	$head = new cHtmlDiv("tabHead".$this->name);
-	$body = new cHtmlDiv("tabBody".$this->name);
-	foreach ($this->tabs as $tabName => $content) {
-	  if ($tabName == $this->selected) {
-		$button = new cHtmlSpan("tab".$this->name.$tabName);
-		$button->setAttribute("CONTENT", gui("tab".$this->name.$tabName, $GLOBALS[lang], $tabName));
-		$body->setAttribute("CONTENT", $content);
-	  } else {
-        $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
-	  }
+  	// create html  
+  	$main = new cHtmlDiv("tabControl".$this->name);
+  	$head = new cHtmlDiv("tabHead".$this->name);
+  	$body = new cHtmlDiv("tabBody".$this->name);
+  	foreach ($this->tabs as $tabName => $content) {
+  	  if ($tabName == $this->selected) {
+    		$button = new cHtmlSpan("tab".$this->name.$tabName);
+    		$button->setAttribute("CONTENT", gui("tab".$this->name.$tabName, $GLOBALS[lang], $tabName));
+    		$body->setAttribute("CONTENT", $content);
+  	  } else {
+  	    if ($this->name=="Admin") {
+          $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
+  	    } else {
+          $button = new cHtmlSpan("tabButton".$this->name.$tabName);
+          $button->setAttribute("CONTENT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
+          $button->setAttribute("onClick", "switchTab('".$this->name."' ,'".$tabName."');");
+  	    }
+  	  }
       $switch.=$button->display();
-	}
-	$form = new cHtmlForm();
+  	}
+  	$form = new cHtmlForm();
     $form->setAttribute("ID", "tabSwitch".$this->name);
     $form->setAttribute("ACTION", "");
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", $switch);
     $head->setAttribute("CONTENT", $form->display());
-	$main->setAttribute("CONTENT", $head->display().$body->display());
-	return $main->display();
+  	$main->setAttribute("CONTENT", $head->display().$body->display());
+  	return $main->display();
   }
 }
 
@@ -396,20 +405,81 @@ class cHtmlTable extends cHtmlElement
   protected $headers = array();
   protected $footers = array();
   protected $rows  = array();
+  protected $ids = array();
   
   // $columns is array of values
   public function addHeader($columns) {
     array_push($this->headers, $columns);
   }
-  public function addRow($columns) {
+  
+  public function deleteRows() {
+    while (count($this->rows)) {
+      array_pop($this->rows);
+      array_pop($this->ids);
+    }
+  }
+  
+  public function addRow($id, $columns) {
 	  // var_dump( $columns );
+	  array_push($this->ids, $id);
 	  array_push($this->rows, $columns);
   }
+  
   // $columns is array of values
   public function addFooter($columns) {
     array_push($this->footers, $columns);
   }
-  public function display() {
+  
+  public function displayRows() {
+    foreach ($this->rows as $rowIndex=>$row) {
+      $html = "";
+      $onClick = "";
+      $class = "";
+      foreach ($row as $columnName=>$value) {
+        //if ($columnName=="CLASS") continue;
+        unset($style);
+    
+        if ($columnName == "onKeyPress") {
+          $onKeyPress = "onKeyPress=\"$value\"";
+          continue;
+        }
+        if ($columnName == "onClick") {
+          $onClick = "onClick=\"$value\"";
+          continue;
+        }
+        if (!$this->attributes[StatusEdit]) {
+      		  if ($columnName == "StatusName") {
+      		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
+      		  }
+      		  if ($columnName == "StatusColor") continue;
+        }
+    
+        if (strpos($columnName, "_id")) continue;
+    
+        if ($columnName == "sbColSpan") continue;
+        if ($columnName == "subBrowser") {
+          $class = " CLASS=\"subBrowserRow\"";
+          $html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+          continue;
+        }
+        if ($columnName == "statusGannt") {
+          $class = " CLASS=\"statusGannt\"";
+          $html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+          continue;
+        }
+        if ($columnName == "CLASS") {
+          $class = " CLASS=\"".$value."\"";
+          continue;
+        }
+    
+        $html.="<TD $style>$value</TD>";
+      }
+      $rows.="<TR ID=\"".$this->ids[$rowIndex]."\" $class $onClick $onKeyPress>$html</TR>";
+    }
+    return $rows;
+  }
+  
+  public function display($tableId="") {
   	$table = "";
 	  // display headers
   	foreach ($this->headers as $header) {
@@ -421,51 +491,7 @@ class cHtmlTable extends cHtmlElement
   	  $table.="<TR>$html</TR>";
   	}
   	// display rows 
-  	foreach ($this->rows as $rowIndex=>$row) {
-  	  $html = "";
-  	  $onClick = "";
-  	  $class = "";
-  	  foreach ($row as $columnName=>$value) {
-  	  	//if ($columnName=="CLASS") continue;
-  	  	unset($style);
-  	  	
-  	  	if ($columnName == "onKeyPress") {
-  	  		$onKeyPress = "onKeyPress=\"$value\"";
-  	  		continue;
-  	  	} 
-  	  	if ($columnName == "onClick") {
-  	  		$onClick = "onClick=\"$value\"";
-  	  		continue;
-  	  	}
-  	  	if (!$this->attributes[StatusEdit]) {
-  		  if ($columnName == "StatusName") {
-  		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
-  		  }
-  		  if ($columnName == "StatusColor") continue;
-  	  	}
-  	  	
-  	  	if (strpos($columnName, "_id")) continue;
-  	  	
-  	  	if ($columnName == "sbColSpan") continue;
-  	  	if ($columnName == "subBrowser") {
-  	  		$class = " CLASS=\"subBrowserRow\"";
-  	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
-  	  		continue;
-  	  	}
-  	  	if ($columnName == "statusGannt") {
-  	  		$class = " CLASS=\"statusGannt\"";
-  	  		$html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
-  	  		continue;
-  	  	}
-  	  	if ($columnName == "CLASS") {
-  	  		$class = " CLASS=\"".$value."\"";
-  	  		continue;
-  	  	}
-  	  	
-  	  	$html.="<TD $style>$value</TD>";
-  	  }
-  	  $table.="<TR $class $onClick $onKeyPress>$html</TR>";
-  	}
+  	$table.=$this->displayRows();
   	// display footers
   	foreach ($this->footers as $footer) {
   	  $html = "";
@@ -475,7 +501,7 @@ class cHtmlTable extends cHtmlElement
   	  }
   	  $table.="<TR>$html</TR>";
   	}
-  	return "<TABLE>$table</TABLE>";
+  	return "<TABLE ID=\"$tableId\">$table</TABLE>";
   }
 }
 
@@ -488,11 +514,20 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 	
 	// display is overloaded 
 	public function display() {
+	  
+	  
+	  // toto je uplne napicu, to sa takto nerobi
+	  
+	  
+	  
 		$input = new cHtmlInput($this->attributes[ID], "TEXT", $this->attributes[VALUE]);
 		$input->setAttribute("SIZE", "10");
 		$input->setAttribute("CLASS", "datepicker");
 		$input->setAttribute("onInput", "rowHasChanged('".$this->attributes[TableName]."');");
 		$input->setAttribute("onChange", "rowHasChanged('".$this->attributes[TableName]."');");
+		
+		$input->setAttribute("onClick", "stopEvent(event);");
+		
 		return
 		  $input->display();
 	}
@@ -555,6 +590,7 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			" NAME=".$this->attributes[ID].
 			" VALUE=\"".$this->attributes[VALUE]."\"".                                        
 			$this->add(SIZE).
+			$this->add(onClick).
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
 			" onChange=\"updateColor(this)\"".
 		  ">";

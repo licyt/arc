@@ -31,6 +31,17 @@
 	border: 2px solid #B2B2B2;
 }
 
+#browseFormNote tr {
+  background-color: #B2B2B2;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+#browseFormNote tr:hover {
+  background-color: white;
+}
+
 #tabButtonNoteStatus {
 	color: black;
 	background-color: #B2B2B2;

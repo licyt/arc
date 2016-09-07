@@ -6,11 +6,12 @@ var xmlHttp;
 var timeOn;
 var suggestFireFlag;
 
+
 function Unpack(params) {
   var result="";
   for (name in params) {
     //alert(name+"="+params[name]); // trace parameters
-    result=result+"&"+name+"="+params[name];
+    result=result+(params[name] ? "&"+name+"="+params[name] : "");
   }
   return result;
 }
@@ -68,27 +69,27 @@ function Ajax(request, params) {
               var fileBrowser=elementById("fileBrowser");
               fileBrowser.innerHTML=xmlHttp.responseText;
               if (element=elementById(params['elementId'])) {
-	            if (pos=getAbsolutePosition(element)) {
-    	          fileBrowser.style.left=(pos.x-8)+"px";
-		          fileBrowser.style.top=(pos.y+element.offsetHeight-5)+"px";
-		        }
-	          }
+  	            if (pos=getAbsolutePosition(element)) {
+      	          fileBrowser.style.left=(pos.x-8)+"px";
+    		          fileBrowser.style.top=(pos.y+element.offsetHeight-5)+"px";
+    		        }
+  	          }
               show(fileBrowser.id);
               break;
             case "suggestSearch":
             	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
-			  	var dlchildren = document.getElementsByName(params['destinationId']+"Options");
-			  	var flag = 0;
-			  	for( i = 0; i < dlchildren.length; i++ ) {
-				  if( dlchildren[i].text == params['searchString'] ) {
-					document.getElementById(params['hiddenId']).setAttribute("value",dlchildren[i].getAttribute("data-value"));
-				  	flag = 1;
-				  }
-			  	}
-			  	if( flag == 0 ) {
-				  document.getElementById(params['hiddenId']).setAttribute("value","-1");
-			  	}
-			  break;
+    			  	var dlchildren = document.getElementsByName(params['destinationId']+"Options");
+    			  	var flag = 0;
+    			  	for( i = 0; i < dlchildren.length; i++ ) {
+      				  if( dlchildren[i].text == params['searchString'] ) {
+      				    document.getElementById(params['hiddenId']).setAttribute("value",dlchildren[i].getAttribute("data-value"));
+      				  	flag = 1;
+      				  }
+    			  	}
+    			  	if( flag == 0 ) {
+    			  	  document.getElementById(params['hiddenId']).setAttribute("value","-1");
+    			  	}
+    			  	break;
             case "loadTable":
               var table=elementById('ActionTable');
               var td0=table.parentElement;
@@ -106,30 +107,53 @@ function Ajax(request, params) {
               td1.innerHTML=xmlHttp.responseText.substr(0, pos);
               td2.innerHTML=xmlHttp.responseText.substr(pos+1);
               break;
-/*
-            case "loadParam2":
-              var par1=elementById('ActionParam1');
-              var td1=par1.parentElement;
-              var td2=td1.nextSibling;
-              td2.innerHTML=xmlHttp.responseText;
-              break;
-*/
             case "loadRightRows":
-                var table=elementById('RelationRObject');
-                var td0=table.parentElement;
-                var td1=td0.nextSibling;
-                td1.innerHTML=xmlHttp.responseText;  
-                break;
+              var table=elementById('RelationRObject');
+              var td0=table.parentElement;
+              var td1=td0.nextSibling;
+              td1.innerHTML=xmlHttp.responseText;  
+              break;
             case "loadLeftRows":
-                var table=elementById('RelationLObject');
-                var td0=table.parentElement;
-                var td1=td0.nextSibling;
-                td1.innerHTML=xmlHttp.responseText;  
-                break;
+              var table=elementById('RelationLObject');
+              var td0=table.parentElement;
+              var td1=td0.nextSibling;
+              td1.innerHTML=xmlHttp.responseText;  
+              break;
             case "loadGantt":
-                var gantt=elementById('gantt');
-                gantt.innerHTML=xmlHttp.responseText;
-                break;
+              var gantt=elementById('gantt');
+              gantt.innerHTML=xmlHttp.responseText;
+              break;
+            case "loadRow":
+              response = JSON.parse(xmlHttp.responseText);
+              var table=elementById("table"+params["tableName"]);
+              var oldRowName = params["tableName"]+"Row"+response.oldRowId;
+              if (oldRow = table.rows.namedItem(oldRowName)) {
+                oldRow.innerHTML = response.oldRow;
+                oldRow.setAttribute('onclick', response.onClick);
+              }
+              var sbRowName = params["tableName"]+"Sb"+response.oldRowId;
+              var sbRowIndex = getRowIndex(table, sbRowName)
+              if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+              var newRowName = params["tableName"]+"Row"+params["newRowId"];
+              var newRowIndex = getRowIndex(table, newRowName);
+              if (newRow = table.rows.namedItem(newRowName)) {
+                newRow.innerHTML = response.newRow;
+                newRow.setAttribute('onClick', response.onEditClick);
+              }
+              var newSbRow = table.insertRow(newRowIndex+1);
+              newSbRow.id = params["tableName"]+"Sb"+params["newRowId"];
+              newSbRow.setAttribute("class", "subBrowserRow");
+              newSbRow.innerHTML = response.subBrowser;
+              currentRowId = params["newRowId"];
+              $("#id"+params["tableName"]).val(currentRowId);
+              break;
+            case "switchTab":
+              response = JSON.parse(xmlHttp.responseText);
+              currentRowId = response.currentRecordId;
+              var table=elementById("table"+params["tableName"]);
+              var sbRowName = params["tableName"]+"Sb"+currentRowId;
+              table.rows.namedItem(sbRowName).innerHTML = response.subBrowser;
+              break;
         } // switch request
       } // switch readyState
     } // function
@@ -143,6 +167,15 @@ function Ajax(request, params) {
   xmlHttp.send(null);
 }
 
+function getRowIndex(table, rowId) {
+  var index=0;
+  while (index < table.rows.length) {
+    if (table.rows[index].id == rowId) return index;
+    index++;
+  }
+  return null;
+}
+
 // file browser functions
 
 function updatePath(elementId, path) {
@@ -150,14 +183,14 @@ function updatePath(elementId, path) {
   a = elementById(elementId+"Link");
   oldtext = a.text;
   if (path=="..") {
-	lastSlashPos = oldtext.lastIndexOf('/')
+	  lastSlashPos = oldtext.lastIndexOf('/')
 	if (lastSlashPos > -1) {
 	  a.text = oldtext.slice(0, lastSlashPos);
 	} else {
 	  a.text = "";
 	}
   } else {
-	a.text = (oldtext ? oldtext+"/" : "")+path;
+	  a.text = (oldtext ? oldtext+"/" : "")+path;
   }
   a.href = './datafiles/'+a.text;
   input.value = a.text;
@@ -231,14 +264,6 @@ function loadParameters() {
   Ajax("loadParameters", params);
 }
 
-/*
-function loadParam2() {
-  var params=new Array();
-  params['param1']=elementById("ActionParam1").value;
-  Ajax("loadParam2", params);
-}
-*/
-
 function loadRightRows() {
   var params=new Array();
   params['table']=elementById("RelationRObject").value;
@@ -251,3 +276,88 @@ function loadLeftRows() {
   Ajax("loadLeftRows", params);
 }
 
+var currentRowId = -1;
+
+function loadRow(parentName, tableName, newRowId) {
+  //alert(parentName+" "+tableName+" "+oldRowId+" "+newRowId);
+  var params=new Array();
+  params['parentName']=parentName;
+  params['tableName']=tableName;
+  params['newRowId']=newRowId;
+  Ajax("loadRow", params);
+}
+
+function switchTab(tableName, tabName) {
+  //alert(tableName+" "+tabName);
+  var params=new Array();
+  params['tableName']=tableName;
+  params['tabName']=tabName;
+  Ajax("switchTab", params);
+}
+
+function ajaxPost(tableName) {
+  $.post(
+      "ajax.php?submitRow&tableName="+tableName, 
+      $("#browseForm"+tableName).serialize(),
+      function (result) {
+        response = JSON.parse(result);
+        var newRowId = response.newRowId;
+        var newRowName = tableName+"Row"+newRowId;
+        if (response.oldRowId==-1) {
+          $("#id"+tableName).val(newRowId);
+          elementById(tableName+"Row-1").id = newRowName;
+          //$("#"+tableName+"Row-1").attr("id", newRowName);
+          $("#"+tableName+"Insert").show();
+          $("#"+tableName+"Cancel").hide();
+        }
+        $("#"+newRowName).html(response.newRow);
+/*
+        // subBrowsers of new row
+        table = elementById("table"+tableName);
+        var sbRowName = tableName+"Sb"+newRowId;
+        if (!(sbRow=table.rows.namedItem(sbRowName))) {
+          var newRowIndex = getRowIndex(table, newRowName);
+          var sbRow = table.insertRow(newRowIndex+1);
+          sbRow.id = sbRowName;
+        }
+        sbRow.innerHTML = response.subBrowser;
+*/
+      }
+  );
+}
+
+function ajaxInsert(tableName) {
+  var newRow = elementById("table"+tableName).insertRow(1);
+  newRow.id = tableName+"Row-1";
+  $.post(
+      "ajax.php?insertRow&tableName="+tableName, 
+      function (result) {
+        response = JSON.parse(result);
+        table = elementById("table"+tableName);
+        // old row
+        var oldRowName = tableName+"Row"+response.oldRowId;
+        if (oldRow = table.rows.namedItem(oldRowName)) {
+          oldRow.innerHTML = response.oldRow;
+          oldRow.setAttribute('onclick', response.onClick);
+        }
+        // subBrowsers of old row
+        var sbRowName = tableName+"Sb"+response.oldRowId;
+        var sbRowIndex = getRowIndex(table, sbRowName);
+        if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+        // new row for insert
+        $("#"+tableName+"Row"+$("#id"+tableName).val()).html(response.oldRow);
+        newRow.innerHTML = response.newRow;
+        $("#id"+tableName).val(-1);
+        $("#"+tableName+"Insert").hide();
+        $("#"+tableName+"Cancel").show();
+      }
+  );
+}
+
+function Cancel(tableName) {
+  table = elementById("table"+tableName);
+  var rowIndex = getRowIndex(table, tableName+"Row-1");
+  if (rowIndex>0) table.deleteRow(rowIndex);
+  $("#"+tableName+"Insert").show();
+  $("#"+tableName+"Cancel").hide();
+}

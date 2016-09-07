@@ -1,3 +1,7 @@
+table {
+	border-spacing: 1px;
+}
+
 body {
   font-family: "Tahoma";
   font-size: 12px;
@@ -21,6 +25,9 @@ th {
 
 td {
   font-size: 12px;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -48,7 +55,7 @@ select {
 	margin: 0px;
 	padding: 0px;
 	border: 1px;
-	max-width: 200px;
+	max-width: 170px;
 }
 
 select:disabled {
@@ -73,9 +80,15 @@ img {
   border: 0px;
 }
 
+#tabBodyAdmin {
+	width: 1500px;
+	height: 700px;
+	overflow-y: scroll;
+	overflow-x: auto;
+}
 
-.subBrowserRow:hover {
-  background-color: transparent;
+.subBrowserRow  {
+  background-color: white;
 }
 
 .goButtons {
@@ -158,7 +171,7 @@ img {
 }
 
 .cHtmlFilePath {
- width: 200px; 
+ width: 165px; 
 }
 
 .cHtmlFilePath a {
@@ -173,6 +186,7 @@ img {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	height: 16px;
+	width: 140px;
 }
 
 .cHtmlFilePath input {

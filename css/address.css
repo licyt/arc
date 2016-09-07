@@ -97,3 +97,13 @@
 	#AddressORDERAddressCity, #AddressORDERAddressCountry {
 	
 }
+
+#browseFormAddress tr {
+  background-color: #CCCCCC;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+#browseFormAddress tr:hover {
+  background-color: white;
+}

@@ -44,7 +44,7 @@ echo
   	linkCss("css/history.css").
   	linkCss("css/datepicker.css").
   		
-  	//linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google
+  	linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google
   	
   	linkJs("js/jscolor.js").
   	linkJs("js/datepicker.js").
@@ -61,7 +61,7 @@ echo
   	  "<div id='svnrevision'>".
         "<span style=\"font-size:20px;\">Life Cycle Tracker ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
-        " grammaton</span>".
+        " gramm-A-ton</span>".
         " SVN:".shell_exec('svnversion').
         " DB:".$dbName."[".$GLOBALS[queryCount]."]".
       "</div>".

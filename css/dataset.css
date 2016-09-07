@@ -156,3 +156,12 @@
 	#DataSetORDERDataSetName, #DataSetORDERDataSetDate {
 	
 }
+
+
+#browseFormDataSet th,
+#browseFormDataSet td {
+  background-color: #B2B2B2;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}

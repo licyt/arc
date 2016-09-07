@@ -14,6 +14,11 @@
 	display: block;
 }
 
+.ProjectOrderButton {
+  background-color: #00CCFF;
+  font-weight: bold;
+}
+
 #tabAdminProject {
 	color: black;
 	background-color: #00CCFF;
@@ -151,8 +156,13 @@
 	margin: 0px 2px 0px 0px;
 }
 
-#ProjectORDERidProject, #ProjectORDERCompanyName,
-	#ProjectORDERProjectName, #ProjectORDERStatusName,
-	#ProjectORDERProjectStartDate, #ProjectORDERProjectPriority {
+#browseFormProject tr {
+	background-color: #00CCFF;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
 
+#browseFormProject tr:hover {
+  background-color: white;
 }

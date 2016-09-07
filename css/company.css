@@ -215,3 +215,13 @@
 	#CompanyORDERCompanyWebsite {
 	
 }
+
+#browseFormCompany tr {
+  background-color: #66FF66;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+#browseFormCompany tr:hover {
+  background-color: white;
+}

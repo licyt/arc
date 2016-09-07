@@ -8,6 +8,7 @@ require_once("html.php");
 require_once 'action.php';
 require_once 'relation.php';
 require_once 'gantt.php';
+require_once 'color.php';
 
 function myQuery($query) {
   $GLOBALS[queryCount]++;
@@ -42,12 +43,7 @@ interface iDbTable
 {
   public function __construct($table, $parent=null);
   public function addButton();
-  public function assignSQL($record);
   public function browse($include="");
-  protected function buildSQL();
-  public function commit();
-  protected function commitSQL();
-  protected function deleteRelations(); 
   public function detailForm();
   public function getCurrentRecord();
   public function getFieldByName($fieldName); 
@@ -220,6 +216,8 @@ class cDbField implements iDbField
       	:""
       )
     );
+    
+    $htmlControl->setAttribute("onClick", "stopEvent(event);");
     $htmlControl->setAttribute("VALUE", $value);
     
     return 
@@ -276,36 +274,36 @@ class cDbField implements iDbField
           }
         }
         // color background for status
-	  	$js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
-	  }
-	  // attach onChange handler
-	  if (($childTable->getMode()=="UPDATE")||($childTable->getMode()=="INSERT")) {
-	    $js .= "rowHasChanged('".$childTable->getName()."');";
-	  }
-	  if ($js) $htmlControl->setAttribute("onChange", $js);
-	  // prepare select for lookup options
-	  $query = 
-	    "SELECT id".$ftName.", ".
-		  gui($ftName, "lookupField", $ftName."Name"). 
-		  ($ftName=="Status" ? ", StatusColor" : "").
-	    " FROM ".$ftName.
-		// Status - additional filter for StatusType
-		($ftName=="Status"
-		  ? " WHERE StatusType=\"".$childTable->getName()."\""
-		  : ""
-		);
-	  // push options
-	  if ($result = myQuery($query)) {
-		while ($row = mysql_fetch_assoc($result)) {
-		  $htmlControl->addOption(
-		    $row["id".$ftName], 
-		    $row[gui($ftName, "lookupField", $ftName."Name")], 
-		 	($ftName=="Status" ? $row[StatusColor] : "")
-		  );
+	  	  $js ="this.style.backgroundColor=this.options[this.selectedIndex].style.backgroundColor;";
+  	  }
+  	  // attach onChange handler
+  	  if (($childTable->getMode()=="UPDATE")||($childTable->getMode()=="INSERT")) {
+  	    $js .= "rowHasChanged('".$childTable->getName()."');";
+  	  }
+  	  if ($js) $htmlControl->setAttribute("onChange", $js);
+  	  // prepare select for lookup options
+  	  $query = 
+  	    "SELECT id".$ftName.", ".
+  		  gui($ftName, "lookupField", $ftName."Name"). 
+  		  ($ftName=="Status" ? ", StatusColor" : "").
+  	    " FROM ".$ftName.
+  		// Status - additional filter for StatusType
+  		($ftName=="Status"
+  		  ? " WHERE StatusType=\"".$childTable->getName()."\""
+  		  : ""
+  		);
+  	  // push options
+  	  if ($result = myQuery($query)) {
+    		while ($row = mysql_fetch_assoc($result)) {
+    		  $htmlControl->addOption(
+    		    $row["id".$ftName], 
+    		    $row[gui($ftName, "lookupField", $ftName."Name")], 
+    		 	  ($ftName=="Status" ? $row[StatusColor] : "")
+    		  );
         }
-	  }
+  	  }
     }
-    
+    $htmlControl->setAttribute("onClick", "stopEvent(event);");
   	return $htmlControl->display();
   }
   
@@ -397,6 +395,10 @@ class cDbTable implements iDbTable
   
   public function getCurrentRecordId() {
   	return $this->currentRecordId;
+  }
+  
+  public function getLastRecord() {
+    return $this->lastRecord;
   }
   
   public function getNumRecords() 
@@ -506,7 +508,8 @@ class cDbTable implements iDbTable
   public function isSelected() {
   	$selectedItem = "Admin";
   	$selectedPath = $selectedItem;
-  	while ($selectedItem = $_SESSION[tabControl][$selectedItem][selected]) {
+  	while ($sI = $_SESSION[tabControl][$selectedItem][selected]) {
+  	  $selectedItem = $sI;
   	  if (strpos($selectedPath, $selectedItem)) break;		// avoid loops
   	  $selectedPath .= "|".$selectedItem;
   	}
@@ -703,7 +706,7 @@ class cDbTable implements iDbTable
   	    ? " AND (P".$pi.".id".$this->parent->getName()."=".$this->parent->getCurrentRecordId().")"
   	    : ""
   	  ).
-  	  ($this->filter
+  	  ($this->filter && !$this->parent
   		? " AND ".$this->filter
   	  	: ""
   	  ).
@@ -783,13 +786,20 @@ class cDbTable implements iDbTable
   }
   
   public function addButton() {
-  	$button = new cHtmlInput($this->name."Insert", "SUBMIT", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
+  	$button = new cHtmlSpan($this->name."Insert", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "InsertButton");
+    $button->setAttribute(onClick, "ajaxInsert('".$this->name."');");
   	return $button->display();
   }
 
-  public function manipulator() 
-  {
+  public function cancelButton() {
+  	$button = new cHtmlSpan($this->name."Cancel", "x"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
+    $button->setAttribute("CLASS", "CancelButton");
+    $button->setAttribute(onClick, "Cancel('".$this->name."');");
+  	return $button->display();
+  }
+
+  public function manipulator() {
     // display update button
     if (($this->mode == "BROWSE")&&($this->currentRecordId>0)) {
       $button = new cHtmlInput($this->name."Update", "SUBMIT", "o");
@@ -805,17 +815,24 @@ class cDbTable implements iDbTable
     // display ok & cancel buttons
     if (($this->mode == "INSERT") ||
     	($this->mode == "UPDATE") ||
-		($this->mode == "DELETE")) {
+		  ($this->mode == "DELETE")) {
       
-	  $button = new cHtmlInput($this->name."Ok", "SUBMIT", "v");
+  	  $button = new cHtmlSpan($this->name."Ok", "v");
       $button->setAttribute("CLASS", "OkButton");
+      $button->setAttribute(
+          "onClick", 
+          "ajaxPost('".$this->name."'); stopEvent(event);"
+      );
       if ($this->mode == "DELETE") {
       	$button->setAttribute("STYLE", "display:block;");
       }
       $result .= $button->display();
+      
+      /*
       $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
       $button->setAttribute("CLASS", "CancelButton");
       $result .= $button->display();
+      */
       
       $anchor = new cHtmlA("");
       $anchor->setAttribute(ID, $this->name.$this->currentRecordId);
@@ -1192,7 +1209,7 @@ class cDbTable implements iDbTable
    	);
   }
   
-  protected function commit() {
+  public function commit() {
   	// save changes - execute SQL
   	if ($result = myQuery($this->commitSQL())) {
   	  switch ($this->mode) {
@@ -1383,7 +1400,9 @@ class cDbTable implements iDbTable
    	  }
   	}
   	$result["CLASS"] = $this->mode;
-  	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}"; 
+  	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}";
+  	$sbName = $this->name."Sb".$id;
+  	$result[onClick] = "toggleDisplay('$sbName');";
   	return $result;
   }
   
@@ -1411,7 +1430,7 @@ class cDbTable implements iDbTable
   	    $newNames["id".$this->name] = $this->manipulator().$id;
   	    break;
   	  default :
-      	$newNames["id".$this->name] = $this->addButton();
+      	//$newNames["id".$this->name] = $this->addButton();
       	break;
     }
     return $newNames;
@@ -1422,8 +1441,10 @@ class cDbTable implements iDbTable
     $buttons = array();
     foreach ($columnNames as $i=>$buttonName) {
       $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
+      $button->setAttribute("CLASS", $this->name."OrderButton");
       $buttons[$i]=$button->display();
     }
+    $buttons[0].=$this->addButton().$this->cancelButton();
     return $buttons;	
   }
 
@@ -1477,6 +1498,100 @@ class cDbTable implements iDbTable
   	  if (($tableName=="StatusLog")) $table->setParent($this);
   	}
   }
+  
+  public function gantt($dbRow) {
+    $sG = new statusGantt();
+    $sG->iFrom = "2016-04-14";
+    $sG->iTill = "2016-07-21";
+    $sG->statusType = $this->name;
+    $sG->statusLogRowId = $this->currentRecordId;
+    $sG->loadLanes();
+    $gantt["sbIndent"]="";
+    $gantt["sbColSpan"]=sizeof($dbRow)-1;
+    $gantt["statusGannt"] = $sG->display();
+    return $gantt;
+  }
+  
+  public function displayRow($id, $dbRow=null) {
+    $js=
+      "loadRow(".
+        "'".(isset($this->parent) ? $this->parent->getName() : "")."', ".
+        "'".$this->name."', ".
+        $id.
+      ");";
+    	
+    // --- special lookup for Action/Event
+    if ($this->name=="Action") {
+      // replace idStatus  with StatusName
+      if ($dbRow[ActionCommand]=="SET STATUS") {
+        $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
+        if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
+          $dbRow[ActionParam1]=$dbRow2[StatusName];
+        }
+      }
+    }
+    
+    // --- Relation - load lookup value
+    if ($this->name=="Relation") {
+      switch ($this->relation) {
+        case 1:
+          $lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
+          $q2 =
+          "SELECT $lookupName".
+          " FROM ".$dbRow[RelationRObject].
+          " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
+          if ($dbr2=myQuery($q2)) {
+            if ($r2=mysql_fetch_assoc($dbr2)) {
+              $dbRow[RelationRId]=$r2[$lookupName];
+            }
+          }
+          break;
+        case 2:
+          $lookupName = gui($dbRow[RelationLObject], "lookupField", $dbRow[RelationLObject]."Name");
+          $q2 =
+          "SELECT $lookupName".
+          " FROM ".$dbRow[RelationLObject].
+          " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
+          if ($dbr2=myQuery($q2)) {
+            if ($r2=mysql_fetch_assoc($dbr2)) {
+              $dbRow[RelationLId]=$r2[$lookupName];
+            }
+          }
+          break;
+      } // switch
+    } // if
+    
+    // display only columns included in displayColumnNames
+    foreach ($this->displayColumnNames as $dcn) {
+      switch ($dcn) {
+        case "StatusName":
+          $displayRow[$dcn] =
+          "<div style=\"color:".(RGBToHSL(HTMLToRGB($dbRow[StatusColor]))->lightness>128?"black":"white").
+          ";background-color:#".$dbRow[StatusColor]."\">".
+          $dbRow[$dcn].
+          "</div>";
+          break;
+        default:
+          $displayRow[$dcn] = $dbRow[$dcn];
+      }
+    }
+    if ($this->name=="Relation") {
+      $button = new cHtmlInput("GoRelation".$this->relation, "SUBMIT", ">");
+      $button->setAttribute("CLASS", "GoButton");
+      $button->setAttribute("onClick", $js);
+      $displayRow["idRelation"] = $button->display();
+    } else {
+      $displayRow["id".$this->name] = "";
+    }
+    
+    // hide column for lookupField if it is a lookup into parent table
+    if (isset($this->parent)) {
+      if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
+    }
+    // add javascript to onClick event of this row
+    $displayRow[onClick] = $js;
+    return $displayRow;
+  }
  
   public function browse($include="") {
     $sub = (isset($this->parent)&&($this->parent->getName()==$this->name)?"sub":"");
@@ -1487,8 +1602,8 @@ class cDbTable implements iDbTable
   	  $table->setAttribute("StatusEdit", true);
   	}
   	$table->addHeader($this->orderSet($this->displayColumnNames, $this->name."ORDER"));
-  	if (($this->name!="StatusLog") && ($this->name!="History")) {
-  	  $table->addRow($this->insertRow());
+  	if (($this->name!="StatusLog") && ($this->name!="History") && ($this->mode=="INSERT")) {
+  	  $table->addRow($this->name."InsertRow", $this->insertRow());
   	}
   	// add filter only for master browser
   	if (!isset($this->parent)) {
@@ -1501,111 +1616,29 @@ class cDbTable implements iDbTable
   	  	$id = $dbRow["id".$this->name];
   	  	$i++;
   	  	if ($id==$this->currentRecordId) {
+  	  	  
           // --------------------------------------------------------- current record is editable
           //$this->currentRecord = $dbRow;
-  	  	  $table->addRow($this->editColumns($id));
+  	  	  $table->addRow($this->name."Row".$id, $this->editColumns($id));
   	  	  // sub-data for the current record
   	  	  if (($this->name != "Note")&&($this->name != "Relation")&&($this->name != "StatusLog")) { 
   	  	    // gantt
   	  	  	if ($this->hasStatus()) {
-  	  	    	$sG = new statusGantt();
-  						$sG->iFrom = "2016-04-14";
-  						$sG->iTill = "2016-07-21";
-  						$sG->statusType = $this->name;
-  	  	    	$sG->statusLogRowId = $this->currentRecordId;
-  	  	    	$sG->loadLanes();
-  	  	    	$gantt["sbIndent"]="";
-  	  	    	$gantt["sbColSpan"]=sizeof($dbRow)-1;
-  	  	    	$gantt["statusGannt"] = $sG->display();
-  	  	    	$table->addRow($gantt);
+  	  	    	//$table->addRow($this->name."Gannt".$id, $this->gantt($dbRow));
   	  	    }
   	  	    // sub-browsers
   	  	    if (!isset($this->parent) || ($this->name != $this->parent->getName())) {
   	  	      $sbRow["sbIndent"]="";
   	  	      $sbRow["sbColSpan"]=sizeof($dbRow)-1;
   	  	      $sbRow["subBrowser"] = $this->subBrowsers();
-  	  	      $table->addRow($sbRow);
+  	  	      $table->addRow($this->name."Sb".$id, $sbRow);
   	  	    }
   	  	  }
   	  	} else {
-  	  	// ------------------------------------------------------------------------ other records
-  	  	  $js=
-  		  	  "elementById('".$sub."id".$this->name."').value=$id;".
-  		  	  "document.".$sub."browseForm".$this->name.".action='#".$this->name."$id';".
-  	  	    "document.".$sub."browseForm".$this->name.".submit();";
-  		  
-    		  // --- special lookup for Action/Event
-    		  if ($this->name=="Action") {
-      	  	// replace idStatus  with StatusName
-      	  	if ($dbRow[ActionCommand]=="SET STATUS") {
-      	  	  $query="SELECT StatusName FROM Status WHERE idStatus=".$dbRow[ActionParam1];
-      	  	  if (($dbRes2=myQuery($query))&&($dbRow2=mysql_fetch_assoc($dbRes2))) {
-      	  	    $dbRow[ActionParam1]=$dbRow2[StatusName];
-      	  	  }
-      	  	}
-    		  }
-    		  
-    		  // --- Relation - load lookup value
-    		  if ($this->name=="Relation") {
-    		  	switch ($this->relation) {
-    		  	  case 1:  
-      			  	$lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
-      			  	$q2 = 
-      			  	  "SELECT $lookupName".
-      			  	  " FROM ".$dbRow[RelationRObject].
-      			  	  " WHERE id".$dbRow[RelationRObject]."=".$dbRow[RelationRId];
-      			  	if ($dbr2=myQuery($q2)) {
-      			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-      			  	  	$dbRow[RelationRId]=$r2[$lookupName];
-      			  	  }
-      			  	}
-      			    break;
-    		  	  case 2:  
-      			  	$lookupName = gui($dbRow[RelationLObject], "lookupField", $dbRow[RelationLObject]."Name");
-      			  	$q2 = 
-      			  	  "SELECT $lookupName".
-      			  	  " FROM ".$dbRow[RelationLObject].
-      			  	  " WHERE id".$dbRow[RelationLObject]."=".$dbRow[RelationLId];
-      			  	if ($dbr2=myQuery($q2)) {
-      			  	  if ($r2=mysql_fetch_assoc($dbr2)) {
-      			  	  	$dbRow[RelationLId]=$r2[$lookupName];
-      			  	  }
-      			  	}
-      			  	break;
-    		  	} // switch
-    		  } // if
-    		  
-    		  // display only columns included in displayColumnNames
-    		  foreach ($this->displayColumnNames as $dcn) {
-    		  	switch ($dcn) {
-    		  	  case "StatusName":
-    		  	  	$displayRow[$dcn] = 
-    		  	  	  "<div style=\"color:".(RGBToHSL(HTMLToRGB($dbRow[StatusColor]))->lightness>128?"black":"white").
-    		  		  	  	  ";background-color:#".$dbRow[StatusColor]."\">".
-    		  	  	    $dbRow[$dcn].
-    		  	  	  "</div>";
-    		  	  	break;
-    		  	  default:
-    		  	    $displayRow[$dcn] = $dbRow[$dcn];
-    		  	}
-    		  }
-    		  if ($this->name=="Relation") {
-    		    $button = new cHtmlInput("GoRelation".$this->relation, "SUBMIT", ">");
-    		    $button->setAttribute("CLASS", "GoButton");
-    		    $button->setAttribute("onClick", $js);
-    		    $displayRow["idRelation"] = $button->display();  
-    		  } else {
-    		    $displayRow["id".$this->name] = "";
-    		  }
-    		  
-    		  // hide column for lookupField if it is a lookup into parent table 
-    		  if (isset($this->parent)) {
-            if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
-    		  }
-    		  // add javascript to onClick event of this row
-    		  $displayRow[onClick] = $js;
+  	  	  
+  	  	  // ------------------------------------------------------------------------ other records
     		  // add row to table
-    		  $table->addRow($displayRow);
+    		  $table->addRow($this->name."Row".$id, $this->displayRow($id, $dbRow));
     	  }
     	}
       mysql_free_result($dbResult);
@@ -1619,7 +1652,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
 	  //gui($this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."]".br().
-      $table->display().
+      $table->display("table".$this->name).
       $RowId->display().
       $include
     );
@@ -1632,16 +1665,19 @@ class cDbTable implements iDbTable
   	
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
-	  //if ($tableName==$this->name) continue;
-  	  if ($_POST["tabButton".$browsers->getName().$tableName]) {
-		$browsers->setSelected($tableName);
-	  }
-  	  if ($_POST["tabButton".$browsers->getName()."RelationLeft"]) {
-		$browsers->setSelected("RelationLeft");
-	  }
-  	  if ($_POST["tabButton".$browsers->getName()."RelationRight"]) {
-		$browsers->setSelected("RelationRight");
-	  }
+  	  if (isset($_REQUEST[switchTab]) && ($tableName == $_REQUEST[tableName]) && ($_REQUEST[tabName])) {
+  	    $browsers->setSelected($_REQUEST[tabName]);
+  	  } elseif ($_POST["tabButton".$browsers->getName().$tableName]) {
+		    $browsers->setSelected($tableName);
+	    } elseif ($_POST["tabButton".$browsers->getName()."RelationLeft"]) {
+    		$browsers->setSelected("RelationLeft");
+	    } elseif ($_POST["tabButton".$browsers->getName()."RelationRight"]) {
+		    $browsers->setSelected("RelationRight");
+	    }
+  	}
+	    
+  	foreach ($this->scheme->tables as $table) {
+  	  $tableName = $table->getName();
   	  if ($table->isChildOf($this)) {
   	  	$table->setParent($this);
   	  	$browsers->addTab(
@@ -1730,6 +1766,7 @@ class cDbScheme implements iDbScheme
       	$table->loadChildren();
       }
       $this->status = "initialized";
+	    $this->setup();
     }
   }
   
@@ -1743,57 +1780,56 @@ class cDbScheme implements iDbScheme
     }
     return null;
   }
+
+  public function setup() {
+    if ($_POST["GoRelation1"]) {
+      $query =
+      "SELECT RelationRObject, RelationRId".
+      " FROM Relation".
+      " WHERE idRelation=".$_POST[idRelation];
+      if ($Relation = mysql_fetch_assoc(myQuery($query))) {
+        $_SESSION[tabControl][Admin][selected] = $Relation[RelationRObject];
+        $this->tables[$Relation[RelationRObject]]->setCurrentRecordId($Relation[RelationRId]);
+      }
+    } elseif ($_POST["GoRelation2"]) {
+      $query =
+      "SELECT RelationLObject, RelationLId".
+      " FROM Relation".
+      " WHERE idRelation=".$_POST[idRelation];
+      if ($Relation = mysql_fetch_assoc(myQuery($query))) {
+        $_SESSION[tabControl][Admin][selected] = $Relation[RelationLObject];
+        $this->tables[$Relation[RelationLObject]]->setCurrentRecordId($Relation[RelationLId]);
+      }
+    } else {
+      foreach ($this->tables as $name=>$table) {
+        // check POST for any admin button
+        if ($_POST["tabButtonAdmin".$name]) {
+          // store selected table in session
+          $_SESSION[tabControl][Admin][selected] = $name;
+        }
+      }
+    }
+     
+    foreach ($this->tables as $name=>$table) {
+      $table->loadColumns();
+    }
+     
+    if ($selectedTable = $this->tables[$_SESSION[tabControl][Admin][selected]]) {
+      $selectedTable->preProcess();
+      $this->tables[Note]->preProcess();
+      $this->tables[Relation]->preProcess();
+    }
+     
+    foreach ($this->tables as $name=>$table) {
+      $table->loadDisplayColumns();
+    }
+  }
   
   public function admin() 
   {
-  	// display all tables from scheme as tabs
-  	$tableTabs = new cHtmlTabControl($dbName."Admin");
-  	
-  	if ($_POST["GoRelation1"]) {
-  	  $query =
-  	    "SELECT RelationRObject, RelationRId".
-  	    " FROM Relation".
-  	    " WHERE idRelation=".$_POST[idRelation];
-  	  if ($Relation = mysql_fetch_assoc(myQuery($query))) {
-  	    $_SESSION[tabControl][Admin][selected] = $Relation[RelationRObject];
-  	    $this->tables[$Relation[RelationRObject]]->setCurrentRecordId($Relation[RelationRId]);
-  	  }
-  	} elseif ($_POST["GoRelation2"]) {
-  	  $query =
-  	  "SELECT RelationLObject, RelationLId".
-  	  " FROM Relation".
-  	  " WHERE idRelation=".$_POST[idRelation];
-  	  if ($Relation = mysql_fetch_assoc(myQuery($query))) {
-  	    $_SESSION[tabControl][Admin][selected] = $Relation[RelationLObject];
-  	    $this->tables[$Relation[RelationLObject]]->setCurrentRecordId($Relation[RelationLId]);
-  	  }
-  	} else {
-    	foreach ($this->tables as $name=>$table) {
-        // check POST for any admin button
-    	  if ($_POST["tabButtonAdmin".$name]) {
-    	  	// store selected table in session
-  	  	  $_SESSION[tabControl][Admin][selected] = $name;
-  	    }
-    	}
-  	}
-  	
-  	foreach ($this->tables as $name=>$table) {
-  	  $table->loadColumns();
-  	}
-  	
-  	if ($selectedTable = $this->tables[$_SESSION[tabControl][Admin][selected]]) {
-      $selectedTable->preProcess();
-  	  $this->tables[Note]->preProcess(); 
-  	  $this->tables[Relation]->preProcess();
-  	}
-  	
-  	foreach ($this->tables as $name=>$table) {
-  	  $table->loadDisplayColumns();
-  	}
-  	 
-  	 
-  	// add all table buttons 
-	foreach ($this->tables as $name=>$table) {
+	// display all tables from scheme as tabs
+  $tableTabs = new cHtmlTabControl($dbName."Admin");
+  foreach ($this->tables as $name=>$table) {
 		$tableTabs->addTab(
         $name, 
         ($_SESSION[tabControl][Admin][selected] == $name

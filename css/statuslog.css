@@ -31,6 +31,17 @@
 	border: 2px solid #B2B2B2;
 }
 
+#browseFormStatusLog tr {
+  background-color: #B2B2B2;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+#browseFormStatusLoge tr:hover {
+  background-color: white;
+}
+
 #tabButtonStatusLogStatusLogNote {
 	color: black;
 	background-color: #B2B2B2;

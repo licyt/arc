@@ -33,6 +33,11 @@
 	margin: 0px 2px 0px 0px;
 }
 
+.QuoteOrderButton {
+  background-color: #FF6600;
+  font-weight: bold;
+}
+
 #tabButtonQuoteDataSet {
 	color: black;
 	background-color: #B2B2B2;
@@ -186,4 +191,15 @@
 	margin: 0px 0px 0px 0px;
 	padding: 0px 0px 0px 0px;
 	display: block;
+}
+
+#browseFormQuote tr {
+  background-color: #FF6600;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+#browseFormQuote tr:hover {
+  background-color: white;
 }

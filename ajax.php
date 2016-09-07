@@ -2,6 +2,8 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 // 2016 (C) Rastislav Seč, rastislav.sec@gmail.com aka tomcat
 
+session_start();
+
 require_once("html.php");
 require_once("database.php");
 require_once 'gantt.php';
@@ -56,7 +58,7 @@ if (isset($_REQUEST[browseFile])) {
 }
 
 // ----------------------------------------------------------------------------- searchType by tomcat
-if( $_REQUEST["searchType"] === "suggestSearch" ) {
+elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
   $con = mysqli_connect($dbServerName,$dbUser,$dbPassword,$dbName);
   if (!$con) {
     die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
@@ -84,11 +86,11 @@ if( $_REQUEST["searchType"] === "suggestSearch" ) {
 }
 
 // ------------------------------------------------------------------------------------ loadTable
-if (isset($_REQUEST[loadTable])) {
+elseif (isset($_REQUEST[loadTable])) {
   if ($_REQUEST[table]) {
-	$table = $dbScheme->tables[$_REQUEST[table]]; // cDbTable
-	$fields = fieldsForAction($table);
-	$commands = commandsForAction($table);
+  	$table = $dbScheme->tables[$_REQUEST[table]]; // cDbTable
+  	$fields = fieldsForAction($table);
+  	$commands = commandsForAction($table);
   } else {
   	$fields = new cHtmlInput("ActionField", "HIDDEN");
   	$commands = new cHtmlInput("ActionCommand", "HIDDEN");
@@ -97,43 +99,23 @@ if (isset($_REQUEST[loadTable])) {
 }
 
 // --------------------------------------------------------------------------------- loadParameters
-if (isset($_REQUEST[loadParameters])) {
+elseif (isset($_REQUEST[loadParameters])) {
   $params = loadParameters($dbScheme->tables[$_REQUEST[table]], $_REQUEST[command]);
-  echo $params[1]->display()/*."|".$params[2]->display()*/;
+  echo $params[1]->display();
 }
-
-/*
-// --------------------------------------------------------------------------------------- loadParam2
-if (isset($_REQUEST[loadParam2])) {
-  $table = $dbScheme->tables[$_REQUEST[param1]];
-  $param2 = new cHtmlSelect;
-  $param2->setAttribute("ID", "ActionParam2");
-  $param2->setAttribute("NAME", "ActionParam2");
-  $query = 
-  	"SELECT StatusName, StatusColor".
-    " FROM Status ".
-    " WHERE StatusType=\"".$_REQUEST[param1]."\"";
-  if ($dbRes=mySQL($query)) {
-  	while ($dbRow=mysql_fetch_assoc($dbRes)) {
-  	  $param2->addOption($dbRow[StatusName], $dbRow[StatusName], $dbRow[StatusColor]);
-  	}
-  }
-  echo $param2->display();
-}
-*/
 
 // ------------------------------------------------------------------------------------ loadRightRows
-if (isset($_REQUEST[loadRightRows])) {
+elseif (isset($_REQUEST[loadRightRows])) {
   echo loadRightRows($_REQUEST[table]);
 }
 
 // ------------------------------------------------------------------------------------ loadLeftRows
-if (isset($_REQUEST[loadLeftRows])) {
+elseif (isset($_REQUEST[loadLeftRows])) {
 	echo loadLeftRows($_REQUEST[table]);
 }
 
 // ------------------------------------------------------------------------------------ loadGantt
-if (isset($_REQUEST[loadGantt])) {
+elseif (isset($_REQUEST[loadGantt])) {
 	$sG = new statusGantt();
 	$sG->statusType = "Project";
 	$sG->iFrom =date("Y-m-d H:i:s", $_REQUEST[leftValue]);
@@ -141,6 +123,97 @@ if (isset($_REQUEST[loadGantt])) {
 	$sG->iWidth = 800;
 	$sG->loadLanes();
 	echo $sG->display(true, false);
+}
+
+// ------------------------------------------------------------------------------------------- insertRow
+elseif (isset($_REQUEST[insertRow])) {
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $htmlTable = new cHtmlTable;
+  $result[oldRowId] = $dbTable->getCurrentRecordId();
+  $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getCurrentRecord());
+  $result[onClick] = $oldRow[onClick];
+  $htmlTable->addRow(
+    $_REQUEST[tableName]."Row".$result[oldRowId], 
+    $oldRow
+  );
+  $result[oldRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+  // reuse cHtmlTable to format html of the new table row
+  $htmlTable->deleteRows();
+  $dbTable->setMode("INSERT");
+  $dbTable->setCurrentRecordId(-1);
+  $htmlTable->addRow(
+      $_REQUEST[tableName]."Row-1",
+      $dbTable->editColumns()
+      );
+  $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+  echo json_encode($result);
+}
+
+// ------------------------------------------------------------------------------------------ submitRow
+// ------------------------------------------------------------------------------------------- loadRow
+elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  if ($_REQUEST[parentName]) {
+    $dbTable->setParent($dbScheme->getTableByName($_REQUEST[parentName]));
+  }
+  if ($dbTable->getCurrentRecordId()==-1) {
+    $dbTable->setMode("INSERT");
+    $result[oldRowId] = -1;
+  }
+  if (isset($_REQUEST[submitRow])) {
+    $dbTable->commit(); //----------------------------------------------- commit() !
+    $result[newRowId] = $dbTable->getCurrentRecordId();
+    $_REQUEST[newRowId] = $result[newRowId]; 
+  } else {
+    $result[oldRowId] = $dbTable->getCurrentRecordId();
+  }
+  $dbTable->getCurrentRecord($dbTable->getCurrentRecordId());
+  $dbTable->getCurrentRecord($_REQUEST[newRowId]);
+  $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getLastRecord());
+  $result[onClick] = $oldRow[onClick];
+  // use cHtmlTable to format html of the old table row
+  $htmlTable = new cHtmlTable;
+  $htmlTable->addRow(
+    $_REQUEST[tableName]."Row".$result[oldRowId], 
+    $oldRow
+  );
+  $result[oldRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+  // reuse cHtmlTable to format html of the new table row
+  $htmlTable->deleteRows();
+  $editRow = $dbTable->editColumns($_REQUEST[newRowId]);
+  $htmlTable->addRow(
+    $_REQUEST[tableName]."Row".$_REQUEST[newRowId],
+    $editRow
+  );
+  $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+  $result[onEditClick] = $editRow[onClick];
+  // sub-browsers
+  $sbRow["sbIndent"]="";
+  $sbRow["sbColSpan"] = sizeof($oldRow)-1;
+  $sbRow["subBrowser"] = $dbTable->subBrowsers();
+  $htmlTable->deleteRows();
+  $htmlTable->addRow($dbTable->getName()."Sb".$_REQUEST[newRowId], $sbRow);
+  // strip <TR></TR> but only at the beginning and the end of the row
+  $result[subBrowser] = preg_replace('/^<TR[^>]*>/i', '', $htmlTable->displayRows());
+  $result[subBrowser] = preg_replace('/<\/TR[^>]*>$/i', '', $result[subBrowser]);
+  echo json_encode($result);
+}
+
+// --------------------------------------------------------------------------------------------- switchTab
+elseif (isset($_REQUEST[switchTab])) {
+  //$_SESSION[tabControl][$_REQUEST[tableName]][selected] = $_REQUEST[tabName];
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $result[currentRecordId] = $dbTable->getCurrentRecordId();
+  $editRow = $dbTable->editColumns($dbTable->getCurrentRecordId());
+  $sbRow["sbIndent"]="";
+  $sbRow["sbColSpan"] = sizeof($editRow)-1;
+  $sbRow["subBrowser"] = $dbTable->subBrowsers();
+  $htmlTable = new cHtmlTable;
+  $htmlTable->addRow($dbTable->getName()."Sb".$dbTable->getCurrentRecordId(), $sbRow);
+  // strip <TR></TR> but only at the beginning and the end of the row
+  $result[subBrowser] = preg_replace('/^<TR[^>]*>/i', '', $htmlTable->displayRows());
+  $result[subBrowser] = preg_replace('/<\/TR[^>]*>$/i', '', $result[subBrowser]);
+  echo json_encode($result);
 }
 
 ?>

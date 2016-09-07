@@ -27,10 +27,25 @@
 	display: block;
 }
 
+.RelationOrderButton {
+  background-color: #BE34BA;
+  font-weight: bold;
+}
+
 #browseFormRelation {
 	border: 2px solid #BE34BA;
 }
 
+#browseFormRelation tr {
+  background-color: #BE34BA;
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+#browseFormRelation tr:hover {
+  background-color: white;
+}
 #tabButtonRelationNote {
 	color: black;
 	background-color: #B2B2B2;
