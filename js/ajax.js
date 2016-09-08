@@ -146,6 +146,7 @@ function Ajax(request, params) {
               newSbRow.innerHTML = response.subBrowser;
               currentRowId = params["newRowId"];
               $("#id"+params["tableName"]).val(currentRowId);
+              addDatePickers();
               break;
             case "switchTab":
               response = JSON.parse(xmlHttp.responseText);
@@ -153,6 +154,7 @@ function Ajax(request, params) {
               var table=elementById("table"+params["tableName"]);
               var sbRowName = params["tableName"]+"Sb"+currentRowId;
               table.rows.namedItem(sbRowName).innerHTML = response.subBrowser;
+              addDatePickers();
               break;
         } // switch request
       } // switch readyState
@@ -280,6 +282,7 @@ var currentRowId = -1;
 
 function loadRow(parentName, tableName, newRowId) {
   //alert(parentName+" "+tableName+" "+oldRowId+" "+newRowId);
+  CancelInsert(tableName);
   var params=new Array();
   params['parentName']=parentName;
   params['tableName']=tableName;
@@ -305,23 +308,22 @@ function ajaxPost(tableName) {
         var newRowName = tableName+"Row"+newRowId;
         if (response.oldRowId==-1) {
           $("#id"+tableName).val(newRowId);
+          //$("#"+tableName+"Row-1").attr("id", newRowName); // does not work, replaced by next line
           elementById(tableName+"Row-1").id = newRowName;
-          //$("#"+tableName+"Row-1").attr("id", newRowName);
           $("#"+tableName+"Insert").show();
           $("#"+tableName+"Cancel").hide();
+          // subBrowsers of new row
+          table = elementById("table"+tableName);
+          var sbRowName = tableName+"Sb"+newRowId;
+          if (!(sbRow=table.rows.namedItem(sbRowName))) {
+            var newRowIndex = getRowIndex(table, newRowName);
+            var sbRow = table.insertRow(newRowIndex+1);
+            sbRow.id = sbRowName;
+          }
+          sbRow.innerHTML = response.subBrowser;
+          $("#"+newRowName).attr("onclick", response.onEditClick);
         }
         $("#"+newRowName).html(response.newRow);
-/*
-        // subBrowsers of new row
-        table = elementById("table"+tableName);
-        var sbRowName = tableName+"Sb"+newRowId;
-        if (!(sbRow=table.rows.namedItem(sbRowName))) {
-          var newRowIndex = getRowIndex(table, newRowName);
-          var sbRow = table.insertRow(newRowIndex+1);
-          sbRow.id = sbRowName;
-        }
-        sbRow.innerHTML = response.subBrowser;
-*/
       }
   );
 }
@@ -354,7 +356,7 @@ function ajaxInsert(tableName) {
   );
 }
 
-function Cancel(tableName) {
+function CancelInsert(tableName) {
   table = elementById("table"+tableName);
   var rowIndex = getRowIndex(table, tableName+"Row-1");
   if (rowIndex>0) table.deleteRow(rowIndex);

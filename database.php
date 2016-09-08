@@ -795,7 +795,7 @@ class cDbTable implements iDbTable
   public function cancelButton() {
   	$button = new cHtmlSpan($this->name."Cancel", "x"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "CancelButton");
-    $button->setAttribute(onClick, "Cancel('".$this->name."');");
+    $button->setAttribute(onClick, "CancelInsert('".$this->name."');");
   	return $button->display();
   }
 

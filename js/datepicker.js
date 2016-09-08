@@ -335,31 +335,37 @@ function onDOMReady(fn, ctx) {
 
 // This is called when the page loads, it searches for inputs where the class is
 // 'datepicker'
-onDOMReady(function() {
-	// Search for elements by class
-	var allElements = document.getElementsByTagName("*");
-	for (i = 0; i < allElements.length; i++) {
-		var className = allElements[i].className;
-		if (className == 'datepicker' || className.indexOf('datepicker ') != -1
-				|| className.indexOf(' datepicker') != -1) {
-			// Found one! 
-			// First check if the date is null (0000-00-00) if yes set the value to empty
-//			console.log(allElements[i].getAttribute("value"));
-			if( allElements[i].getAttribute("value") === "0000-00-00" ) {
-				allElements[i].setAttribute( "value" , "" );
-			}
-			// Now lets add a datepicker next to it
-			var a = document.createElement('a');
-			a.href = '#';
-			a.className = "datepickershow";
-			a.setAttribute('onclick', 'return showDatePicker("'
-					+ allElements[i].id + '")');
+onDOMReady(addDatePickers());
 
-			var img = document.createElement('img');
-			img.src = 'img/datepicker.png';
-			img.title = 'Show calendar';
-			a.appendChild(img);
-			insertAfter(a, allElements[i]);
-		}
-	}
-});
+function addDatePickers() {
+  // Search for elements by class
+  var allElements = document.getElementsByTagName("*");
+  for (i = 0; i < allElements.length; i++) {
+    var className = allElements[i].className;
+    if (className == 'datepicker' || className.indexOf('datepicker ') != -1
+        || className.indexOf(' datepicker') != -1) {
+      // Found one! 
+      // First check if the date is null (0000-00-00) if yes set the value to empty
+//      console.log(allElements[i].getAttribute("value"));
+      if( allElements[i].getAttribute("value") === "0000-00-00" ) {
+        allElements[i].setAttribute( "value" , "" );
+      }
+      if (!allElements[i].nextSibling ||(allElements[i].nextSibling.className!="datepickershow")) {
+        addDatePicker(allElements[i]);
+      }
+    }
+  }
+}
+function addDatePicker(element) {
+  // Now lets add a datepicker next to it
+  var a = document.createElement('a');
+  a.href = '#';
+  a.className = "datepickershow";
+  a.setAttribute('onclick', 'showDatePicker("'
+      + element.id + '");  stopEvent(event);');
+  var img = document.createElement('img');
+  img.src = 'img/datepicker.png';
+  img.title = 'Show calendar';
+  a.appendChild(img);
+  insertAfter(a, element);
+}

@@ -170,7 +170,7 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   $dbTable->getCurrentRecord($dbTable->getCurrentRecordId());
   $dbTable->getCurrentRecord($_REQUEST[newRowId]);
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getLastRecord());
-  $result[onClick] = $oldRow[onClick];
+  $result[onClick] = str_replace(", -1);", ", ".$result[newRowId].");", $oldRow[onClick]);
   // use cHtmlTable to format html of the old table row
   $htmlTable = new cHtmlTable;
   $htmlTable->addRow(
