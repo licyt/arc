@@ -30,4 +30,5 @@ function Load() {
   }
   // swapOkDel();
   alignAllLanes();
+  addDatePickers();
 }

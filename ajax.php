@@ -125,6 +125,13 @@ elseif (isset($_REQUEST[loadGantt])) {
 	echo $sG->display(true, false);
 }
 
+
+
+/*
+ *                       B R O W S E R     R O W      M A N I P U L A T I O N
+ */
+
+
 // ------------------------------------------------------------------------------------------- insertRow
 elseif (isset($_REQUEST[insertRow])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
@@ -149,26 +156,30 @@ elseif (isset($_REQUEST[insertRow])) {
   echo json_encode($result);
 }
 
-// ------------------------------------------------------------------------------------------ submitRow
 // ------------------------------------------------------------------------------------------- loadRow
+// ------------------------------------------------------------------------------------------ submitRow
 elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
   if ($_REQUEST[parentName]) {
     $dbTable->setParent($dbScheme->getTableByName($_REQUEST[parentName]));
   }
-  if ($dbTable->getCurrentRecordId()==-1) {
-    $dbTable->setMode("INSERT");
-    $result[oldRowId] = -1;
-  }
+  // -------------- submitRow
   if (isset($_REQUEST[submitRow])) {
+    if ($dbTable->getCurrentRecordId()==-1) {
+      $dbTable->setMode("INSERT");
+      $result[oldRowId] = -1;
+    }
     $dbTable->commit(); //----------------------------------------------- commit() !
     $result[newRowId] = $dbTable->getCurrentRecordId();
     $_REQUEST[newRowId] = $result[newRowId]; 
   } else {
     $result[oldRowId] = $dbTable->getCurrentRecordId();
   }
+  // -------------- loadRow
   $dbTable->getCurrentRecord($dbTable->getCurrentRecordId());
-  $dbTable->getCurrentRecord($_REQUEST[newRowId]);
+  if ($_REQUEST[newRowId]) {
+    $dbTable->getCurrentRecord($_REQUEST[newRowId]);
+  }
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getLastRecord());
   $result[onClick] = str_replace(", -1);", ", ".$result[newRowId].");", $oldRow[onClick]);
   // use cHtmlTable to format html of the old table row
@@ -199,10 +210,29 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   echo json_encode($result);
 }
 
+// --------------------------------------------------------------------------------------------- deleteRow
+elseif (isset($_REQUEST[deleteRow])) {
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $result[oldRowId] = $dbTable->getCurrentRecordId();
+  $dbTable->setMode("DELETE");
+  $dbTable->commit(); //--------------------------------------------- commit() !
+  echo json_encode($result);
+}
+
 // --------------------------------------------------------------------------------------------- switchTab
 elseif (isset($_REQUEST[switchTab])) {
   //$_SESSION[tabControl][$_REQUEST[tableName]][selected] = $_REQUEST[tabName];
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  switch ($_REQUEST[tabName]) {
+    case "RelationLeft" : 
+      $_SESSION[relation] = 1; 
+      break;
+    case "RelationRight": 
+      $_SESSION[relation] = 2; 
+      break;
+    default: 
+      $_SESSION[relation] = 0; 
+  }
   $result[currentRecordId] = $dbTable->getCurrentRecordId();
   $editRow = $dbTable->editColumns($dbTable->getCurrentRecordId());
   $sbRow["sbIndent"]="";

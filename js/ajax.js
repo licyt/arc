@@ -139,6 +139,7 @@ function Ajax(request, params) {
               if (newRow = table.rows.namedItem(newRowName)) {
                 newRow.innerHTML = response.newRow;
                 newRow.setAttribute('onClick', response.onEditClick);
+                newRow.setAttribute('onKeyPress', response.onKeyPress);
               }
               var newSbRow = table.insertRow(newRowIndex+1);
               newSbRow.id = params["tableName"]+"Sb"+params["newRowId"];
@@ -351,7 +352,8 @@ function ajaxInsert(tableName) {
         newRow.innerHTML = response.newRow;
         $("#id"+tableName).val(-1);
         $("#"+tableName+"Insert").hide();
-        $("#"+tableName+"Cancel").show();
+        elementById(tableName+"Cancel").style.display="inline-block";
+        //$("#"+tableName+"Cancel").show();
         addDatePickers();
       }
   );
@@ -364,3 +366,24 @@ function CancelInsert(tableName) {
   $("#"+tableName+"Insert").show();
   $("#"+tableName+"Cancel").hide();
 }
+
+function ajaxDelete(tableName) {
+  if (confirm("Delete?")) {
+    $.post(
+        "ajax.php?deleteRow&tableName="+tableName, 
+        function (result) {
+          response = JSON.parse(result);
+          table = elementById("table"+tableName);
+          // old row
+          var oldRowName = tableName+"Row"+response.oldRowId;
+          var oldRowIndex = getRowIndex(table, oldRowName);
+          if (oldRowIndex>0) table.deleteRow(oldRowIndex);
+          var sbRowName = tableName+"Sb"+response.oldRowId;
+          var sbRowIndex = getRowIndex(table, sbRowName);
+          if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+        }
+    );
+    
+  }
+}
+

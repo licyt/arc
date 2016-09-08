@@ -484,9 +484,9 @@ class cHtmlTable extends cHtmlElement
 	  // display headers
   	foreach ($this->headers as $header) {
   	  $html = "";
-  	  foreach ($header as $value) {
+  	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$html.="<TH>$value</TH>";
+  	  	$html.="<TH ".($index==0?"class=\"firstColumn\"":"").">$value</TH>";
   	  }
   	  $table.="<TR>$html</TR>";
   	}

@@ -80,6 +80,10 @@ img {
   border: 0px;
 }
 
+.firstColumn {
+	width: 52px;
+}
+
 #tabBodyAdmin {
 	width: 1500px;
 	height: 700px;
@@ -113,28 +117,43 @@ img {
 }
 
 .InsertButton {
+	width: 23px;
+	display: inline-block;
+	cursor: pointer;
 	color: white;
 	background-color: blue;
 }
 
 .UpdateButton {
+  width: 23px;
+  display: inline-block;
+  cursor: pointer;
 	color: white;
 	background-color: red;
 	display: none;
 }
 
 .DeleteButton {
+  width: 23px;
+  display: inline-block;
+  cursor: pointer;
 	color: white;
 	background-color: black;
 }
 
 .OkButton {
+  width: 23px;
+  display: inline-block;
+  cursor: pointer;
 	color: white;
 	background-color: green;
 	display: none;
 }
 
 .CancelButton {
+  width: 23px;
+  display: inline-block;
+  cursor: pointer;
 	color: red;
 	background-color: white;
 	display: none;
@@ -192,6 +211,9 @@ img {
 .cHtmlFilePath input {
 	display: inline;
 	width: 0px;
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
 }
 
 #tabHeadAdmin {

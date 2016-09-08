@@ -198,7 +198,6 @@ class cDbField implements iDbField
   	if (!isset($htmlControl)) {
   	  //use input for other fields
   	  $htmlControl = new cHtmlInput;
-  	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$this->table->getName()."');");
   	}
   	
     // set input size based on dbField type
@@ -217,6 +216,7 @@ class cDbField implements iDbField
       )
     );
     
+  	$htmlControl->setAttribute("onInput", "rowHasChanged('".$this->table->getName()."');");
     $htmlControl->setAttribute("onClick", "stopEvent(event);");
     $htmlControl->setAttribute("VALUE", $value);
     
@@ -478,12 +478,6 @@ class cDbTable implements iDbTable
   	);
   }
   
-  function setRelation($value) {
-  	// $value=1 this table is on the left
-  	// $value=2 this table is on the right
-  	$this->relation=$value;
-  }
-  
   public function hasStatusField() {
   	return $this->hasStatus();
   }
@@ -578,7 +572,9 @@ class cDbTable implements iDbTable
   
   public function loadDisplayColumns() 
   {
-  	foreach ($this->displayColumnNames as $i=>$displayColumnName) unset($this->displayColumnNames[$i]);
+  	foreach ($this->displayColumnNames as $i=>$displayColumnName) {
+  	  unset($this->displayColumnNames[$i]);
+  	}
   	foreach ($this->fields as $i=>$field) {
 	  $fieldName = $field->getName();
 	  
@@ -586,20 +582,20 @@ class cDbTable implements iDbTable
 	  switch ($fieldName) {
 	  	case "RelationLId":
 	  	case "RelationLObject": 
-	  	  if ($this->relation!=1) {
+	  	  if ((!isset($this->parent))||($_SESSION[relation]!=1)) {
 	  	  	array_push($this->displayColumnNames, $fieldName);
 	  	  }
 	  	  $continue=true;
 	  	  break;
 	  	case "RelationRId":
 	  	case "RelationRObject": 
-	  	  if ($this->relation!=2) {
-	  	  	array_push($this->displayColumnNames, $fieldName);
+	  	  if ((!isset($this->parent))||($_SESSION[relation]!=2)) {
+	  	  array_push($this->displayColumnNames, $fieldName);
 	  	  }
 	  	  $continue=true;
 	  	  break;
 	  }
-	  if ($continue) continue; // move continue outside switch to continue next foreach iteration 
+	  if ($continue) continue; // move continue outside of switch to continue to next foreach iteration 
   	  
   	  if (!isset($this->parent) ||  
   	  	   ( 
@@ -731,13 +727,13 @@ class cDbTable implements iDbTable
   	  	: ""
   	  ).
   	  // restrict table relation 
-  	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==1))
+  	  (($this->name=="Relation") && (isset($this->parent) && ($_SESSION[relation]==1))
   	  	? " AND ". 
   	  	  "(RelationLObject = \"".$this->parent->getName()."\") AND ".
   	  	  "(RelationLId = ".$this->parent->getCurrentRecordId().")"
   	  	: ""
   	  ).
-  	  (($this->name=="Relation") && (isset($this->parent) && ($this->relation==2))
+  	  (($this->name=="Relation") && (isset($this->parent) && ($_SESSION[relation]==2))
   	  	? " AND ". 
   	  	  "(RelationRObject = \"".$this->parent->getName()."\") AND ".
   	  	  "(RelationRId = ".$this->parent->getCurrentRecordId().")"
@@ -809,8 +805,12 @@ class cDbTable implements iDbTable
     }
     // display delete button
     if (($this->mode == "UPDATE")&&($this->currentRecordId>0)) {
-      $button = new cHtmlInput($this->name."Delete", "SUBMIT", "x");
+      $button = new cHtmlSpan($this->name."Delete", "x");
       $button->setAttribute("CLASS", "DeleteButton");
+      $button->setAttribute(
+          "onClick", 
+          "ajaxDelete('".$this->name."'); stopEvent(event);"
+      );
       $result .= $button->display();
     }
     // display ok & cancel buttons
@@ -847,8 +847,8 @@ class cDbTable implements iDbTable
       	$result .= $parentId->display();
       }
       
-      if ($this->relation) {
-      	$hidden = new cHtmlInput($this->name."Relation", "HIDDEN", $this->relation);
+      if ($_SESSION[relation]) {
+      	$hidden = new cHtmlInput("RelationDirection", "HIDDEN", $_SESSION[relation]);
       	$result .= $hidden->display;
       }
     }
@@ -861,7 +861,7 @@ class cDbTable implements iDbTable
   	  case "DELETE" :
   		$query = 
   		  "DELETE FROM ".$this->name.
-  		  " WHERE id".$this->name."=".$_POST["id".$this->name];
+  		  " WHERE id".$this->name."=".$this->currentRecordId; // $_POST["id".$this->name];
   		  break;
   		case "INSERT" :
   		case "UPDATE" :
@@ -1224,7 +1224,7 @@ class cDbTable implements iDbTable
   	  	  break;
   	  	case "DELETE":
   	  	  $this->deleteRelations();
-  	  	  $this->setCurrentRecordId(0);
+  	  	  $this->setCurrentRecordId(-1);
   	  	  break;
   	  }
   	  $this->getCurrentRecord();
@@ -1275,8 +1275,8 @@ class cDbTable implements iDbTable
     	$this->setCurrentRecordId($_SESSION[table][$this->name][currentRecordId]);
     }
     
-    if ($_POST[$this->name."Relation"]) {
-      $this->relation = $_POST[$this->name."Relation"]; 
+    if ($_POST["RelationDirection"]) {
+      $_SESSION[relation] = $_POST["RelationDirection"]; 
     }
     
     // # button - collapse tree 
@@ -1340,10 +1340,10 @@ class cDbTable implements iDbTable
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
   	  if ((($columnName=="RelationLObject") || ($columnName=="RelationLId")) 
-  	  	&& (isset($this->parent) && ($this->relation==1)))
+  	  	&& (isset($this->parent) && ($_SESSION[relation]==1)))
   	  	continue;
   	  if ((($columnName=="RelationRObject") || ($columnName=="RelationRId"))
-  	  	&& (isset($this->parent) && ($this->relation==2)))
+  	  	&& (isset($this->parent) && ($_SESSION[relation]==2)))
   	  	continue;
   	  	
   	  if ($this->mode=="UPDATE") {
@@ -1536,7 +1536,7 @@ class cDbTable implements iDbTable
     
     // --- Relation - load lookup value
     if ($this->name=="Relation") {
-      switch ($this->relation) {
+      switch ($_SESSION[relation]) {
         case 1:
           $lookupName = gui($dbRow[RelationRObject], "lookupField", $dbRow[RelationRObject]."Name");
           $q2 =
@@ -1579,7 +1579,7 @@ class cDbTable implements iDbTable
       }
     }
     if ($this->name=="Relation") {
-      $button = new cHtmlInput("GoRelation".$this->relation, "SUBMIT", ">");
+      $button = new cHtmlInput("GoRelation".$_SESSION[relation], "SUBMIT", ">");
       $button->setAttribute("CLASS", "GoButton");
       $button->setAttribute("onClick", $js);
       $displayRow["idRelation"] = $button->display();
@@ -1697,13 +1697,13 @@ class cDbTable implements iDbTable
   	}
   	
   	// relations for current record
-   	$ftable = $this->scheme->tables["Relation"];
+   	$ftable = $this->scheme->getTableByName("Relation");
   	$ftable->setParent($this);
-  	$ftable->setRelation(1); // this table on the left side of the relation
+  	//$ftable->setRelation(1); // this table on the left side of the relation
   	$ftable->loadDisplayColumns();
   	$browsers->addTab("RelationLeft", $ftable->browse());
-  	$ftable->setRelation(2); // this table on the right side of the relation
-  	$ftable->loadDisplayColumns();
+  	//$ftable->setRelation(2); // this table on the right side of the relation
+  	//$ftable->loadDisplayColumns();
   	$browsers->addTab("RelationRight", $ftable->browse());
   	unset($ftable);
   	
