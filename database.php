@@ -190,7 +190,7 @@ class cDbField implements iDbField
   	// ----------------------------------------------------------------------------- GUI field types
   	switch (gui($this->getName(), "type")) { 
   	  case "path":
-   	    $htmlControl = new cHtmlFilePath($value);
+   	    $htmlControl = new cHtmlFilePath($value, $this->table->getName());
   	    break;
   	}
   	

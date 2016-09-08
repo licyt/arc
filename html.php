@@ -632,27 +632,35 @@ class cHtmlImg extends cHtmlElement
 
 class cHtmlFilePath extends cHtmlElement
 {
-  public function __construct($path) {
+  public function __construct($path, $tableName) {
   	$this->setAttribute(PATH, $path);
+  	$this->setAttribute(tableName, $tableName);
   }
   public function display() {
   	$id=$this->attributes[ID];
+  	
   	$a = new cHtmlA($this->attributes[PATH]);
   	$a->setAttribute(HREF, ".".$GLOBALS['RepositoryPath'].$this->attributes[PATH]);
   	$a->setAttribute(TARGET, "EXT");
   	$a->setAttribute(ID, $id."Link");
+  	
   	$input = new cHtmlInput($id, "TEXT", $this->attributes[PATH]);
+  	
   	$button = new cHtmlDiv($id."Button");
   	$button->setAttribute("CLASS", "openFileBrowserButton");
+  	
   	$js = 
       "el=elementById('fileBrowser');".
       "if (el.style.display=='block') {hide(el.id);}".
   	  "else {browseFile(elementById('$id'));}".
+  	  "rowHasChanged('".$this->attributes[tableName]."');".
   	  "stopEvent(event);"; 
   	$button->setAttribute(onClick, $js);
+  	
   	$div = new cHtmlDiv($id."Wrap");
   	$div->setAttribute("CLASS", "cHtmlFilePath");
   	$div->setAttribute(CONTENT, $input->display().$a->display().$button->display());
+  	
   	return 
   	  $div->display();
   }

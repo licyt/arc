@@ -31,6 +31,11 @@
 	border: 1px solid #B2B2B2;
 }
 
+.PartOrderButton {
+  background-color: #B2B2B2;
+  font-weight: bold;
+}
+
 #tabButtonPartPart {
 	color: black;
 	background-color: #B2B2B2;
