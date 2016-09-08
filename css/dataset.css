@@ -31,6 +31,11 @@
 	border: 2px solid #B2B2B2;
 }
 
+.DataSetOrderButton {
+  background-color: #B2B2B2;
+  font-weight: bold;
+}
+
 #tabButtonDataSetNote {
 	color: black;
 	background-color: #B2B2B2;

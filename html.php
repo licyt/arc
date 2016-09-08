@@ -647,7 +647,8 @@ class cHtmlFilePath extends cHtmlElement
   	$js = 
       "el=elementById('fileBrowser');".
       "if (el.style.display=='block') {hide(el.id);}".
-  	  "else {browseFile(elementById('$id'));}"; 
+  	  "else {browseFile(elementById('$id'));}".
+  	  "stopEvent(event);"; 
   	$button->setAttribute(onClick, $js);
   	$div = new cHtmlDiv($id."Wrap");
   	$div->setAttribute("CLASS", "cHtmlFilePath");

@@ -664,8 +664,9 @@ class cDbTable implements iDbTable
 	foreach ($record as $fieldName=>$value) {
       // is there a field by this name
 	  if ($field=$this->getFieldByName($fieldName)) {
-        $assign.=($assign?", ":"").
-	      "$fieldName = \"$value\"";
+        $assign .= 
+          ($assign?", ":"").
+	        "$fieldName = \"".addslashes($value)."\"";
 	  }
 	}
 	return $assign;
@@ -909,8 +910,10 @@ class cDbTable implements iDbTable
     			}
     			
     			// append assignment of value
-    			$assign .= ($assign ? ", " : "").
-    			$fieldName." = \"".$_POST[$fieldName]."\"";
+    			$assign .= 
+    			  ($assign ? ", " : "").
+    			  $fieldName." = \"".addslashes($_POST[$fieldName])."\"";
+    			
     		} // foreach 
     		  
     	  if ($this->name=="StatusLog") {

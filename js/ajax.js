@@ -352,6 +352,7 @@ function ajaxInsert(tableName) {
         $("#id"+tableName).val(-1);
         $("#"+tableName+"Insert").hide();
         $("#"+tableName+"Cancel").show();
+        addDatePickers();
       }
   );
 }
