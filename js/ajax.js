@@ -383,7 +383,21 @@ function ajaxDelete(tableName) {
           if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
         }
     );
-    
   }
 }
 
+function jumpToRow(idRelation, relationDirection) {
+  $.post(
+      "ajax.php?jumpToRow",
+      {
+        "idRelation": idRelation, 
+        "relationDirection": relationDirection
+      },
+      function (result) {
+        //alert(result);
+        response = JSON.parse(result);
+        // new table browser!
+        $("#tabBodyAdmin").html(response.browser); 
+      }
+  ); 
+}

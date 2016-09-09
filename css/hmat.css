@@ -13,6 +13,7 @@ form {
 
 table {
 	width: 100%;
+	border-spacing: 0px;
 }
 
 tr:hover {
@@ -162,6 +163,8 @@ img {
 .GoButton {
   color: white;
   background-color: #BE34BA;
+  width: 23px;
+  display: inline-block;
 }
 
 .BROWSE {

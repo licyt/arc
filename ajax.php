@@ -246,4 +246,25 @@ elseif (isset($_REQUEST[switchTab])) {
   echo json_encode($result);
 }
 
+// --------------------------------------------------------------------------------------- jumpToRow
+elseif (isset($_REQUEST[jumpToRow])) {
+  $tableRelation = $dbScheme->getTableByName("Relation");
+  $relation = $tableRelation->getCurrentRecord($_REQUEST[idRelation]);
+  switch ($_REQUEST[relationDirection]) {
+    case 1:
+      $_SESSION[tabControl][Admin][selected] = $relation[RelationRObject];
+      $targetTable = $dbScheme->getTableByName($relation[RelationRObject]);
+      $targetTable->getCurrentRecord($relation[RelationRId]);
+      break;
+    case 2:
+      $_SESSION[tabControl][Admin][selected] = $relation[RelationLObject];
+      $targetTable = $dbScheme->getTableByName($relation[RelationLObject]);
+      $targetTable->getCurrentRecord($relation[RelationLId]);
+      break;
+  }
+  $result[browser] = $targetTable->browse();
+  echo json_encode($result);
+}
+
+
 ?>

@@ -1516,13 +1516,6 @@ class cDbTable implements iDbTable
   }
   
   public function displayRow($id, $dbRow=null) {
-    $js=
-      "loadRow(".
-        "'".(isset($this->parent) ? $this->parent->getName() : "")."', ".
-        "'".$this->name."', ".
-        $id.
-      ");";
-    	
     // --- special lookup for Action/Event
     if ($this->name=="Action") {
       // replace idStatus  with StatusName
@@ -1578,20 +1571,29 @@ class cDbTable implements iDbTable
           $displayRow[$dcn] = $dbRow[$dcn];
       }
     }
+    // jump to related record button 
     if ($this->name=="Relation") {
-      $button = new cHtmlInput("GoRelation".$_SESSION[relation], "SUBMIT", ">");
+      $button = new cHtmlSpan("GoRelation".$id, ">");
       $button->setAttribute("CLASS", "GoButton");
+      $js=
+        "jumpToRow($id, ".$_SESSION[relation].");".
+        "stopEvent(event);";
       $button->setAttribute("onClick", $js);
       $displayRow["idRelation"] = $button->display();
     } else {
       $displayRow["id".$this->name] = "";
     }
     
-    // hide column for lookupField if it is a lookup into parent table
-    if (isset($this->parent)) {
-      if ($this->name=="StatusLog") unset($displayRow["StatusLogRowId"]);
+    if (isset($this->parent)&&($this->name=="StatusLog")) {
+      unset($displayRow["StatusLogRowId"]);
     }
     // add javascript to onClick event of this row
+    $js=
+      "loadRow(".
+        "'".(isset($this->parent) ? $this->parent->getName() : "")."', ".
+        "'".$this->name."', ".
+        $id.
+      ");";
     $displayRow[onClick] = $js;
     return $displayRow;
   }
