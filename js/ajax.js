@@ -398,6 +398,8 @@ function jumpToRow(idRelation, relationDirection) {
         response = JSON.parse(result);
         // new table browser!
         $("#tabBodyAdmin").html(response.browser); 
+        $('#'+response.rowId)[0].scrollIntoView(true);
       }
   ); 
 }
+

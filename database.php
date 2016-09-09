@@ -439,6 +439,10 @@ class cDbTable implements iDbTable
   	$this->parent = $parent;
   }
   
+  public function unsetParent() {
+  	unset($this->parent);
+  }
+  
   public function getParent() {
     if ($this->name=="Job") {
       return $this->scheme->getTableByName(jobParent($this->currentRecordId)[RelationRObject]);
@@ -613,18 +617,18 @@ class cDbTable implements iDbTable
   	  }
   	}
   	// add columns for parents
-	foreach ($this->parents as $parent) {
-	  // skip parent browsers lookup
-	  if (!isset($this->parent)||($this->parent!=$parent)) {
-		$ftName = $parent->getName();
-		$lookupName = gui($ftName, "lookupField", $ftName."Name");
-		array_push($this->displayColumnNames, ($ftName==$this->name?"parent":"").$lookupName);
-	  }
-	}
-	if ($this->name=="StatusLog") {
-	  array_push($this->displayColumnNames, "StatusType");
-	  array_push($this->displayColumnNames, "StatusName");
-	}
+  	foreach ($this->parents as $parent) {
+  	  // skip parent browsers lookup
+  	  if (!isset($this->parent)||($this->parent!=$parent)) {
+  		$ftName = $parent->getName();
+  		$lookupName = gui($ftName, "lookupField", $ftName."Name");
+  		array_push($this->displayColumnNames, ($ftName==$this->name?"parent":"").$lookupName);
+  	  }
+  	}
+  	if ($this->name=="StatusLog") {
+  	  array_push($this->displayColumnNames, "StatusType");
+  	  array_push($this->displayColumnNames, "StatusName");
+  	}
   }
   
   public function loadSession() 

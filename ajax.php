@@ -253,16 +253,20 @@ elseif (isset($_REQUEST[jumpToRow])) {
   switch ($_REQUEST[relationDirection]) {
     case 1:
       $_SESSION[tabControl][Admin][selected] = $relation[RelationRObject];
+      $_SESSION[tabControl][Admin][$relation[RelationRObject]] = "";
       $targetTable = $dbScheme->getTableByName($relation[RelationRObject]);
       $targetTable->getCurrentRecord($relation[RelationRId]);
       break;
     case 2:
       $_SESSION[tabControl][Admin][selected] = $relation[RelationLObject];
+      $_SESSION[tabControl][Admin][$relation[RelationLObject]] = "";
       $targetTable = $dbScheme->getTableByName($relation[RelationLObject]);
       $targetTable->getCurrentRecord($relation[RelationLId]);
       break;
   }
+  $targetTable->unsetParent();
   $result[browser] = $targetTable->browse();
+  $result[rowId] = $targetTable->getName()."Row".$targetTable->getCurrentRecordId();
   echo json_encode($result);
 }
 

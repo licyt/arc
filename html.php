@@ -454,7 +454,7 @@ class cHtmlTable extends cHtmlElement
       		  if ($columnName == "StatusColor") continue;
         }
     
-        if (strpos($columnName, "_id")) continue;
+        //if (strpos($columnName, "_id")) continue;
     
         if ($columnName == "sbColSpan") continue;
         if ($columnName == "subBrowser") {
