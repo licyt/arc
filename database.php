@@ -441,6 +441,7 @@ class cDbTable implements iDbTable
   
   public function unsetParent() {
   	unset($this->parent);
+  	$this->loadDisplayColumns();
   }
   
   public function getParent() {
