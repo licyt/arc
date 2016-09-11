@@ -1841,7 +1841,7 @@ class cDbScheme implements iDbScheme
       $this->style .= 
         str_replace(
           "<color>", 
-          gui($name, "color", "gray"),
+          gui($name, "color", "lightgray"),
           str_replace(
             "<table>",
             $name, 
