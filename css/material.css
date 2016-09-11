@@ -1,157 +1,15 @@
 /*           All that belongs to the Material           */
 #tabButtonAdminMaterial {
-	color: black;
-	background-color: #cbcbcb;
 	height: 20px;
-	position: absolute;
 	top: 60px;
 	left: 360px;
 	width: 80px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminMaterial {
-	color: black;
-	background-color: #cbcbcb;
 	height: 14px;
-	position: absolute;
 	top: 60px;
 	left: 360px;
 	width: 76px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
-#browseFormMaterial {
-	border: 1px solid #cbcbcb;
-}
-
-#tabButtonMaterialMaterial {
-	color: black;
-	background-color: #cbcbcb;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonMaterialNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonMaterialCompany {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabMaterialMaterial {
-	color: black;
-	background-color: #cbcbcb;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabMaterialNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabMaterialCompany {
-	color: black;
-	background-color: #66FF66;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabMaterialPrintParameters {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;	
-}
-
-#tabButtonMaterialPrintParameters {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;	
-}
-
-#MaterialORDERidMaterial, #MaterialORDERMaterialShortcut,
-	#MaterialORDERMaterialName {
-	
-}

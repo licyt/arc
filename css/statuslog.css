@@ -1,138 +1,15 @@
 /*           All that belongs to the statuslog           */
 #tabButtonAdminStatusLog {
-	color: black;
-	background-color: #B2B2B2;
 	height: 20px;
-	position: absolute;
 	top: 40px;
 	left: 1220px;
 	width: 80px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminStatusLog {
-	color: black;
-	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
 	top: 40px;
 	left: 1220px;
 	width: 74px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
-#browseFormStatusLog {
-	border: 2px solid #B2B2B2;
-}
-
-#browseFormStatusLog tr {
-  background-color: #B2B2B2;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-
-#browseFormStatusLoge tr:hover {
-  background-color: white;
-}
-
-#tabButtonStatusLogStatusLogNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonStatusLogStatusLogStatus {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonStatusLogStatusLogStatusLog {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabStatusLogStatusLogNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabStatusLogStatusLogStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabStatusLogStatusLogStatusLog {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#StatusLogORDERidStatusLog, #StatusLogORDERStatusLogRowId,
-	#StatusLogORDERStatusName, #StatusLogORDERStatusLogTimestamp {
-	
-}

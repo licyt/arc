@@ -1,102 +1,15 @@
 /*           All that belongs to the GUI           */
 #tabButtonAdminAction {
-	color: black;
-	background-color: #B2B2B2;
 	height: 20px;
-	position: absolute;
 	top: 40px;
 	left: 1380px;
 	width: 80px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminAction {
-	color: black;
-	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
 	top: 40px;
 	left: 1380px;
 	width: 74px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
-#browseFormAction {
-	border: 2px solid #B2B2B2;
-}
-
-#tabButtonActionNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonActionAction {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabActionNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabActionAction {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#browseFormAction tr {
-  background-color: #B2B2B2;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-#browseFormAction tr:hover {
-  background-color: white;
-}

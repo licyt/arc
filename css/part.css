@@ -1,134 +1,15 @@
 /*           All that belongs to the part           */
 #tabButtonAdminPart {
-	color: black;
-	background-color: #B2B2B2;
-	position: absolute;
 	top: 60px;
 	left: 490px;
 	height: 20px;
 	width: 100px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminPart {
-	color: black;
-	background-color: #B2B2B2;
-	position: absolute;
 	top: 60px;
 	left: 490px;
 	height: 14px;
 	width: 94px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
-#browseFormPart {
-	border: 1px solid #B2B2B2;
-}
-
-.PartOrderButton {
-  background-color: #B2B2B2;
-  font-weight: bold;
-}
-
-#tabButtonPartPart {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonPartNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonPartStatus {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabPartPart {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabPartNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabPartStatus {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#PartORDERidPart, #PartORDERStatusName, #PartORDERDataSetName,
-	#PartORDERPrintParametersTechnology, #PartORDERPartFileName,
-	#PartORDERPartQuoteFileName, #PartORDERPartAMFileName,
-	#PartORDERPartFinish, #PartORDERPartQuantity {
-	
-}
