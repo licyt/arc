@@ -13,9 +13,11 @@ echo
     charset().
 	  linkCss("css/hmat.css").
   	linkCss("css/gantt.css").
-	//linkCss("css/hideIdTags.css").
+	  //linkCss("css/hideIdTags.css").
   	
-  	linkCss("css/project.css").
+    style($dbScheme->style).
+
+    linkCss("css/project.css").
   	linkCss("css/quote.css").
   	linkCss("css/status.css").
   	linkCss("css/task.css").
@@ -42,6 +44,7 @@ echo
   	linkCss("css/action.css").
   	linkCss("css/payment.css").
   	linkCss("css/history.css").
+  	
   	linkCss("css/datepicker.css").
   		
   	linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google

@@ -1,166 +1,21 @@
 /*           All that belongs to the Relation           */
 #tabButtonAdminRelation {
-	color: black;
-	background-color: #B2B2B2;
 	height: 20px;
-	position: absolute;
 	top: 20px;
 	left: 1300px;
 	width: 80px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminRelation {
-	color: black;
-	background-color: #B2B2B2;
 	height: 14px;
-	position: absolute;
 	top: 20px;
 	left: 1300px;
 	width: 74px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
-.RelationOrderButton {
-  background-color: #BE34BA;
-  font-weight: bold;
-}
-
-#browseFormRelation {
-	border: 2px solid #BE34BA;
-}
-
-#browseFormRelation tr {
-  background-color: #BE34BA;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-
-#browseFormRelation tr:hover {
-  background-color: white;
-}
-#tabButtonRelationNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabRelationNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabButtonDataSetRelationLeft,
-#tabButtonDataSetRelationRight,
-#tabButtonPartRelationLeft,
-#tabButtonPartRelationRight,
-#tabButtonCompanyRelationLeft,
-#tabButtonCompanyRelationRight,
-#tabButtonPersonRelationLeft,
-#tabButtonPersonRelationRight,
-#tabButtonJobRelationLeft,
-#tabButtonJobRelationRight,
-#tabButtonTaskRelationLeft,
-#tabButtonTaskRelationRight,
-#tabButtonGUIRelationLeft,
-#tabButtonGUIRelationRight,
-#tabButtonDeliveryNoteRelationLeft,
-#tabButtonDeliveryNoteRelationRight,
-#tabButtonDeliveryTransportRelationLeft,
-#tabButtonDeliveryTransportRelationRight,
-#tabButtonPaymentRelationLeft,
-#tabButtonPaymentRelationRight,
-#tabButtonInvoiceRelationLeft,
-#tabButtonInvoiceRelationRight,
-#tabButtonDemandRelationLeft,
-#tabButtonDemandRelationRight,
-#tabButtonProjectRelationLeft,
-#tabButtonProjectRelationRight,
-#tabButtonQuoteRelationLeft,
-#tabButtonQuoteRelationRight {
-	color: black;
-	background-color: #BE34BA;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabDataSetRelationLeft,
-#tabDataSetRelationRight,
-#tabPartRelationLeft,
-#tabPartRelationRight,
-#tabCompanyRelationLeft,
-#tabCompanyRelationRight,
-#tabPersonRelationLeft,
-#tabPersonRelationRight,
-#tabJobRelationLeft,
-#tabJobRelationRight,
-#tabTaskRelationLeft,
-#tabTaskRelationRight,
-#tabGUIRelationLeft,
-#tabGUIRelationRight,
-#tabDeliveryNoteRelationLeft,
-#tabDeliveryNoteRelationRight,
-#tabDeliveryTransportRelationLeft,
-#tabDeliveryTransportRelationRight,
-#tabPaymentRelationLeft,
-#tabPaymentRelationRight,
-#tabInvoiceRelationLeft,
-#tabInvoiceRelationRight,
-#tabDemandRelationLeft, 
-#tabDemandRelationRight,
-#tabProjectRelationLeft, 
-#tabProjectRelationRight,
-#tabQuoteRelationLeft, 
-#tabQuoteRelationRight {
-	color: black;
-	background-color: #BE34BA;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
- #RelationORDERidRelation, #RelationORDERRelationelement, #RelationORDERRelationattribute,
-	#RelationORDERRelationvalue {
-	
+#tabRelationLeft,
+#tabRelationRight,
+#tabButtonRelationLeft,
+#tabButtonRelationRight {
+	background-color: #cc99ff;
 }

@@ -1,97 +1,14 @@
 /*           All that belongs to the invoice           */
 #tabButtonAdminInvoice {
-	color: black;
-	background-color: #99FFFF;
 	height: 20px;
-	position: absolute;
 	top: 20px;
 	left: 960px;
 	width: 60px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminInvoice {
-	color: black;
-	background-color: #99FFFF;
 	height: 14px;
-	position: absolute;
 	top: 20px;
 	left: 960px;
 	width: 54px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
-}
-
-#browseFormInvoice {
-	border: 1px solid #99FFFF;
-}
-.InvoiceOrderButton {
-  background-color: #99FFFF;
-  font-weight: bold;
-}
-
-#tabButtonInvoicePayment,
-#tabButtonInvoiceDeliveryNote,
-#tabButtonInvoiceNote,
-#tabButtonInvoiceStatus,
-#tabButtonInvoiceInvoice {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabInvoicePayment,
-#tabInvoiceDeliveryNote,
-#tabInvoiceNote,
-#tabInvoiceStatus,
-#tabInvoiceInvoice {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabButtonInvoicePayment,
-#tabInvoicePayment {
-  background-color: #33ffff;
-}
-
-
-#InvoiceORDERidInvoice, #InvoiceORDERStatusName, #InvoiceORDERDemandName,
-	#InvoiceORDERInvoiceIssued, #InvoiceORDERInvoicePaymentTerm,
-	#InvoiceORDERInvoiceTotal, #InvoiceORDERInvoiceVAT,
-	#InvoiceORDERInvoiceType {
-	
-}
-
-#browseFormInvoice tr {
-  background-color: #99FFFF;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-#browseFormInvoice tr:hover {
-  background-color: white;
 }

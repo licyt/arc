@@ -29,6 +29,9 @@ function charset($charset="UTF-8") {
   return "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=$charset\">";
 }
  
+function style($css) {
+  return "<style>$css</style>";
+}
 // ------------------------------------------------------ I N T E R F A C E
 // common ancestor for all Html elements on a page
 interface iHtmlElement {
@@ -375,17 +378,19 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   	$body = new cHtmlDiv("tabBody".$this->name);
   	foreach ($this->tabs as $tabName => $content) {
   	  if ($tabName == $this->selected) {
-    		$button = new cHtmlSpan("tab".$this->name.$tabName);
-    		$button->setAttribute("CONTENT", gui("tab".$this->name.$tabName, $GLOBALS[lang], $tabName));
+    		$button = new cHtmlSpan("tab".($this->name=="Admin"?"Admin":"").$tabName);
+    		$button->setAttribute("CLASS", "tab".($this->name=="Admin"?"Admin":""));
+    		$button->setAttribute("CONTENT", gui("tab".$tabName, $GLOBALS[lang], $tabName));
     		$body->setAttribute("CONTENT", $content);
   	  } else {
   	    if ($this->name=="Admin") {
           $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
   	    } else {
-          $button = new cHtmlSpan("tabButton".$this->name.$tabName);
-          $button->setAttribute("CONTENT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
+          $button = new cHtmlSpan("tabButton".$tabName);
+          $button->setAttribute("CONTENT", gui("tabButton".$tabName, $GLOBALS[lang], $tabName));
           $button->setAttribute("onClick", "switchTab('".$this->name."' ,'".$tabName."');");
   	    }
+  	    $button->setAttribute("CLASS", "tabButton".($this->name=="Admin"?"Admin":""));
   	  }
       $switch.=$button->display();
   	}

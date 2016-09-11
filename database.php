@@ -1739,6 +1739,7 @@ class cDbScheme implements iDbScheme
   protected $status = "undefined";
   protected $dbLink;
   public $tables = array();
+  public $style;
   
   // create link to MySQL database 
   public function link ($dbServerName, $dbUser, $dbPassword)
@@ -1792,6 +1793,7 @@ class cDbScheme implements iDbScheme
   }
 
   public function setup() {
+    /*
     if ($_POST["GoRelation1"]) {
       $query =
       "SELECT RelationRObject, RelationRId".
@@ -1811,6 +1813,7 @@ class cDbScheme implements iDbScheme
         $this->tables[$Relation[RelationLObject]]->setCurrentRecordId($Relation[RelationLId]);
       }
     } else {
+    */
       foreach ($this->tables as $name=>$table) {
         // check POST for any admin button
         if ($_POST["tabButtonAdmin".$name]) {
@@ -1818,8 +1821,10 @@ class cDbScheme implements iDbScheme
           $_SESSION[tabControl][Admin][selected] = $name;
         }
       }
+    /*
     }
-     
+    */
+    
     foreach ($this->tables as $name=>$table) {
       $table->loadColumns();
     }
@@ -1830,8 +1835,19 @@ class cDbScheme implements iDbScheme
       $this->tables[Relation]->preProcess();
     }
      
+    $this->style = "";
     foreach ($this->tables as $name=>$table) {
       $table->loadDisplayColumns();
+      $this->style .= 
+        str_replace(
+          "<color>", 
+          gui($name, "color", "gray"),
+          str_replace(
+            "<table>",
+            $name, 
+            file_get_contents("./css/template.table.css")
+          )
+        );
     }
   }
   

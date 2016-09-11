@@ -1,31 +1,13 @@
--- phpMyAdmin SQL Dump
--- version 4.6.0
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Aug 23, 2016 at 08:48 AM
--- Server version: 5.7.13-0ubuntu0.16.04.2
--- PHP Version: 5.6.21
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `hmat_dev`
---
 
--- --------------------------------------------------------
-
---
--- Table structure for table `GUI`
---
-
+DROP TABLE IF EXISTS `GUI`;
 CREATE TABLE `GUI` (
   `idGUI` int(11) NOT NULL,
   `GUIelement` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
@@ -33,18 +15,14 @@ CREATE TABLE `GUI` (
   `GUIvalue` varchar(45) CHARACTER SET utf8 DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_slovak_ci;
 
---
--- Dumping data for table `GUI`
---
-
 INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (1, 'tabButtonAdminDemand', 'ENG', 'Orders'),
 (3, 'LabelProjectName', 'ENG', 'Name'),
-(4, 'LabelProject_idStatus', 'ENG', 'Status'),
+(4, 'LabelProject_idStatus', 'ENG', 'State'),
 (5, 'LabelProject_idCompany', 'ENG', 'Company'),
 (6, 'LabelProjectStartDate', 'ENG', 'Start Date'),
 (7, 'LabelProjectPriority', 'ENG', 'Priority'),
-(8, 'LabelQuote_idStatus', 'ENG', 'Status'),
+(8, 'LabelQuote_idStatus', 'ENG', 'State'),
 (9, 'LabelQuote_idProject', 'ENG', 'Project'),
 (10, 'LabelQuote_idPrintParameters', 'ENG', 'Print Parameters'),
 (11, 'LabelQuoteLeadTime', 'ENG', 'Lead Time'),
@@ -88,11 +66,11 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (52, 'tabButtonDeliveryTransportDeliveryTransport', 'ENG', 'DeliveryTransport'),
 (53, 'tabButtonDeliveryNoteDeliveryTransport', 'ENG', 'DeliveryTransport'),
 (54, 'tabButtonNoteNote', 'ENG', 'Note'),
-(55, 'tabButtonStatusStatus', 'ENG', 'Status'),
+(55, 'tabButtonStatusStatus', 'ENG', 'State'),
 (56, 'tabButtonStatusStatusLog', 'ENG', 'Status History'),
 (57, 'tabButtonStatusLogStatusLog', 'ENG', 'StatusLog'),
-(58, 'tabButtonGUIGUI', 'ENG', 'GUI'),
-(59, 'LabelDemand_idStatus', 'ENG', 'Status'),
+(58, 'tabButtonGUIGUI', 'ENG', 'OM'),
+(59, 'LabelDemand_idStatus', 'ENG', 'State'),
 (60, 'LabelDemand_idQuote', 'ENG', 'Quote'),
 (61, 'LabelDemandDateReceived', 'ENG', 'Date Received'),
 (62, 'LabelDemandDateConfirmed', 'ENG', 'Date Confirmed'),
@@ -128,14 +106,13 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (93, 'DemandORDERidDemand', 'ENG', '#'),
 (94, 'Demand', 'ENG', 'Order'),
 (95, 'DemandORDERDemandDateReceived', 'ENG', 'Date Received'),
-(96, 'DemandORDERStatusName', 'ENG', 'Status'),
+(96, 'DemandORDERStatusName', 'ENG', 'State'),
 (97, 'DemandORDERQuoteName', 'ENG', 'Quote'),
 (98, 'DemandORDERDemandDateConfirmed', 'ENG', 'Date Confirmed'),
 (99, 'DemandORDERDemandPostProcessStart', 'ENG', 'Post Process Start'),
 (100, 'DemandORDERDemandPostProcessEnd', 'ENG', 'Post Process End'),
 (101, 'DemandORDERDemandCheckedBy', 'ENG', 'Checked By'),
 (102, 'DemandORDERDemandCheckDate', 'ENG', 'Check Date'),
-(103, 'Demand', 'ENG', 'Order'),
 (104, 'tabButtonAdminProject', 'ENG', 'stories'),
 (105, 'tabButtonAdminAccount', 'ENG', 'Accounts'),
 (106, 'tabButtonAdminAddress', 'ENG', 'Addresses'),
@@ -153,9 +130,9 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (118, 'tabButtonAdminPlatform_has_Part', 'ENG', 'Platforms have Parts'),
 (119, 'tabButtonAdminPrintParameters', 'ENG', 'Print Parameters'),
 (120, 'tabButtonAdminQuote', 'ENG', 'Quotes'),
-(121, 'tabButtonAdminStatus', 'ENG', 'Statuses'),
-(122, 'tabButtonAdminStatusLog', 'ENG', 'Status Log'),
-(123, 'tabGUIGUI', 'ENG', 'GUI'),
+(121, 'tabButtonAdminStatus', 'ENG', 'States'),
+(122, 'tabButtonAdminStatusLog', 'ENG', 'States Log'),
+(123, 'tabGUIGUI', 'ENG', 'OM'),
 (124, 'LabelBuild_idPlatform', 'ENG', 'Platform'),
 (125, 'LabelBuildRequested', 'ENG', 'Requested'),
 (126, 'AccountORDERidAccount', 'ENG', '#'),
@@ -190,7 +167,7 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (157, 'DataSetORDERidDataSet', 'ENG', '#'),
 (158, 'DataSetORDERDataSetDate', 'ENG', 'Date'),
 (159, 'DataSetORDERDataSetName', 'ENG', 'Name'),
-(160, 'LabelDataSet_idStatus', 'ENG', 'Status'),
+(160, 'LabelDataSet_idStatus', 'ENG', 'State'),
 (161, 'LabelDataSet_idPrintParameters', 'ENG', 'Print_Parameters'),
 (162, 'LabelDataSet_idQuote', 'ENG', 'Id_Quote'),
 (163, 'LabelDataSetName', 'ENG', 'Name'),
@@ -215,39 +192,38 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (185, 'tabButtonDemandStatus', 'ENG', 'Order History'),
 (186, 'tabButtonInvoiceStatus', 'ENG', 'Invoice History'),
 (187, 'tabButtonDataSetStatus', 'ENG', 'DataSet History'),
-(188, 'tabButtonDeliveryNoteStatus', 'ENG', 'Status'),
+(188, 'tabButtonDeliveryNoteStatus', 'ENG', 'State'),
 (189, 'tabButtonPartStatus', 'ENG', 'Part History'),
-(190, 'tabButtonNoteStatus', 'ENG', 'Status'),
-(191, 'tabButtonStatusStatus', 'ENG', 'Status'),
-(192, 'tabButtonStatusLogStatus', 'ENG', 'Status'),
+(190, 'tabButtonNoteStatus', 'ENG', 'State'),
+(192, 'tabButtonStatusLogStatus', 'ENG', 'State'),
 (193, 'DataSetORDERQuoteQuotePrice', 'ENG', 'QuotePrice'),
 (194, 'LabelPlatform_idPlatform', 'ENG', 'Platform_id'),
-(195, 'LabelInvoice_idStatus', 'ENG', 'Status'),
+(195, 'LabelInvoice_idStatus', 'ENG', 'State'),
 (196, 'LabelInvoicePaymentTerm', 'ENG', 'PaymentTerm'),
 (197, 'LabelInvoice_idDemand', 'ENG', 'Order'),
 (198, 'LabelInvoiceIssued', 'ENG', 'Issued'),
 (199, 'ProjectORDERidProject', 'ENG', '#'),
 (200, 'ProjectORDERCompanyName', 'ENG', 'Company'),
 (201, 'ProjectORDERProjectName', 'ENG', 'Project'),
-(202, 'ProjectORDERStatusName', 'ENG', 'Status'),
+(202, 'ProjectORDERStatusName', 'ENG', 'State'),
 (203, 'ProjectORDERProjectPriority', 'ENG', 'Priority'),
 (204, 'QuoteORDERidQuote', 'ENG', '#'),
 (205, 'QuoteORDERProjectName', 'ENG', 'Project'),
-(206, 'QuoteORDERStatusName', 'ENG', 'Status'),
+(206, 'QuoteORDERStatusName', 'ENG', 'State'),
 (207, 'QuoteORDERPrintParametersTechnology', 'ENG', 'Technology'),
 (208, 'QuoteORDERQuotePrice', 'ENG', 'Price'),
 (209, 'QuoteORDERQuoteDateSent', 'ENG', 'Date Sent'),
 (210, 'QuoteORDERQuoteLeadTime', 'ENG', 'Lead Time'),
-(211, 'StatusLogORDERStatusName', 'ENG', 'Status'),
+(211, 'StatusLogORDERStatusName', 'ENG', 'State'),
 (212, 'NoteORDERidNote', 'ENG', '#'),
 (213, 'NoteORDERNoteText', 'ENG', 'Note'),
-(214, 'NoteORDERStatusName', 'ENG', 'Status'),
+(214, 'NoteORDERStatusName', 'ENG', 'State'),
 (215, 'NoteORDERNoteTime', 'ENG', 'Time'),
-(216, 'DataSetORDERStatusName', 'ENG', 'Status'),
+(216, 'DataSetORDERStatusName', 'ENG', 'State'),
 (217, 'DataSetORDERQuotePrice', 'ENG', 'Price'),
 (218, 'DemandORDERQuotePrice', 'ENG', 'Price'),
 (219, 'InvoiceORDERidInvoice', 'ENG', '#'),
-(220, 'InvoiceORDERStatusName', 'ENG', 'Status'),
+(220, 'InvoiceORDERStatusName', 'ENG', 'State'),
 (221, 'InvoiceORDERDemandName', 'ENG', 'Order'),
 (222, 'InvoiceORDERInvoiceIssued', 'ENG', 'Issued'),
 (223, 'InvoiceORDERInvoicePaymentTerm', 'ENG', 'Payment Term'),
@@ -258,9 +234,9 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (228, 'BuildORDERPlatformName', 'ENG', 'Platform'),
 (229, 'BuildORDERBuildRequested', 'ENG', 'Requested'),
 (230, 'BuildORDERBuildPrintJobStart', 'ENG', 'Print Job Start'),
-(231, 'BuildORDERStatusName', 'ENG', 'Status'),
+(231, 'BuildORDERStatusName', 'ENG', 'State'),
 (232, 'DeliveryNoteORDERidDeliveryNote', 'ENG', '#'),
-(233, 'DeliveryNoteORDERStatusName', 'ENG', 'Status'),
+(233, 'DeliveryNoteORDERStatusName', 'ENG', 'State'),
 (234, 'DeliveryNoteORDERInvoiceName', 'ENG', 'Invoice'),
 (235, 'DeliveryNoteORDERDeliveryNoteIssued', 'ENG', 'Issued'),
 (236, 'DeliveryNoteORDERDeliveryNoteSigned', 'ENG', 'Signed'),
@@ -272,7 +248,7 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (242, 'AddressORDERCompanyName', 'ENG', 'Company'),
 (243, 'PersonORDERCompanyName', 'ENG', 'Company'),
 (244, 'PartORDERidPart', 'ENG', '#'),
-(245, 'PartORDERStatusName', 'ENG', 'Status'),
+(245, 'PartORDERStatusName', 'ENG', 'State'),
 (246, 'PartORDERDataSetName', 'ENG', 'Date Set'),
 (247, 'PartORDERPrintParametersTechnology', 'ENG', 'Technology'),
 (248, 'PartORDERPartFileName', 'ENG', 'File Name'),
@@ -293,7 +269,7 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (263, 'DeliveryTransportORDERdeliveryTransportPayment', 'ENG', 'Payment'),
 (264, 'StatusORDERidStatus', 'ENG', '#'),
 (265, 'StatusORDERStatusType', 'ENG', 'Type'),
-(266, 'StatusORDERStatusName', 'ENG', 'Status'),
+(266, 'StatusORDERStatusName', 'ENG', 'State'),
 (267, 'StatusORDERStatusColor', 'ENG', 'Color'),
 (268, 'tabProjectStatus', 'ENG', 'Project History'),
 (269, 'tabButtonProjectNote', 'ENG', 'Project Notes'),
@@ -318,9 +294,9 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (289, 'tabAdminDeliveryTransport', 'ENG', 'Delivery Transports'),
 (290, 'tabAdminDeliveryNote', 'ENG', 'Delivery Notes'),
 (291, 'tabAdminNote', 'ENG', 'Notes'),
-(292, 'tabAdminStatus', 'ENG', 'Statuses'),
-(293, 'tabAdminStatusLog', 'ENG', 'Status Log'),
-(294, 'tabAdminGUI', 'ENG', 'GUI'),
+(292, 'tabAdminStatus', 'ENG', 'States'),
+(293, 'tabAdminStatusLog', 'ENG', 'States Log'),
+(294, 'tabAdminGUI', 'ENG', 'OM'),
 (295, 'tabQuoteDataSet', 'ENG', 'DataSets'),
 (296, 'tabQuoteDemand', 'ENG', 'Orders'),
 (297, 'tabQuoteStatus', 'ENG', 'Quote History'),
@@ -399,8 +375,6 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (386, 'PartAMFileName', 'type', 'path'),
 (387, 'MaterialORDERidMaterial', 'ENG', '#'),
 (388, 'tabMaterialNote', 'ENG', 'Material Notes'),
-(389, 'tabButtonDemandNote', 'ENG', 'Order Notes'),
-(390, 'tabDemandNote', 'ENG', 'Order Notes'),
 (394, 'PrintParameters', 'lookupField', 'PrintParametersTechnology'),
 (399, 'ActionORDERidAction', 'ENG', '#'),
 (400, 'ActionORDERActionName', 'ENG', 'Name'),
@@ -421,33 +395,32 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (421, 'RelationORDERRelationRightId', 'ENG', 'Connect to Record'),
 (422, 'RelationORDERRelationLeftTable', 'ENG', 'Connected Table'),
 (423, 'RelationORDERRelationLeftId', 'ENG', 'Connected Record'),
-(424, 'tabButtonProjectRelationRight', 'ENG', '<---'),
-(425, 'tabButtonQuoteRelationRight', 'ENG', '<---'),
-(430, 'tabDemandRelationRight', 'ENG', '<---'),
-(431, 'tabBuildRelationRight', 'ENG', '<---'),
-(432, 'tabInvoiceRelationRight', 'ENG', '<---'),
-(433, 'tabProjectRelationRight', 'ENG', '<---'),
+(424, 'tabButtonProjectRelationRight', 'ENG', '>---'),
+(425, 'tabButtonQuoteRelationRight', 'ENG', '>---'),
+(430, 'tabDemandRelationRight', 'ENG', '>---'),
+(431, 'tabBuildRelationRight', 'ENG', '>---'),
+(432, 'tabInvoiceRelationRight', 'ENG', '>---'),
+(433, 'tabProjectRelationRight', 'ENG', '>---'),
 (434, 'tabQuoteRelationLeft', 'ENG', '--->'),
-(435, 'tabQuoteRelationRight', 'ENG', '<---'),
+(435, 'tabQuoteRelationRight', 'ENG', '>---'),
 (436, 'tabDemandRelationLeft', 'ENG', '--->'),
-(437, 'tabButtonDemandRelationRight', 'ENG', '<---'),
+(437, 'tabButtonDemandRelationRight', 'ENG', '>---'),
 (438, 'tabButtonDemandRelationLeft', 'ENG', '--->'),
 (439, 'tabBuildRelationLeft', 'ENG', '--->'),
-(440, 'tabButtonBuildRelationRight', 'ENG', '<---'),
+(440, 'tabButtonBuildRelationRight', 'ENG', '>---'),
 (441, 'tabButtonBuildRelationLeft', 'ENG', '--->'),
 (443, 'ProjectName', 'lookupType', 'suggest'),
 (444, 'RelationLeft', 'ENG', '--->'),
-(445, 'RelationRight', 'ENG', '<---'),
+(445, 'RelationRight', 'ENG', '>---'),
 (446, 'tabButtonDataSetRelationLeft', 'ENG', '--->'),
-(447, 'tabButtonDataSetRelationRight', 'ENG', '<---'),
+(447, 'tabButtonDataSetRelationRight', 'ENG', '>---'),
 (448, 'tabInvoiceRelationLeft', 'ENG', '--->'),
 (449, 'tabButtonInvoiceRelationLeft', 'ENG', '--->'),
-(450, 'tabInvoiceRelationRight', 'ENG', '--->'),
-(451, 'tabButtonInvoiceRelationRight', 'ENG', '<---'),
+(451, 'tabButtonInvoiceRelationRight', 'ENG', '>---'),
 (452, 'DemandORDERDemandName', 'ENG', 'Order Name'),
 (453, 'tabPaymentRelationLeft', 'ENG', '--->'),
-(454, 'tabPaymentRelationRight', 'ENG', '<---'),
-(455, 'tabButtonPaymentRelationRight', 'ENG', '<---'),
+(454, 'tabPaymentRelationRight', 'ENG', '>---'),
+(455, 'tabButtonPaymentRelationRight', 'ENG', '>---'),
 (456, 'tabButtonPaymentRelationLeft', 'ENG', '--->'),
 (457, 'PaymentORDERidPayment', 'ENG', '#'),
 (458, 'RelationORDERRelationRObject', 'ENG', 'Connected to Object Type'),
@@ -457,12 +430,12 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (462, 'DeliveryNoteORDERDeliveryNoteName', 'ENG', 'Name'),
 (463, 'tabButtonDeliveryNoteRelationLeft', 'ENG', '--->'),
 (464, 'tabDeliveryNoteRelationLeft', 'ENG', '--->'),
-(465, 'tabButtonDeliveryNoteRelationRight', 'ENG', '<---'),
-(466, 'tabDeliveryNoteRelationRight', 'ENG', '<---'),
+(465, 'tabButtonDeliveryNoteRelationRight', 'ENG', '>---'),
+(466, 'tabDeliveryNoteRelationRight', 'ENG', '>---'),
 (467, 'tabDeliveryTransportRelationLeft', 'ENG', '--->'),
-(468, 'tabDeliveryTransportRelationRight', 'ENG', '<---'),
+(468, 'tabDeliveryTransportRelationRight', 'ENG', '>---'),
 (469, 'tabButtonDeliveryTransportRelationLeft', 'ENG', '--->'),
-(470, 'tabButtonDeliveryTransportRelationRight', 'ENG', '<---'),
+(470, 'tabButtonDeliveryTransportRelationRight', 'ENG', '>---'),
 (471, 'TaskORDERidTask', 'ENG', '#'),
 (472, 'TaskORDERTaskName', 'ENG', 'Name'),
 (473, 'TaskORDERTaskSequence', 'ENG', 'Sequence'),
@@ -474,12 +447,12 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (479, 'JobORDERJobStarted', 'ENG', 'Started'),
 (480, 'JobORDERJobFinished', 'ENG', 'Finished'),
 (481, 'JobORDERJobDeadline', 'ENG', 'Deadline'),
-(482, 'JobORDERStatusName', 'ENG', 'Status'),
+(482, 'JobORDERStatusName', 'ENG', 'State'),
 (483, 'JobORDERTaskName', 'ENG', 'Task'),
 (484, 'tabButtonJobRelationLeft', 'ENG', '--->'),
 (485, 'tabJobRelationLeft', 'ENG', '--->'),
-(486, 'tabButtonJobRelationRight', 'ENG', '<---'),
-(487, 'tabJobRelationRight', 'ENG', '<---'),
+(486, 'tabButtonJobRelationRight', 'ENG', '>---'),
+(487, 'tabJobRelationRight', 'ENG', '>---'),
 (488, 'tabButtonJobNote', 'ENG', 'Notes'),
 (489, 'tabJobStatus', 'ENG', 'History'),
 (490, 'tabButtonJobStatus', 'ENG', 'History'),
@@ -487,48 +460,56 @@ INSERT INTO `GUI` (`idGUI`, `GUIelement`, `GUIattribute`, `GUIvalue`) VALUES
 (492, 'StatusLogORDERStatusType', 'ENG', 'Status Type'),
 (493, 'tabGUIRelationLeft', 'ENG', '--->'),
 (494, 'tabButtonGUIRelationLeft', 'ENG', '--->'),
-(495, 'tabGUIRelationRight', 'ENG', '<---'),
-(496, 'tabButtonGUIRelationRight', 'ENG', '<---'),
+(495, 'tabGUIRelationRight', 'ENG', '>---'),
+(496, 'tabButtonGUIRelationRight', 'ENG', '>---'),
 (497, 'tabButtonAdminAction', 'ENG', 'Automation'),
 (498, 'tabButtonAdminRelation', 'ENG', 'Relations'),
 (499, 'tabButtonAdminJob', 'ENG', 'Jobs'),
-(500, 'tabButtonAdminTask', 'ENG', 'Tasks'),
+(500, 'tabButtonAdminTask', 'ENG', 'Moves'),
 (501, 'tabButtonAdminMaterial', 'ENG', 'Materials'),
 (502, 'tabButtonTaskJob', 'ENG', 'Jobs'),
 (503, 'tabTaskJob', 'ENG', 'Jobs'),
-(504, 'tabTaskTask', 'ENG', 'Tasks'),
-(505, 'tabButtonTaskTask', 'ENG', 'Tasks'),
+(504, 'tabTaskTask', 'ENG', 'Moves'),
+(505, 'tabButtonTaskTask', 'ENG', 'Moves'),
 (506, 'tabTaskRelationLeft', 'ENG', '--->'),
 (507, 'tabButtonTaskRelationLeft', 'ENG', '--->'),
-(508, 'tabTaskRelationRight', 'ENG', '<---'),
-(509, 'tabButtonTaskRelationRight', 'ENG', '<---'),
+(508, 'tabTaskRelationRight', 'ENG', '>---'),
+(509, 'tabButtonTaskRelationRight', 'ENG', '>---'),
 (510, 'tabButtonTaskNote', 'ENG', 'Notes'),
 (511, 'tabTaskNote', 'ENG', 'Notes'),
 (512, 'tabAdminJob', 'ENG', 'Jobs'),
-(513, 'tabAdminTask', 'ENG', 'Tasks'),
+(513, 'tabAdminTask', 'ENG', 'Moves'),
 (514, 'tabAdminAction', 'ENG', 'Automation'),
 (515, 'tabAdminRelation', 'ENG', 'Relations'),
-(516, 'JobORDERJobPriority', 'ENG', 'Priority');
+(516, 'JobORDERJobPriority', 'ENG', 'Priority'),
+(517, 'MaterialName', 'lookupType', 'suggest'),
+(518, 'tabButtonAdminGUI', 'ENG', 'OM'),
+(519, 'Project', 'color', '#99ccff'),
+(520, 'Quote', 'color', '#ffcc99'),
+(521, 'Demand', 'color', '#ff9999'),
+(522, 'Invoice', 'color', '#66ffff'),
+(523, 'Relation', 'color', '#cc99ff'),
+(524, 'tabButtonRelationRight', 'ENG', '>---'),
+(525, 'tabRelationRight', 'ENG', '>---'),
+(526, 'tabRelationLeft', 'ENG', '--->'),
+(527, 'tabButtonRelationLeft', 'ENG', '--->'),
+(528, 'Build', 'color', '#ffff99'),
+(529, 'Payment', 'color', '#99ffcc'),
+(530, 'Industry', 'color', '#99ff66'),
+(531, 'Company', 'color', '#66ff33'),
+(532, 'Person', 'color', '#99ff99'),
+(533, 'Address', 'color', '#ccff66'),
+(534, 'Account', 'color', '#ccff33'),
+(535, 'DataSet', 'color', '#ffcc66');
 
---
--- Indexes for dumped tables
---
 
---
--- Indexes for table `GUI`
---
 ALTER TABLE `GUI`
-  ADD PRIMARY KEY (`idGUI`);
+  ADD PRIMARY KEY (`idGUI`),
+  ADD UNIQUE KEY `GUIelement` (`GUIelement`,`GUIattribute`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `GUI`
---
 ALTER TABLE `GUI`
-  MODIFY `idGUI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=517;
+  MODIFY `idGUI` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=536;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,109 +1,14 @@
 /*           All that belongs to the address           */
 #tabButtonAdminAddress {
-	color: black;
-	background-color: #CCCCCC;
 	height: 20px;
-	position: absolute;
 	top: 60px;
 	left: 160px;
 	width: 80px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
 }
 
 #tabAdminAddress {
-	color: black;
-	background-color: #CCCCCC;
 	height: 14px;
-	position: absolute;
 	top: 60px;
 	left: 160px;
 	width: 74px;
-	border-style: solid;
-	border-width: 3px;
-	margin: 0px 0px 0px 0px;
-	padding: 0px 0px 0px 0px;
-	display: block;
-}
-
-#browseFormAddress {
-	border: 2px solid #CCCCCC;
-}
-
-#tabButtonAddressNote {
-	color: black;
-	background-color: #B2B2B2;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabButtonAddressAddress {
-	color: black;
-	background-color: #CCCCCC;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px 2px 0px 0px;
-}
-
-#tabAddressNote {
-	color: black;
-	background-color: #B2B2B2;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#tabAddressAddress {
-	color: black;
-	background-color: #CCCCCC;
-	border: 0 none;
-	height: 20px;
-	top: 0px;
-	left: 0px;
-	margin: 0px;
-	border: 0px;
-	padding: 0px;
-	display: inline-block;
-	font-size: 12px;
-	font-family: "Tahoma";
-	padding: 0px 4px 0px 4px;
-	margin: 0px 2px 0px 0px;
-	font-style: italic;
-}
-
-#AddressORDERidAddress, #AddressORDERCompanyName,
-	#AddressORDERAddressName, #AddressORDERAddressStreet,
-	#AddressORDERAddressNumber, #AddressORDERAddressZip,
-	#AddressORDERAddressCity, #AddressORDERAddressCountry {
-	
-}
-
-#browseFormAddress tr {
-  background-color: #CCCCCC;
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-}
-#browseFormAddress tr:hover {
-  background-color: white;
 }
