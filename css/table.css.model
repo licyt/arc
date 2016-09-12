@@ -22,7 +22,11 @@
 
 .<table>OrderButton {
   background-color: <color>;
-  font-weight: bold;
+  font-style: italic;
+}
+
+.<table>OrderButton:hover {
+  color: white;
 }
 
 #table<table> {
