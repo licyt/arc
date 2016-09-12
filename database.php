@@ -1845,7 +1845,7 @@ class cDbScheme implements iDbScheme
           str_replace(
             "<table>",
             $name, 
-            file_get_contents("./css/template.table.css")
+            file_get_contents("./css/table.css.model")
           )
         );
     }
