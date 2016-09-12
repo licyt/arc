@@ -437,6 +437,7 @@ class cDbTable implements iDbTable
   
   public function setParent($parent) {
   	$this->parent = $parent;
+  	$this->loadDisplayColumns();
   }
   
   public function unsetParent() {
@@ -790,7 +791,7 @@ class cDbTable implements iDbTable
   public function addButton() {
   	$button = new cHtmlSpan($this->name."Insert", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "InsertButton");
-    $button->setAttribute(onClick, "ajaxInsert('".$this->name."');");
+    $button->setAttribute(onClick, "ajaxInsert('".$this->name."', '".(isset($this->parent) ? $this->parent->getName() : "")."');");
   	return $button->display();
   }
 
@@ -827,7 +828,7 @@ class cDbTable implements iDbTable
       $button->setAttribute("CLASS", "OkButton");
       $button->setAttribute(
           "onClick", 
-          "ajaxPost('".$this->name."'); stopEvent(event);"
+          "ajaxPost('".$this->name."', '".(isset($this->parent) ? $this->parent->getName(): "")."'); stopEvent(event);"
       );
       if ($this->mode == "DELETE") {
       	$button->setAttribute("STYLE", "display:block;");
@@ -1477,6 +1478,25 @@ class cDbTable implements iDbTable
     return $result;
   }
   
+  public function lumpChildren() {
+    foreach ($this->scheme->tables as $table) {
+      $tableName = $table->getName();
+      //if ($tableName==$this->name) continue;
+      if ($table->isChildOf($this)) {
+        if (!isset($this->parent) || ($this->parent->getName()!=$this->name)) {
+          $table->setParent($this);
+          $table->preProcess();
+          if (isset($this->parent) && ($this->parent->getName()==$this->name)) {
+            $table->setParent(null);
+          }
+        }
+      }
+      if (($tableName=="Note")) $table->setParent($this);
+      if (($tableName=="Relation")) $table->setParent($this);
+      if (($tableName=="StatusLog")) $table->setParent($this);
+    }
+  }
+  
   public function preProcess() {
     if ($this->preprocessed) return; 
     
@@ -1488,23 +1508,8 @@ class cDbTable implements iDbTable
   	if ($this->name=="Note") return;
   	if ($this->name=="Relation") return;
   	if ($this->name=="StatusLog") return;
-  	 
-  	foreach ($this->scheme->tables as $table) {
-  	  $tableName = $table->getName();
-  	  //if ($tableName==$this->name) continue;
-  	  if ($table->isChildOf($this)) {
-  	  	if (!isset($this->parent) || ($this->parent->getName()!=$this->name)) {
-  	      $table->setParent($this);
-  	      $table->preProcess(); 
-  	      if (isset($this->parent) && ($this->parent->getName()==$this->name)) {
-  	      	$table->setParent(null);
-  	      }
-  	  	} 
-  	  }
-  	  if (($tableName=="Note")) $table->setParent($this);
-  	  if (($tableName=="Relation")) $table->setParent($this);
-  	  if (($tableName=="StatusLog")) $table->setParent($this);
-  	}
+  	
+  	$this->lumpChildren();
   }
   
   public function gantt($dbRow) {

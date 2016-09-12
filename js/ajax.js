@@ -299,9 +299,9 @@ function switchTab(tableName, tabName) {
   Ajax("switchTab", params);
 }
 
-function ajaxPost(tableName) {
+function ajaxPost(tableName, parentName) {
   $.post(
-      "ajax.php?submitRow&tableName="+tableName, 
+      "ajax.php?submitRow&tableName="+tableName+"&parentName="+parentName, 
       $("#browseForm"+tableName).serialize(),
       function (result) {
         response = JSON.parse(result);
@@ -329,11 +329,11 @@ function ajaxPost(tableName) {
   );
 }
 
-function ajaxInsert(tableName) {
+function ajaxInsert(tableName, parentName) {
   var newRow = elementById("table"+tableName).insertRow(1);
   newRow.id = tableName+"Row-1";
   $.post(
-      "ajax.php?insertRow&tableName="+tableName, 
+      "ajax.php?insertRow&tableName="+tableName+"&parentName="+parentName, 
       function (result) {
         response = JSON.parse(result);
         table = elementById("table"+tableName);

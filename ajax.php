@@ -135,6 +135,7 @@ elseif (isset($_REQUEST[loadGantt])) {
 // ------------------------------------------------------------------------------------------- insertRow
 elseif (isset($_REQUEST[insertRow])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $dbTable->setParent($dbScheme->getTableByName($_REQUEST[parentName]));
   $htmlTable = new cHtmlTable;
   $result[oldRowId] = $dbTable->getCurrentRecordId();
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getCurrentRecord());
@@ -233,6 +234,7 @@ elseif (isset($_REQUEST[switchTab])) {
     default: 
       $_SESSION[relation] = 0; 
   }
+  $dbTable->lumpChildren();
   $result[currentRecordId] = $dbTable->getCurrentRecordId();
   $editRow = $dbTable->editColumns($dbTable->getCurrentRecordId());
   $sbRow["sbIndent"]="";

@@ -34,7 +34,7 @@
 }
 
 #table<table> > tbody > tr {
-	background-color: <color>;
+  background-color: <color>;
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
