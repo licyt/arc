@@ -437,6 +437,7 @@ class cDbTable implements iDbTable
   
   public function setParent($parent) {
   	$this->parent = $parent;
+  	//$_SESSION[table][$this->name][parentName] = $parent->getName();
   	$this->loadDisplayColumns();
   }
   
@@ -469,7 +470,7 @@ class cDbTable implements iDbTable
   
   public function isChildOf($table) {
   	foreach ($this->parents as $parent) {
-  	  if ($parent == $table) return true;
+  	  if ($parent->getName() == $table->getName()) return true;
   	}
   	return false; 
   }
@@ -1448,12 +1449,13 @@ class cDbTable implements iDbTable
   protected function orderSet(array $columnNames, $setName="") 
   {
     $buttons = array();
+    $add = $this->addButton().$this->cancelButton();
     foreach ($columnNames as $i=>$buttonName) {
       $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
       $button->setAttribute("CLASS", $this->name."OrderButton");
-      $buttons[$i]=$button->display();
+      $buttons[$i]=$button->display().$add;
+      $add="";
     }
-    $buttons[0].=$this->addButton().$this->cancelButton();
     return $buttons;	
   }
 
@@ -1482,6 +1484,11 @@ class cDbTable implements iDbTable
     foreach ($this->scheme->tables as $table) {
       $tableName = $table->getName();
       //if ($tableName==$this->name) continue;
+      /*
+      if ($_SESSION[table][$tableName][parentName]==$this->name) {
+        $table->setParent($this);
+      } else
+      */
       if ($table->isChildOf($this)) {
         if (!isset($this->parent) || ($this->parent->getName()!=$this->name)) {
           $table->setParent($this);

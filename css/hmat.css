@@ -75,6 +75,7 @@ img {
 
 .firstColumn {
 	width: 52px;
+	white-space: nowrap;
 }
 
 #tabBodyAdmin {
