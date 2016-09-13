@@ -12,7 +12,8 @@ window.addEventListener('load', Load, false);
 
 function rowHasChanged(TableName) { 
   hide(TableName+"Delete");									
-  show(TableName+"Ok");										
+  show(TableName+"Ok");		
+  show(TableName+"Cancel");
 }
 
 function Load() {

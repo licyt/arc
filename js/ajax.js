@@ -145,6 +145,7 @@ function Ajax(request, params) {
               newSbRow.id = params["tableName"]+"Sb"+params["newRowId"];
               newSbRow.setAttribute("class", "subBrowserRow");
               newSbRow.innerHTML = response.subBrowser;
+              newSbRow.style.display = "none";
               currentRowId = params["newRowId"];
               $("#id"+params["tableName"]).val(currentRowId);
               addDatePickers();
@@ -283,7 +284,7 @@ var currentRowId = -1;
 
 function loadRow(parentName, tableName, newRowId) {
   //alert(parentName+" "+tableName+" "+oldRowId+" "+newRowId);
-  CancelInsert(tableName);
+  CancelEdit(tableName);
   var params=new Array();
   params['parentName']=parentName;
   params['tableName']=tableName;
@@ -352,19 +353,21 @@ function ajaxInsert(tableName, parentName) {
         newRow.innerHTML = response.newRow;
         $("#id"+tableName).val(-1);
         $("#"+tableName+"Insert").hide();
+        elementById(tableName+"Ok").style.display="inline-block";
         elementById(tableName+"Cancel").style.display="inline-block";
-        //$("#"+tableName+"Cancel").show();
         addDatePickers();
       }
   );
 }
 
-function CancelInsert(tableName) {
+function CancelEdit(tableName) {
   table = elementById("table"+tableName);
   var rowIndex = getRowIndex(table, tableName+"Row-1");
   if (rowIndex>0) table.deleteRow(rowIndex);
   $("#"+tableName+"Insert").show();
+  $("#"+tableName+"Delete").show();
   $("#"+tableName+"Cancel").hide();
+  $("#"+tableName+"Ok").hide();
 }
 
 function ajaxDelete(tableName) {

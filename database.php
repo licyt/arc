@@ -799,7 +799,7 @@ class cDbTable implements iDbTable
   public function cancelButton() {
   	$button = new cHtmlSpan($this->name."Cancel", "x"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "CancelButton");
-    $button->setAttribute(onClick, "CancelInsert('".$this->name."');");
+    $button->setAttribute(onClick, "CancelEdit('".$this->name."');stopEvent(event);");
   	return $button->display();
   }
 
@@ -836,11 +836,7 @@ class cDbTable implements iDbTable
       }
       $result .= $button->display();
       
-      /*
-      $button = new cHtmlInput($this->name."Cancel", "SUBMIT", "x");
-      $button->setAttribute("CLASS", "CancelButton");
-      $result .= $button->display();
-      */
+      $result .= $this->cancelButton();
       
       $anchor = new cHtmlA("");
       $anchor->setAttribute(ID, $this->name.$this->currentRecordId);
@@ -1449,7 +1445,7 @@ class cDbTable implements iDbTable
   protected function orderSet(array $columnNames, $setName="") 
   {
     $buttons = array();
-    $add = $this->addButton().$this->cancelButton();
+    $add = $this->addButton();
     foreach ($columnNames as $i=>$buttonName) {
       $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
       $button->setAttribute("CLASS", $this->name."OrderButton");
