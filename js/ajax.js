@@ -353,8 +353,8 @@ function ajaxInsert(tableName, parentName) {
         newRow.innerHTML = response.newRow;
         $("#id"+tableName).val(-1);
         $("#"+tableName+"Insert").hide();
-        elementById(tableName+"Ok").style.display="inline-block";
-        elementById(tableName+"Cancel").style.display="inline-block";
+        $("#"+tableName+"Ok").show();
+        $("#"+tableName+"Cancel").show();
         addDatePickers();
       }
   );
@@ -366,27 +366,36 @@ function CancelEdit(tableName) {
   if (rowIndex>0) table.deleteRow(rowIndex);
   $("#"+tableName+"Insert").show();
   $("#"+tableName+"Delete").show();
+  $("#"+tableName+"Erase").hide();
   $("#"+tableName+"Cancel").hide();
   $("#"+tableName+"Ok").hide();
+  $("#browseForm"+tableName)[0].reset();
 }
 
 function ajaxDelete(tableName) {
-  if (confirm("Delete?")) {
-    $.post(
-        "ajax.php?deleteRow&tableName="+tableName, 
-        function (result) {
-          response = JSON.parse(result);
-          table = elementById("table"+tableName);
-          // old row
-          var oldRowName = tableName+"Row"+response.oldRowId;
-          var oldRowIndex = getRowIndex(table, oldRowName);
-          if (oldRowIndex>0) table.deleteRow(oldRowIndex);
-          var sbRowName = tableName+"Sb"+response.oldRowId;
-          var sbRowIndex = getRowIndex(table, sbRowName);
-          if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
-        }
-    );
-  }
+  $("#"+tableName+"Delete").hide();
+  $("#"+tableName+"Cancel").show();
+  $("#"+tableName+"Erase").show();
+}
+
+function ajaxErase(tableName) {
+  $.post(
+      "ajax.php?deleteRow&tableName="+tableName, 
+      function (result) {
+        response = JSON.parse(result);
+        table = elementById("table"+tableName);
+        // old row
+        var oldRowName = tableName+"Row"+response.oldRowId;
+        var oldRowIndex = getRowIndex(table, oldRowName);
+        if (oldRowIndex>0) table.deleteRow(oldRowIndex);
+        var sbRowName = tableName+"Sb"+response.oldRowId;
+        var sbRowIndex = getRowIndex(table, sbRowName);
+        if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+        $("#"+tableName+"Delete").show();
+        $("#"+tableName+"Cancel").hide();
+        $("#"+tableName+"Erase").hide();
+      }
+  );
 }
 
 function jumpToRow(idRelation, relationDirection) {

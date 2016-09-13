@@ -199,6 +199,7 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   );
   $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
   $result[onEditClick] = $editRow[onClick];
+  $result[onKeyPress] = $editRow[onKeyPress];
   // sub-browsers
   $sbRow["sbIndent"]="";
   $sbRow["sbColSpan"] = sizeof($oldRow)-1;

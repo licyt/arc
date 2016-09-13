@@ -7,7 +7,7 @@ function elementById(id) {
 }
 
 function show(id) {
-  if (el=elementById(id)) el.style.display="block";
+  if (el=elementById(id)) el.style.display="inline-block";
 }
 
 function hide(id) {

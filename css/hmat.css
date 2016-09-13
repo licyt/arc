@@ -173,7 +173,6 @@ img {
 
 .UpdateButton {
   width: 23px;
-  display: inline-block;
   cursor: pointer;
 	color: white;
 	background-color: red;
@@ -188,9 +187,16 @@ img {
 	background-color: black;
 }
 
+.EraseButton {
+  width: 23px;
+  cursor: pointer;
+  color: black;
+  background-color: red;
+  display: none;
+}
+
 .OkButton {
   width: 23px;
-  display: inline-block;
   cursor: pointer;
 	color: white;
 	background-color: green;
@@ -199,7 +205,6 @@ img {
 
 .CancelButton {
   width: 23px;
-  display: inline-block;
   cursor: pointer;
 	color: red;
 	background-color: white;

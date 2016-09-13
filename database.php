@@ -797,7 +797,7 @@ class cDbTable implements iDbTable
   }
 
   public function cancelButton() {
-  	$button = new cHtmlSpan($this->name."Cancel", "x"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
+  	$button = new cHtmlSpan($this->name."Cancel", "o"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "CancelButton");
     $button->setAttribute(onClick, "CancelEdit('".$this->name."');stopEvent(event);");
   	return $button->display();
@@ -817,6 +817,16 @@ class cDbTable implements iDbTable
       $button->setAttribute(
           "onClick", 
           "ajaxDelete('".$this->name."'); stopEvent(event);"
+      );
+      $result .= $button->display();
+    }
+    // display confirm button
+    if (($this->mode == "UPDATE")&&($this->currentRecordId>0)) {
+      $button = new cHtmlSpan($this->name."Erase", "x");
+      $button->setAttribute("CLASS", "EraseButton");
+      $button->setAttribute(
+          "onClick", 
+          "ajaxErase('".$this->name."'); stopEvent(event);"
       );
       $result .= $button->display();
     }
@@ -1407,6 +1417,7 @@ class cDbTable implements iDbTable
   	}
   	$result["CLASS"] = $this->mode;
   	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}";
+  	$result["onKeyPress"].= "if (event && event.keyCode==27) {elementById('".$this->name."Cancel').click();}";
   	$sbName = $this->name."Sb".$id;
   	$result[onClick] = "toggleDisplay('$sbName');";
   	return $result;
