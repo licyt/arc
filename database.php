@@ -820,16 +820,6 @@ class cDbTable implements iDbTable
       );
       $result .= $button->display();
     }
-    // display confirm button
-    if (($this->mode == "UPDATE")&&($this->currentRecordId>0)) {
-      $button = new cHtmlSpan($this->name."Erase", "x");
-      $button->setAttribute("CLASS", "EraseButton");
-      $button->setAttribute(
-          "onClick", 
-          "ajaxErase('".$this->name."'); stopEvent(event);"
-      );
-      $result .= $button->display();
-    }
     // display ok & cancel buttons
     if (($this->mode == "INSERT") ||
     	($this->mode == "UPDATE") ||
@@ -847,6 +837,17 @@ class cDbTable implements iDbTable
       $result .= $button->display();
       
       $result .= $this->cancelButton();
+      
+		  // display erase button (confirm delete)
+      if (($this->mode == "UPDATE")&&($this->currentRecordId>0)) {
+        $button = new cHtmlSpan($this->name."Erase", "x");
+        $button->setAttribute("CLASS", "EraseButton");
+        $button->setAttribute(
+            "onClick", 
+            "ajaxErase('".$this->name."'); stopEvent(event);"
+        );
+        $result .= $button->display();
+      }
       
       $anchor = new cHtmlA("");
       $anchor->setAttribute(ID, $this->name.$this->currentRecordId);

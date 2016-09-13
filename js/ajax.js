@@ -310,7 +310,6 @@ function ajaxPost(tableName, parentName) {
         var newRowName = tableName+"Row"+newRowId;
         if (response.oldRowId==-1) {
           $("#id"+tableName).val(newRowId);
-          //$("#"+tableName+"Row-1").attr("id", newRowName); // does not work, replaced by next line
           elementById(tableName+"Row-1").id = newRowName;
           $("#"+tableName+"Insert").show();
           $("#"+tableName+"Cancel").hide();
@@ -373,9 +372,9 @@ function CancelEdit(tableName) {
 }
 
 function ajaxDelete(tableName) {
-  $("#"+tableName+"Delete").hide();
-  $("#"+tableName+"Cancel").show();
-  $("#"+tableName+"Erase").show();
+  hide(tableName+"Delete");
+  show(tableName+"Cancel");
+  show(tableName+"Erase");
 }
 
 function ajaxErase(tableName) {
