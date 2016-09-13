@@ -311,8 +311,8 @@ function ajaxPost(tableName, parentName) {
         if (response.oldRowId==-1) {
           $("#id"+tableName).val(newRowId);
           elementById(tableName+"Row-1").id = newRowName;
-          $("#"+tableName+"Insert").show();
-          $("#"+tableName+"Cancel").hide();
+          show(tableName+"Insert");
+          hide(tableName+"Cancel");
           // subBrowsers of new row
           table = elementById("table"+tableName);
           var sbRowName = tableName+"Sb"+newRowId;
@@ -351,9 +351,9 @@ function ajaxInsert(tableName, parentName) {
         $("#"+tableName+"Row"+$("#id"+tableName).val()).html(response.oldRow);
         newRow.innerHTML = response.newRow;
         $("#id"+tableName).val(-1);
-        $("#"+tableName+"Insert").hide();
-        $("#"+tableName+"Ok").show();
-        $("#"+tableName+"Cancel").show();
+        hide(tableName+"Insert");
+        show(tableName+"Ok");
+        show(tableName+"Cancel");
         addDatePickers();
       }
   );
@@ -363,11 +363,11 @@ function CancelEdit(tableName) {
   table = elementById("table"+tableName);
   var rowIndex = getRowIndex(table, tableName+"Row-1");
   if (rowIndex>0) table.deleteRow(rowIndex);
-  $("#"+tableName+"Insert").show();
-  $("#"+tableName+"Delete").show();
-  $("#"+tableName+"Erase").hide();
-  $("#"+tableName+"Cancel").hide();
-  $("#"+tableName+"Ok").hide();
+  show(tableName+"Insert");
+  show(tableName+"Delete");
+  hide(tableName+"Erase");
+  hide(tableName+"Cancel");
+  hide(tableName+"Ok");
   $("#browseForm"+tableName)[0].reset();
 }
 
@@ -390,9 +390,9 @@ function ajaxErase(tableName) {
         var sbRowName = tableName+"Sb"+response.oldRowId;
         var sbRowIndex = getRowIndex(table, sbRowName);
         if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
-        $("#"+tableName+"Delete").show();
-        $("#"+tableName+"Cancel").hide();
-        $("#"+tableName+"Erase").hide();
+        show(tableName+"Delete");
+        hide(tableName+"Cancel");
+        hide(tableName+"Erase");
       }
   );
 }
