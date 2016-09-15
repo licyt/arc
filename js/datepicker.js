@@ -85,6 +85,8 @@ function chooseDate(e) {
 		dispacher.dispatchEvent(eventForward);
 	}
 	div.parentNode.removeChild(div); // Remove the dropdown box now
+	
+	stopEvent(e); // SiR 2016/09/15
 }
 
 // Parse a date in d-MMM-yyyy format
@@ -295,7 +297,7 @@ function addDatePicker(element) {
   a.href = '#';
   a.className = "datepickershow";
   a.setAttribute('onclick', 'showDatePicker("'
-      + element.id + '");  stopEvent(event);');
+      + element.id + '");  stopEvent(event);'); // SiR
   var img = document.createElement('img');
   img.src = 'img/datepicker.png';
   img.title = 'Show calendar';

@@ -208,6 +208,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
           : "TEXT").
         $this->attributes[DISABLED].
         $this->add(VALUE).
+        $this->add(hint).
         $this->add(onChange).
         $this->add(onClick).
         $this->add(onFocus).
@@ -380,7 +381,7 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   	  if ($tabName == $this->selected) {
     		$button = new cHtmlSpan("tab".($this->name=="Admin"?"Admin":"").$tabName);
     		$button->setAttribute("CLASS", "tab".($this->name=="Admin"?"Admin":""));
-    		$button->setAttribute("CONTENT", gui("tab".$tabName, $GLOBALS[lang], $tabName));
+    		$button->setAttribute("CONTENT", gui("tab".($this->name=="Admin"?"Admin":"").$tabName, $GLOBALS[lang], $tabName));
     		$body->setAttribute("CONTENT", $content);
   	  } else {
   	    if ($this->name=="Admin") {
@@ -407,15 +408,10 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 
 class cHtmlTable extends cHtmlElement
 {
-  protected $dbTable;
   protected $headers = array();
   protected $footers = array();
   protected $rows  = array();
   protected $ids = array();
-  
-  public function __construct ($dbTable) {
-    $this->dbTable = $dbTable;
-  }
   
   // $columns is array of values
   public function addHeader($columns) {
@@ -469,7 +465,7 @@ class cHtmlTable extends cHtmlElement
         if ($columnName == "sbColSpan") continue;
         if ($columnName == "subBrowser") {
           $class = " CLASS=\"subBrowserRow\"";
-          $html.="<TD colspan=".$row[sbColSpan].">$value</TD>";
+          $html.="<TD colspan=".$row[sbColSpan]." class=\"subBrowser\">$value</TD>";
           continue;
         }
         if ($columnName == "statusGannt") {
@@ -489,41 +485,30 @@ class cHtmlTable extends cHtmlElement
     return $rows;
   }
   
-  public function display() {
+  public function display($tableId="") {
+  	$table = "";
 	  // display headers
   	foreach ($this->headers as $header) {
-  	  $tr = ""; $atr = ""; $i-0;
+  	  $html = ""; $i-0;
   	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$tr.="<TH ".($i==0?"class=\"firstColumn\"":"")."><DIV class=\"thInner\">$value</DIV></TH>";
-  	  	$atr.="<TD".($i==0?"class=\"firstColumn\"":"").">$value</TD>";
+  	  	$html.="<TH ".($i==0?"class=\"firstColumn\"":"").">$value</TH>";
   	  	$i++;
   	  }
-  	  $thead.="<TR>$tr</TR>";
-  	  //$tbody.="<TR  STYLE=\"line-height:0px;\">$atr</TR>";
+  	  $table.="<TR>$html</TR>";
   	}
   	// display rows 
-  	$tbody .= $this->displayRows();
+  	$table.=$this->displayRows();
   	// display footers
   	foreach ($this->footers as $footer) {
-  	  $tr = "";
+  	  $html = "";
   	  foreach ($footer as $value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$tr.="<TD>$value</TD>";
+  	  	$html.="<TH>$value</TH>";
   	  }
-  	  $tfoot.="<TR>$tr</TR>";
+  	  $table.="<TR>$html</TR>";
   	}
-  	return 
-  	  "<DIV CLASS=\"outerTableContainer\" ".($this->dbTable->getParent() == null ? "" : "STYLE=\"height:100%;\"").">".
-  	    "<DIV CLASS=\"tableHeaderBackground tableHeader".$this->dbTable->getName()."\"></DIV>".
-  	    "<DIV CLASS=\"innerTableContainer\">".
-      	  "<TABLE ID=\"table".$this->dbTable->getName()."\">".
-      	    "<THEAD>$thead</THEAD>".
-      	    "<TFOOT>$tfoot</TFOOT>".
-      	    "<TBODY>$tbody</TBODY>".
-      	  "</TABLE>".
-      	"</DIV>".
-  	  "</DIV>";
+  	return "<TABLE ID=\"$tableId\">$table</TABLE>";
   }
 }
 
@@ -539,7 +524,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 	  
 	  
 	  // toto je uplne napicu, to sa takto nerobi
-	  // nevytvara sa inštancia parent objektu
+	  
 	  
 	  
 		$input = new cHtmlInput($this->attributes[ID], "TEXT", $this->attributes[VALUE]);
