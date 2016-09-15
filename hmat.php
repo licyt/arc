@@ -12,9 +12,10 @@ echo
   head(
     charset().
 	  linkCss("css/hmat.css").
-  	linkCss("css/gantt.css").
-	  //linkCss("css/hideIdTags.css").
-  	
+	  linkCss("css/fileBrowser.css").
+    linkCss("css/tableBrowser.css").
+    linkCss("css/gantt.css").
+    linkCss("css/datepicker.css").
     style($dbScheme->style).
 
     linkCss("css/project.css").
@@ -45,18 +46,15 @@ echo
   	linkCss("css/payment.css").
   	linkCss("css/history.css").
   	
-  	linkCss("css/datepicker.css").
   		
-  	linkJs("https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"). // jQuery @ google
-  	
-  	linkJs("js/jscolor.js").
-  	linkJs("js/datepicker.js").
-  	
+  	linkJs("js/jquery.min.js"). // jQuery @ google
     linkJs("js/hmat.js").
     linkJs("js/basic.js").
+    linkJs("js/cHtmlSuggest.js").
   	linkJs("js/ajax.js").
-  	linkJs("js/gantt.js").
-  	linkJs("js/cHtmlSuggest.js")
+    linkJs("js/gantt.js").
+  	linkJs("js/jscolor.js").
+  	linkJs("js/datepicker.js")
   		
   ).
   body(

@@ -5,6 +5,7 @@
   padding:10px;
   position:absolute;
   text-align:center;
+  z-index: 1000;
 }
 .datepickerdropdown table {
   border-collapse:collapse;
@@ -49,6 +50,8 @@
 }
 .datepickershow img {
   border:0;
+  position: relative;
+  top: 3;
 }
 .monthDsp
 {

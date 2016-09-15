@@ -407,10 +407,15 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 
 class cHtmlTable extends cHtmlElement
 {
+  protected $dbTable;
   protected $headers = array();
   protected $footers = array();
   protected $rows  = array();
   protected $ids = array();
+  
+  public function __construct ($dbTable) {
+    $this->dbTable = $dbTable;
+  }
   
   // $columns is array of values
   public function addHeader($columns) {
@@ -484,30 +489,41 @@ class cHtmlTable extends cHtmlElement
     return $rows;
   }
   
-  public function display($tableId="") {
-  	$table = "";
+  public function display() {
 	  // display headers
   	foreach ($this->headers as $header) {
-  	  $html = ""; $i-0;
+  	  $tr = ""; $atr = ""; $i-0;
   	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$html.="<TH ".($i==0?"class=\"firstColumn\"":"").">$value</TH>";
+  	  	$tr.="<TH ".($i==0?"class=\"firstColumn\"":"")."><DIV class=\"thInner\">$value</DIV></TH>";
+  	  	$atr.="<TD".($i==0?"class=\"firstColumn\"":"").">$value</TD>";
   	  	$i++;
   	  }
-  	  $table.="<TR>$html</TR>";
+  	  $thead.="<TR>$tr</TR>";
+  	  //$tbody.="<TR  STYLE=\"line-height:0px;\">$atr</TR>";
   	}
   	// display rows 
-  	$table.=$this->displayRows();
+  	$tbody .= $this->displayRows();
   	// display footers
   	foreach ($this->footers as $footer) {
-  	  $html = "";
+  	  $tr = "";
   	  foreach ($footer as $value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$html.="<TH>$value</TH>";
+  	  	$tr.="<TD>$value</TD>";
   	  }
-  	  $table.="<TR>$html</TR>";
+  	  $tfoot.="<TR>$tr</TR>";
   	}
-  	return "<TABLE ID=\"$tableId\">$table</TABLE>";
+  	return 
+  	  "<DIV CLASS=\"outerTableContainer\" ".($this->dbTable->getParent() == null ? "" : "STYLE=\"height:100%;\"").">".
+  	    "<DIV CLASS=\"tableHeaderBackground tableHeader".$this->dbTable->getName()."\"></DIV>".
+  	    "<DIV CLASS=\"innerTableContainer\">".
+      	  "<TABLE ID=\"table".$this->dbTable->getName()."\">".
+      	    "<THEAD>$thead</THEAD>".
+      	    "<TFOOT>$tfoot</TFOOT>".
+      	    "<TBODY>$tbody</TBODY>".
+      	  "</TABLE>".
+      	"</DIV>".
+  	  "</DIV>";
   }
 }
 
@@ -523,7 +539,7 @@ class cHtmlJsDatePick extends cHtmlInput implements iHtmlJsDatePick
 	  
 	  
 	  // toto je uplne napicu, to sa takto nerobi
-	  
+	  // nevytvara sa inštancia parent objektu
 	  
 	  
 		$input = new cHtmlInput($this->attributes[ID], "TEXT", $this->attributes[VALUE]);

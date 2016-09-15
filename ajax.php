@@ -136,7 +136,7 @@ elseif (isset($_REQUEST[loadGantt])) {
 elseif (isset($_REQUEST[insertRow])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
   $dbTable->setParent($dbScheme->getTableByName($_REQUEST[parentName]));
-  $htmlTable = new cHtmlTable;
+  $htmlTable = new cHtmlTable($dbTable);
   $result[oldRowId] = $dbTable->getCurrentRecordId();
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getCurrentRecord());
   $result[onClick] = $oldRow[onClick];
@@ -184,7 +184,7 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getLastRecord());
   $result[onClick] = str_replace(", -1);", ", ".$result[newRowId].");", $oldRow[onClick]);
   // use cHtmlTable to format html of the old table row
-  $htmlTable = new cHtmlTable;
+  $htmlTable = new cHtmlTable($dbTable);
   $htmlTable->addRow(
     $_REQUEST[tableName]."Row".$result[oldRowId], 
     $oldRow
@@ -241,7 +241,7 @@ elseif (isset($_REQUEST[switchTab])) {
   $sbRow["sbIndent"]="";
   $sbRow["sbColSpan"] = sizeof($editRow)-1;
   $sbRow["subBrowser"] = $dbTable->subBrowsers();
-  $htmlTable = new cHtmlTable;
+  $htmlTable = new cHtmlTable($dbTable);
   $htmlTable->addRow($dbTable->getName()."Sb".$dbTable->getCurrentRecordId(), $sbRow);
   // strip <TR></TR> but only at the beginning and the end of the row
   $result[subBrowser] = preg_replace('/^<TR[^>]*>/i', '', $htmlTable->displayRows());

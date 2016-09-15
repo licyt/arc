@@ -1,69 +1,24 @@
 body {
   font-family: "Tahoma";
   font-size: 12px;
-}
-
-form {
-	margin-bottom:0px;
-}
-
-table {
-	width: 100%;
-	border-spacing: 0px;
-}
-
-th {
-  text-align: left;
-}
-
-td {
-  font-size: 12px;
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
 }
 
 span {
   font-size: 12px;
-  text-align: center;	
+  text-align: center; 
   font-family: "Tahoma";
+  padding: 0px;
+  margin: 0px;
 }
 
-label {
-	display: inline-block;
-	width: 300px;
-	text-align: right;
-	margin-right: 5px;
-	font-style: italic;
-}
-
-select {
-	font-size: 12px;
-	height: 16px;
-	margin: 0px;
+div {
 	padding: 0px;
-	border: 1px;
-	max-width: 170px;
-}
-
-select:disabled {
-	color: black;
-}
-
-input {
-	font-size: 12px;
 	border: 0px;
-   background-color: #dddddd;
-   height: 16px;
-   margin: 0px;
-   max-width: 200px;
+	margin: 0px;
 }
-
-input:disabled {
-	color: black;
-}
-
 
 img {
   border: 0px;
@@ -73,238 +28,42 @@ img {
 
 
 
-.firstColumn {
-	width: 52px;
-	white-space: nowrap;
+form {
+	margin-bottom:0px;
 }
 
-#tabBodyAdmin {
-	width: 1500px;
-	height: 700px;
-	overflow-y: scroll;
-	overflow-x: auto;
-}
-#tabHeadAdmin {
-  margin: 0 auto;
-  height: 70px;
-  display: block;
+label {
+  display: inline-block;
+  width: 300px;
+  text-align: right;
+  margin-right: 5px;
+  font-style: italic;
 }
 
-.tab {
-  height: 20px;
-  padding: 0px 4px 2px 4px;
+select {
+  font-size: 12px;
+  height: 16px;
+  margin: 0px;
+  padding: 0px;
   border: 0px;
-  margin: 0px 2px 0px 0px;
-  display: inline-block;
-  font-weight: bold;
+  max-width: 170px;
+   background-color: #eeeeee;
 }
 
-.tabButton {
-  height: 20px;
-  padding: 0px 4px 0px 4px;
+select:disabled {
+  color: black;
+}
+
+input {
+  font-size: 12px;
   border: 0px;
-  margin: 0px 2px 2px 0px;
-  display: inline-block;
+   background-color: #eeeeee;
+   height: 16px;
+   margin: 0px;
+   max-width: 170px;
 }
 
-.tabButton:hover {
-  cursor: pointer;
-	color: white;
-}
-
-.tabAdmin {
-  position: absolute;
-  height: 14px;
-  border-style: solid;
-  border-width: 3px;
-  margin: 0px 0px 0px 0px;
-  padding: 0px 0px 0px 0px;
-  display: block;
-}
-
-.tabButtonAdmin {
+input:disabled {
   color: black;
-  position: absolute;
-  height: 20px;
-  max-width: 1080px;
-  margin: 0px 0px 0px 0px;
-  padding: 0px 0px 0px 0px;
-  display: block;
-}
-
-
-
-
-
-
-
-.subBrowserRow  {
-  background-color: white;
-}
-
-.goButtons {
-	margin-top: 0px;
-	margin-bottom: 0px;
-}
-
-#logo {
-  position:absolute;
-  top:0px;
-  left:1090px;
-}
-
-.filter {
-	background-color: white;
-	border: 1px solid lightgray;
-}
-
-.ReservedButton {
-	background-color: transparent;
-	display: none;
-}
-
-.InsertButton {
-	width: 23px;
-	display: inline-block;
-	cursor: pointer;
-	color: white;
-	background-color: blue;
-}
-
-.UpdateButton {
-  width: 23px;
-  cursor: pointer;
-	color: white;
-	background-color: red;
-	display: none;
-}
-
-.DeleteButton {
-  width: 23px;
-  display: inline-block;
-  cursor: pointer;
-	color: white;
-	background-color: black;
-}
-
-.EraseButton {
-  width: 23px;
-  cursor: pointer;
-  color: black;
-  background-color: red;
-  display: none;
-}
-
-.OkButton {
-  width: 23px;
-  cursor: pointer;
-	color: white;
-	background-color: green;
-	display: none;
-}
-
-.CancelButton {
-  width: 23px;
-  cursor: pointer;
-	color: red;
-	background-color: white;
-	display: none;
-}
-
-.GoButton {
-  color: white;
-  background-color: #BE34BA;
-  width: 23px;
-  display: inline-block;
-}
-
-.BROWSE {
-	background-color: gray;
-}
-.BROWSE:hover {
-	background-color: gray;
-}
-.INSERT {
-	background-color: blue;
-}
-.INSERT:hover {
-	background-color: lightblue;
-}
-.UPDATE {
-	background-color: gray;
-}
-.UPDATE:hover {
-	background-color: lightgray;
-}
-.DELETE {
-	background-color: black;
-}
-.DELETE:hover {
-	background-color: red;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-.cHtmlFilePath {
-  white-space: normal;
-  width: 165px; 
-}
-
-.cHtmlFilePath a {
-   display: inline-block;
-	background-color: white;
-	color: black;
-	padding: 0px 3px 0px 3px;
-	margin: 0px 0px 0px 0px;
-	max-width: 170px;
-	max-height: 20px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	height: 16px;
-	width: 140px;
-}
-
-.cHtmlFilePath input {
-	display: inline;
-	width: 0px;
-	border: 0px;
-	padding: 0px;
-	margin: 0px;
-}
-
-#fileBrowser {
-	display: none;
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 200px;
-	height: 100px;
-	z-index: 1000;
-	background-color: lightgray;
-	overflow-y: scroll;
-}
-#fileBrowser div:hover {
-	color:white;
-	background-color: black;
-}
-
-.openFileBrowserButton {
-   float: right;
-   display: inline-block;
-	width: 16px;
-	height: 16px;
-	z-index: 10;
-	background-image: url(../img/openFB.png);
 }
 

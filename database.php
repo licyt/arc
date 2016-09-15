@@ -1627,7 +1627,7 @@ class cDbTable implements iDbTable
     $sub = (isset($this->parent)&&($this->parent->getName()==$this->name)?"sub":"");
     if ($this->mode!="INSERT") $this->getCurrentRecord();
   	// create output as html table
-	  $table = new cHtmlTable();
+	  $table = new cHtmlTable($this);
   	if (($this->name=="Status")&&!isset($this->parent)) {
   	  $table->setAttribute("StatusEdit", true);
   	}
@@ -1682,7 +1682,7 @@ class cDbTable implements iDbTable
     $form->setAttribute("METHOD", "POST");
     $form->setAttribute("CONTENT", 
 	  //gui($this->name, $GLOBALS[lang], $this->name)." [".$this->at."/".$this->count."]".br().
-      $table->display("table".$this->name).
+      $table->display().
       $RowId->display().
       $include
     );

@@ -1,0 +1,53 @@
+.cHtmlFilePath {
+  white-space: normal;
+  width: 165px; 
+}
+
+.cHtmlFilePath a {
+   display: inline-block;
+   background-color: #eeeeee;
+  color: black;
+  padding: 0px 3px 0px 3px;
+  margin: 0px 0px 0px 0px;
+  max-width: 170px;
+  max-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 16px;
+  width: 140px;
+}
+
+.cHtmlFilePath input {
+  display: inline;
+  width: 0px;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+}
+
+#fileBrowser {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 200px;
+  height: 100px;
+  z-index: 1000;
+  background-color: lightgray;
+  overflow-y: scroll;
+}
+#fileBrowser div:hover {
+  color:white;
+  background-color: black;
+}
+
+.openFileBrowserButton {
+   float: right;
+   display: inline-block;
+  width: 16px;
+  height: 16px;
+  z-index: 10;
+  background-image: url(../img/openFB.png);
+}
+

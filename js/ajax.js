@@ -151,6 +151,7 @@ function Ajax(request, params) {
               addDatePickers();
               break;
             case "switchTab":
+              //alert(xmlHttp.responseText);
               response = JSON.parse(xmlHttp.responseText);
               currentRowId = response.currentRecordId;
               var table=elementById("table"+params["tableName"]);
