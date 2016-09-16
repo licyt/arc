@@ -408,10 +408,15 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 
 class cHtmlTable extends cHtmlElement
 {
+  protected $dbTable;
   protected $headers = array();
   protected $footers = array();
   protected $rows  = array();
   protected $ids = array();
+  
+  public function __construct($dbTable) {
+    $this->dbTable = $dbTable;
+  }
   
   // $columns is array of values
   public function addHeader($columns) {
@@ -485,7 +490,8 @@ class cHtmlTable extends cHtmlElement
     return $rows;
   }
   
-  public function display($tableId="") {
+  public function display() {
+    $tableId = $this->dbTable->getName();
   	$table = "";
 	  // display headers
   	foreach ($this->headers as $header) {
@@ -508,7 +514,7 @@ class cHtmlTable extends cHtmlElement
   	  }
   	  $table.="<TR>$html</TR>";
   	}
-  	return "<TABLE ID=\"$tableId\">$table</TABLE>";
+  	return "<TABLE ID=\"table".$tableId."\">$table</TABLE>";
   }
 }
 
