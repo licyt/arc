@@ -748,10 +748,7 @@ class cDbTable implements iDbTable
   	  ).
   	  
   	  // set colation order
-  	  ($this->order //&& strpos($this->columns, $this->order) 
-  	    ? " ORDER BY ".$this->order 
-  	  	: ""
-  	  );
+  	  " ORDER BY ".($this->order ? $this->order : "id".$this->name." DESC");
     return $query;
   }
   
