@@ -252,8 +252,33 @@ img {
 
 
 
+/* column Menu */
+#columnMenu {
+  display: none;
+  position: absolute;
+  z-index: 1001;
+  background-color: lightgray;
+}
+#columnMenu div:hover {
+  color:white;
+  background-color: black;
+  cursor: pointer;
+}
+#columnMenu th {
+	font-size: 12px;
+	white-space: nowrap;
+}
+#btnAddColumn {
+	
+}
 
+#btnAlterColumn {
+	
+}
 
+#btnDeleteColumn {
+	
+}
 
 
 

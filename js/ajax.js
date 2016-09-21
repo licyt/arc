@@ -415,3 +415,69 @@ function jumpToRow(idRelation, relationDirection) {
   ); 
 }
 
+function columnMenu(event, tableName, columnName) {
+  $.post(
+      "ajax.php?columnMenu",
+      {
+        "tableName": tableName, 
+        "columnName": columnName
+      },
+      function (result) {
+        //alert(result);
+        response = JSON.parse(result);
+        var columnMenu = elementById("columnMenu");
+        columnMenu.innerHTML = response.columnMenu;
+        columnMenu.style.left = event.clientX+"px";
+        columnMenu.style.top = event.clientY+"px";
+        show("columnMenu");
+     }
+  ); 
+}
+
+function addColumn(event, tableName, columnName) {
+  $.post(
+      "ajax.php?addColumn",
+      {
+        "tableName": tableName, 
+        "columnName": columnName
+      },
+      function (result) {
+        response = JSON.parse(result);
+        var columnMenu = elementById("columnMenu");
+        columnMenu.innerHTML = response.columnEditor;
+        columnMenu.style.left = event.clientX+"px";
+        columnMenu.style.top = event.clientY+"px";
+        show("columnMenu");
+     }
+  ); 
+}
+
+function addLookup(event, tableName, columnName) {
+  hide("columnMenu");
+  alert("This feature will be implemented soon!");
+}
+
+function alterColumn(event, tableName, columnName) {
+  $.post(
+      "ajax.php?alterColumn",
+      {
+        "tableName": tableName, 
+        "columnName": columnName
+      },
+      function (result) {
+        response = JSON.parse(result);
+        var columnMenu = elementById("columnMenu");
+        columnMenu.innerHTML = response.columnEditor;
+        columnMenu.style.left = event.clientX+"px";
+        columnMenu.style.top = event.clientY+"px";
+        show("columnMenu");
+     }
+  ); 
+}
+
+function deleteColumn(event, tableName, columnName) {
+  hide("columnMenu");
+  if (confirm("Are you sure you want to PERMANENTLY DELETE column "+columnName+" from table "+tableName+"?\r\nWarning: ALL DATA FROM THIS COLUMN WILL BE LOST!")) {
+    alert("just kidding :)\n\rYou can not do this yet.");  
+  }
+}

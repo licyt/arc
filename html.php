@@ -491,30 +491,32 @@ class cHtmlTable extends cHtmlElement
   }
   
   public function display() {
-    $tableId = $this->dbTable->getName();
-  	$table = "";
+    $tableName = $this->dbTable->getName();
+  	$htmlTable = "";
 	  // display headers
   	foreach ($this->headers as $header) {
-  	  $html = ""; $i-0;
+  	  $html = ""; $i=0;
   	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$html.="<TH ".($i==0?"class=\"firstColumn\"":"").">$value</TH>";
+  	  	$dcn = $this->dbTable->displayColumnNames[$index];
+  	  	$html.="<TH ID=\"column".$dcn."\" onClick=\"columnMenu(event, '$tableName', '$dcn');\"".
+  	  	          ($i==0?"class=\"firstColumn\"":"").">$value</TH>";
   	  	$i++;
   	  }
-  	  $table.="<TR>$html</TR>";
+  	  $htmlTable.="<TR>$html</TR>";
   	}
   	// display rows 
-  	$table.=$this->displayRows();
+  	$htmlTable.=$this->displayRows();
   	// display footers
   	foreach ($this->footers as $footer) {
-  	  $html = "";
+  	  $htmlRow = "";
   	  foreach ($footer as $value) {
   	  	if (strpos($value, "StatusColor")) continue;
-  	  	$html.="<TH>$value</TH>";
+  	  	$htmlRow .= "<TH>$value</TH>";
   	  }
-  	  $table.="<TR>$html</TR>";
+  	  $htmlTable.="<TR>$htmlRow</TR>";
   	}
-  	return "<TABLE ID=\"table".$tableId."\">$table</TABLE>";
+  	return "<TABLE ID=\"table".$tableName."\">$htmlTable</TABLE>";
   }
 }
 

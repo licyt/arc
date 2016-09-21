@@ -68,8 +68,9 @@ echo
         " SVN:".shell_exec('svnversion').
         " DB:".$dbName."[".$GLOBALS[queryCount]."]".
       "</div>".
-  	  "<div style='position:absolute'>".
-  	  "<div id='fileBrowser'></div>".
+  	  //"<div style='position:absolute'>".
+  	  "<div id='columnMenu'></div>".
+      "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
   	  $admin.
     "</div>",

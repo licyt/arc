@@ -55,6 +55,9 @@ function setupSuggestList(hiddenId,visibleId,listId)
 
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
 function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
+  value = elementById(listId).getAttribute("data-value");
+  elementById(hiddenId).setAttribute("value", value);
+  /* 
 	var val = document.getElementById(visibleId).value;
 	var dlchildren = document.getElementsByName(listId+"Options");
 
@@ -64,6 +67,7 @@ function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
 //			document.getElementById(visibleId).setAttribute("value",dlchildren[i].text);
 		}
 	}
+  */
 }
 
 function sanitizeSuggestList( listId ) {

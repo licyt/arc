@@ -100,6 +100,10 @@ class cDbField implements iDbField
     return $this->properties[Type];
   }
   
+  public function getExtra() {
+    return $this->properties[Extra];
+  }
+  
   public function getSize() {
   	return filter_var($this->getType(), FILTER_SANITIZE_NUMBER_INT);
   }
@@ -329,7 +333,7 @@ class cDbTable implements iDbTable
   protected $lastRecord = array();
   // browser parameters
   protected $columnNames = array();
-  protected $displayColumnNames = array();
+  public $displayColumnNames = array();
   protected $ftNames = array();
   protected $start;									// browser starting position
   protected $rowCount;								// number of rows in browser
@@ -538,7 +542,7 @@ class cDbTable implements iDbTable
       while ($column = mysql_fetch_assoc($result)) {
         // create/set cDbField object for each table column
         $field = new cDbField($column);
-		$field->setTable($this);
+		    $field->setTable($this);
         // push this new field into array of fields of this object
         array_push($this->fields, $field);
       }
@@ -777,6 +781,42 @@ class cDbTable implements iDbTable
   	} else {
   	  return false;
   	}
+  }
+  
+  public function columnMenu($columnName) {
+    $addButton = new cHtmlDiv("btnAddColumn");
+    $addButton->setAttribute("CONTENT", "+ Add column");
+    $addButton->setAttribute("onClick", "hide('columnMenu');addColumn(event, '".$this->name."', '$columnName')");
+    $lookupButton = new cHtmlDiv("btnAddLookup");
+    $lookupButton->setAttribute("CONTENT", "^ Add lookup");
+    $lookupButton->setAttribute("onClick", "hide('columnMenu');addLookup(event, '".$this->name."', '$columnName')");
+    $alterButton = new cHtmlDiv("btnAlterColumn");
+    $alterButton->setAttribute("CONTENT", "* Change column");
+    $alterButton->setAttribute("onClick", "hide('columnMenu');alterColumn(event, '".$this->name."', '$columnName')");
+    $deleteButton = new cHtmlDiv("btnDeleteColumn");
+    $deleteButton->setAttribute("CONTENT", "x Delete column");
+    $deleteButton->setAttribute("onClick", "hide('columnMenu');deleteColumn(event, '".$this->name."', '$columnName')");
+    return
+        $addButton->display().
+        $lookupButton->display().
+        $alterButton->display().
+        $deleteButton->display();
+  }
+  
+  public function columnEditor($columnName) {
+    if ($field = $this->getFieldByName($columnName)) {
+      $result = 
+        "<table>".
+          "<tr><th>Displayed name</th><td><input id='displayedName' value='".gui($this->name."ORDER".$columnName, $GLOBALS[lang], $columnName)."' type=text></td></tr>".
+          "<tr><th>Column name</th><td><input id='columnName' value='$columnName' type=text></td></tr>".
+          "<tr><th>Table name</th><td>".$this->name."</td></tr>".
+          //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
+          "<tr><th>Data type</th><td><input id='dataType' value='".$field->getType()."' type=text></td></tr>".
+          //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
+          "<tr><td><div>Ok</div></td><td><div>Cancel</div></td></tr>".
+        "</table>";
+    }
+    return $result;
   }
 
   public function reservedButton() {
@@ -1753,6 +1793,7 @@ class cDbTable implements iDbTable
 //implement the interface iDbScheme
 class cDbScheme implements iDbScheme 
 {
+  protected $name;
   protected $status = "undefined";
   protected $dbLink;
   public $tables = array();
@@ -1769,11 +1810,20 @@ class cDbScheme implements iDbScheme
     else echo 'Not connected : ' . mysql_error();
   }
   
+  public function getName() {
+    return $this->name;
+  }
+  
+  public function setName($dbName) {
+    $this->useDb($dbName);
+  }
+  
   // select database schema to work with
   public function useDb ($dbName)
   {
   	if (mysql_select_db($dbName, $this->dbLink)) 
     {
+      $this->name = $dbName;
       loadGUI();
       // clear old tables
       foreach ($this->tables as $name=>$table) {

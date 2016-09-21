@@ -77,7 +77,7 @@ elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
     	  "<option".
     	    " data-value=\"".$row["id".$_REQUEST["tableName"]]."\"".
     	    " name=\"".$_REQUEST["destinationId"]."Options\">".
-  	      $row[$_REQUEST["columnName"]].
+    	    $row[$_REQUEST["columnName"]].
   	      "</option>";
     }
   }
@@ -273,5 +273,28 @@ elseif (isset($_REQUEST[jumpToRow])) {
   echo json_encode($result);
 }
 
+
+// ------------------------------------------------------------------------------------- columnMenu
+elseif (isset($_REQUEST[columnMenu])) {
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $result[columnMenu] = $dbTable->columnMenu($_REQUEST[columnName]);
+  echo json_encode($result);
+}
+
+// ------------------------------------------------------------------------------------- addColumn
+elseif (isset($_REQUEST[addColumn])) {
+  $_SESSION[columnMode] = "add";
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $result[columnEditor] = $dbTable->columnEditor("");
+  echo json_encode($result);
+}
+
+// ------------------------------------------------------------------------------------- alterColumn
+elseif (isset($_REQUEST[alterColumn])) {
+  $_SESSION[columnMode] = "alter";
+  $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+  $result[columnEditor] = $dbTable->columnEditor($_REQUEST[columnName]);
+  echo json_encode($result);
+}
 
 ?>
