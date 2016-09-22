@@ -530,7 +530,7 @@ class cDbTable implements iDbTable
   public function loadFields() 
   {
   	// clear list of fields
-  	foreach ($this->fields as $i=>$field) unset($this->fields[$i]);
+  	while (count($this->fields)) array_pop($this->fields);
     // get list of fields for a table from database
     $query = "SHOW COLUMNS FROM ".$this->name;
     $result = myQuery($query);
@@ -552,61 +552,70 @@ class cDbTable implements iDbTable
   public function loadColumns() 
   {
   	// clear list of columns and foreign_tables
-  	foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
-  	foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
+  	while (count($this->columnNames)) { array_pop($this->columnNames); }
+  	//foreach ($this->columnNames as $i=>$columnName) unset($this->columnNames[$i]);
+  	//foreach ($this->ftNames as $i=>$ftName) unset($this->ftNames[$i]);
+  	
   	// load list of columns for query from list of fields
-	foreach ($this->fields as $i=>$field) {
-	  $fieldName = $field->getName();
-	  array_push($this->columnNames, "C.".$fieldName);
-	}
-	// add columns for parents
-	$i = 0;
-	foreach ($this->parents as $parent) {
-	  $ftName = $parent->getName();
-	  $lookupName = gui($ftName, "lookupField", $ftName."Name");
-	  array_push($this->ftNames, $ftName." P".$i);
-	  array_push($this->columnNames, "P".$i.".id".$ftName.
-	  		($ftName==$this->name?" as parentId".$ftName:""));
-	  array_push($this->columnNames, "P".$i.".".$lookupName.
-	  		($ftName==$this->name?" as parent".$lookupName:""));
-	  if ($lookupName=="StatusName") {
-	  	array_push($this->columnNames, "P".$i.".StatusColor");
-	  }
-	  $i++;
-	}
-	if ($this->name=="StatusLog") {
-	  array_push($this->columnNames, "S.StatusType");
-	  array_push($this->columnNames, "S.StatusName");
-	  array_push($this->columnNames, "S.StatusColor");
-	}
+  	foreach ($this->fields as $i=>$field) {
+  	  $fieldName = $field->getName();
+  	  array_push($this->columnNames, "C.".$fieldName);
+  	}
+  	// add columns for parents
+  	$i = 0;
+  	foreach ($this->parents as $parent) {
+  	  $ftName = $parent->getName();
+  	  $lookupName = gui($ftName, "lookupField", $ftName."Name");
+  	  array_push($this->ftNames, $ftName." P".$i);
+  	  array_push($this->columnNames, "P".$i.".id".$ftName.
+  	  		($ftName==$this->name?" as parentId".$ftName:""));
+  	  array_push($this->columnNames, "P".$i.".".$lookupName.
+  	  		($ftName==$this->name?" as parent".$lookupName:""));
+  	  if ($lookupName=="StatusName") {
+  	  	array_push($this->columnNames, "P".$i.".StatusColor");
+  	  }
+  	  $i++;
+  	}
+  	if ($this->name=="StatusLog") {
+  	  array_push($this->columnNames, "S.StatusType");
+  	  array_push($this->columnNames, "S.StatusName");
+  	  array_push($this->columnNames, "S.StatusColor");
+  	}
+  }
+  
+  public function reload() {
+    $this->loadFields();
+    $this->loadColumns();
+    $this->loadDisplayColumns();
+    $this->setCurrentRecordId(0);
   }
   
   public function loadDisplayColumns() 
   {
-  	foreach ($this->displayColumnNames as $i=>$displayColumnName) {
-  	  unset($this->displayColumnNames[$i]);
+  	while (count($this->displayColumnNames)) {
+  	  array_pop($this->displayColumnNames);
   	}
   	foreach ($this->fields as $i=>$field) {
-	  $fieldName = $field->getName();
-	  
-	  $continue=false;
-	  switch ($fieldName) {
-	  	case "RelationLId":
-	  	case "RelationLObject": 
-	  	  if ((!isset($this->parent))||($_SESSION[relation]!=1)) {
-	  	  	array_push($this->displayColumnNames, $fieldName);
-	  	  }
-	  	  $continue=true;
-	  	  break;
-	  	case "RelationRId":
-	  	case "RelationRObject": 
-	  	  if ((!isset($this->parent))||($_SESSION[relation]!=2)) {
-	  	  array_push($this->displayColumnNames, $fieldName);
-	  	  }
-	  	  $continue=true;
-	  	  break;
-	  }
-	  if ($continue) continue; // move continue outside of switch to continue to next foreach iteration 
+  	  $fieldName = $field->getName();
+  	  
+  	  $continue=false;
+  	  switch ($fieldName) {
+  	  	case "RelationLId":
+  	  	case "RelationLObject": 
+  	  	  if ((!isset($this->parent))||($_SESSION[relation]!=1)) {
+  	  	  	array_push($this->displayColumnNames, $fieldName);
+  	  	  }
+  	  	  $continue=true;
+  	  	  break;
+  	  	case "RelationRId":
+  	  	case "RelationRObject": 
+  	  	  if ((!isset($this->parent))||($_SESSION[relation]!=2)) {
+  	  	  array_push($this->displayColumnNames, $fieldName);
+  	  	  }
+  	  	  $continue=true;
+  	  	  break;
+  	  }
+  	  if ($continue) continue; // move continue outside of switch to continue to next foreach iteration 
   	  
   	  if (!isset($this->parent) ||  
   	  	   ( 
@@ -623,6 +632,7 @@ class cDbTable implements iDbTable
   		}
   	  }
   	}
+  	
   	// add columns for parents
   	foreach ($this->parents as $parent) {
   	  // skip parent browsers lookup
@@ -784,6 +794,7 @@ class cDbTable implements iDbTable
   }
   
   public function columnMenu($columnName) {
+    if (isset($this->parent)) return "";
     $addButton = new cHtmlDiv("btnAddColumn");
     $addButton->setAttribute("CONTENT", "+ Add column");
     $addButton->setAttribute("onClick", "hide('columnMenu');addColumn(event, '".$this->name."', '$columnName')");
@@ -791,16 +802,21 @@ class cDbTable implements iDbTable
     $lookupButton->setAttribute("CONTENT", "^ Add lookup");
     $lookupButton->setAttribute("onClick", "hide('columnMenu');addLookup(event, '".$this->name."', '$columnName')");
     $alterButton = new cHtmlDiv("btnAlterColumn");
-    $alterButton->setAttribute("CONTENT", "* Change column");
-    $alterButton->setAttribute("onClick", "hide('columnMenu');alterColumn(event, '".$this->name."', '$columnName')");
+    $alterButton->setAttribute("CONTENT", "* Rename column");
+    $alterButton->setAttribute("onClick", "hide('columnMenu');changeColumn(event, '".$this->name."', '$columnName')");
     $deleteButton = new cHtmlDiv("btnDeleteColumn");
     $deleteButton->setAttribute("CONTENT", "x Delete column");
     $deleteButton->setAttribute("onClick", "hide('columnMenu');deleteColumn(event, '".$this->name."', '$columnName')");
+    $closeButton = new cHtmlDiv("btnCloseMenu");
+    $closeButton->setAttribute("CONTENT", "o Cancel");
+    $closeButton->setAttribute("onClick", "hide('columnMenu');");
     return
+        "<strong>$columnName</strong>".
         $addButton->display().
         $lookupButton->display().
         $alterButton->display().
-        $deleteButton->display();
+        $deleteButton->display().
+        $closeButton->display();
   }
   
   public function columnEditor($columnName) {
@@ -808,12 +824,23 @@ class cDbTable implements iDbTable
       $result = 
         "<table>".
           "<tr><th>Displayed name</th><td><input id='displayedName' value='".gui($this->name."ORDER".$columnName, $GLOBALS[lang], $columnName)."' type=text></td></tr>".
-          "<tr><th>Column name</th><td><input id='columnName' value='$columnName' type=text></td></tr>".
+          "<tr><th>Column name</th><td><input readonly id='columnName' value='$columnName' type=text></td></tr>".
           "<tr><th>Table name</th><td>".$this->name."</td></tr>".
           //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
-          "<tr><th>Data type</th><td><input id='dataType' value='".$field->getType()."' type=text></td></tr>".
+          "<tr><th>Data type</th><td><input readonly id='dataType' value='".$field->getType()."' type=text></td></tr>".
           //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
-          "<tr><td><div>Ok</div></td><td><div>Cancel</div></td></tr>".
+          "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('columnMenu');\">Cancel</div></td></tr>".
+        "</table>";
+    } else {
+      $result =
+        "<table>".
+        "<tr><th>Displayed name</th><td><input id='displayedName' value='' type=text></td></tr>".
+        "<tr><th>Column name</th><td><input id='columnName' value='' type=text></td></tr>".
+        "<tr><th>Table name</th><td>".$this->name."</td></tr>".
+        //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
+        "<tr><th>Data type</th><td><input id='dataType' value='' type=text></td></tr>".
+        //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
+        "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('columnMenu');\">Cancel</div></td></tr>".
         "</table>";
     }
     return $result;

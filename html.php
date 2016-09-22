@@ -493,17 +493,22 @@ class cHtmlTable extends cHtmlElement
   public function display() {
     $tableName = $this->dbTable->getName();
   	$htmlTable = "";
+  	$htmlRow = "";
 	  // display headers
   	foreach ($this->headers as $header) {
   	  $html = ""; $i=0;
   	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor")) continue;
   	  	$dcn = $this->dbTable->displayColumnNames[$index];
-  	  	$html.="<TH ID=\"column".$dcn."\" onClick=\"columnMenu(event, '$tableName', '$dcn');\"".
-  	  	          ($i==0?"class=\"firstColumn\"":"").">$value</TH>";
+  	  	$htmlRow.="<TH ID=\"column".$dcn."\" ".
+  	   	  	      (isset($this->dbTable->parent)
+	   	  	          ? ""
+	   	  	          : "onClick=\"columnMenu(event, '$tableName', '$dcn');\" "
+  	   	  	      ).
+  	  	          ($i==0?"class=\"firstColumn\" ":"").">$value</TH>";
   	  	$i++;
   	  }
-  	  $htmlTable.="<TR>$html</TR>";
+  	  $htmlTable.="<TR>$htmlRow</TR>";
   	}
   	// display rows 
   	$htmlTable.=$this->displayRows();

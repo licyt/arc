@@ -62,14 +62,13 @@ echo
   body(
     "<div>".
   	  "<div id='svnrevision'>".
-        "<span style=\"font-size:20px;\">Life Cycle Tracker ".
+        "<span style=\"font-size:14px;\">Life Cycle Tracker ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
         " gramm-A-ton</span>".
         " SVN:".shell_exec('svnversion').
         " DB:".$dbName."[".$GLOBALS[queryCount]."]".
       "</div>".
-  	  //"<div style='position:absolute'>".
-  	  "<div id='columnMenu'></div>".
+      "<div id='columnMenu'></div>".
       "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png'>".
   	  $admin.

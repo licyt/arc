@@ -281,6 +281,9 @@ function loadLeftRows() {
   Ajax("loadLeftRows", params);
 }
 
+
+
+
 var currentRowId = -1;
 
 function loadRow(parentName, tableName, newRowId) {
@@ -415,6 +418,11 @@ function jumpToRow(idRelation, relationDirection) {
   ); 
 }
 
+
+
+
+// --------------------------------------------------- data structure manipulation, column Menu
+
 function columnMenu(event, tableName, columnName) {
   $.post(
       "ajax.php?columnMenu",
@@ -454,12 +462,12 @@ function addColumn(event, tableName, columnName) {
 
 function addLookup(event, tableName, columnName) {
   hide("columnMenu");
-  alert("This feature will be implemented soon!");
+  alert("Coming soon!");
 }
 
-function alterColumn(event, tableName, columnName) {
+function changeColumn(event, tableName, columnName) {
   $.post(
-      "ajax.php?alterColumn",
+      "ajax.php?changeColumn",
       {
         "tableName": tableName, 
         "columnName": columnName
@@ -477,7 +485,35 @@ function alterColumn(event, tableName, columnName) {
 
 function deleteColumn(event, tableName, columnName) {
   hide("columnMenu");
-  if (confirm("Are you sure you want to PERMANENTLY DELETE column "+columnName+" from table "+tableName+"?\r\nWarning: ALL DATA FROM THIS COLUMN WILL BE LOST!")) {
-    alert("just kidding :)\n\rYou can not do this yet.");  
+  if (confirm("Permanently delete column "+columnName+" from table "+tableName+"?"+"\r\nWarning! Data will be lost!")) {
+    $.post(
+        "ajax.php?deleteColumn",
+        {
+          "tableName": tableName, 
+          "columnName": columnName
+        },
+        function (result) {
+          response = JSON.parse(result);
+          elementById("tabBodyAdmin").innerHTML = response.browser;
+        }
+    ); 
   }
 }
+
+function confirmColumn() {
+  hide('columnMenu');
+  $.post(
+      "ajax.php?confirmColumn",
+      {
+        "displayedName": elementById("displayedName").value,
+        "columnName": elementById("columnName").value,
+        "dataType": elementById("dataType").value
+      },
+      function (result) {
+        response = JSON.parse(result);
+        elementById("tabBodyAdmin").innerHTML = response.browser;        
+      }
+  );
+}
+
+
