@@ -583,13 +583,6 @@ class cDbTable implements iDbTable
   	}
   }
   
-  public function reload() {
-    $this->loadFields();
-    $this->loadColumns();
-    $this->loadDisplayColumns();
-    $this->setCurrentRecordId(0);
-  }
-  
   public function loadDisplayColumns() 
   {
   	while (count($this->displayColumnNames)) {
@@ -646,6 +639,13 @@ class cDbTable implements iDbTable
   	  array_push($this->displayColumnNames, "StatusType");
   	  array_push($this->displayColumnNames, "StatusName");
   	}
+  }
+  
+  public function reload() {
+    $this->loadFields();
+    $this->loadColumns();
+    $this->loadDisplayColumns();
+    $this->setCurrentRecordId(0);
   }
   
   public function loadSession() 
@@ -802,7 +802,7 @@ class cDbTable implements iDbTable
     $lookupButton->setAttribute("CONTENT", "^ Add lookup");
     $lookupButton->setAttribute("onClick", "hide('columnMenu');addLookup(event, '".$this->name."', '$columnName')");
     $alterButton = new cHtmlDiv("btnAlterColumn");
-    $alterButton->setAttribute("CONTENT", "* Rename column");
+    $alterButton->setAttribute("CONTENT", "* Modify column");
     $alterButton->setAttribute("onClick", "hide('columnMenu');changeColumn(event, '".$this->name."', '$columnName')");
     $deleteButton = new cHtmlDiv("btnDeleteColumn");
     $deleteButton->setAttribute("CONTENT", "x Delete column");
@@ -827,7 +827,7 @@ class cDbTable implements iDbTable
           "<tr><th>Column name</th><td><input readonly id='columnName' value='$columnName' type=text></td></tr>".
           "<tr><th>Table name</th><td>".$this->name."</td></tr>".
           //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
-          "<tr><th>Data type</th><td><input readonly id='dataType' value='".$field->getType()."' type=text></td></tr>".
+          "<tr><th>Data type</th><td><input id='dataType' value='".$field->getType()."' type=text></td></tr>".
           //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
           "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('columnMenu');\">Cancel</div></td></tr>".
         "</table>";

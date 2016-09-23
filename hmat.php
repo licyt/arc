@@ -64,7 +64,7 @@ echo
   	  "<div id='svnrevision'>".
         "<span style=\"font-size:14px;\">Life Cycle Tracker ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
-        " gramm-A-ton</span>".
+        " gramm-A-tone</span>".
         " SVN:".shell_exec('svnversion').
         " DB:".$dbName."[".$GLOBALS[queryCount]."]".
       "</div>".

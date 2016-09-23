@@ -327,6 +327,10 @@ elseif (isset($_REQUEST[confirmColumn])) {
       ugi($tableName."ORDER".$_REQUEST[columnName], $lang, $_REQUEST[displayedName]);
       break;
     case "change":
+      $query =
+        "ALTER TABLE $tableName ".
+        "MODIFY COLUMN ".$_SESSION[column][name]." ".$_REQUEST[dataType];
+      myQuery($query);
       ugi($tableName."ORDER".$_SESSION[column][name], $lang, $_REQUEST[displayedName]);
       break;
   }
