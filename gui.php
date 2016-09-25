@@ -11,10 +11,16 @@ function loadGUI() {
 }
 
 function gui($element, $attribute, $default='') {
-  return (isset($GLOBALS[GUI][$element][$attribute])?$GLOBALS[GUI][$element][$attribute]:$default);
+  return 
+    (isset($GLOBALS[GUI][$element][$attribute])
+      ? $GLOBALS[GUI][$element][$attribute]
+      : ugi($element, $attribute, $default)
+    );
 }
 
 function ugi($element, $attribute, $value) {
+  if (!$element || !$attribute || !$value) return false;
+  
   if (isset($GLOBALS[GUI][$element][$attribute])) {
     if ($GLOBALS[GUI][$element][$attribute]!=$value) {
       $query =

@@ -147,7 +147,8 @@ function Ajax(request, params) {
               newSbRow.innerHTML = response.subBrowser;
               newSbRow.style.display = "none";
               currentRowId = params["newRowId"];
-              $("#id"+params["tableName"]).val(currentRowId);
+              elementById("id"+params["tableName"]).value = currentRowId;
+              //$("#id"+params["tableName"]).val(currentRowId);
               addDatePickers();
               break;
             case "switchTab":
@@ -467,19 +468,33 @@ function addLookup(event, tableName, columnName) {
 
 function changeColumn(event, tableName, columnName) {
   $.post(
-      "ajax.php?changeColumn",
-      {
-        "tableName": tableName, 
-        "columnName": columnName
-      },
-      function (result) {
-        response = JSON.parse(result);
-        var columnMenu = elementById("columnMenu");
-        columnMenu.innerHTML = response.columnEditor;
-        columnMenu.style.left = event.clientX+"px";
-        columnMenu.style.top = event.clientY+"px";
-        show("columnMenu");
-     }
+    "ajax.php?changeColumn",
+    {
+      "tableName": tableName, 
+      "columnName": columnName
+    },
+    function (result) {
+      response = JSON.parse(result);
+      var columnMenu = elementById("columnMenu");
+      columnMenu.innerHTML = response.columnEditor;
+      columnMenu.style.left = event.clientX+"px";
+      columnMenu.style.top = event.clientY+"px";
+      show("columnMenu");
+   }
+  ); 
+}
+
+function moveColumn(event, tableName, columnName) {
+  $.post(
+    "ajax.php?moveColumn",
+    {
+      "tableName": tableName, 
+      "columnName": columnName
+    },
+    function (result) {
+      response = JSON.parse(result);
+      elementById("tabBodyAdmin").innerHTML = response.browser;
+   }
   ); 
 }
 
@@ -487,15 +502,15 @@ function deleteColumn(event, tableName, columnName) {
   hide("columnMenu");
   if (confirm("Permanently delete column "+columnName+" from table "+tableName+"?"+"\r\nWarning! Data will be lost!")) {
     $.post(
-        "ajax.php?deleteColumn",
-        {
-          "tableName": tableName, 
-          "columnName": columnName
-        },
-        function (result) {
-          response = JSON.parse(result);
-          elementById("tabBodyAdmin").innerHTML = response.browser;
-        }
+      "ajax.php?deleteColumn",
+      {
+        "tableName": tableName, 
+        "columnName": columnName
+      },
+      function (result) {
+        response = JSON.parse(result);
+        elementById("tabBodyAdmin").innerHTML = response.browser;
+      }
     ); 
   }
 }

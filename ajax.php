@@ -273,7 +273,10 @@ elseif (isset($_REQUEST[jumpToRow])) {
   echo json_encode($result);
 }
 
-// ----------------------------------------------     data structure manipulation
+// -------------------------------------------------------
+// d a t a   s t r u c t u r e   m a n i p u l a t i o n 
+// ------------------------------------------------------- 
+
 // ------------------------------------------------------------------------------------- columnMenu
 elseif (isset($_REQUEST[columnMenu])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
@@ -301,14 +304,26 @@ elseif (isset($_REQUEST[changeColumn])) {
   echo json_encode($result);
 }
 
+// ------------------------------------------------------------------------------------- moveColumn
+elseif (isset($_REQUEST[moveColumn])) {
+  switch ($_SESSION[column][mode]) {
+    case "move":
+      $_SESSION[column][mode]="";
+      $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
+      $dbTable->swapColumns($_SESSION[column][name], $_REQUEST[columnName]);
+      $result[browser] = $dbTable->browse();
+      echo json_encode($result);
+      break;
+    default:
+      $_SESSION[column][mode]="move";
+      $_SESSION[column][name] = $_REQUEST[columnName];
+  }
+}
+
 // ------------------------------------------------------------------------------------- deleteColumn
 elseif (isset($_REQUEST[deleteColumn])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
-  $query = 
-    "ALTER TABLE ".$_REQUEST[tableName]." ".
-    "DROP COLUMN ".$_REQUEST[columnName];
-  myQuery($query);
-  $dbTable->reload();
+  $dbTable->deleteColumn($_REQUEST[columnName]);
   $result[browser] = $dbTable->browse();
   echo json_encode($result);
 }
@@ -319,22 +334,12 @@ elseif (isset($_REQUEST[confirmColumn])) {
   $dbTable = $dbScheme->getTableByName($tableName);
   switch ($_SESSION[column][mode]) {
     case "add":
-      $query =
-        "ALTER TABLE $tableName ".
-        "ADD COLUMN ".$_REQUEST[columnName]." ".$_REQUEST[dataType]." ".
-        "AFTER ".$_SESSION[column][name];
-      myQuery($query);
-      ugi($tableName."ORDER".$_REQUEST[columnName], $lang, $_REQUEST[displayedName]);
+      $dbTable->addColumn($_REQUEST[columnName], $_REQUEST[displayedName], $_REQUEST[dataType], $_SESSION[column][name]);
       break;
     case "change":
-      $query =
-        "ALTER TABLE $tableName ".
-        "MODIFY COLUMN ".$_SESSION[column][name]." ".$_REQUEST[dataType];
-      myQuery($query);
-      ugi($tableName."ORDER".$_SESSION[column][name], $lang, $_REQUEST[displayedName]);
+      $dbTable->modifyColumn($_SESSION[column][name], $_REQUEST[displayedName], $_REQUEST[dataType]);
       break;
   }
-  $dbTable->reload();
   $result[browser] = $dbTable->browse();
   echo json_encode($result);
 }
