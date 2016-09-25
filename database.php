@@ -692,7 +692,7 @@ class cDbTable implements iDbTable
   
   public function modifyColumn($columnName, $displayedName, $dataType) {
     $query =
-      "ALTER TABLE $tableName ".
+      "ALTER TABLE ".$this->name." ".
       "MODIFY COLUMN $columnName $dataType";
       myQuery($query);
     ugi($this->name."ORDER".$columnName, $lang, $displayedName);
