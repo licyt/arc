@@ -244,7 +244,9 @@ class cDbField implements iDbField
     		  $optionList[$row["id".$ftName]] = $row[$lookupField];
     		}
   	  }
-  	  $htmlControl = new cHtmlSuggest("id".$ftName, $value, $optionList[$value]);
+  	  $hiddenName = $childTable->getName()."Id".$ftName;
+  	  $visibleName = $childTable->getName().gui($ftName, "lookupField", $ftName."Name");
+  	  $htmlControl = new cHtmlSuggest($hiddenName, $value, $optionList[$value]);
   	  $htmlControl->setOptions($optionList, $lookupField);
   	  // get lookup field type/size
   	  $sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
@@ -252,12 +254,13 @@ class cDbField implements iDbField
     		$row = mysql_fetch_assoc($result);
     		$htmlControl->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
   	  }
-  	  $htmlControl->setAttribute("SUGGESTID", gui($ftName, "lookupField", $ftName."Name"));
+  	  $htmlControl->setAttribute("SUGGESTID", $visibleName);
   	  // attach event controllers
-  	  $htmlControl->setAttribute("onFocus","suggestList(event,'valueSearch',this.value,'".$ftName."','".$lookupField."','id".$ftName."','".$lookupField."','id".$ftName."List')");
-      $htmlControl->setAttribute("onKeyUp","suggestList(event,'valueSearch',this.value,'".$ftName."','".$lookupField."','id".$ftName."','".$lookupField."','id".$ftName."List')");
-      $htmlControl->setAttribute("onSelect","sanitizeSuggestValues('id".$ftName."','".$lookupField."','id".$ftName."List')");
-  	  $htmlControl->setAttribute("onBlur", "sanitizeSuggestList('id".$ftName."List')");
+  	  // suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId)
+  	  $htmlControl->setAttribute("onFocus","suggestList(event, 'valueSearch', this.value, '$ftName', '$lookupField', '$hiddenName', '$visibleName', '$hiddenName"."List')");
+      $htmlControl->setAttribute("onKeyUp","suggestList(event, 'valueSearch', this.value, '$ftName', '$lookupField', '$hiddenName', '$visibleName', '$hiddenName"."List')");
+      $htmlControl->setAttribute("onSelect","sanitizeSuggestValues('$hiddenName', '$visibleName', '$hiddenName"."List')");
+  	  $htmlControl->setAttribute("onBlur", "sanitizeSuggestList('$hiddenName"."List')");
   	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
@@ -1323,11 +1326,7 @@ class cDbTable implements iDbTable
   	  $lookupField = gui($parentName, "lookupField", $parentName."Name");
   	  $lookupSelf = "";
   	  if (gui($lookupField, "lookupType")=="suggest") {
-  	    if (isset($this->parent)) {
-  	      $newParentId = $_POST[$lookupField];
-  	    } else {
-  	      $newParentId = $_POST["id".$parentName];
-  	    }
+        $newParentId = $_POST[$this->name."Id".$parentName];
   	  } elseif ($parentName==$this->name) {
   	    $lookupSelf = "parent"; 
   	  	$newParentId = $_POST[$lookupSelf.$lookupField];

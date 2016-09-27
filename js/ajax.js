@@ -77,8 +77,8 @@ function Ajax(request, params) {
               show(fileBrowser.id);
               break;
             case "suggestSearch":
-            	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
-    			  	var dlchildren = document.getElementsByName(params['destinationId']+"Options");
+    			  	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
+              var dlchildren = document.getElementsByName(params['destinationId']+"Options");
     			  	var flag = 0;
     			  	for( i = 0; i < dlchildren.length; i++ ) {
       				  if( dlchildren[i].text == params['searchString'] ) {
