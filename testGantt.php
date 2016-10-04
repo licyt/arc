@@ -4,8 +4,9 @@ require 'gantt.php';
 
 $sG = new statusGantt();
 $sG->statusType = "Project";
-$sG->iFrom = "2016-05-01";
-$sG->iTill = "2016-07-01";
+//$sG->statusLogRowId = 1;
+$sG->iFrom = "2016-04-01";
+$sG->iTill = "2016-10-01";
 $sG->iWidth = 800;
 $sG->loadLanes();
 
@@ -21,7 +22,7 @@ echo
   	linkJs("js/jquery.nstSlider.min.js")
   ).
   body(
-  	$sG->display(true, true).
+  	$sG->display().
     $slider->display().
   	$slider->setup()
   );

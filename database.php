@@ -938,7 +938,7 @@ class cDbTable implements iDbTable
   public function addButton() {
   	$button = new cHtmlSpan($this->name."Insert", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "InsertButton");
-    $button->setAttribute(onClick, "ajaxInsert('".$this->name."', '".(isset($this->parent) ? $this->parent->getName() : "")."');");
+    $button->setAttribute(onClick, "ajaxInsert('".$this->name."', '".(isset($this->parent) ? $this->parent->getName() : "")."');stopEvent(event);");
   	return $button->display();
   }
 
@@ -1676,10 +1676,7 @@ class cDbTable implements iDbTable
     $sG->statusType = $this->name;
     $sG->statusLogRowId = $this->currentRecordId;
     $sG->loadLanes();
-    $gantt["sbIndent"]="";
-    $gantt["sbColSpan"]=sizeof($dbRow)-1;
-    $gantt["statusGannt"] = $sG->display();
-    return $gantt;
+    return $sG->display();
   }
   
   public function displayRow($id, $dbRow=null) {

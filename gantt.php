@@ -13,7 +13,13 @@ class statusGantt {
   public $statusLogRowId;
   public $lanes = array();
   
+  public function emptyLanes() {
+    while (count($this->lanes)) array_pop($this->lanes);
+  }
+  
   public function loadLanes() {
+    $this->emptyLanes();
+    
     // interval duration in seconds
     if (!($iDuration = strtotime($this->iTill)-strtotime($this->iFrom))) return;
     $iRatio = ($this->iWidth)/$iDuration; 				
@@ -68,12 +74,35 @@ class statusGantt {
     }
   }
   
-  public function display($useLabels=false, $useDiv=false) {
+  public function subLanes($statusType, $statusLogRowId) {
+    $subSG = new statusGantt();
+    $subSG->iFrom = $this->iFrom;
+    $subSG->iTill = $this->iTill;
+    $subSG->iWidth = $this->iWidth;
+    // for all children of this parent
+    $query = 
+      "SELECT RelationLObject, RelationLId FROM Relation ".
+      "WHERE (RelationRObject='$statusType') AND (RelationRId=$statusLogRowId) ".
+      "ORDER BY RelationLObject, RelationLId";
+    if ($dbResult = myQuery($query)) {
+      while ($child = mysql_fetch_assoc($dbResult)) {
+        $dbTable = $GLOBALS[dbScheme]->getTableByName($child[RelationLObject]);
+        if ($dbTable->hasStatus()) {
+          $subSG->statusType = $child[RelationLObject];
+          $subSG->statusLogRowId = $child[RelationLId];
+          $subSG->loadLanes();
+          $subLanes.=$subSG->displayLanes(); 
+        }
+      }
+    }
+    return $subLanes;
+  }
+  
+  public function displayLanes() {
   	foreach ($this->lanes as $StatusType=>$subLanes) {
   	  if (!$StatusType) continue;
   	  foreach ($subLanes as $StatusLogRowId=>$bars) {
   	  	if (!$StatusLogRowId) continue;
-  	  	if ($useLabels) {
   	  	  $q0 = "SELECT ".$StatusType."Name FROM $StatusType WHERE id".$StatusType."=$StatusLogRowId";
   	  	  if (($dbRes0 = myQuery($q0)) && ($dbRow0 = mysql_fetch_assoc($dbRes0))) {
   	  	    $laneLabel = $dbRow0[$StatusType."Name"];
@@ -82,28 +111,24 @@ class statusGantt {
   	  	  }
   	  	  $lanes .= 
     	      "<TR>".
-  	  	      "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$laneLabel."</DIV>"."</TD>".
+  	  	      "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$StatusType."</DIV>"."</TD>".
+    	        "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$laneLabel."</DIV>"."</TD>".
   	  	      "<TD CLASS=\"gantt\">"."<DIV CLASS=\"ganttLane\">".$bars."</DIV>"."</TD>".
-  	        "</TR>";
-  	    } else {
-  	  	  $lanes .= 
-    	      "<DIV CLASS=\"ganttLane\">".$bars."</DIV>";
-  	    }
+  	        "</TR>".
+  	  	    $this->subLanes($StatusType, $StatusLogRowId);
   	  }
   	}
-    if ($useLabels) {
-      $lanes = "<TABLE CLASS=\"gantt\">".$lanes."</TABLE>";
-  	} 
-  	if ($useDiv) {
-  		$lanes = "<DIV ID=\"gantt\">".$lanes."</DIV>";
-  	}
   	return $lanes;
+  }
+
+  public function display() {
+    return "<TABLE CLASS=\"gantt\">".$this->displayLanes()."</TABLE>";
   }
 }
 
 class cSlider {
 	public $min = "2016-04-01";
-	public $max = "2016-09-01";
+	public $max = "2016-10-01";
 	public $start = "2016-05-01";
 	public $end = "2016-07-20";
 	
@@ -113,7 +138,7 @@ class cSlider {
 		$start = strtotime($this->start);
 		$end = strtotime($this->end);
 		return 
-		  "<div id=\"slider\" style=\"width:1000px;\">".
+		  "<div id=\"slider\" style=\"width:1200px;\">".
 		    "<div style=\"text-align:right;width:150px;float:right;\" class=\"rightLabel\"></div>".
 		    "<DIV style=\"float:right;\" CLASS=\"nstSlider\" ".
 		        "data-range_min=\"".$min."\" data-range_max=\"".$max."\" ".
@@ -130,7 +155,7 @@ class cSlider {
 	public function setup() {
 	  return 
 	    "<script>".
-	      file_get_contents('setupSlider.js').
+	      file_get_contents('js/setupSlider.js').
 	    "</script>";
 	}
 }
