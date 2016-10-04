@@ -709,7 +709,7 @@ class cDbTable implements iDbTable
       "ALTER TABLE ".$this->name." ".
       "MODIFY COLUMN $columnName $dataType";
       myQuery($query);
-    ugi($this->name."ORDER".$columnName, $lang, $displayedName);
+    ugi($this->name."ORDER".$columnName, $GLOBALS[lang], $displayedName);
     $this->reload();
   }
   
