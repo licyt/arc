@@ -602,6 +602,17 @@ class cDbTable implements iDbTable
   public function loadDisplayColumns() 
   {
     if ($dcn=gui($this->name, "displayColumnNames", false)) {
+      // remove lookups to parent browsers from list of columns
+      $parent = $this->parent;
+      while (isset($parent)) {
+        $dcn = str_replace(gui($parent->getName(), "lookupField"), "", $dcn);
+        // deal with commas
+        $dcn = str_replace(",,", ",", $dcn);
+        $dcn = ltrim($dcn, ",");
+        $dcn = rtrim($dcn, ",");
+        // move up in hierarchy of browsers
+        $parent = $parent->parent;
+      }
       $this->displayColumnNames = explode(",", $dcn);
       return;
     }
@@ -1319,6 +1330,7 @@ class cDbTable implements iDbTable
   
   protected function updateRelations() {
   	// update relations on commit for current record
+  	
   	// iterate through all parent tables
   	foreach ($this->parents as $parent) {
   	  $parentName = $parent->getName();
@@ -1333,7 +1345,7 @@ class cDbTable implements iDbTable
   	  } else {
   	    $newParentId = $_POST[$lookupField]; 
   	  }
-  	  if (($newParentId == -1) && ($_POST[$lookupSelf.$lookupField]!="")) {
+  	  if (($newParentId == - 1) && ($_POST[$lookupSelf.$lookupField]!="")) {
   	  	// non existent parent value
   	  	// INSERT new value into parent table
   	  	if (myQuery("INSERT INTO $parentName SET $lookupField='".$_POST[$lookupSelf.$lookupField]."'")) {
@@ -1348,13 +1360,36 @@ class cDbTable implements iDbTable
   	  	// parent has changed
   	    // UPDATE relation
   	    myQuery( 
-    	  "UPDATE Relation SET RelationRId=".$newParentId.
+      	  "UPDATE Relation SET RelationRId=".$newParentId.
+      	  " WHERE (RelationType='RRCP')".
+    	    " AND (RelationLObject='".$this->name."')".
+      	  " AND (RelationLId=".$this->currentRecordId.") ".
+      	  " AND (RelationRObject='$parentName')"
+  	  	);
+  	  }
+  	}
+  	
+  	// iterate through all parent browsers
+  	$parent = $this->parent;
+  	while (isset($parent)) {
+  	  $query = 
+    	  "UPDATE Relation SET RelationRId=".$parent->getCurrentRecordId().
     	  " WHERE (RelationType='RRCP')".
   	    " AND (RelationLObject='".$this->name."')".
     	  " AND (RelationLId=".$this->currentRecordId.") ".
-    	  " AND (RelationRObject='$parentName')"
-  	  	);
+    	  " AND (RelationRObject='".$parent->getName()."')";
+  	  $dbResult = myQuery($query);
+  	  if (mysql_affected_rows()===0) {
+  	    $query =
+    	    "INSERT INTO Relation SET ".
+    	    "RelationType='RRCP', ".
+    	    "RelationLObject='".$this->name."', ".
+    	    "RelationLId=".$this->currentRecordId.", ".
+    	    "RelationRObject='".$parent->getName()."', ".
+    	    "RelationRId=".$parent->getCurrentRecordId();
+  	    myQuery($query);
   	  }
+  	  $parent = $parent->parent;
   	}
   }
   
