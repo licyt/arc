@@ -671,7 +671,7 @@ class cHtmlFilePath extends cHtmlElement
   	
   	$js = 
       "el=elementById('fileBrowser');".
-      "if (el.style.display=='block') {hide(el.id);}".
+      "if (el.style.display!='none') {hide(el.id);}".
   	  "else {browseFile(elementById('$id'));}".
   	  "rowHasChanged('".$this->attributes[tableName]."');".
   	  "stopEvent(event);"; 
