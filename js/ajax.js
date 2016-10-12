@@ -69,11 +69,10 @@ function Ajax(request, params) {
               var fileBrowser=elementById("fileBrowser");
               fileBrowser.innerHTML=xmlHttp.responseText;
               if (element=elementById(params['elementId'])) {
-  	            if (pos=getAbsolutePosition(element)) {
-      	          fileBrowser.style.left=(pos.x-8)+"px";
-    		          fileBrowser.style.top=(pos.y+element.offsetHeight-5)+"px";
-    		        }
-  	          }
+                var rect = element.getBoundingClientRect();
+                fileBrowser.style.left=rect.left;
+  		          fileBrowser.style.top=rect.top+20;
+  		        }
               show(fileBrowser.id);
               break;
             case "suggestSearch":
