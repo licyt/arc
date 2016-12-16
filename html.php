@@ -34,7 +34,7 @@ function style($css) {
 }
 
 function displayStatus($status) {
-  $div = new cHtmlDiv("Status".$status[idStatus]);
+  $div = new cHtmlSpan("Status".$status[idStatus]);
   $div->setAttribute("CLASS", "Status");
   $div->setAttribute("STYLE", "background-color:".$status[StatusColor].";");
   $div->setAttribute("CONTENT", $status[StatusName]);
@@ -170,6 +170,7 @@ class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 		    " NAME=".$this->attributes[ID].
         $this->add(onClick).
         $this->add("CLASS").
+        $this->add("STYLE").
 		  ">".
 		  $this->attributes[CONTENT].
 		"</SPAN>";
