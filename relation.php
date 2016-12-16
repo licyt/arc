@@ -1,5 +1,7 @@
 <?php
 
+require_once 'database.php';
+
 function loadRightRows($tableName, $value="") {
 	$rows = new cHtmlSelect();
 	$rows->setAttribute("ID", "RelationRId");
@@ -63,7 +65,7 @@ function getParentId($childTableName, $childId, $parentTableName) {
   return -1;
 }
 
-function getChildId($childTableName, $parentTableName, $parentId) {
+function getFirstChildId($childTableName, $parentTableName, $parentId) {
   // special behaviour for StatusLog which uses foreign key to status
   if (($childTableName=="StatusLog") && ($parentTableName=="Status")) {
     $query="SELECT idStatusLog FROM StatusLog WHERE StatusLog_idStatus=$parentId";
@@ -86,6 +88,34 @@ function getChildId($childTableName, $parentTableName, $parentId) {
   }
   // no relation found
   return -1;
+}
+
+function getChildren($childTableName, $parentTableName, $parentId) {
+  global $dbScheme;
+  $result = array();
+  // special behaviour for StatusLog which uses foreign key to status
+  if (($childTableName=="StatusLog") && ($parentTableName=="Status")) {
+    $query="SELECT idStatusLog FROM StatusLog WHERE StatusLog_idStatus=$parentId";
+    if ($dbRes=myQuery($query)) {
+      while ($dbRow=mysql_fetch_assoc($dbRes)) {
+        array_push($result, $dbRow);
+      }
+    }
+  } else {
+    // default search in table Relation
+    $dbTable = $dbScheme->getTableByName($childTableName);
+    $query=
+      "SELECT RelationLId FROM Relation ".
+      "WHERE (RelationLObject='$childTableName') ".
+      "AND (RelationRObject='$parentTableName') ".
+      "AND (RelationRId=$parentId) ";
+    if ($dbRes=myQuery($query)) {
+      while ($dbRow=mysql_fetch_assoc($dbRes)) {
+        array_push($result, $dbTable->getCurrentRecord($dbRow[RelationLId]));
+      }
+    }
+  }
+  return $result;
 }
 
 function updateStatus($LObject, $LId, $statusId) {

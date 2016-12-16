@@ -1,0 +1,5 @@
+2016-11-24 Thu
+
+09.00 install workstation
+09.30 setup database privileges for new ip@192.168.3.%  hmat_dev and hmat_arc
+10.00 ajax.js.loadRow@dev.nasa.lan

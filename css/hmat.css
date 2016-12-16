@@ -75,12 +75,24 @@ img {
   border: 0px;
 }
 
-
-
+.required {
+	border-left: 3px red solid;
+}
+.defined {
+	border-left: 3px lightgreen solid;
+}
 
 
 .firstColumn {
   width: 52px;
+  white-space: nowrap;
+}
+
+.Status {
+  width: 80px;
+	max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -224,6 +236,16 @@ img {
   background-color: #BE34BA;
   width: 23px;
   display: inline-block;
+}
+
+.PrintButton {
+  width: 23px;
+  cursor: pointer;
+  color: white;
+  background-color: darkgray;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
 }
 
 .BROWSE {

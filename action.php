@@ -91,7 +91,7 @@ function loadParameters($table, $command, $param1="" ) {
 }
 
 function getSubTask($idTask) {
-  if ($dbRes = myQuery("SELECT * FROM Task WHERE idTask=".getChildId("Task", "Task", $idTask))) {
+  if ($dbRes = myQuery("SELECT * FROM Task WHERE idTask=".getFirstChildId("Task", "Task", $idTask))) {
     return mysql_fetch_assoc($dbRes);
   }
 }

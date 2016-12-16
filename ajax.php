@@ -197,7 +197,10 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
     $_REQUEST[tableName]."Row".$_REQUEST[newRowId],
     $editRow
   );
-  $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+  $newRow = $htmlTable->displayRows();
+  $json = json_encode($newRow);
+  $error = json_last_error();
+  $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $newRow);
   $result[onEditClick] = $editRow[onClick];
   $result[onKeyPress] = $editRow[onKeyPress];
   // sub-browsers
@@ -209,7 +212,11 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   // strip <TR></TR> but only at the beginning and the end of the row
   $result[subBrowser] = preg_replace('/^<TR[^>]*>/i', '', $htmlTable->displayRows());
   $result[subBrowser] = preg_replace('/<\/TR[^>]*>$/i', '', $result[subBrowser]);
-  echo json_encode($result);
+  
+  //foreach ($result as $key=>$value) {$result[$key] = addslashes($value);}
+  
+  $json=json_encode($result);
+  echo $json;
 }
 
 // --------------------------------------------------------------------------------------------- deleteRow

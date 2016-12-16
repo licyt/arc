@@ -213,6 +213,11 @@ class cDbField implements iDbField
     // set attributes derived from Field name                                       
     $htmlControl->setAttribute("ID", $this->properties[Field]);
     $htmlControl->setAttribute("NAME", $this->properties[Field]);
+    
+    $class = gui($this->properties[Field], "CLASS", "");
+    if (($value) && (strpos($class, "required")!==false)) $class .= " defined";
+    $htmlControl->setAttribute("CLASS", $class);
+    
     $htmlControl->setAttribute("DISABLED", 
       ($disabled
         ?" onClick=\"javascript:elementById('".$this->table->getName()."Update').click();\""
@@ -462,15 +467,17 @@ class cDbTable implements iDbTable
   
   public function loadChildren() {
   	$query=
-  	  "SELECT RelationRObject".
+  	  "SELECT RelationLObject".
   	  " FROM Relation".
-  	  " WHERE (RelationLObject='".$this->name."')".
-  	  " AND (RelationLId=0) AND (RelationRId=0)";
+  	  " WHERE (RelationType='TTCP')".
+  	  " AND (RelationRObject='".$this->name."')".
+  	  //" AND (RelationRId=0) ".
+  	  " ORDER BY RelationLId";
   	if ($dbRes=myQuery($query)) {
   	  while ($dbRow=mysql_fetch_assoc($dbRes)) {
-  	  	$parent = $this->scheme->tables[$dbRow[RelationRObject]];
-  	  	array_push($this->parents, $parent);
-  	  	array_push($parent->children, $this);
+  	    $childTable = $this->scheme->getTableByName($dbRow[RelationLObject]);
+  	  	array_push($this->children, $childTable);
+  	  	array_push($childTable->parents, $this);
   	  }
   	}
   }
@@ -1004,6 +1011,10 @@ class cDbTable implements iDbTable
             "ajaxErase('".$this->name."'); stopEvent(event);"
         );
         $result .= $button->display();
+        
+        if ($this->name == "Quote") {
+          $result .= $this->printButton($this->currentRecordId);
+        }
       }
       
       $anchor = new cHtmlA("");
@@ -1022,7 +1033,7 @@ class cDbTable implements iDbTable
       	$hidden = new cHtmlInput("RelationDirection", "HIDDEN", $_SESSION[relation]);
       	$result .= $hidden->display;
       }
-    }
+    } 
     return $result;
   }
   
@@ -1527,6 +1538,11 @@ class cDbTable implements iDbTable
   	// display fields as controls in a row of a html table
   	$result = array();
   	foreach ($this->displayColumnNames as $i => $columnName) {
+  	  if ($columnName == "subStatus") {
+  	    $result[$columnName] = $this->subStatus($id);
+  	    continue;
+  	  }
+  	  
   	  // skip some special columns for notes and relations when they are displayed as subbrowser
   	  if ((($columnName=="NoteTable") || ($columnName=="NoteRowId")) && (isset($this->parent)))
   	  	continue;
@@ -1714,6 +1730,54 @@ class cDbTable implements iDbTable
     return $sG->display();
   }
   
+  protected function printButton($id) {
+    $button = new cHtmlA("./doc.php?id".$this->name."=".$id, "P");
+    $button->setAttribute("CLASS", "PrintButton");
+    $button->setAttribute("TARGET", $this->name.$id);
+    return $button->display();
+  }
+  
+  protected function getCurrentStatus($id) {
+    $query =
+      "SELECT Status.* FROM StatusLog JOIN Status ON (idStatus=StatusLog_idStatus) ".
+      "WHERE (StatusType='".$this->name."') AND (StatusLogRowId=$id) ".
+      "ORDER BY StatusLogTimestamp DESC ".
+      "LIMIT 0,1";
+    if ($dbRes = myQuery($query)) {
+      if ($dbRow = mysql_fetch_assoc($dbRes)) return $dbRow;
+    }
+    return false;
+  }
+  
+  protected function getLowestStatus($parentName, $parentId) {
+    // display the lowest status from all child records of given parent record
+    $query = 
+      "SELECT RelationLId FROM Relation ".
+      "WHERE (RelationType='RRCP') AND (RelationLObject='".$this->name."') ".
+      "AND (RelationRobject='$parentName') AND (RelationRId=$parentId)";
+    if ($dbRes = myQuery($query)) {
+      while ($dbRow = mysql_fetch_assoc($dbRes)) {
+        $newStatus = $this->getCurrentStatus($dbRow["RelationLId"]);
+        if ($minStatus) {
+          if ($newStatus[StatusSequence]<$minStatus[StatusSequence]) $minStatus = $newStatus;
+        } else {
+          $minStatus = $newStatus;
+        }
+      }
+    }
+    return $minStatus;
+  }
+  
+  protected function subStatus($id) {
+    // display states of children of record with given $id
+    foreach ($this->children as $index=>$child) {
+      if ($child->hasStatus()) {
+        $result .= displayStatus($child->getLowestStatus($this->name, $id));
+      }
+    }
+    return $result;
+  }
+  
   public function displayRow($id, $dbRow=null) {
     // --- special lookup for Action/Event
     if ($this->name=="Action") {
@@ -1766,21 +1830,31 @@ class cDbTable implements iDbTable
           $dbRow[$dcn].
           "</div>";
           break;
+        case "subStatus":
+          $displayRow[$dcn] = $this->subStatus($id);
+          break;
         default:
           $displayRow[$dcn] = $dbRow[$dcn];
       }
     }
-    // jump to related record button 
-    if ($this->name=="Relation") {
-      $button = new cHtmlSpan("GoRelation".$id, ">");
-      $button->setAttribute("CLASS", "GoButton");
-      $js=
-        "jumpToRow($id, ".$_SESSION[relation].");".
-        "stopEvent(event);";
-      $button->setAttribute("onClick", $js);
-      $displayRow["idRelation"] = $button->display();
-    } else {
-      $displayRow["id".$this->name] = "";
+    
+    switch ($this->name) {
+      case "Quote":
+      // print button
+        $displayRow["idQuote"] = $this->printButton($id);
+        break;
+      case "Relation":
+      // jump to related record button 
+        $button = new cHtmlSpan("GoRelation".$id, ">");
+        $button->setAttribute("CLASS", "GoButton");
+        $js=
+          "jumpToRow($id, ".$_SESSION[relation].");".
+          "stopEvent(event);";
+        $button->setAttribute("onClick", $js);
+        $displayRow["idRelation"] = $button->display();
+        break;
+      default:
+        $displayRow["id".$this->name] = "";
     }
     
     if (isset($this->parent)&&($this->name=="StatusLog")) {
@@ -1880,6 +1954,14 @@ class cDbTable implements iDbTable
 	    }
   	}
 	    
+  	foreach ($this->children as $child) {
+  	  $browsers->addTab(
+	      $child->getName(), 
+	      ($child->isSelected() ? $child->browse() : "")
+	    );
+  	}
+  	
+  	/*
   	foreach ($this->scheme->tables as $table) {
   	  $tableName = $table->getName();
   	  if ($table->isChildOf($this)) {
@@ -1896,6 +1978,7 @@ class cDbTable implements iDbTable
   	  	}
   	  }
   	}
+  	*/
   	
   	// relations for current record
    	$ftable = $this->scheme->getTableByName("Relation");

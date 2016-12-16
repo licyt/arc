@@ -32,6 +32,16 @@ function charset($charset="UTF-8") {
 function style($css) {
   return "<style>$css</style>";
 }
+
+function displayStatus($status) {
+  $div = new cHtmlDiv("Status".$status[idStatus]);
+  $div->setAttribute("CLASS", "Status");
+  $div->setAttribute("STYLE", "background-color:".$status[StatusColor].";");
+  $div->setAttribute("CONTENT", $status[StatusName]);
+  return $div->display();
+}
+
+
 // ------------------------------------------------------ I N T E R F A C E
 // common ancestor for all Html elements on a page
 interface iHtmlElement {
@@ -628,6 +638,7 @@ class cHtmlA extends cHtmlElement
   	  "<A".
   	    $this->add(ID).
   	    $this->add(HREF).
+  	    $this->add("CLASS").
   	    $this->add(onClick).
   	    $this->add(TARGET).
   	  ">".

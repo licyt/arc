@@ -3,28 +3,29 @@
 require 'gantt.php';
 
 $sG = new statusGantt();
-$sG->statusType = "Project";
+$sG->statusType = "Job";
 //$sG->statusLogRowId = 1;
 $sG->iFrom = "2016-04-01";
-$sG->iTill = "2016-10-01";
-$sG->iWidth = 800;
+$sG->iTill = "2016-11-05";
+$sG->iWidth = 1300;
 $sG->loadLanes();
 
-$slider = new cSlider();
 
 echo
   head(
     linkCss("css/gantt.css").
-    linkCss("css/jquery.nstSlider.min.css").
+    linkCss("css/classic.css").
   	linkJs("js/basic.js").
   	linkJs("js/gantt.js").
   	linkJs("//code.jquery.com/jquery-1.11.0.min.js").
-  	linkJs("js/jquery.nstSlider.min.js")
+    linkJs("//code.jquery.com/ui/1.10.3/jquery-ui.min.js").
+    linkJs("js/jquery.mousewheel.min.js").
+    linkJs("js/jQDateRangeSlider-withRuler-min.js")
   ).
   body(
-  	$sG->display().
-    $slider->display().
-  	$slider->setup()
+  	"<div id=ganttContainer>".$sG->display()."</div>".
+    "<div style=\"padding:30px;\"><div id=\"dateSlider\"></div></div>".
+    "<script>".file_get_contents("js/dateSlider.js")."</script>"
   );
 
 ?>

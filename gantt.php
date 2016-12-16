@@ -110,7 +110,7 @@ class statusGantt {
   	  	  	$laneLabel = "";
   	  	  }
   	  	  $lanes .= 
-    	      "<TR>".
+    	      "<TR id=\"".$StatusType.$StatusLogRowId."\">".
   	  	      "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$StatusType."</DIV>"."</TD>".
     	        "<TD CLASS=\"gantt\" STYLE=\"width:200px;\">"."<DIV CLASS=\"ganttLaneLabel\">".$laneLabel."</DIV>"."</TD>".
   	  	      "<TD CLASS=\"gantt\">"."<DIV CLASS=\"ganttLane\">".$bars."</DIV>"."</TD>".
@@ -124,40 +124,6 @@ class statusGantt {
   public function display() {
     return "<TABLE CLASS=\"gantt\">".$this->displayLanes()."</TABLE>";
   }
-}
-
-class cSlider {
-	public $min = "2016-04-01";
-	public $max = "2016-10-01";
-	public $start = "2016-05-01";
-	public $end = "2016-07-20";
-	
-	public function display() {
-		$min = strtotime($this->min);
-		$max = strtotime($this->max);
-		$start = strtotime($this->start);
-		$end = strtotime($this->end);
-		return 
-		  "<div id=\"slider\" style=\"width:1200px;\">".
-		    "<div style=\"text-align:right;width:150px;float:right;\" class=\"rightLabel\"></div>".
-		    "<DIV style=\"float:right;\" CLASS=\"nstSlider\" ".
-		        "data-range_min=\"".$min."\" data-range_max=\"".$max."\" ".
-		        "data-cur_min=\"".$start."\" data-cur_max=\"".$end."\">".
-		      "<div class=\"highlightPanel\"></div>".
-		      "<div class=\"bar\"></div>".
-		      "<div class=\"leftGrip\"></div>".
-		      "<div class=\"rightGrip\"></div>".
-		    "</DIV>".
-		    "<div style=\"text-align:left;width:150px;float:right;\" class=\"leftLabel\"></div>".
-		  "</div>";
-	}
-	
-	public function setup() {
-	  return 
-	    "<script>".
-	      file_get_contents('js/setupSlider.js').
-	    "</script>";
-	}
 }
 
 ?>
