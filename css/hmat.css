@@ -89,8 +89,8 @@ img {
 }
 
 .Status {
-  width: 60px;
-	max-width: 60px;
+  width: 50px;
+	max-width: 50px;
 	display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -1652,9 +1652,15 @@ class cDbTable implements iDbTable
     $buttons = array();
     $add = $this->addButton();
     foreach ($columnNames as $i=>$buttonName) {
-      $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
-      $button->setAttribute("CLASS", $this->name."OrderButton");
-      $buttons[$i]=$button->display().$add;
+      switch ($buttonName) {
+        case "subStatus":
+          $buttons[$i] = $this->subStatusHeader();
+          break;
+        default:
+          $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
+          $button->setAttribute("CLASS", $this->name."OrderButton");
+          $buttons[$i]=$button->display().$add;
+      }
       $add="";
     }
     return $buttons;	
@@ -1667,14 +1673,14 @@ class cDbTable implements iDbTable
   	  if ($columnName=="id".$this->name) {
   	    $result[$i]="";
   	  } else {
-	    $filter  = new cHtmlInput($setName.$columnName, "TEXT", $values[$columnName]);
-	    // autofire form submit
-	    $filter->setAttribute("onChange", "this.form.submit()");
-	    $filter->setAttribute("CLASS", "filter");
-	    if ($field = $this->getFieldByName($columnName)) {
-	      $filter->setAttribute("SIZE", $field->getSize());
-	    }
-	    $result[$i]=$filter->display();
+  	    $filter  = new cHtmlInput($setName.$columnName, "TEXT", $values[$columnName]);
+  	    // autofire form submit
+  	    $filter->setAttribute("onChange", "this.form.submit()");
+  	    $filter->setAttribute("CLASS", "filter");
+  	    if ($field = $this->getFieldByName($columnName)) {
+  	      $filter->setAttribute("SIZE", $field->getSize());
+  	    }
+  	    $result[$i]=$filter->display();
   	  }
     }
     //$result[0]="";
@@ -1766,6 +1772,16 @@ class cDbTable implements iDbTable
       }
     }
     return $minStatus;
+  }
+  
+  protected function subStatusHeader() {
+    global $lang;
+    foreach ($this->children as $index=>$child) {
+      if ($child->hasStatus()) {
+        $result .= displayStatusHeader(gui($child->getName(), $lang, $child->getName()));
+      }
+    }
+    return $result;
   }
   
   protected function subStatus($id) {

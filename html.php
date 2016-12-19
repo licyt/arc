@@ -34,11 +34,18 @@ function style($css) {
 }
 
 function displayStatus($status) {
-  $div = new cHtmlSpan("Status".$status[idStatus]);
-  $div->setAttribute("CLASS", "Status");
-  $div->setAttribute("STYLE", "background-color:".$status[StatusColor].";");
-  $div->setAttribute("CONTENT", $status[StatusName]);
-  return $div->display();
+  $span = new cHtmlSpan("Status".$status[idStatus]);
+  $span->setAttribute("CLASS", "Status");
+  $span->setAttribute("STYLE", "background-color:".$status[StatusColor].";");
+  $span->setAttribute("CONTENT", $status[StatusName]);
+  return $span->display();
+}
+
+function displayStatusHeader($head) {
+  $span = new cHtmlSpan("StatusHead".$head);
+  $span->setAttribute("CLASS", "Status");
+  $span->setAttribute("CONTENT", $head);
+  return $span->display();
 }
 
 
