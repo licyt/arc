@@ -206,7 +206,7 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   // sub-browsers
   $sbRow["sbIndent"]="";
   $sbRow["sbColSpan"] = sizeof($oldRow)-1;
-  $sbRow["subBrowser"] = $dbTable->subBrowsers();
+  $sbRow["subBrowser"] = $dbTable->subBrowsers($_REQUEST[newRowId]);
   $htmlTable->deleteRows();
   $htmlTable->addRow($dbTable->getName()."Sb".$_REQUEST[newRowId], $sbRow);
   // strip <TR></TR> but only at the beginning and the end of the row
@@ -244,12 +244,12 @@ elseif (isset($_REQUEST[switchTab])) {
   }
   $dbTable->lumpChildren();
   $result[currentRecordId] = $dbTable->getCurrentRecordId();
-  $editRow = $dbTable->editColumns($dbTable->getCurrentRecordId());
+  $editRow = $dbTable->editColumns($result[currentRecordId]);
   $sbRow["sbIndent"]="";
   $sbRow["sbColSpan"] = sizeof($editRow)-1;
-  $sbRow["subBrowser"] = $dbTable->subBrowsers();
+  $sbRow["subBrowser"] = $dbTable->subBrowsers($result[currentRecordId]);
   $htmlTable = new cHtmlTable($dbTable);
-  $htmlTable->addRow($dbTable->getName()."Sb".$dbTable->getCurrentRecordId(), $sbRow);
+  $htmlTable->addRow($dbTable->getName()."Sb".$result[currentRecordId], $sbRow);
   // strip <TR></TR> but only at the beginning and the end of the row
   $result[subBrowser] = preg_replace('/^<TR[^>]*>/i', '', $htmlTable->displayRows());
   $result[subBrowser] = preg_replace('/<\/TR[^>]*>$/i', '', $result[subBrowser]);

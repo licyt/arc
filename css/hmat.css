@@ -81,7 +81,22 @@ img {
 .defined {
 	border-left: 3px lightgreen solid;
 }
-
+.required_bar {
+	background-color: red;
+	width: 3px;
+	height: 14px;
+	border: 0px;
+	display: inline-block;
+	margin-right: 2px;
+	margin-top: 3px;
+	position: relative;
+}
+.defined_bar {
+	background-color: lightgreen;
+	width: 3px;
+	border: 0px;
+	position: absolute;
+}
 
 .firstColumn {
   width: 52px;

@@ -365,7 +365,8 @@ class cHtmlForm extends cHtmlElement implements iHtmlForm
 class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
 {
   protected $name;
-  protected $tabs;
+  protected $tabs=array();
+  protected $tabTitles=array();
   protected $selected;
   
   public function __construct ($name="") {
@@ -382,7 +383,10 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   	$_SESSION[tabControl][$this->name][selected] = $this->selected;
   }
   
-  public function addTab($tabName, $content) {
+  public function addTab($tabName, $content, $tabTitle="") {
+    if ($tabTitle) {
+      $this->tabTitles[$tabName]=$tabTitle;
+    }
   	// process tab switching
   	$this->tabs[$tabName] = $content;
   	if ($_SESSION[tabControl][$this->name][selected] && !$this->selected)
@@ -399,14 +403,14 @@ class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl
   	  if ($tabName == $this->selected) {
     		$button = new cHtmlSpan("tab".($this->name=="Admin"?"Admin":"").$tabName);
     		$button->setAttribute("CLASS", "tab".($this->name=="Admin"?"Admin":""));
-    		$button->setAttribute("CONTENT", gui("tab".($this->name=="Admin"?"Admin":"").$tabName, $GLOBALS[lang], $tabName));
+    		$button->setAttribute("CONTENT", $this->tabTitles[$tabName].gui("tab".($this->name=="Admin"?"Admin":"").$tabName, $GLOBALS[lang], $tabName));
     		$body->setAttribute("CONTENT", $content);
   	  } else {
   	    if ($this->name=="Admin") {
           $button  = new cHtmlInput("tabButton".$this->name.$tabName, "SUBMIT", gui("tabButton".$this->name.$tabName, $GLOBALS[lang], $tabName));
   	    } else {
           $button = new cHtmlSpan("tabButton".$tabName);
-          $button->setAttribute("CONTENT", gui("tabButton".$tabName, $GLOBALS[lang], $tabName));
+          $button->setAttribute("CONTENT", $this->tabTitles[$tabName].gui("tabButton".$tabName, $GLOBALS[lang], $tabName));
           $button->setAttribute("onClick", "switchTab('".$this->name."' ,'".$tabName."');");
   	    }
   	    $button->setAttribute("CLASS", "tabButton".($this->name=="Admin"?"Admin":""));

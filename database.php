@@ -145,6 +145,11 @@ class cDbField implements iDbField
 	  return ( $this->properties[Field] == "StatusColor" );
   }
   
+  public function isRequired() {
+    $class = gui($this->properties[Field], "CLASS", "");
+    return (strpos($class, "required")!==false);
+  }
+  
   public function foreignTableName() {
     $fieldName = $this->getName();
 	  return substr($fieldName, strpos($fieldName, "_id")+3);
@@ -1924,7 +1929,7 @@ class cDbTable implements iDbTable
   	  	    if (!isset($this->parent) || ($this->name != $this->parent->getName())) {
   	  	      $sbRow["sbIndent"]="";
   	  	      $sbRow["sbColSpan"]=sizeof($dbRow)-1;
-  	  	      $sbRow["subBrowser"] = $this->subBrowsers();
+  	  	      $sbRow["subBrowser"] = $this->subBrowsers($id);
   	  	      $table->addRow($this->name."Sb".$id, $sbRow);
   	  	    }
   	  	  }
@@ -1953,7 +1958,45 @@ class cDbTable implements iDbTable
     return $form->display();
   }
   
-  public function subBrowsers() 
+  public function subRequired($parentName, $parentId) {
+    // count required and defined fields of records with given parent
+    $query = 
+      "SELECT * ".
+      "FROM ".$this->name.", Relation ".
+      "WHERE (RelationType='RRCP') AND (RelationLObject='".$this->name."') ".
+      "AND (RelationRObject='$parentName') AND (RelationRId=$parentId) ".
+      "AND (id".$this->name."=RelationLId)";
+    $required=0;
+    $defined=0;
+    if ($dbRes = myQuery($query)) {
+      while ($dbRow = mysql_fetch_assoc($dbRes)) {
+        foreach ($this->fields as $field) {
+          if ($field->isRequired()) {
+            $required++;
+            if ($dbRow[$field->getName()]) $defined++;
+          }
+        }
+      }
+    }
+    // display result as percentage in bar format
+    if ($required) {
+      $requiredHeight = 14;
+      $definedHeight = round($requiredHeight*($defined/$required));
+      $outerDiv = new cHtmlDiv($this->name."Required");
+      $outerDiv->setAttribute("CLASS", "required_bar");
+      $innerDiv = new cHtmlDiv($this->name."Defined");
+      $innerDiv->setAttribute("CLASS", "defined_bar");
+      $innerDiv->setAttribute("STYLE", 
+          "height:".$definedHeight."px;".
+          "top:".($requiredHeight-$definedHeight)."px;");
+      $outerDiv->setAttribute("TITLE", "[".$defined.":".$required."]");
+      $outerDiv->setAttribute("CONTENT", $innerDiv->display());
+      return $outerDiv->display();
+    }
+    return "";
+  }
+  
+  public function subBrowsers($id) 
   {
   	$browsers = new cHtmlTabControl($this->name);
   	
@@ -1973,7 +2016,8 @@ class cDbTable implements iDbTable
   	foreach ($this->children as $child) {
   	  $browsers->addTab(
 	      $child->getName(), 
-	      ($child->isSelected() ? $child->browse() : "")
+	      ($child->isSelected() ? $child->browse() : ""),
+  	    $child->subRequired($this->name, $id)
 	    );
   	}
   	
@@ -1996,6 +2040,12 @@ class cDbTable implements iDbTable
   	}
   	*/
   	
+  	// notes for current record
+  	$ftable = $this->scheme->tables["Note"];
+  	$ftable->setParent($this);
+  	$browsers->addTab("Note", $ftable->browse());
+  	unset($ftable);
+  	
   	// relations for current record
    	$ftable = $this->scheme->getTableByName("Relation");
   	$ftable->setParent($this);
@@ -2007,17 +2057,11 @@ class cDbTable implements iDbTable
   	$browsers->addTab("RelationRight", $ftable->browse());
   	unset($ftable);
   	
-  	// notes for current record
-  	$ftable = $this->scheme->tables["Note"];
-  	$ftable->setParent($this);
-  	$browsers->addTab("Note", $ftable->browse());
-  	unset($ftable);
-  	
   	// history of statuses for current record
   	if ($this->hasStatusField()) {
   	  $ftable = $this->scheme->tables["StatusLog"];
   	  $ftable->setParent($this);
-      $browsers->addTab("Status", $ftable->browse());
+      $browsers->addTab("StatusLog", $ftable->browse());
   	  unset($ftable);
   	}
   	
