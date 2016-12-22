@@ -1980,7 +1980,7 @@ class cDbTable implements iDbTable
     }
     // display result as percentage in bar format
     if ($required) {
-      $requiredHeight = 14;
+      $requiredHeight = 10;
       $definedHeight = round($requiredHeight*($defined/$required));
       $outerDiv = new cHtmlDiv($this->name."Required");
       $outerDiv->setAttribute("CLASS", "required_bar");

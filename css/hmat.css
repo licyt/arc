@@ -84,11 +84,10 @@ img {
 .required_bar {
 	background-color: red;
 	width: 3px;
-	height: 14px;
-	border: 0px;
+	height: 10px;
 	display: inline-block;
 	margin-right: 2px;
-	margin-top: 3px;
+	margin-top: 2px;
 	position: relative;
 }
 .defined_bar {
