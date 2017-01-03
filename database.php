@@ -443,7 +443,8 @@ class cDbTable implements iDbTable
   
   public function setOrder($order) 
   {
-    $cleanOrder = substr($order, strpos($order, ".")+1);
+    //$cleanOrder = substr($order, strpos($order, ".")+1);
+    $order=str_replace("StatusName","StatusSequence",$order);
     if ($_SESSION[table][$this->name][order]==$order) { 
       $this->order = $order." DESC"; 
     } else {
@@ -601,6 +602,7 @@ class cDbTable implements iDbTable
   	  		($ftName==$this->name?" as parent".$lookupName:""));
   	  if ($lookupName=="StatusName") {
   	  	array_push($this->columnNames, "P".$i.".StatusColor");
+  	  	array_push($this->columnNames, "P".$i.".StatusSequence");
   	  }
   	  $i++;
   	}
@@ -608,6 +610,7 @@ class cDbTable implements iDbTable
   	  array_push($this->columnNames, "S.StatusType");
   	  array_push($this->columnNames, "S.StatusName");
   	  array_push($this->columnNames, "S.StatusColor");
+  	  array_push($this->columnNames, "S.StatusSequence");
   	}
   }
   
