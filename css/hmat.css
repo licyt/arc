@@ -167,7 +167,9 @@ img {
   display: block;
 }
 
-
+#FORM_DB_SELECT {
+	display: inline;
+}
 
 
 

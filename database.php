@@ -1,6 +1,7 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
 // ------------------------------------------------------ C O N S T A N T S
+session_start();
 
 include_once("./dbConfig.php");
 require_once 'gui.php';
@@ -9,6 +10,25 @@ require_once 'action.php';
 require_once 'relation.php';
 require_once 'gantt.php';
 require_once 'color.php';
+
+function dbSelect() {
+  $select = new cHtmlSelect();
+  $select->setAttribute("NAME", "dbName");
+  $select->setAttribute("ID", "dbName");
+  $select->setAttribute("onChange", "this.form.submit();");
+  global $dbName;
+  $select->setSelected($dbName);
+  global $databases;
+  foreach ($databases as $database) {
+    $select->addOption($database, $database);
+  }
+  $form = new cHtmlForm();
+  $form->setAttribute("ID", "FORM_DB_SELECT");
+  $form->setAttribute("METHOD", "POST");
+  $form->setAttribute("CONTENT", $select->display());
+  return $form->display();
+}
+
 
 function myQuery($query) {
   $GLOBALS[queryCount]++;

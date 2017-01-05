@@ -1,8 +1,6 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
-session_start();
-
 require_once 'color.php';
 require_once("database.php");
 
@@ -60,13 +58,14 @@ echo
   		
   ).
   body(
+    
     "<div>".
   	  "<div id='svnrevision'>".
         "<span style=\"font-size:14px;\">Life Cycle Tracker ".
           "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
         " gramm-A-tone</span>".
         " SVN:".shell_exec('svnversion').
-        " DB:".$dbName."[".$GLOBALS[queryCount]."]".
+        " DB:".dbSelect()."[".$GLOBALS[queryCount]."]".
       "</div>".
       "<div id='columnMenu'></div>".
       "<div id='fileBrowser'></div>".
