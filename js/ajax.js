@@ -423,6 +423,53 @@ function jumpToRow(idRelation, relationDirection) {
 
 // --------------------------------------------------- data structure manipulation, column Menu
 
+function tableList(event) {
+  $.post(
+      "ajax.php?tableList",
+      function (result) {
+        response = JSON.parse(result);
+        var list = elementById("columnMenu");
+        list.innerHTML = response.tableList;
+        list.style.left = event.clientX+"px";
+        list.style.top = event.clientY+"px";
+        show("columnMenu");
+      }
+  );
+}
+
+function tableDialog(event, tableName) {
+  $.post(
+    "ajax.php?tableDialog",
+    {
+      "tableName": tableName
+    },
+    function (result) {
+      response = JSON.parse(result);
+      var tableDialog = elementById("columnMenu");
+      tableDialog.innerHTML = response.tableDialog;
+      tableDialog.style.left = event.clientX+"px";
+      tableDialog.style.top = event.clientY+"px";
+      show("columnMenu");
+   }
+  ); 
+}
+
+function tableSave() {
+  $.post(
+    "ajax.php?tableSave",
+    {
+      "tableName": elementById("tableName").value,
+      "top": elementById("buttonTop").value,
+      "left": elementById("buttonLeft").value,
+      "width": elementById("buttonWidth").value
+    },
+    function (result) {
+      response = JSON.parse(result);
+      
+   }
+  ); 
+}
+
 function columnMenu(event, tableName, columnName) {
   $.post(
       "ajax.php?columnMenu",

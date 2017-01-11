@@ -33,6 +33,18 @@ function style($css) {
   return "<style>$css</style>";
 }
 
+function table($rows) {
+  return "<table>".$rows."</table>";
+}
+
+function tr($cols) {
+  return "<tr>".$cols."</tr>";
+}
+
+function td($cell) {
+  return "<td>".$cell."</td>";
+}
+
 function displayStatus($status) {
   $span = new cHtmlSpan("Status".$status[idStatus]);
   $span->setAttribute("CLASS", "Status");

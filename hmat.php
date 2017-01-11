@@ -69,7 +69,7 @@ echo
       "</div>".
       "<div id='columnMenu'></div>".
       "<div id='fileBrowser'></div>".
-      "<img id='logo' src='img/hmat_logo.png'>".
+      "<img id='logo' src='img/hmat_logo.png' onclick='tableList(event);'>".
   	  $admin.
     "</div>",
   	"Load();"

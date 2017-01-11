@@ -5,24 +5,26 @@ function loadGUI() {
   $query = "SELECT idGUI, GUIElement, GUIAttribute, GUIValue FROM GUI";
   if ($dbResult =  myQuery($query)) {
 	while ($dbRow = mysql_fetch_assoc($dbResult)) {
-	  $GLOBALS[GUI][$dbRow[GUIElement]][$dbRow[GUIAttribute]] = $dbRow[GUIValue];
+	  if (!$GLOBALS[GUI][$dbRow[GUIElement]][$dbRow[GUIAttribute]])
+	    $GLOBALS[GUI][$dbRow[GUIElement]][$dbRow[GUIAttribute]] = array();
+	  array_push($GLOBALS[GUI][$dbRow[GUIElement]][$dbRow[GUIAttribute]], $dbRow[GUIValue]);
 	}
   }
 }
 
-function gui($element, $attribute, $default='') {
+function gui($element, $attribute, $default='', $i=0) {
   return 
     (isset($GLOBALS[GUI][$element][$attribute])
-      ? $GLOBALS[GUI][$element][$attribute]
-      : ugi($element, $attribute, $default)
+      ? $GLOBALS[GUI][$element][$attribute][$i]
+      : false //ugi($element, $attribute, $default)
     );
 }
 
-function ugi($element, $attribute, $value) {
-  if (!$element || !$attribute || !$value) return false;
+function ugi($element, $attribute, $value, $forceAppend=false) {
+  if (!isset($element) || !isset($attribute) || !isset($value) || ($value=="")) return false;
   
-  if (isset($GLOBALS[GUI][$element][$attribute])) {
-    if ($GLOBALS[GUI][$element][$attribute]!=$value) {
+  if (isset($GLOBALS[GUI][$element][$attribute]) && !$forceAppend) {
+    if ($GLOBALS[GUI][$element][$attribute]!==$value) {
       $query =
         "UPDATE GUI ".
         "SET GUIValue = '$value' ".
@@ -44,7 +46,7 @@ function ugi($element, $attribute, $value) {
 
 function iug($value, $attribute, $default='') {
   foreach ($GLOBALS[GUI] as $name=>$element) {
-  	if ($element[$attribute]==$value) return $name;
+  	if (is_array($element[$attribute]) && in_array($value, $element[$attribute])) return $name;
   }
   return $default;
 }

@@ -45,6 +45,66 @@ function listDir($path) {
   return $result;
 }
 
+function tableList() {
+  $query = "SELECT GUIvalue FROM GUI WHERE GUIattribute='tableName'";
+  if ($dbRes = myQuery($query)) {
+    $button = new cHtmlDiv("buttonCancel");
+    $button->setAttribute("CONTENT", "o Cancel");
+    $button->setAttribute("onClick", "hide('columnMenu');");
+    $result .= $button->display();
+    $button = new cHtmlDiv("buttonCancel");
+    $button->setAttribute("CONTENT", "+ Add");
+    $button->setAttribute("CLASS", "addButton");
+    $button->setAttribute("onClick", "hide('columnMenu');tableDialog(event, 'new');");
+    $result .= $button->display();
+    while ($dbRow = mysql_fetch_assoc($dbRes)) {
+      $tableName = $dbRow[GUIvalue];
+      $button = new cHtmlDiv("buttonTable".$tableName);
+      $button->setAttribute("CONTENT", $tableName);
+      $button->setAttribute("onClick", "hide('columnMenu');tableDialog(event, '$tableName');");
+      $result .= $button->display();
+    }
+  }
+  return $result;
+}
+
+function tableDialog($tableName) {
+  $input = new cHtmlInput("tableName", "text", $tableName);
+  $top = new cHtmlInput("buttonTop", "text", gui("button".$tableName, "top", 0));
+  $left = new cHtmlInput("buttonLeft", "text", gui("button".$tableName, "left", 0));
+  $width = new cHtmlInput("buttonWidth", "text", gui("button".$tableName, "width", 0));
+  $save = new cHtmlDiv("buttonSave");
+  $save->setAttribute("CONTENT", "save");
+  $save->setAttribute("onClick", "hide('columnMenu');tableSave();");
+  $cancel = new cHtmlDiv("buttonCancel");
+  $cancel->setAttribute("CONTENT", "cancel");
+  $cancel->setAttribute("onClick", "hide('columnMenu');");
+  return 
+    table(
+      tr(td("Table").td($input->display())).
+      tr(td("top").td($top->display())).
+      tr(td("left").td($left->display())).
+      tr(td("width").td($width->display())). 
+      tr(td($save->display()).td($cancel->display()))  
+    );
+}
+
+function camelize($string, $space=" ") {
+  return implode($space, array_map('ucfirst', explode($space, $string)));
+}
+
+function createTable($tableName) {
+  myQuery(
+    "CREATE TABLE IF NOT EXISTS $tableName ".
+    "(id".$tableName." INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id".$tableName."))"
+  );
+}
+
+function showTableInMenu($tableName) {
+  global $dbName;
+  if (!iug($tableName, "tableName", false)) 
+    ugi($dbName, "tableName", $tableName, true);
+}
 
 // ======================================================================= REQUEST processing switch
 
@@ -283,6 +343,35 @@ elseif (isset($_REQUEST[jumpToRow])) {
 // -------------------------------------------------------
 // d a t a   s t r u c t u r e   m a n i p u l a t i o n 
 // ------------------------------------------------------- 
+
+// ------------------------------------------------------------------------------------- tableList
+elseif (isset($_REQUEST[tableList])) {
+  $result[tableList] = tableList();
+  echo json_encode($result);
+}
+// ------------------------------------------------------------------------------------- tableDialog
+elseif (isset($_REQUEST[tableDialog])) {
+  $result[tableDialog] = tableDialog($_REQUEST[tableName]);
+  echo json_encode($result);
+}
+// ------------------------------------------------------------------------------------- tableSave
+elseif (isset($_REQUEST[tableSave])) {
+  $tableName = camelize($_REQUEST[tableName]);
+  $top = $_REQUEST[top];
+  $left = $_REQUEST[left];
+  $width = $_REQUEST[width];
+  
+  createTable($tableName);
+  showTableInMenu($tableName);
+  
+  ugi("button".$tableName, "top", $top);
+  ugi("button".$tableName, "left", $left);
+  ugi("button".$tableName, "width", $width);
+  
+  
+  
+  echo json_encode($result);
+}
 
 // ------------------------------------------------------------------------------------- columnMenu
 elseif (isset($_REQUEST[columnMenu])) {
