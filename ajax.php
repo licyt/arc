@@ -50,18 +50,18 @@ function tableList() {
   if ($dbRes = myQuery($query)) {
     $button = new cHtmlDiv("buttonCancel");
     $button->setAttribute("CONTENT", "o Cancel");
-    $button->setAttribute("onClick", "hide('columnMenu');");
+    $button->setAttribute("onClick", "hide('popupMenu');");
     $result .= $button->display();
     $button = new cHtmlDiv("buttonCancel");
     $button->setAttribute("CONTENT", "+ Add");
     $button->setAttribute("CLASS", "addButton");
-    $button->setAttribute("onClick", "hide('columnMenu');tableDialog(event, 'new');");
+    $button->setAttribute("onClick", "hide('popupMenu');tableDialog(event, 'new');");
     $result .= $button->display();
     while ($dbRow = mysql_fetch_assoc($dbRes)) {
       $tableName = $dbRow[GUIvalue];
       $button = new cHtmlDiv("buttonTable".$tableName);
       $button->setAttribute("CONTENT", $tableName);
-      $button->setAttribute("onClick", "hide('columnMenu');tableDialog(event, '$tableName');");
+      $button->setAttribute("onClick", "hide('popupMenu');tableDialog(event, '$tableName');");
       $result .= $button->display();
     }
   }
@@ -70,21 +70,22 @@ function tableList() {
 
 function tableDialog($tableName) {
   $input = new cHtmlInput("tableName", "text", $tableName);
-  $top = new cHtmlInput("buttonTop", "text", gui("button".$tableName, "top", 0));
-  $left = new cHtmlInput("buttonLeft", "text", gui("button".$tableName, "left", 0));
-  $width = new cHtmlInput("buttonWidth", "text", gui("button".$tableName, "width", 0));
+  $level = new cHtmlInput("buttonLevel", "text", gui("button".$tableName, "level", 0));
+  $sequence = new cHtmlInput("buttonSequence", "text", gui("button".$tableName, "sequence", 0));
   $save = new cHtmlDiv("buttonSave");
   $save->setAttribute("CONTENT", "save");
-  $save->setAttribute("onClick", "hide('columnMenu');tableSave();");
+  $save->setAttribute("onClick", "hide('popupMenu');tableSave();");
   $cancel = new cHtmlDiv("buttonCancel");
   $cancel->setAttribute("CONTENT", "cancel");
-  $cancel->setAttribute("onClick", "hide('columnMenu');");
+  $cancel->setAttribute("onClick", "hide('popupMenu');");
+  $drop = new cHtmlDiv("buttonDrop");
+  $drop->setAttribute("CONTENT", "drop");
+  $drop->setAttribute("onClick", "hide('popupMenu');tableDrop();");
   return 
     table(
       tr(td("Table").td($input->display())).
-      tr(td("top").td($top->display())).
-      tr(td("left").td($left->display())).
-      tr(td("width").td($width->display())). 
+      tr(td("level").td($level->display())).
+      tr(td("sequence").td($sequence->display())).
       tr(td($save->display()).td($cancel->display()))  
     );
 }
@@ -357,19 +358,15 @@ elseif (isset($_REQUEST[tableDialog])) {
 // ------------------------------------------------------------------------------------- tableSave
 elseif (isset($_REQUEST[tableSave])) {
   $tableName = camelize($_REQUEST[tableName]);
-  $top = $_REQUEST[top];
-  $left = $_REQUEST[left];
-  $width = $_REQUEST[width];
+  $level = $_REQUEST[level];
+  $sequence = $_REQUEST[sequence];
   
   createTable($tableName);
   showTableInMenu($tableName);
   
-  ugi("button".$tableName, "top", $top);
-  ugi("button".$tableName, "left", $left);
-  ugi("button".$tableName, "width", $width);
-  
-  
-  
+  ugi("button".$tableName, "level", $level);
+  ugi("button".$tableName, "sequence", $sequence);
+
   echo json_encode($result);
 }
 

@@ -293,19 +293,19 @@ img {
 
 
 
-/* column Menu */
-#columnMenu {
+/* popup Menu */
+#popupMenu {
   display: none;
   position: absolute;
   z-index: 1001;
   background-color: lightgray;
 }
-#columnMenu div:hover {
+#popupMenu div:hover {
   color:white;
   background-color: black;
   cursor: pointer;
 }
-#columnMenu th {
+#popupMenu th {
 	font-size: 12px;
 	white-space: nowrap;
 }

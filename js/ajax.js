@@ -428,11 +428,11 @@ function tableList(event) {
       "ajax.php?tableList",
       function (result) {
         response = JSON.parse(result);
-        var list = elementById("columnMenu");
+        var list = elementById("popupMenu");
         list.innerHTML = response.tableList;
         list.style.left = event.clientX+"px";
         list.style.top = event.clientY+"px";
-        show("columnMenu");
+        show("popupMenu");
       }
   );
 }
@@ -445,11 +445,11 @@ function tableDialog(event, tableName) {
     },
     function (result) {
       response = JSON.parse(result);
-      var tableDialog = elementById("columnMenu");
+      var tableDialog = elementById("popupMenu");
       tableDialog.innerHTML = response.tableDialog;
       tableDialog.style.left = event.clientX+"px";
       tableDialog.style.top = event.clientY+"px";
-      show("columnMenu");
+      show("popupMenu");
    }
   ); 
 }
@@ -459,9 +459,8 @@ function tableSave() {
     "ajax.php?tableSave",
     {
       "tableName": elementById("tableName").value,
-      "top": elementById("buttonTop").value,
-      "left": elementById("buttonLeft").value,
-      "width": elementById("buttonWidth").value
+      "level": elementById("buttonLevel").value,
+      "sequence": elementById("buttonSequence").value,
     },
     function (result) {
       response = JSON.parse(result);
@@ -480,11 +479,11 @@ function columnMenu(event, tableName, columnName) {
       function (result) {
         //alert(result);
         response = JSON.parse(result);
-        var columnMenu = elementById("columnMenu");
-        columnMenu.innerHTML = response.columnMenu;
-        columnMenu.style.left = event.clientX+"px";
-        columnMenu.style.top = event.clientY+"px";
-        show("columnMenu");
+        var popupMenu = elementById("popupMenu");
+        popupMenu.innerHTML = response.columnMenu;
+        popupMenu.style.left = event.clientX+"px";
+        popupMenu.style.top = event.clientY+"px";
+        show("popupMenu");
      }
   ); 
 }
@@ -498,17 +497,17 @@ function addColumn(event, tableName, columnName) {
       },
       function (result) {
         response = JSON.parse(result);
-        var columnMenu = elementById("columnMenu");
-        columnMenu.innerHTML = response.columnEditor;
-        columnMenu.style.left = event.clientX+"px";
-        columnMenu.style.top = event.clientY+"px";
-        show("columnMenu");
+        var popupMenu = elementById("popupMenu");
+        popupMenu.innerHTML = response.columnEditor;
+        popupMenu.style.left = event.clientX+"px";
+        popupMenu.style.top = event.clientY+"px";
+        show("popupMenu");
      }
   ); 
 }
 
 function addLookup(event, tableName, columnName) {
-  hide("columnMenu");
+  hide("popupMenu");
   alert("Coming soon!");
 }
 
@@ -521,11 +520,11 @@ function changeColumn(event, tableName, columnName) {
     },
     function (result) {
       response = JSON.parse(result);
-      var columnMenu = elementById("columnMenu");
-      columnMenu.innerHTML = response.columnEditor;
-      columnMenu.style.left = event.clientX+"px";
-      columnMenu.style.top = event.clientY+"px";
-      show("columnMenu");
+      var popupMenu = elementById("popupMenu");
+      popupMenu.innerHTML = response.columnEditor;
+      popupMenu.style.left = event.clientX+"px";
+      popupMenu.style.top = event.clientY+"px";
+      show("popupMenu");
    }
   ); 
 }
@@ -545,7 +544,7 @@ function moveColumn(event, tableName, columnName) {
 }
 
 function deleteColumn(event, tableName, columnName) {
-  hide("columnMenu");
+  hide("popupMenu");
   if (confirm("Permanently delete column "+columnName+" from table "+tableName+"?"+"\r\nWarning! Data will be lost!")) {
     $.post(
       "ajax.php?deleteColumn",
@@ -562,7 +561,7 @@ function deleteColumn(event, tableName, columnName) {
 }
 
 function confirmColumn() {
-  hide('columnMenu');
+  hide('popupMenu');
   $.post(
       "ajax.php?confirmColumn",
       {

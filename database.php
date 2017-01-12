@@ -769,22 +769,22 @@ class cDbTable implements iDbTable
     if (isset($this->parent)) return "";
     $addButton = new cHtmlDiv("btnAddColumn");
     $addButton->setAttribute("CONTENT", "+ Add column");
-    $addButton->setAttribute("onClick", "hide('columnMenu');addColumn(event, '".$this->name."', '$columnName')");
+    $addButton->setAttribute("onClick", "hide('popupMenu');addColumn(event, '".$this->name."', '$columnName')");
     $lookupButton = new cHtmlDiv("btnAddLookup");
     $lookupButton->setAttribute("CONTENT", "^ Add lookup");
-    $lookupButton->setAttribute("onClick", "hide('columnMenu');addLookup(event, '".$this->name."', '$columnName')");
+    $lookupButton->setAttribute("onClick", "hide('popupMenu');addLookup(event, '".$this->name."', '$columnName')");
     $alterButton = new cHtmlDiv("btnAlterColumn");
     $alterButton->setAttribute("CONTENT", "* Modify column");
-    $alterButton->setAttribute("onClick", "hide('columnMenu');changeColumn(event, '".$this->name."', '$columnName')");
+    $alterButton->setAttribute("onClick", "hide('popupMenu');changeColumn(event, '".$this->name."', '$columnName')");
     $moveButton = new cHtmlDiv("btnMoveColumn");
     $moveButton->setAttribute("CONTENT", "< Move ".($_SESSION[column][mode]=="move"?"<strong>".$_SESSION[column][name]."</strong>":"column"));
-    $moveButton->setAttribute("onClick", "hide('columnMenu');moveColumn(event, '".$this->name."', '$columnName')");
+    $moveButton->setAttribute("onClick", "hide('popupMenu');moveColumn(event, '".$this->name."', '$columnName')");
     $deleteButton = new cHtmlDiv("btnDeleteColumn");
     $deleteButton->setAttribute("CONTENT", "x Delete column");
-    $deleteButton->setAttribute("onClick", "hide('columnMenu');deleteColumn(event, '".$this->name."', '$columnName')");
+    $deleteButton->setAttribute("onClick", "hide('popupMenu');deleteColumn(event, '".$this->name."', '$columnName')");
     $closeButton = new cHtmlDiv("btnCloseMenu");
     $closeButton->setAttribute("CONTENT", "o Cancel");
-    $closeButton->setAttribute("onClick", "hide('columnMenu');");
+    $closeButton->setAttribute("onClick", "hide('popupMenu');");
     return
         "<strong>$columnName</strong>".
         $addButton->display().
@@ -805,7 +805,7 @@ class cDbTable implements iDbTable
           //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
           "<tr><th>Data type</th><td><input id='dataType' value='".$field->getType()."' type=text></td></tr>".
           //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
-          "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('columnMenu');\">Cancel</div></td></tr>".
+          "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('popupMenu');\">Cancel</div></td></tr>".
         "</table>";
     } else {
       $result =
@@ -816,7 +816,7 @@ class cDbTable implements iDbTable
         //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
         "<tr><th>Data type</th><td><input id='dataType' value='' type=text></td></tr>".
         //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
-        "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('columnMenu');\">Cancel</div></td></tr>".
+        "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('popupMenu');\">Cancel</div></td></tr>".
         "</table>";
     }
     return $result;

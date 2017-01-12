@@ -67,7 +67,7 @@ echo
         " SVN:".shell_exec('svnversion').
         " DB:".dbSelect()."[".$GLOBALS[queryCount]."]".
       "</div>".
-      "<div id='columnMenu'></div>".
+      "<div id='popupMenu'></div>".
       "<div id='fileBrowser'></div>".
       "<img id='logo' src='img/hmat_logo.png' onclick='tableList(event);'>".
   	  $admin.

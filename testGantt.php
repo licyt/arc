@@ -3,7 +3,7 @@
 require 'gantt.php';
 
 $sG = new statusGantt();
-$sG->statusType = "Job";
+$sG->statusType = "Project";
 //$sG->statusLogRowId = 1;
 $sG->iFrom = "2016-04-01";
 $sG->iTill = "2016-11-05";
