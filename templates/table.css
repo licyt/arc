@@ -1,0 +1,59 @@
+/*           All that belongs to the {{tableName}}           */
+
+#tab{{tableName}} {
+  background-color: {{color}};
+}
+
+#tabButton{{tableName}} {
+  background-color: {{color}};
+}
+
+#tabAdmin{{tableName}} {
+  background-color: {{color}};
+  top: {{top}}px;
+  left: {{left}}px;
+  width: {{width}}px;
+}
+
+#tabButtonAdmin{{tableName}} {
+  background-color: {{color}};
+  top: {{top}}px;
+  left: {{left}}px;
+  width: {{width}}px;
+}
+
+.{{tableName}}OrderButton {
+  background-color: {{color}};
+  font-style: italic;
+}
+
+.{{tableName}}OrderButton:hover {
+  color: white;
+}
+
+#table{{tableName}} {
+  border: 2px solid {{color}};
+}
+
+#table{{tableName}} > tbody > tr {
+  background-color: {{color}};
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+#table{{tableName}} > thead > tr {
+  background-color: {{color}};
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+}
+
+#table{{tableName}} > tbody > tr:hover {
+  background-color: white;
+}
+
+.tableHeader{{tableName}} {
+  background-color: {{color}};
+}
+

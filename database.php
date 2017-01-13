@@ -10,6 +10,9 @@ require_once 'action.php';
 require_once 'relation.php';
 require_once 'gantt.php';
 require_once 'color.php';
+require './mustache.php-2.11.1/src/Mustache/Autoloader.php';
+Mustache_Autoloader::register();
+$menu = array();
 
 function dbSelect() {
   $select = new cHtmlSelect();
@@ -351,6 +354,13 @@ class cDbTable implements iDbTable
 {
   public $scheme;
   protected $name;  
+  // menu button positioning
+  public $level;
+  public $sequence;
+  public $top;
+  public $left;
+  public $width;
+  
   protected $parent; // parent browser
   protected $relation;
   protected $preprocessed=false;
@@ -501,9 +511,10 @@ class cDbTable implements iDbTable
   	  " ORDER BY RelationLId";
   	if ($dbRes=myQuery($query)) {
   	  while ($dbRow=mysql_fetch_assoc($dbRes)) {
-  	    $childTable = $this->scheme->getTableByName($dbRow[RelationLObject]);
-  	  	array_push($this->children, $childTable);
-  	  	array_push($childTable->parents, $this);
+  	    if ($childTable = $this->scheme->getTableByName($dbRow[RelationLObject])) {
+  	  	  array_push($this->children, $childTable);
+  	  	  array_push($childTable->parents, $this);
+  	    }
   	  }
   	}
   }
@@ -595,6 +606,15 @@ class cDbTable implements iDbTable
         // push this new field into array of fields of this object
         array_push($this->fields, $field);
       }
+    }
+  }
+  
+  public function loadMenuPosition() {
+    global $menu;
+    $this->level = gui("button".$this->name, "level", 0);
+    if ($this->sequence = gui("button".$this->name, "sequence", 0)) {
+      //if (!isset($menu[$this->level])) $menu[$this->level] = array();
+      $menu[$this->level][$this->sequence] = $this->name;
     }
   }
   
@@ -944,6 +964,8 @@ class cDbTable implements iDbTable
   	  
   	  // set colation order
   	  " ORDER BY ".($this->order ? $this->order : "id".$this->name." DESC");
+  	
+  	//if ($this->name=="Project") echo $query;
     return $query;
   }
   
@@ -2132,6 +2154,9 @@ class cDbScheme implements iDbScheme
       foreach ($this->tables as $name=>$table) {
         unset($this->tables[$name]);
       }
+      
+      // load all tables - replace by - load system tables and load app tables
+      /*
       // load all tables
       $query = "SHOW TABLES";
       if ($result = myQuery($query)) {
@@ -2142,6 +2167,27 @@ class cDbScheme implements iDbScheme
           $this->tables[$tableName] = $table;
         }
       } 
+      */
+      // load system tables
+      $table = new cDbTable("GUI", $this); $this->tables["GUI"] = $table;
+      $table = new cDbTable("Relation", $this); $this->tables["Relation"] = $table;
+      $table = new cDbTable("History", $this); $this->tables["History"] = $table;
+      $table = new cDbTable("Status", $this); $this->tables["Status"] = $table;
+      $table = new cDbTable("StatusLog", $this); $this->tables["StatusLog"] = $table;
+      $table = new cDbTable("Note", $this); $this->tables["Note"] = $table;
+      $table = new cDbTable("Task", $this); $this->tables["Task"] = $table;
+      $table = new cDbTable("Job", $this); $this->tables["Job"] = $table;
+      $table = new cDbTable("Action", $this); $this->tables["Action"] = $table;
+      // load app tables
+      $query = "SELECT GUIvalue FROM GUI WHERE (GUIelement='$dbName') AND (GUIattribute='tableName')";
+      if ($dbRes = myQuery($query)) {
+        while ($dbRow = mysql_fetch_assoc($dbRes)) {
+          $tableName = $dbRow[GUIvalue];
+          $table = new cDbTable($tableName, $this);
+          $this->tables[$tableName] = $table;
+        }
+      }
+      
       // initialize children
       foreach ($this->tables as $table) {
       	$table->loadChildren();
@@ -2197,6 +2243,22 @@ class cDbScheme implements iDbScheme
     
     foreach ($this->tables as $name=>$table) {
       $table->loadColumns();
+      $table->loadMenuPosition();
+    }
+    
+    // calculate absolute coordinates of menu buttons based on relative positioning
+    global $menu;
+    foreach ($menu as $level=>$subMenu) {
+      $i=0;
+      $totalWidth = 1080;
+      $count=count($subMenu);
+      $width = floor($totalWidth / $count);
+      foreach ($subMenu as $sequence=>$tableName) {
+        $this->tables[$tableName]->top = $level*20;
+        $this->tables[$tableName]->left = $i*$width;
+        $this->tables[$tableName]->width = $width-($_SESSION[tabControl][Admin][selected]==$tableName)*6;
+        $i++;
+      }
     }
      
     if ($selectedTable = $this->tables[$_SESSION[tabControl][Admin][selected]]) {
@@ -2206,8 +2268,22 @@ class cDbScheme implements iDbScheme
     }
      
     $this->style = "";
+    
     foreach ($this->tables as $name=>$table) {
       $table->loadDisplayColumns();
+      
+      $m = new Mustache_Engine;
+      $template=file_get_contents("./templates/table.css");
+      $params = Array (
+        "tableName"=>$name,
+        "color"=>gui($name, "color", "lightgray"),
+        "top"=>$table->top,
+        "left"=>$table->left,
+        "width"=>$table->width
+      );
+      $this->style .=  $m->render($template, $params);
+      /* 
+      // replaced by mustache_engine above
       $this->style .= 
         str_replace(
           "<color>", 
@@ -2215,9 +2291,10 @@ class cDbScheme implements iDbScheme
           str_replace(
             "<table>",
             $name, 
-            file_get_contents("./css/table.css.model")
+            file_get_contents("./teplates/table.css")
           )
         );
+      */
     }
   }
   

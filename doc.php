@@ -1,8 +1,5 @@
 <?php
 
-require './mustache.php-2.11.1/src/Mustache/Autoloader.php';
-Mustache_Autoloader::register();
-
 require_once 'database.php';
 
 function printQuote($quoteId) {
