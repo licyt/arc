@@ -2249,15 +2249,19 @@ class cDbScheme implements iDbScheme
     // calculate absolute coordinates of menu buttons based on relative positioning
     global $menu;
     foreach ($menu as $level=>$subMenu) {
-      $i=0;
+      // renumber sequences to zero based indexes
+      $menu[$level] = array_flip($subMenu);
+      asort($menu[$level]);
+      $menu[$level] = array_values(array_flip($menu[$level]));
+    }
+    foreach ($menu as $level=>$subMenu) {
       $totalWidth = 1080;
       $count=count($subMenu);
       $width = floor($totalWidth / $count);
       foreach ($subMenu as $sequence=>$tableName) {
         $this->tables[$tableName]->top = $level*20;
-        $this->tables[$tableName]->left = $i*$width;
+        $this->tables[$tableName]->left = $sequence*$width;
         $this->tables[$tableName]->width = $width-($_SESSION[tabControl][Admin][selected]==$tableName)*6;
-        $i++;
       }
     }
      
