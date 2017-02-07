@@ -39,5 +39,21 @@ function Load() {
         e.preventDefault();
         return false;
     }
-  });  
+  });
+  // synchronize columns in header and data tables
+  $(".header").each(function() {
+    var tableName = $(this).attr("id").substring(11);
+    alignDataToHeader(tableName);
+  })
+  $(".tabBody").on("scroll", function(e) {
+    var tableName = $(this).attr("id").substring(7);
+    var left = $(this).scrollLeft();
+    elementById("tabHead"+tableName).scrollLeft = left;
+  })
+  //dynamic height with window resize
+  $(window).resize(function() {
+    var el = elementById("tabBodyAdmin");
+    el.style.height = (window.innerHeight-100)+"px";
+  })
+  $(window).trigger('resize');
 }

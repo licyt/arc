@@ -1,3 +1,2 @@
-hmat_dev
 hmat_arc
-hmat_pro
+LiCyT

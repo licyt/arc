@@ -13,6 +13,7 @@ table {
 }
 
 th {
+	white-space: nowrap;
   text-align: left;
 }
 
@@ -110,21 +111,32 @@ img {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
+.tabControl {
+	position: relative;
+}
 #tabBodyAdmin {
-  width: 1500px;
-  height: 700px;
+	 top: 90px;
+	 position: relative;
+}
+.tabBody {
+	height: 90%;
   overflow-y: scroll;
   overflow-x: auto;
   position: relative;
-  top: 10px;
+  padding-bottom: 10px;
 }
-#tabHeadAdmin {
-  margin: 0 auto;
-  height: 70px;
-  display: block;
+.tabHead {
+  overflow-y: scroll;
+  overflow-x: auto;
 }
-
+.tabHeadScroll {
+  overflow-y: hidden;
+  height: 35px;
+}
+.subBrowser .tabHeadScroll {
+	overflow-y: hidden;
+	height: 17px;
+}
 .tab {
   height: 20px;
   padding: 0px 4px 2px 4px;
@@ -188,6 +200,8 @@ img {
   position:absolute;
   top:0px;
   left:1090px;
+  width: 126px;
+  height: 60px;
 }
 
 .filter {

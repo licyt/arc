@@ -149,6 +149,7 @@ function Ajax(request, params) {
               elementById("id"+params["tableName"]).value = currentRowId;
               //$("#id"+params["tableName"]).val(currentRowId);
               addDatePickers();
+              alignDataToHeader(params["tableName"]);
               break;
             case "switchTab":
               //alert(xmlHttp.responseText);
@@ -178,7 +179,7 @@ function getRowIndex(table, rowId) {
     if (table.rows[index].id == rowId) return index;
     index++;
   }
-  return null;
+  return -1;
 }
 
 // file browser functions
@@ -334,7 +335,7 @@ function ajaxPost(tableName, parentName) {
 }
 
 function ajaxInsert(tableName, parentName) {
-  var newRow = elementById("table"+tableName).insertRow(1);
+  var newRow = elementById("table"+tableName).insertRow(0);
   newRow.id = tableName+"Row-1";
   $.post(
       "ajax.php?insertRow&tableName="+tableName+"&parentName="+parentName, 
@@ -366,7 +367,7 @@ function ajaxInsert(tableName, parentName) {
 function CancelEdit(tableName) {
   table = elementById("table"+tableName);
   var rowIndex = getRowIndex(table, tableName+"Row-1");
-  if (rowIndex>0) table.deleteRow(rowIndex);
+  if (rowIndex>-1) table.deleteRow(rowIndex);
   show(tableName+"Insert");
   show(tableName+"Delete");
   hide(tableName+"Erase");
@@ -423,6 +424,29 @@ function jumpToRow(idRelation, relationDirection) {
 
 // --------------------------------------------------- data structure manipulation, column Menu
 
+function dbSelect($dbName) {
+  if ($dbName == "Unknown") {
+    elementById("dbName").style.display = "none";
+    elementById("newDbName").style.display = "inline";
+    elementById("createDb").style.display = "inline";
+    elementById("cancelDb").style.display = "inline";
+    elementById("newDbName").focus();
+  } else {
+    elementById("FORM_DB_SELECT").submit();
+  }
+}
+
+function dbCancel() {
+  hide('newDbName');
+  hide('createDb');
+  hide('cancelDb');
+  show('dbName');
+}
+
+function dbCreate($dbName) {
+  
+}
+
 function tableList(event) {
   $.post(
       "ajax.php?tableList",
@@ -464,7 +488,7 @@ function tableSave() {
     },
     function (result) {
       response = JSON.parse(result);
-      
+      $("#tabSwitchAdmin").submit();
    }
   ); 
 }

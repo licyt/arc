@@ -291,7 +291,7 @@ class cHtmlSelect extends cHtmlElement implements iHtmlSelect
   }
   
   public function displayOptions() {
-  	$result = "<OPTION VALUE=0></OPTION>";
+  	//$result = "<OPTION VALUE=0></OPTION>";
     foreach ($this->options as $value => $option) {
       if ($value == $this->selected) {
       $this->selectedColor = $this->colors[$value];		  
@@ -535,30 +535,43 @@ class cHtmlTable extends cHtmlElement
   	foreach ($this->headers as $header) {
   	  $html = ""; $i=0;
   	  foreach ($header as $index=>$value) {
-  	  	if (strpos($value, "StatusColor")) continue;
-  	  	$dcn = $this->dbTable->displayColumnNames[$index];
-  	  	$htmlRow.="<TH ID=\"column".$dcn."\" ".
+  	  	if (strpos($value, "StatusColor") && ($this->dbTable->getName()!="Status")) continue;
+  	  	$cn = $this->dbTable->columnNames[$index];
+  	  	$cna = explode(".", $cn);
+  	  	$cn = $cna[sizeof($cna)-1];
+  	  	$htmlRow.="<TH ID=\"column".$cn."\" ".
   	   	  	      (isset($this->dbTable->parent)
 	   	  	          ? ""
-	   	  	          : "onClick=\"columnMenu(event, '$tableName', '$dcn');\" "
+	   	  	          : "onClick=\"columnMenu(event, '$tableName', '$cn');\" "
   	   	  	      ).
   	  	          ($i==0?"class=\"firstColumn\" ":"").">$value</TH>";
   	  	$i++;
   	  }
-  	  $htmlTable.="<TR>$htmlRow</TR>";
+  	  $htmlHeader.="<TR>$htmlRow</TR>";
   	}
-  	// display rows 
-  	$htmlTable.=$this->displayRows();
   	// display footers
   	foreach ($this->footers as $footer) {
   	  $htmlRow = "";
-  	  foreach ($footer as $value) {
-  	  	if (strpos($value, "StatusColor")) continue;
-  	  	$htmlRow .= "<TH>$value</TH>";
+  	  foreach ($footer as $index=>$value) {
+  	  	if (strpos($value, "StatusColor") && ($this->dbTable->getName()!="Status")) continue;
+  	    $cn = $this->dbTable->columnNames[$index];
+  	  	$cna = explode(".", $cn);
+  	  	$cn = $cna[sizeof($cna)-1];
+  	    $htmlRow .= "<TH ID=\"filter".$cn."\">$value</TH>";
   	  }
-  	  $htmlTable.="<TR>$htmlRow</TR>";
+  	  $htmlFooter.="<TR>$htmlRow</TR>";
   	}
-  	return "<TABLE ID=\"table".$tableName."\">$htmlTable</TABLE>";
+  	return 
+  	  "<DIV CLASS=\"tabControl\" ID=\"tabControl".$tableName."\">".
+    	  "<DIV CLASS=\"tabHeadScroll\" ID=\"tabHeadScroll".$tableName."\">".
+      	  "<DIV CLASS=\"tabHead\" ID=\"tabHead".$tableName."\">".
+      	    "<TABLE CLASS=\"header\" ID=\"tableHeader".$tableName."\">$htmlHeader$htmlFooter</TABLE>".
+      	  "</DIV>".
+    	  "</DIV>".
+    	  "<DIV CLASS=\"tabBody\" ID=\"tabBody".$tableName."\">".
+    	    "<TABLE CLASS=\"data\" ID=\"table".$tableName."\">".$this->displayRows()."</TABLE>".
+    	  "</DIV>".
+  	  "</DIV>";
   }
 }
 

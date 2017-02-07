@@ -18,17 +18,26 @@ function dbSelect() {
   $select = new cHtmlSelect();
   $select->setAttribute("NAME", "dbName");
   $select->setAttribute("ID", "dbName");
-  $select->setAttribute("onChange", "this.form.submit();");
+  $select->setAttribute("onChange", "dbSelect(this.value);");
   global $dbName;
   $select->setSelected($dbName);
   global $databases;
   foreach ($databases as $database) {
     $select->addOption($database, $database);
   }
+  $select->addOption("Unknown", "+ Add");
+  $input = new cHtmlInput("newDbName", "TEXT", "Unknown");
+  $input->setAttribute("STYLE", "display:none;");
+  $btnCreate = new cHtmlInput("createDb", "SUBMIT", "Create Database");
+  $btnCreate->setAttribute("onClick", "dbCreate(elementById('newDbName').value);");
+  $btnCreate->setAttribute("STYLE", "display:none;");
+  $btnCancel = new cHtmlInput("cancelDb", "SUBMIT", "Cancel");
+  $btnCancel->setAttribute("STYLE", "display:none;");
+  $btnCancel->setAttribute("onClick", "dbCancel();");
   $form = new cHtmlForm();
   $form->setAttribute("ID", "FORM_DB_SELECT");
   $form->setAttribute("METHOD", "POST");
-  $form->setAttribute("CONTENT", $select->display());
+  $form->setAttribute("CONTENT", $select->display().$input->display().$btnCreate->display().$btnCancel->display());
   return $form->display();
 }
 
@@ -37,6 +46,24 @@ function myQuery($query) {
   $GLOBALS[queryCount]++;
   //echo $query."<BR>";
   return mysql_query($query);
+}
+
+function runSqlScript($link, $fileName) {
+  if ($sqlScript = file_get_contents($fileName)) {
+    if (mysqli_multi_query($link, $sqlScript)) {
+      do {
+        if ($result = mysqli_store_result($link)) {
+          while ($row = mysqli_fetch_row($result)) {
+            // process result row here
+          }
+          mysqli_free_result($result);
+        }
+        if (mysqli_more_results($link)) {
+          // insert divider
+        }
+      } while (mysqli_next_result($link));
+    }
+  }
 }
 
 // ------------------------------------------------------ I N T E R F A C E
@@ -375,7 +402,7 @@ class cDbTable implements iDbTable
   protected $currentRecord = array();
   protected $lastRecord = array();
   // browser parameters
-  protected $columnNames = array();
+  public $columnNames = array();
   public $displayColumnNames = array();
   protected $ftNames = array();
   protected $start;									// browser starting position
@@ -965,7 +992,7 @@ class cDbTable implements iDbTable
   	  // set colation order
   	  " ORDER BY ".($this->order ? $this->order : "id".$this->name." DESC");
   	
-  	//if ($this->name=="Project") echo $query;
+  	//if ($this->name=="Bug") echo $query;
     return $query;
   }
   
@@ -1723,13 +1750,55 @@ class cDbTable implements iDbTable
   	  if ($columnName=="id".$this->name) {
   	    $result[$i]="";
   	  } else {
+/**/  
+  	    // original filter functionality SiR 2016
   	    $filter  = new cHtmlInput($setName.$columnName, "TEXT", $values[$columnName]);
   	    // autofire form submit
   	    $filter->setAttribute("onChange", "this.form.submit()");
+  	    
+  	    // ENTER PICI! SiR feb2017
+  	    $filter->setAttribute("onKeyDown", "if (event && event.keyCode==13) {this.form.submit();}");
+  	    
   	    $filter->setAttribute("CLASS", "filter");
   	    if ($field = $this->getFieldByName($columnName)) {
   	      $filter->setAttribute("SIZE", $field->getSize());
   	    }
+/** /
+  	    // suggest functionality for filter feb2017 SiR
+  	    $value = $values[$i];
+  	    $ftName=$this->name;
+  	    $lookupField=$columnName;
+  	    // load options from database
+  	    $sql=
+    	    "SELECT id".$ftName.",".$lookupField.
+    	    " FROM ".$ftName.
+    	    " ORDER BY ".$lookupField." ASC";
+  	    $optionList = Array();
+  	    if( $dbResult = myQuery($sql) ) {
+  	      while( $row = mysql_fetch_assoc($dbResult) ) {
+  	        $optionList[$row["id".$ftName]] = $row[$lookupField];
+  	      }
+  	    }
+  	    $hiddenName = "filterId".$columnName;
+  	    $visibleName = "filter".$columnName;
+  	    $filter = new cHtmlSuggest($hiddenName, $value, $optionList[$value]);
+  	    $filter->setOptions($optionList, $lookupField);
+  	    // get lookup field type/size
+  	    $sql = "SHOW COLUMNS FROM ".$ftName." LIKE '".$lookupField."'";
+  	    if( $dbResult = myQuery($sql) ) {
+  	      $row = mysql_fetch_assoc($dbResult);
+  	      $filter->setAttribute("SIZE", filter_var($row[Type], FILTER_SANITIZE_NUMBER_INT));
+  	    }
+  	    $filter->setAttribute("SUGGESTID", $visibleName);
+  	    // attach event controllers
+  	    // suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId)
+  	    $filter->setAttribute("onFocus","suggestList(event, 'valueSearch', this.value, '$ftName', '$lookupField', '$hiddenName', '$visibleName', '$hiddenName"."List')");
+  	    $filter->setAttribute("onKeyUp","suggestList(event, 'valueSearch', this.value, '$ftName', '$lookupField', '$hiddenName', '$visibleName', '$hiddenName"."List')");
+  	    $filter->setAttribute("onSelect","sanitizeSuggestValues('$hiddenName', '$visibleName', '$hiddenName"."List')");
+  	    $filter->setAttribute("onBlur", "sanitizeSuggestList('$hiddenName"."List')");
+  	    $filter->setAttribute("onInput", "rowHasChanged('".$ftName."');");
+  	    // end of suggest functionality feb2017 SiR
+/**/
   	    $result[$i]=$filter->display();
   	  }
     }
@@ -2246,14 +2315,14 @@ class cDbScheme implements iDbScheme
       $table->loadMenuPosition();
     }
     
-    // calculate absolute coordinates of menu buttons based on relative positioning
     global $menu;
+    // renumber sequences to zero based indexes
     foreach ($menu as $level=>$subMenu) {
-      // renumber sequences to zero based indexes
       $menu[$level] = array_flip($subMenu);
       asort($menu[$level]);
       $menu[$level] = array_values(array_flip($menu[$level]));
     }
+    // calculate absolute coordinates of menu buttons based on relative positioning
     foreach ($menu as $level=>$subMenu) {
       $totalWidth = 1080;
       $count=count($subMenu);

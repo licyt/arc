@@ -11,28 +11,8 @@ echo
     charset().
 	  linkCss("css/hmat.css").
   	linkCss("css/gantt.css").
-	  //linkCss("css/hideIdTags.css").
   	
     style($dbScheme->style).
-
-    //linkCss("css/project.css").
-  	//linkCss("css/quote.css").
-    //linkCss("css/dataset.css").
-  	//linkCss("css/demand.css").
-  	//linkCss("css/invoice.css").
-  	//linkCss("css/build.css").
-  	//linkCss("css/deliverynote.css").
-  	//linkCss("css/industry.css").
-  	//linkCss("css/company.css").
-  	//linkCss("css/account.css").
-  	//linkCss("css/address.css").
-  	//linkCss("css/material.css").
-  	//linkCss("css/person.css").
-  	//linkCss("css/printparameters.css").
-  	//linkCss("css/part.css").
-  	//linkCss("css/platform.css").
-  	//linkCss("css/deliverytransport.css").
-  	//linkCss("css/payment.css").
   	
     linkCss("css/status.css").
   	linkCss("css/task.css").
@@ -51,12 +31,13 @@ echo
   	linkJs("js/jscolor.js").
   	linkJs("js/datepicker.js").
   	
-    linkJs("js/hmat.js").
     linkJs("js/basic.js").
   	linkJs("js/ajax.js").
+    linkJs("js/alignTables.js").
   	linkJs("js/gantt.js").
-  	linkJs("js/cHtmlSuggest.js")
-  		
+  	linkJs("js/cHtmlSuggest.js").
+    linkJs("js/hmat.js")
+      
   ).
   body(
     
@@ -70,7 +51,7 @@ echo
       "</div>".
       "<div id='popupMenu'></div>".
       "<div id='fileBrowser'></div>".
-      "<img id='logo' src='img/hmat_logo.png' onclick='tableList(event);'>".
+      "<div id='logo'><img src='img/".$dbName."_logo.png' class='imageLogo' onclick='tableList(event);'></div>".
   	  $admin.
     "</div>",
   	"Load();"

@@ -364,6 +364,8 @@ elseif (isset($_REQUEST[tableSave])) {
   createTable($tableName);
   showTableInMenu($tableName);
   
+  ugi("tabAdmin".$tableName, $lang, $_REQUEST[tableName]);
+  ugi("tabButtonAdmin".$tableName, $lang, $_REQUEST[tableName]);
   ugi("button".$tableName, "level", $level);
   ugi("button".$tableName, "sequence", $sequence);
 
