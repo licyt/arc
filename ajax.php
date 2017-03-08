@@ -107,6 +107,14 @@ function showTableInMenu($tableName) {
     ugi($dbName, "tableName", $tableName, true);
 }
 
+function lookupEditor() {
+  return
+    "<table>".
+    "<tr><th>Lookup table</th><td><input id='lookupTable' value='' type=text></td></tr>".
+    "<tr><td><div onClick=\"confirmLookup();\">Ok</div></td><td><div onClick=\"hide('popupMenu');\">Cancel</div></td></tr>".
+    "</table>";
+}
+
 // ======================================================================= REQUEST processing switch
 
 
@@ -198,6 +206,9 @@ elseif (isset($_REQUEST[insertRow])) {
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
   $dbTable->setParent($dbScheme->getTableByName($_REQUEST[parentName]));
   $htmlTable = new cHtmlTable($dbTable);
+  if ($_REQUEST[tableName]=="Status") {
+    $htmlTable->setAttribute("StatusEdit", true);
+  }
   $result[oldRowId] = $dbTable->getCurrentRecordId();
   $oldRow = $dbTable->displayRow($result[oldRowId], $dbTable->getCurrentRecord());
   $result[onClick] = $oldRow[onClick];
@@ -246,8 +257,9 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   $result[onClick] = str_replace(", -1);", ", ".$result[newRowId].");", $oldRow[onClick]);
   // use cHtmlTable to format html of the old table row
   $htmlTable = new cHtmlTable($dbTable);
+  $htmlTable->setAttribute("StatusEdit", true);
   $htmlTable->addRow(
-    $_REQUEST[tableName]."Row".$result[oldRowId], 
+    $result[oldRowId], 
     $oldRow
   );
   $result[oldRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
@@ -396,6 +408,15 @@ elseif (isset($_REQUEST[changeColumn])) {
   $_SESSION[column][table] = $_REQUEST[tableName];
   $dbTable = $dbScheme->getTableByName($_REQUEST[tableName]);
   $result[columnEditor] = $dbTable->columnEditor($_REQUEST[columnName]);
+  echo json_encode($result);
+}
+
+// ------------------------------------------------------------------------------------- addLookup
+elseif (isset($_REQUEST[addLookup])) {
+  $_SESSION[column][mode] = "lookup";
+  $_SESSION[column][name] = $_REQUEST[columnName];
+  $_SESSION[column][table] = $_REQUEST[tableName];
+  $result[lookupEditor] = lookupEditor();
   echo json_encode($result);
 }
 

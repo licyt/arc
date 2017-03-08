@@ -662,7 +662,7 @@ class cHtmlJsColorPick extends cHtmlInput implements iHtmlJsColorPick
 			$this->add(SIZE).
 			$this->add(onClick).
 			" CLASS=\"jscolor { closable:true,closeText:'Close',width:243, height:150, position:'right', borderColor:'#FFF', insetColor:'#FFF', backgroundColor:'#CCC'}\"".
-			" onChange=\"updateColor(this)\"".
+			//" onChange=\"updateColor(this)\"".
 		  ">";
 	}
 }

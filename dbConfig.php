@@ -2,7 +2,7 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
   $dbServerName = 'localhost'; //tokamag.nasa.lan';
   $dbUser       = 'root';
-  $dbPassword   = '';
+  $dbPassword   = 'mindfold';
   
   
   // ------------------------------------------------------------------------------------- Create New Database

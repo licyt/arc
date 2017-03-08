@@ -149,6 +149,9 @@ function Ajax(request, params) {
               elementById("id"+params["tableName"]).value = currentRowId;
               //$("#id"+params["tableName"]).val(currentRowId);
               addDatePickers();
+              if (input=document.getElementById("StatusColor")) {
+                var picker = new jscolor(input);
+              }
               alignDataToHeader(params["tableName"]);
               break;
             case "switchTab":
@@ -360,6 +363,9 @@ function ajaxInsert(tableName, parentName) {
         show(tableName+"Ok");
         show(tableName+"Cancel");
         addDatePickers();
+        if (input=document.getElementById("StatusColor")) {
+          var picker = new jscolor(input);
+        }
       }
   );
 }
@@ -531,8 +537,21 @@ function addColumn(event, tableName, columnName) {
 }
 
 function addLookup(event, tableName, columnName) {
-  hide("popupMenu");
-  alert("Coming soon!");
+  $.post(
+      "ajax.php?addLookup",
+      {
+        "tableName": tableName, 
+        "columnName": columnName
+      },
+      function (result) {
+        response = JSON.parse(result);
+        var popupMenu = elementById("popupMenu");
+        popupMenu.innerHTML = response.lookupEditor;
+        popupMenu.style.left = event.clientX+"px";
+        popupMenu.style.top = event.clientY+"px";
+        show("popupMenu");
+     }
+  ); 
 }
 
 function changeColumn(event, tableName, columnName) {
