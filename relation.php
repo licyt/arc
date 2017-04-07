@@ -145,6 +145,17 @@ function insertRRCP($LObject, $LId, $RObject, $RId) {
   return myQuery($query);
 }
 
+function insertTTCP($LObject, $RObject) {
+  if (!$LObject || !$RObject) return null;
+  $query =
+  "INSERT INTO Relation SET ".
+  "RelationType=\"TTCP\", ".
+  "RelationLObject=\"$LObject\", ".
+  "RelationRObject=\"$RObject\"";
+  return myQuery($query);
+}
+
+
 function jobParent($sourceJobId) {
   $query =
     "SELECT RelationRObject, RelationRId ".

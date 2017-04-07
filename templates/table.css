@@ -31,10 +31,6 @@
   color: white;
 }
 
-#table{{tableName}} {
-  border: 2px solid {{color}};
-}
-
 #table{{tableName}} > tbody > tr {
   background-color: {{color}};
 	padding: 0px;

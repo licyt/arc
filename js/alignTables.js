@@ -18,10 +18,15 @@ function alignDataToHeader(tableName) {
   // Get the column widths in the first row in the "data" table
   $("#table"+tableName+" tr:first").find("td").each(function() {
       var index = $(this).index();
-      var width = $(this).outerWidth(true);
-      // Override the final layout if this column is bigger
-      if(width > arrLayout[index]) {
-          arrLayout[index] = width;
+      var width = parseInt(this.style.width);
+      if (width) {
+        arrLayout[index] = width;
+      } else {
+        width = $(this).outerWidth(true);
+        // Override the final layout if this column is bigger
+        if(width > arrLayout[index]) {
+            arrLayout[index] = width;
+        }
       }
   });
 
@@ -32,12 +37,25 @@ function alignDataToHeader(tableName) {
   }
           
   // Set the new width to the two tables        
-  $("#tableHeader"+tableName).width(widthSum);
-  $("#table"+tableName).width(widthSum);
+  $("#tableHeader"+tableName).css({"width":widthSum});
+  $("#table"+tableName).css({"width":widthSum});
   
   // Set the new widths on the columns (both tables)
   for(var i=0; i < arrLayout.length; i++) {
-      $("#tableHeader"+tableName+" tr:first th:eq("+i+")").css({"min-width":arrLayout[i]});
-      $("#table"+tableName+" tr:first td:eq("+i+")").css({"min-width":arrLayout[i]});
+      $("#tableHeader"+tableName+" tr:first th:eq("+i+")").css({"width":arrLayout[i]});
+      $("#table"+tableName+" tr:first td:eq("+i+")").css({"min-width":arrLayout[i], "width":arrLayout[i], "max-width":arrLayout[i]});
   }
+}
+
+function alignColumns() {
+  // align columns in header and data tables
+  $(".header").each(function() {
+    var tableName = $(this).attr("id").substring(11);
+    alignDataToHeader(tableName);
+  })
+  $(".tabBody").on("scroll", function(e) {
+    var tableName = $(this).attr("id").substring(7);
+    var left = $(this).scrollLeft();
+    elementById("tabHead"+tableName).scrollLeft = left;
+  })
 }

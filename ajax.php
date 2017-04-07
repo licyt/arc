@@ -70,8 +70,26 @@ function tableList() {
 
 function tableDialog($tableName) {
   $input = new cHtmlInput("tableName", "text", $tableName);
-  $level = new cHtmlInput("buttonLevel", "text", gui("button".$tableName, "level", 0));
+  $lookupField = new cHtmlSelect();
+  $lookupField->setAttribute("ID", "lookupField");
+  $lookupField->setAttribute("NAME", "lookupField");
+  $lf = gui($tableName, "lookupField");
+  $dcn = explode(",", gui($tableName, "displayColumnNames"));
+  $lookupField->addOption("", "-");
+  foreach ($dcn as $index=>$columnName) {
+    if (strpos($columnName, $tableName)===0) 
+      $lookupField->addOption($columnName, $columnName);
+  }
+  if ($lf) $lookupField->setSelected($lf);
+  $level = new cHtmlSelect();
+  $level->setAttribute("ID", "buttonLevel");
+  $level->setAttribute("NAME", "buttonLevel");
+  $level->addOption(0, "top");
+  $level->addOption(1, "middle");
+  $level->addOption(2, "bottom");
+  $level->setSelected(gui("button".$tableName, "level", 0));
   $sequence = new cHtmlInput("buttonSequence", "text", gui("button".$tableName, "sequence", 0));
+  $color = new cHtmlJsColorPick("tableColor", "text", gui($tableName, "color"));
   $save = new cHtmlDiv("buttonSave");
   $save->setAttribute("CONTENT", "save");
   $save->setAttribute("onClick", "hide('popupMenu');tableSave();");
@@ -81,13 +99,16 @@ function tableDialog($tableName) {
   $drop = new cHtmlDiv("buttonDrop");
   $drop->setAttribute("CONTENT", "drop");
   $drop->setAttribute("onClick", "hide('popupMenu');tableDrop();");
-  return 
+  $table = 
     table(
       tr(td("Table").td($input->display())).
+      tr(td("color").td($color->display())).
+      tr(td("lookup").td($lookupField->display())).
       tr(td("level").td($level->display())).
       tr(td("sequence").td($sequence->display())).
       tr(td($save->display()).td($cancel->display()))  
     );
+  return $table;
 }
 
 function camelize($string, $space=" ") {
@@ -97,6 +118,7 @@ function camelize($string, $space=" ") {
 function createTable($tableName) {
   myQuery(
     "CREATE TABLE IF NOT EXISTS $tableName ".
+    "ENGINE = INNODB DEFAULT CHARSET=utf8 COLLATE utf8_slovak_ci ".
     "(id".$tableName." INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (id".$tableName."))"
   );
 }
@@ -225,6 +247,9 @@ elseif (isset($_REQUEST[insertRow])) {
       $_REQUEST[tableName]."Row-1",
       $dbTable->editColumns()
       );
+	$result["onKeyPress"] = 
+	  "if (event && event.keyCode==13) {elementById('".$dbTable->getName()."Ok').click();}".
+	  "if (event && event.keyCode==27) {elementById('".$dbTable->getName()."Cancel').click();}";
   $result[newRow] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
   echo json_encode($result);
 }
@@ -257,7 +282,9 @@ elseif (isset($_REQUEST[loadRow])||isset($_REQUEST[submitRow])) {
   $result[onClick] = str_replace(", -1);", ", ".$result[newRowId].");", $oldRow[onClick]);
   // use cHtmlTable to format html of the old table row
   $htmlTable = new cHtmlTable($dbTable);
-  $htmlTable->setAttribute("StatusEdit", true);
+  if ($_REQUEST['tableName']=="Status") {
+    $htmlTable->setAttribute("StatusEdit", true);
+  }
   $htmlTable->addRow(
     $result[oldRowId], 
     $oldRow
@@ -369,17 +396,17 @@ elseif (isset($_REQUEST[tableDialog])) {
 }
 // ------------------------------------------------------------------------------------- tableSave
 elseif (isset($_REQUEST[tableSave])) {
-  $tableName = camelize($_REQUEST[tableName]);
-  $level = $_REQUEST[level];
-  $sequence = $_REQUEST[sequence];
+  $cTableName = camelize($_REQUEST[tableName]);
   
-  createTable($tableName);
-  showTableInMenu($tableName);
+  createTable($cTableName);
+  showTableInMenu($cTableName);
   
-  ugi("tabAdmin".$tableName, $lang, $_REQUEST[tableName]);
-  ugi("tabButtonAdmin".$tableName, $lang, $_REQUEST[tableName]);
-  ugi("button".$tableName, "level", $level);
-  ugi("button".$tableName, "sequence", $sequence);
+  ugi("tabAdmin".$cTableName, $lang, $_REQUEST[tableName]);
+  ugi("tabButtonAdmin".$cTableName, $lang, $_REQUEST[tableName]);
+  ugi("button".$cTableName, "level", $_REQUEST[level]);
+  ugi("button".$cTableName, "sequence", $_REQUEST[sequence]);
+  ugi($cTableName, "color", $_REQUEST[tableColor]);
+  ugi($cTableName, "lookupField", $_REQUEST[lookupField]);
 
   echo json_encode($result);
 }
@@ -450,12 +477,25 @@ elseif (isset($_REQUEST[confirmColumn])) {
   $dbTable = $dbScheme->getTableByName($tableName);
   switch ($_SESSION[column][mode]) {
     case "add":
-      $dbTable->addColumn($_REQUEST[columnName], $_REQUEST[displayedName], $_REQUEST[dataType], $_SESSION[column][name]);
+      $dbTable->addColumn($_REQUEST[columnName], $_REQUEST[displayedName], $_REQUEST[dataType], $_REQUEST[columnWidth], $_SESSION[column][name]);
       break;
     case "change":
-      $dbTable->modifyColumn($_SESSION[column][name], $_REQUEST[displayedName], $_REQUEST[dataType]);
+      $dbTable->modifyColumn($_SESSION[column][name], $_REQUEST[displayedName], $_REQUEST[dataType], $_REQUEST[columnWidth]);
       break;
   }
+  $result[browser] = $dbTable->browse();
+  echo json_encode($result);
+}
+
+// ------------------------------------------------------------------------------------- confirmLookup
+elseif (isset($_REQUEST[confirmLookup])) {
+  $tableName = $_SESSION[tabControl][Admin][selected];
+  $lookupTable = $_REQUEST["lookupTable"];
+  $lookupField = gui($lookupTable, "lookupField");
+  insertTTCP($tableName, $lookupTable);
+  ugi($tableName, "displayColumnNames", gui($tableName, "displayColumnNames").",".$lookupField);
+  ugi($tableName."ORDER".$lookupField, "ENG", gui($lookupTable."ORDER".$lookupField, "ENG"));
+  $dbTable = $dbScheme->getTableByName($tableName);  
   $result[browser] = $dbTable->browse();
   echo json_encode($result);
 }

@@ -159,7 +159,7 @@ class cHtmlElement  {
 class cHtmlDiv extends cHtmlElement implements iHtmlDiv
 { 
   public function __construct ($id="") {
-	$this->setAttribute("ID", $id);
+	  $this->setAttribute("ID", $id);
   }
 	
   public function display() {
@@ -497,7 +497,7 @@ class cHtmlTable extends cHtmlElement
         }
         if (!$this->attributes[StatusEdit]) {
       		  if ($columnName == "StatusName") {
-      		    $style = "STYLE=\"width:140px;background-color:".$row[StatusColor].";\"";
+      		    $style .= "background-color:".$row[StatusColor].";";
       		  }
       		  if ($columnName == "StatusColor") continue;
         }
@@ -519,8 +519,10 @@ class cHtmlTable extends cHtmlElement
           $class = " CLASS=\"".$value."\"";
           continue;
         }
+        
+        $style .= "width:".gui($columnName, "width", "140")."px;";
     
-        $html.="<TD $style>$value</TD>";
+        $html.="<TD STYLE=\"$style\">$value</TD>";
       }
       $rows.="<TR ID=\"".$this->ids[$rowIndex]."\" $class $onClick $onKeyPress>$html</TR>";
     }
@@ -544,7 +546,9 @@ class cHtmlTable extends cHtmlElement
 	   	  	          ? ""
 	   	  	          : "onClick=\"columnMenu(event, '$tableName', '$cn');\" "
   	   	  	      ).
-  	  	          ($i==0?"class=\"firstColumn\" ":"").">$value</TH>";
+  	  	          ($i==0?"class=\"firstColumn\" ":"").
+  	  	          "STYLE=\"\width:".gui($cn, "width", "140")."px;\"".
+  	  	         ">$value</TH>";
   	  	$i++;
   	  }
   	  $htmlHeader.="<TR>$htmlRow</TR>";

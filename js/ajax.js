@@ -152,7 +152,7 @@ function Ajax(request, params) {
               if (input=document.getElementById("StatusColor")) {
                 var picker = new jscolor(input);
               }
-              alignDataToHeader(params["tableName"]);
+              alignColumns();
               break;
             case "switchTab":
               //alert(xmlHttp.responseText);
@@ -162,6 +162,7 @@ function Ajax(request, params) {
               var sbRowName = params["tableName"]+"Sb"+currentRowId;
               table.rows.namedItem(sbRowName).innerHTML = response.subBrowser;
               addDatePickers();
+              alignColumns();
               break;
         } // switch request
       } // switch readyState
@@ -358,6 +359,7 @@ function ajaxInsert(tableName, parentName) {
         // new row for insert
         $("#"+tableName+"Row"+$("#id"+tableName).val()).html(response.oldRow);
         newRow.innerHTML = response.newRow;
+        newRow.setAttribute('onkeypress', response.onKeyPress);
         $("#id"+tableName).val(-1);
         hide(tableName+"Insert");
         show(tableName+"Ok");
@@ -366,6 +368,7 @@ function ajaxInsert(tableName, parentName) {
         if (input=document.getElementById("StatusColor")) {
           var picker = new jscolor(input);
         }
+        alignDataToHeader(tableName);
       }
   );
 }
@@ -480,7 +483,10 @@ function tableDialog(event, tableName) {
       tableDialog.style.left = event.clientX+"px";
       tableDialog.style.top = event.clientY+"px";
       show("popupMenu");
-   }
+      if (input=document.getElementById("tableColor")) {
+        var picker = new jscolor(input);
+      }   
+    }
   ); 
 }
 
@@ -491,6 +497,8 @@ function tableSave() {
       "tableName": elementById("tableName").value,
       "level": elementById("buttonLevel").value,
       "sequence": elementById("buttonSequence").value,
+      "tableColor": elementById("tableColor").value,
+      "lookupField": elementById("lookupField").value
     },
     function (result) {
       response = JSON.parse(result);
@@ -610,7 +618,22 @@ function confirmColumn() {
       {
         "displayedName": elementById("displayedName").value,
         "columnName": elementById("columnName").value,
-        "dataType": elementById("dataType").value
+        "dataType": elementById("dataType").value,
+        "columnWidth": elementById("columnWidth").value
+      },
+      function (result) {
+        response = JSON.parse(result);
+        elementById("tabBodyAdmin").innerHTML = response.browser;        
+      }
+  );
+}
+
+function confirmLookup() {
+  hide('popupMenu');
+  $.post(
+      "ajax.php?confirmLookup",
+      {
+        "lookupTable": elementById("lookupTable").value,
       },
       function (result) {
         response = JSON.parse(result);

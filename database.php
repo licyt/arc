@@ -767,7 +767,7 @@ class cDbTable implements iDbTable
     ugi($this->name, "displayColumnNames", implode(",", $this->displayColumnNames));
   }
   
-  public function addColumn($columnName, $displayedName, $dataType, $afterColumn) {
+  public function addColumn($columnName, $displayedName, $dataType, $columnWidth, $afterColumn) {
     $query =
       "ALTER TABLE ".$this->name." ".
       "ADD COLUMN $columnName $dataType ".
@@ -783,15 +783,17 @@ class cDbTable implements iDbTable
     }
     $this->displayColumnNames[$i] = $columnName;
     ugi($this->name, "displayColumnNames", implode(",", $this->displayColumnNames));
+    ugi($columnName, "width", $columnWidth);
     $this->reload();
   }
   
-  public function modifyColumn($columnName, $displayedName, $dataType) {
+  public function modifyColumn($columnName, $displayedName, $dataType, $columnWidth) {
     $query =
       "ALTER TABLE ".$this->name." ".
       "MODIFY COLUMN $columnName $dataType";
       myQuery($query);
     ugi($this->name."ORDER".$columnName, $GLOBALS[lang], $displayedName);
+    ugi($columnName, "width", $columnWidth);
     $this->reload();
   }
   
@@ -846,22 +848,24 @@ class cDbTable implements iDbTable
     if ($field = $this->getFieldByName($columnName)) {
       $result = 
         "<table>".
-          "<tr><th>Displayed name</th><td><input id='displayedName' value='".gui($this->name."ORDER".$columnName, $GLOBALS[lang], $columnName)."' type=text></td></tr>".
-          "<tr><th>Column name</th><td><input readonly id='columnName' value='$columnName' type=text></td></tr>".
-          "<tr><th>Table name</th><td>".$this->name."</td></tr>".
-          //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
-          "<tr><th>Data type</th><td><input id='dataType' value='".$field->getType()."' type=text></td></tr>".
-          //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
+          "<tr><td>Table name</th><td>".$this->name."</td></tr>".
+          "<tr><td>Column name</th><td><input readonly id='columnName' name='displayedName' value='$columnName' type=text></td></tr>".
+          "<tr><td>Displayed name</th><td><input id='displayedName' name='displayedName' value='".gui($this->name."ORDER".$columnName, $GLOBALS[lang], $columnName)."' type=text></td></tr>".
+          //"<tr><td>Schema</th><td>".$this->scheme->getName()."</td></tr>".
+          "<tr><td>Data type</th><td><input id='dataType' name='dataType' value='".$field->getType()."' type=text></td></tr>".
+          "<tr><td>Width</th><td><input id='columnWidth' name='columnWidth' value='".gui($columnName, "width")."' type=text></td></tr>".
+          //"<tr><td>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
           "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('popupMenu');\">Cancel</div></td></tr>".
         "</table>";
     } else {
       $result =
         "<table>".
-        "<tr><th>Displayed name</th><td><input id='displayedName' value='' type=text></td></tr>".
-        "<tr><th>Column name</th><td><input id='columnName' value='' type=text></td></tr>".
-        "<tr><th>Table name</th><td>".$this->name."</td></tr>".
-        //"<tr><th>Schema</th><td>".$this->scheme->getName()."</td></tr>".
-        "<tr><th>Data type</th><td><input id='dataType' value='' type=text></td></tr>".
+        "<tr><td>Table name</th><td>".$this->name."</td></tr>".
+        "<tr><td>Column name</th><td><input id='columnName' name='columnName' value='' type=text></td></tr>".
+        "<tr><td>Displayed name</th><td><input id='displayedName' name='displayedName' value='' type=text></td></tr>".
+        //"<tr><td>Schema</th><td>".$this->scheme->getName()."</td></tr>".
+        "<tr><td>Data type</th><td><input id='dataType' name='dataType' value='' type=text></td></tr>".
+        "<tr><td>Width</th><td><input id='columnWidth' name='columnWidth' value='' type=text></td></tr>".
         //"<tr><th>Default expression</th><td><input value='".$field->getExtra()."' id='defaultExpression' type=text></td></tr>".
         "<tr><td><div onClick=\"confirmColumn();\">Ok</div></td><td><div onClick=\"hide('popupMenu');\">Cancel</div></td></tr>".
         "</table>";
