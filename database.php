@@ -1,7 +1,6 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com 
 // ------------------------------------------------------ C O N S T A N T S
-session_start();
 
 include_once("./dbConfig.php");
 require_once 'gui.php';
@@ -43,7 +42,7 @@ function dbSelect() {
 
 
 function myQuery($query) {
-  $GLOBALS[queryCount]++;
+  $GLOBALS["queryCount"]++;
   //echo $query."<BR>";
   return mysql_query($query);
 }
@@ -1038,6 +1037,11 @@ class cDbTable implements iDbTable
   	$button = new cHtmlSpan($this->name."Insert", "+"); //gui($this->name."Insert", $GLOBALS[lang], $this->name."Insert")
     $button->setAttribute("CLASS", "InsertButton");
     $button->setAttribute(onClick, "ajaxInsert('".$this->name."', '".(isset($this->parent) ? $this->parent->getName() : "")."');stopEvent(event);");
+    // events occuring on the drop target 
+    $button->setAttribute("onDragEnter", "this.style.backgroundColor='lightblue';");
+    $button->setAttribute("onDragLeave", "this.style.backgroundColor='blue';");
+    $button->setAttribute("onDragOver", "event.preventDefault();");
+    $button->setAttribute("onDrop", "this.style.backgroundColor='blue';doDrop('".$this->name."', '".(isset($this->parent) ? $this->parent->getName() : "")."', event);");
   	return $button->display();
   }
 

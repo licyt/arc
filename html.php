@@ -33,6 +33,10 @@ function style($css) {
   return "<style>$css</style>";
 }
 
+function div($content) {
+  return "<div>$content</div>";
+}
+
 function table($rows) {
   return "<table>".$rows."</table>";
 }
@@ -190,10 +194,14 @@ class cHtmlSpan extends cHtmlElement implements iHtmlSpan
 	    "<SPAN".
 		    " ID=".$this->attributes[ID].
 		    " NAME=".$this->attributes[ID].
-        $this->add(onClick).
+        $this->add("onClick").
         $this->add("CLASS").
         $this->add("STYLE").
-		  ">".
+        $this->add("onDragEnter").
+        $this->add("onDragLeave").
+        $this->add("onDragOver").
+        $this->add("onDrop").
+      ">".
 		  $this->attributes[CONTENT].
 		"</SPAN>";
   }
@@ -268,6 +276,15 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
       )    
     ;
   }
+}
+
+function input($id, $type, $value) {
+  $htmlInput = new cHtmlInput($id, $type, $value);
+  return $htmlInput->display();
+}
+
+function submit($id, $value) {
+  return input($id, "submit", $value);
 }
 
 class cHtmlSelect extends cHtmlElement implements iHtmlSelect
@@ -374,7 +391,16 @@ class cHtmlForm extends cHtmlElement implements iHtmlForm
         $this->attributes[CONTENT].
       "</FORM>";
   }
-}                   
+}  
+
+function form($id, $content, $action="", $method="POST") {
+  $htmlForm = new cHtmlForm;
+  $htmlForm->setAttribute("ID", $id);
+  $htmlForm->setAttribute("ACTION", $action);
+  $htmlForm->setAttribute("METHOD", $method);
+  $htmlForm->setAttribute("CONTENT",$content);
+  return $htmlForm->display();
+}
 
 // implement interface cHtmlTabControl
 class cHtmlTabControl extends cHtmlElement implements iHtmlTabControl

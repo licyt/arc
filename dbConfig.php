@@ -39,7 +39,8 @@
   
   
 
-  $RepositoryPath = "/datafiles/"; // dependency! ajax.js.updatePath()
+  $SCRIPT_DIRECTORY = pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME)."/";
+  $RepositoryDir = $SCRIPT_DIRECTORY."datafiles/"; // dependency! ajax.js.updatePath();
   
   $lang 		= 'ENG';  
 ?>

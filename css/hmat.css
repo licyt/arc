@@ -163,12 +163,13 @@ img {
 
 .tabAdmin {
   position: absolute;
-  height: 14px;
+  height: 16px;
   border-style: solid;
-  border-width: 3px;
+  border-width: 2px;
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
   display: block;
+  font-weight: bold;
 }
 
 .tabButtonAdmin {
@@ -179,6 +180,11 @@ img {
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
   display: block;
+}
+
+.tabButtonAdmin:hover {
+  cursor: pointer;
+  color: white;
 }
 
 #FORM_DB_SELECT {

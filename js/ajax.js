@@ -16,7 +16,7 @@ function Unpack(params) {
   return result;
 }
 
-function Ajax(request, params) {
+function httpRequest(request, params) {
   //alert("ajax - "+request); // trace request
   
   // initialize xmlHttp object depending on browser
@@ -210,7 +210,7 @@ function browseFile(element) {
   var params=new Array();
   params['elementId']=element.id;
   params['filePath']=element.value;
-  Ajax("browseFile", params);
+  httpRequest("browseFile", params);
 }
 
 // suggest list functions by tomcat
@@ -229,12 +229,12 @@ function suggestList(event, searchType, searchString, tableName, columnName, hid
   // check FireFlag if set means onFocus fired and the onKeyUp should not (avoids flicking)
   if( event.type == "focus" ) {
 	suggestFireFlag = 1;
-    Ajax("suggestSearch", params);
+    httpRequest("suggestSearch", params);
     document.getElementById(visibleId).select();    
   } 
   if( event.type == "keyup" ) {
     if( suggestFireFlag == 0 && ( isValidKey(event.keyCode) ) ) {
-      Ajax("suggestSearch", params);
+      httpRequest("suggestSearch", params);
     } else {
       suggestFireFlag = 0;
     }
@@ -264,26 +264,26 @@ function isValidKey(key) {
 function loadTable() {
   var params=new Array();
   params['table']=elementById("ActionTable").value;
-  Ajax("loadTable", params);
+  httpRequest("loadTable", params);
 }
 
 function loadParameters() {
   var params=new Array();
   params['command']=elementById("ActionCommand").value;
   params['table']=elementById("ActionTable").value;
-  Ajax("loadParameters", params);
+  httpRequest("loadParameters", params);
 }
 
 function loadRightRows() {
   var params=new Array();
   params['table']=elementById("RelationRObject").value;
-  Ajax("loadRightRows", params);
+  httpRequest("loadRightRows", params);
 }
 
 function loadLeftRows() {
   var params=new Array();
   params['table']=elementById("RelationLObject").value;
-  Ajax("loadLeftRows", params);
+  httpRequest("loadLeftRows", params);
 }
 
 
@@ -298,7 +298,7 @@ function loadRow(parentName, tableName, newRowId) {
   params['parentName']=parentName;
   params['tableName']=tableName;
   params['newRowId']=newRowId;
-  Ajax("loadRow", params);
+  httpRequest("loadRow", params);
 }
 
 function switchTab(tableName, tabName) {
@@ -306,8 +306,16 @@ function switchTab(tableName, tabName) {
   var params=new Array();
   params['tableName']=tableName;
   params['tabName']=tabName;
-  Ajax("switchTab", params);
+  httpRequest("switchTab", params);
 }
+
+
+
+
+
+
+
+
 
 function ajaxPost(tableName, parentName) {
   $.post(
@@ -642,4 +650,49 @@ function confirmLookup() {
   );
 }
 
+// drag and drop files 
+
+function doDrop(tableName, parentName, event) {
+  // process the drop
+  event.preventDefault();
+  console.log("drop to " + tableName + (parentName ? " @ " + parentName : ""));
+  // If dropped items aren't files, reject them
+  
+  // START A LOADING SPINNER HERE
+
+  // handle the file upload in its own AJAX request
+  // Create a formdata object and add the files
+  var files = event.dataTransfer.files;
+  var data = new FormData();
+  
+  for (var i = 0; i < files.length; i++) {
+    data.append(files[i].name, files[i]);
+  }
+  
+//Display the values
+  for (var value of data.values()) {
+     console.log(value); 
+  }
+  
+  // pass that data as a request to the server
+  $.ajax({
+      url: 'ajax.php?uploadFiles',
+      type: 'POST',
+      data: data,
+      cache: false,
+      dataType: 'json',  // response data type
+      processData: false, // Don't process the files
+      contentType: false, // Set content type to false as jQuery would tell the server its a query string request
+      success: function(response, textStatus, jqXHR)
+        {
+          console.log('STATUS: ' + textStatus);
+        },
+      error: function(jqXHR, textStatus, errorThrown)
+        {
+          // Handle errors here
+          console.log('ERRORS: ' + errorThrown);
+          // STOP LOADING SPINNER
+        }
+  });
+}
 

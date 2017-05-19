@@ -2,7 +2,12 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 // 2016 (C) Rastislav Seč, rastislav.sec@gmail.com aka tomcat
 
-session_start();
+error_reporting(E_ERROR);
+session_name("licyt");
+if (!session_start()) {
+  echo "fuck off";
+  exit;
+}
 
 require_once("html.php");
 require_once("database.php");
@@ -142,8 +147,6 @@ function lookupEditor() {
 
 // ------------------------------------------------------------------------------ browseFile
 if (isset($_REQUEST[browseFile])) {
-  $SCRIPT_DIRECTORY = pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME);
-  $RepositoryDir = $SCRIPT_DIRECTORY.$RepositoryPath;
   $filePath = $RepositoryDir.$_REQUEST[filePath];
   echo listDir($filePath); 
 }
@@ -499,5 +502,31 @@ elseif (isset($_REQUEST[confirmLookup])) {
   $result[browser] = $dbTable->browse();
   echo json_encode($result);
 }
+
+
+// -------------------------------------------------------------------------------------- uploadFiles
+elseif (isset($_REQUEST['uploadFiles'])) {
+  $result = array();
+  $error = false;
+  $files = array();
+
+  $uploadDir = $RepositoryDir."tmp/";
+  //if (!isDir($uploadDir)) createDir($uploadDir);
+  foreach($_FILES as $file) {
+    $uploadFile = $uploadDir.basename($file['name']);
+    if(move_uploaded_file($file['tmp_name'], $uploadFile)) {
+      files.push($uploadFile); 
+    } else {
+      $error = true;
+    }
+  }
+  $result = ($error 
+    ? array('error' => 'There was an error uploading your files') 
+    : array('files' => $files)
+  );
+  //$data = array('success' => 'Form was submitted', 'formData' => $_POST);
+  echo json_encode($result);
+}
+
 
 ?>

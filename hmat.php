@@ -1,8 +1,17 @@
 <?php
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
+error_reporting(E_ERROR);
+session_name("licyt");
+if (!session_start()) {
+  echo "fuck off";
+  exit;
+}
+
+
 require_once 'color.php';
 require_once("database.php");
+require_once("access.php");
 
 $admin = $dbScheme->admin();
 
@@ -40,20 +49,21 @@ echo
       
   ).
   body(
-    
-    "<div>".
-  	  "<div id='svnrevision'>".
-        "<span style=\"font-size:14px;\">Life Cycle Tracker ".
-          "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
-        " gramm-A-tone</span>".
-        " SVN:".shell_exec('svnversion').
-        " DB:".dbSelect()."[".$GLOBALS[queryCount]."]".
-      "</div>".
-      "<div id='popupMenu'></div>".
-      "<div id='fileBrowser'></div>".
-      "<div id='logo'><img src='img/".$dbName."_logo.png' class='imageLogo' onclick='tableList(event);'></div>".
-  	  $admin.
-    "</div>",
+    isin() ?
+      "<div>".
+    	  "<div id='svnrevision'>".
+          "<span style=\"font-size:14px;\">Life Cycle Tracker ".
+            "<img src=\"img/LiCyTlogo.png\" style=\"height:20px;display:inline;\">".
+          " gramm-A-tone</span>".
+          " SVN:".shell_exec('svnversion').
+          " DB:".dbSelect()."[".$GLOBALS[queryCount]."]".
+        "</div>".
+        "<div id='popupMenu'></div>".
+        "<div id='fileBrowser'></div>".
+        "<div id='logo'><img src='img/".$dbName."_logo.png' class='imageLogo' onclick='tableList(event);'></div>".
+    	  $admin.
+      "</div>"
+    : loginForm(),
   	"Load();"
   );
 
