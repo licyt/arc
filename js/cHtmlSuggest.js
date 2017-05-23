@@ -1,7 +1,14 @@
+
+var suggestFireFlag;
+
+// lookup list search
+var dlchildren = new Array();
+
+
 // Hides and shows options in the datalist according to the value in the visible input
 function updateSuggestList(hiddenId,visibleId,listId) {
 	var visiblevalue = document.getElementById(visibleId).value;
-	var dlchildren = document.getElementsByName(visibleId+"Options");
+	//var dlchildren = document.getElementsByName(visibleId+"Options");
 
 	// If INPUT field has no characters do fast show/hide
 	if( visiblevalue == "" ) {
@@ -33,7 +40,7 @@ function setupSuggestList(hiddenId,visibleId,listId)
 	// clean up "" and make it equal to -1
 	if( hiddenvalue == "" ) {
 		document.getElementById(hiddenId).setAttribute("value", "-1");
-		hiddenvalue = document.getElementById(hiddenId).getAttribute("value");
+		hiddenvalue = -1; //document.getElementById(hiddenId).getAttribute("value");
 	}
 	
 	// enable/disable datalist options according to hiddenvalue
@@ -56,7 +63,7 @@ function setupSuggestList(hiddenId,visibleId,listId)
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
 function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
 	var val = document.getElementById(visibleId).value;
-	var dlchildren = document.getElementsByName(listId+"Options");
+	//var dlchildren = document.getElementsByName(listId+"Options");
 
 	for( i = 0; i < dlchildren.length; i++ ) {
 		if( dlchildren[i].text == val ) {

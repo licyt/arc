@@ -4,8 +4,6 @@
 
 var xmlHttp;
 var timeOn;
-var suggestFireFlag;
-
 
 function Unpack(params) {
   var result="";
@@ -77,17 +75,8 @@ function httpRequest(request, params) {
               break;
             case "suggestSearch":
     			  	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
-              var dlchildren = document.getElementsByName(params['destinationId']+"Options");
-    			  	var flag = 0;
-    			  	for( i = 0; i < dlchildren.length; i++ ) {
-      				  if( dlchildren[i].text == params['searchString'] ) {
-      				    document.getElementById(params['hiddenId']).setAttribute("value",dlchildren[i].getAttribute("data-value"));
-      				  	flag = 1;
-      				  }
-    			  	}
-    			  	if( flag == 0 ) {
-    			  	  document.getElementById(params['hiddenId']).setAttribute("value","-1");
-    			  	}
+              dlchildren = document.getElementsByName(params['destinationId']+"Options");
+              document.getElementById(params['hiddenId']).setAttribute("value","-1");
     			  	break;
             case "loadTable":
               var table=elementById('ActionTable');
@@ -228,17 +217,17 @@ function suggestList(event, searchType, searchString, tableName, columnName, hid
  
   // check FireFlag if set means onFocus fired and the onKeyUp should not (avoids flicking)
   if( event.type == "focus" ) {
-	suggestFireFlag = 1;
+	  //suggestFireFlag = 1;
     httpRequest("suggestSearch", params);
+    setupSuggestList(hiddenId,visibleId,listId);
     document.getElementById(visibleId).select();    
   } 
-  if( event.type == "keyup" ) {
-    if( suggestFireFlag == 0 && ( isValidKey(event.keyCode) ) ) {
-      httpRequest("suggestSearch", params);
-    } else {
-      suggestFireFlag = 0;
-    }
-  } else {} // needs to be here javascript does not support incomplete if/else statements
+  if ( event.type == "keyup" ) {
+    if( isValidKey(event.keyCode)  ) {
+      //httpRequest("suggestSearch", params);
+      updateSuggestList(hiddenId,visibleId,listId);
+    } 
+  } 
 }
 
 function isValidKey(key) {

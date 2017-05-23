@@ -153,20 +153,22 @@ if (isset($_REQUEST[browseFile])) {
 
 // ----------------------------------------------------------------------------- searchType by tomcat
 elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
+ /*
   $con = mysqli_connect($dbServerName,$dbUser,$dbPassword,$dbName);
   if (!$con) {
     die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
   }
+*/
   $retval = "";
-  $optionsName = "";
+  //$optionsName = "";
   $sql=
     "SELECT id".$_REQUEST["tableName"].",".$_REQUEST["columnName"].
   	" FROM ".$_REQUEST["tableName"].
-  	" WHERE ".$_REQUEST["columnName"]." LIKE '".$_REQUEST["searchString"]."%'".
+  	//" WHERE ".$_REQUEST["columnName"]." LIKE '".$_REQUEST["searchString"]."%'".
   	" ORDER BY ".$_REQUEST["columnName"]." ASC";
-  $optionList = Array();
-  if( $result = mysqli_query($con,$sql) ) {
-  	while( $row = $result->fetch_assoc() ) {
+  //$optionList = Array();
+  if( $result = myQuery($sql) ) {
+  	while( $row = mysql_fetch_assoc($result) ) {
   	  $retval .= 
     	  "<option".
     	    " data-value=\"".$row["id".$_REQUEST["tableName"]]."\"".
@@ -175,7 +177,7 @@ elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
   	      "</option>";
     }
   }
-  mysqli_close($con);
+  //mysqli_close($con);
   echo $retval;
 }
 
