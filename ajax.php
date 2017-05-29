@@ -3,9 +3,8 @@
 // 2016 (C) Rastislav Seč, rastislav.sec@gmail.com aka tomcat
 
 error_reporting(E_ERROR);
-session_name("licyt");
 if (!session_start()) {
-  echo "fuck off";
+  echo "session start failed";
   exit;
 }
 
@@ -530,5 +529,6 @@ elseif (isset($_REQUEST['uploadFiles'])) {
   echo json_encode($result);
 }
 
+session_write_close();
 
 ?>

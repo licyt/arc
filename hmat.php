@@ -2,9 +2,8 @@
 // 2016 (C) Patrick SiR El Khatim, zayko5@gmail.com
 
 error_reporting(E_ERROR);
-session_name("licyt");
 if (!session_start()) {
-  echo "fuck off";
+  echo "session start failed";
   exit;
 }
 
@@ -71,5 +70,6 @@ echo
 //print_r($_SESSION);  //debug
 //print_r($_POST);
 
+session_write_close();
 
 ?>

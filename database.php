@@ -2120,6 +2120,10 @@ class cDbTable implements iDbTable
   
   public function subBrowsers($id) 
   {
+    
+    if (($this->name == "Note") || ($this->name == "Relation") || ($this->name == "StatusLog")) 
+      return;
+    
   	$browsers = new cHtmlTabControl($this->name);
   	
   	foreach ($this->scheme->tables as $table) {
