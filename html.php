@@ -262,6 +262,7 @@ class cHtmlInput extends cHtmlElement implements iHtmlInput
         $this->add(onChange).
         $this->add(SIZE).
         $this->add(MAXLENGTH).
+        $this->add(TITLE).
         $this->add("CLASS").
         $this->add(STYLE).
         $this->add("LIST").
@@ -564,9 +565,9 @@ class cHtmlTable extends cHtmlElement
   	  $html = ""; $i=0;
   	  foreach ($header as $index=>$value) {
   	  	if (strpos($value, "StatusColor") && ($this->dbTable->getName()!="Status")) continue;
-  	  	$cn = $this->dbTable->columnNames[$index];
-  	  	$cna = explode(".", $cn);
-  	  	$cn = $cna[sizeof($cna)-1];
+  	  	$cn = $this->dbTable->displayColumnNames[$index];
+//  	  	$cna = explode(".", $cn);
+//  	  	$cn = $cna[sizeof($cna)-1];
   	  	$htmlRow.="<TH ID=\"column".$cn."\" ".
   	   	  	      (isset($this->dbTable->parent)
 	   	  	          ? ""
@@ -584,9 +585,9 @@ class cHtmlTable extends cHtmlElement
   	  $htmlRow = "";
   	  foreach ($footer as $index=>$value) {
   	  	if (strpos($value, "StatusColor") && ($this->dbTable->getName()!="Status")) continue;
-  	    $cn = $this->dbTable->columnNames[$index];
-  	  	$cna = explode(".", $cn);
-  	  	$cn = $cna[sizeof($cna)-1];
+  	    $cn = $this->dbTable->displayColumnNames[$index];
+//  	  	$cna = explode(".", $cn);
+//  	  	$cn = $cna[sizeof($cna)-1];
   	    $htmlRow .= "<TH ID=\"filter".$cn."\">$value</TH>";
   	  }
   	  $htmlFooter.="<TR>$htmlRow</TR>";

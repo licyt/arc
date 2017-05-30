@@ -121,7 +121,7 @@ function httpRequest(request, params) {
               }
               var sbRowName = params["tableName"]+"Sb"+response.oldRowId;
               var sbRowIndex = getRowIndex(table, sbRowName)
-              if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+              if (sbRowIndex >= 0) table.deleteRow(sbRowIndex);
               var newRowName = params["tableName"]+"Row"+params["newRowId"];
               var newRowIndex = getRowIndex(table, newRowName);
               if (newRow = table.rows.namedItem(newRowName)) {
@@ -219,13 +219,13 @@ function suggestList(event, searchType, searchString, tableName, columnName, hid
   if( event.type == "focus" ) {
 	  //suggestFireFlag = 1;
     httpRequest("suggestSearch", params);
-    setupSuggestList(hiddenId,visibleId,listId);
+    setupSuggestList(hiddenId,visibleId);
     document.getElementById(visibleId).select();    
   } 
   if ( event.type == "keyup" ) {
     if( isValidKey(event.keyCode)  ) {
       //httpRequest("suggestSearch", params);
-      updateSuggestList(hiddenId,visibleId,listId);
+      updateSuggestList(hiddenId,visibleId);
     } 
   } 
 }
@@ -331,6 +331,7 @@ function ajaxPost(tableName, parentName) {
           $("#"+newRowName).attr("onclick", response.onEditClick);
         }
         $("#"+newRowName).html(response.newRow);
+        alignDataToHeader(tableName);
       }
   );
 }
@@ -352,7 +353,7 @@ function ajaxInsert(tableName, parentName) {
         // subBrowsers of old row
         var sbRowName = tableName+"Sb"+response.oldRowId;
         var sbRowIndex = getRowIndex(table, sbRowName);
-        if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+        if (sbRowIndex >= 0) table.deleteRow(sbRowIndex);
         // new row for insert
         $("#"+tableName+"Row"+$("#id"+tableName).val()).html(response.oldRow);
         newRow.innerHTML = response.newRow;
@@ -373,7 +374,7 @@ function ajaxInsert(tableName, parentName) {
 function CancelEdit(tableName) {
   table = elementById("table"+tableName);
   var rowIndex = getRowIndex(table, tableName+"Row-1");
-  if (rowIndex>-1) table.deleteRow(rowIndex);
+  if (rowIndex>=0) table.deleteRow(rowIndex);
   show(tableName+"Insert");
   show(tableName+"Delete");
   hide(tableName+"Erase");
@@ -397,13 +398,14 @@ function ajaxErase(tableName) {
         // old row
         var oldRowName = tableName+"Row"+response.oldRowId;
         var oldRowIndex = getRowIndex(table, oldRowName);
-        if (oldRowIndex>0) table.deleteRow(oldRowIndex);
+        if (oldRowIndex >= 0) table.deleteRow(oldRowIndex);
         var sbRowName = tableName+"Sb"+response.oldRowId;
         var sbRowIndex = getRowIndex(table, sbRowName);
-        if (sbRowIndex > 0) table.deleteRow(sbRowIndex);
+        if (sbRowIndex >= 0) table.deleteRow(sbRowIndex);
         show(tableName+"Delete");
         hide(tableName+"Cancel");
         hide(tableName+"Erase");
+        alignDataToHeader(tableName);
       }
   );
 }

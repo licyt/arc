@@ -407,6 +407,7 @@ class cDbTable implements iDbTable
   protected $start;									// browser starting position
   protected $rowCount;								// number of rows in browser
   // build SQL substrings
+  public $SQL;
   protected $order;
   protected $filter;
   // stack of executed actions, used to avoid endless loops
@@ -996,6 +997,7 @@ class cDbTable implements iDbTable
   	  " ORDER BY ".($this->order ? $this->order : "id".$this->name." DESC");
   	
   	//if ($this->name=="Bug") echo $query;
+  	$this->SQL = $query;
     return $query;
   }
   
@@ -1735,7 +1737,6 @@ class cDbTable implements iDbTable
   protected function orderSet(array $columnNames, $setName="") 
   {
     $buttons = array();
-    $add = $this->addButton();
     foreach ($columnNames as $i=>$buttonName) {
       switch ($buttonName) {
         case "subStatus":
@@ -1744,9 +1745,9 @@ class cDbTable implements iDbTable
         default:
           $button  = new cHtmlInput($setName.$buttonName, "SUBMIT", gui($setName.$buttonName, $GLOBALS[lang], $buttonName));
           $button->setAttribute("CLASS", $this->name."OrderButton");
-          $buttons[$i]=$button->display().$add;
+//          if ($buttonName == "id".$this->name) $button->setAttribute("TITLE", $this->SQL);
+          $buttons[$i]=$button->display().($buttonName == "id".$this->name ? $this->addButton() : "");
       }
-      $add="";
     }
     return $buttons;	
   }

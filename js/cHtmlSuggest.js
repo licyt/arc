@@ -6,7 +6,7 @@ var dlchildren = new Array();
 
 
 // Hides and shows options in the datalist according to the value in the visible input
-function updateSuggestList(hiddenId,visibleId,listId) {
+function updateSuggestList(hiddenId,visibleId) {
 	var visiblevalue = document.getElementById(visibleId).value;
 	//var dlchildren = document.getElementsByName(visibleId+"Options");
 
@@ -27,11 +27,11 @@ function updateSuggestList(hiddenId,visibleId,listId) {
 		}
 	}
 	document.getElementById(visibleId).setAttribute("value",visiblevalue);
-	sanitizeSuggestValues(hiddenId,visibleId,listId);
+	sanitizeSuggestValues(hiddenId,visibleId);
 }
 
 // Use for OnClick event to check all values and to configure 3 tags accordingly
-function setupSuggestList(hiddenId,visibleId,listId)
+function setupSuggestList(hiddenId,visibleId)
 {
 	var hiddenvalue = document.getElementById(hiddenId).getAttribute("value");
 	var dlchildren = document.getElementsByName(visibleId+"Options");
@@ -61,7 +61,7 @@ function setupSuggestList(hiddenId,visibleId,listId)
 }
 
 // Changes the value in the VISIBLE INPUT from idCompany to companyName   
-function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
+function sanitizeSuggestValues( hiddenId , visibleId  ) {
 	var val = document.getElementById(visibleId).value;
 	//var dlchildren = document.getElementsByName(listId+"Options");
 
@@ -73,6 +73,7 @@ function sanitizeSuggestValues( hiddenId , visibleId ,listId ) {
 	}
 }
 
+
 function sanitizeSuggestList( listId ) {
-  document.getElementById(listId).innerHTML = "";
+//  document.getElementById(listId).innerHTML = "";
 }
