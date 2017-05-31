@@ -204,7 +204,7 @@ function browseFile(element) {
 
 // suggest list functions by tomcat
 
-function suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
+function loadSuggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
   var params = new Array();
   
   params['searchType'] = "suggestSearch";
@@ -215,19 +215,7 @@ function suggestList(event, searchType, searchString, tableName, columnName, hid
   params['visibleId'] = visibleId;
   params['destinationId'] = destinationId;
  
-  // check FireFlag if set means onFocus fired and the onKeyUp should not (avoids flicking)
-  if( event.type == "focus" ) {
-	  //suggestFireFlag = 1;
-    httpRequest("suggestSearch", params);
-    setupSuggestList(hiddenId,visibleId);
-    document.getElementById(visibleId).select();    
-  } 
-  if ( event.type == "keyup" ) {
-    if( isValidKey(event.keyCode)  ) {
-      //httpRequest("suggestSearch", params);
-      updateSuggestList(hiddenId,visibleId);
-    } 
-  } 
+  httpRequest("suggestSearch", params);
 }
 
 function isValidKey(key) {
@@ -381,6 +369,7 @@ function CancelEdit(tableName) {
   hide(tableName+"Cancel");
   hide(tableName+"Ok");
   $("#browseForm"+tableName)[0].reset();
+  alignDataToHeader(tableName);
 }
 
 function ajaxDelete(tableName) {
