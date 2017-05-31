@@ -75,7 +75,6 @@ function httpRequest(request, params) {
               break;
             case "suggestSearch":
     			  	document.getElementById(params['destinationId']).innerHTML = xmlHttp.responseText;
-              dlchildren = document.getElementsByName(params['destinationId']+"Options");
               document.getElementById(params['hiddenId']).setAttribute("value","-1");
     			  	break;
             case "loadTable":
@@ -202,9 +201,12 @@ function browseFile(element) {
   httpRequest("browseFile", params);
 }
 
-// suggest list functions by tomcat
+// suggest list functions
 
 function loadSuggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId) {
+  dlchildren = document.getElementsByName(destinationId+"Options");
+  if (dlchildren.length>0) return true;
+  
   var params = new Array();
   
   params['searchType'] = "suggestSearch";

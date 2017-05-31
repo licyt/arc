@@ -150,6 +150,7 @@ if (isset($_REQUEST[browseFile])) {
   echo listDir($filePath); 
 }
 
+/*
 // ----------------------------------------------------------------------------- searchType by tomcat
 elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
  /*
@@ -157,7 +158,6 @@ elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
   if (!$con) {
     die('SQL ERRORL:'.mysqli_error($con).' Could not connect to '.$dbServerName );
   }
-*/
   $retval = "";
   //$optionsName = "";
   $sql=
@@ -179,6 +179,7 @@ elseif( $_REQUEST["searchType"] === "suggestSearch" ) {
   //mysqli_close($con);
   echo $retval;
 }
+*/
 
 // ------------------------------------------------------------------------------------ loadTable
 elseif (isset($_REQUEST[loadTable])) {

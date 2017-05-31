@@ -779,7 +779,7 @@ class cHtmlSuggest extends cHtmlElement implements iHtmlSuggest
 
 	public function setOptions($optArray,$optionsName) {
 		foreach( $optArray as $value=>$suggest ) {
-		  $options .= "<option data-value=\"$value\" name=\"".$optionsName."Options\">$suggest</option>";
+		  $options .= "<option data-value=\"$value\" name=\"$optionsName\">$suggest</option>";
 		}
 		$this->setAttribute("OPTIONS", $options);
 	}
