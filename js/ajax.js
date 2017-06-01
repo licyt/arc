@@ -132,7 +132,7 @@ function httpRequest(request, params) {
               newSbRow.id = params["tableName"]+"Sb"+params["newRowId"];
               newSbRow.setAttribute("class", "subBrowserRow");
               newSbRow.innerHTML = response.subBrowser;
-              newSbRow.style.display = "none";
+             //newSbRow.style.display = "none";
               currentRowId = params["newRowId"];
               elementById("id"+params["tableName"]).value = currentRowId;
               //$("#id"+params["tableName"]).val(currentRowId);

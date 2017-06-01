@@ -315,11 +315,7 @@ class cDbField implements iDbField
   	  }
   	  $htmlControl->setAttribute("SUGGESTID", $visibleName);
   	  // attach event controllers
-  	  // suggestList(event, searchType, searchString, tableName, columnName, hiddenId, visibleId, destinationId)
-  	  //$htmlControl->setAttribute("onFocus","loadSuggestList(event, 'valueSearch', this.value, '$ftName', '$lookupField', '$hiddenName', '$visibleName', '$hiddenName"."List')");
-      //$htmlControl->setAttribute("onKeyUp","updateSuggestList('$hiddenName', '$visibleName');");
       $htmlControl->setAttribute("onSelect","sanitizeSuggestValues('$hiddenName', '$visibleName')");
-  	  //$htmlControl->setAttribute("onBlur", "sanitizeSuggestList('$hiddenName"."List')");
   	  $htmlControl->setAttribute("onInput", "rowHasChanged('".$childTable->getName()."');");
     } else {
       $htmlControl = new cHtmlSelect;
