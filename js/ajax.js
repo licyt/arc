@@ -658,7 +658,7 @@ function doDrop(tableName, parentName, event) {
   
   // pass that data as a request to the server
   $.ajax({
-      url: 'ajax.php?uploadFiles',
+      url: 'ajax.php?uploadFiles&tableName='+tableName+'&parentName='+parentName,
       type: 'POST',
       data: data,
       cache: false,
@@ -668,6 +668,13 @@ function doDrop(tableName, parentName, event) {
       success: function(response, textStatus, jqXHR)
         {
           console.log('STATUS: ' + textStatus);
+          table = elementById("table"+tableName);
+          for (var property in response) {
+            var row = table.insertRow(0);
+            row.id = property;
+            row.innerHTML = response[property]['html'];
+            row.setAttribute('onclick', response[property]['onClick']);
+          }
         },
       error: function(jqXHR, textStatus, errorThrown)
         {

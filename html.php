@@ -742,7 +742,7 @@ class cHtmlFilePath extends cHtmlElement
   	$id=$this->attributes[ID];
   	
   	$a = new cHtmlA($this->attributes[PATH]);
-  	$a->setAttribute(HREF, ".".$GLOBALS['RepositoryPath'].$this->attributes[PATH]);
+  	$a->setAttribute(HREF, $GLOBALS['RepositoryDir'].$this->attributes[PATH]);
   	$a->setAttribute(TARGET, "EXT");
   	$a->setAttribute(ID, $id."Link");
   	

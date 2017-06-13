@@ -14,6 +14,16 @@ require_once 'gantt.php';
 
 //var_dump($_REQUEST);
 
+function createFilePath($path) {
+  if (substr($path, -1, 1) == "/") $path = substr($path, 0, -1); // remove slash from the end of the path
+  if (!is_dir($path)) {
+    $dirName = pathinfo($path, PATHINFO_DIRNAME);
+    createFilePath($dirName);
+    mkdir($path);
+  }
+  return true;
+}
+
 // -----------------------------------------------------------------------  list files in directory
 function listDir($path) {
   //echo $path;
@@ -146,7 +156,7 @@ function lookupEditor() {
 
 // ------------------------------------------------------------------------------ browseFile
 if (isset($_REQUEST[browseFile])) {
-  $filePath = $RepositoryDir.$_REQUEST[filePath];
+  $filePath = $RepositoryPath.$_REQUEST[filePath];
   echo listDir($filePath); 
 }
 
@@ -508,24 +518,75 @@ elseif (isset($_REQUEST[confirmLookup])) {
 
 // -------------------------------------------------------------------------------------- uploadFiles
 elseif (isset($_REQUEST['uploadFiles'])) {
-  $result = array();
-  $error = false;
-  $files = array();
-
-  $uploadDir = $RepositoryDir."tmp/";
-  //if (!isDir($uploadDir)) createDir($uploadDir);
-  foreach($_FILES as $file) {
-    $uploadFile = $uploadDir.basename($file['name']);
-    if(move_uploaded_file($file['tmp_name'], $uploadFile)) {
-      files.push($uploadFile); 
+  // following code is NOT UNIVERSAL and applies only for datamodel hmat
+  // custom behaviour for database hmat table Part and parent table DataSet
+  if (($_REQUEST["tableName"] == "Part") && ($_REQUEST["parentName"] == "DataSet")) {
+    $result = array(); 
+  
+    // table DataSet and it's current record
+    $DS  = $dbScheme->getTableByName('DataSet');
+    $DSR = $DS->getCurrentRecord();
+    // Project
+    $ProjectId = $DSR["idProject"]; //getParentId("DataSet", $DS->getCurrentRecordId(), "Project");
+    $ProjectName = $DSR["ProjectName"]; //$dbScheme->getTableByName("Project")->getCurrentRecord($ProjectId)["ProjectName"];
+    // Company
+    $CompanyId = getParentId("Project", $ProjectId, "Company");
+    $CompanyName =  $dbScheme->getTableByName("Company")->getCurrentRecord($CompanyId)["CompanyName"];
+    // upload Directory
+    $DSDirName = $DSR["DataSetDate"]."_".$CompanyName."_".$ProjectName."/";
+    $uploadDir = $AMDataDir.$DSDirName.$AMorginalDir;
+    $uploadPath = $RepositoryPath.$uploadDir;
+    if (createFilePath($uploadPath)) {
+    
+      // table Part
+      $P = $dbScheme->getTableByName('Part');
+      
+      // html
+      $htmlTable = new cHtmlTable($P);
+      
+      foreach ($_FILES as $file) {
+        $pathParts = pathinfo($file['name']);
+        $baseName  = $pathParts['basename'];
+        $extension = $pathParts['extension'];
+        $fileName  = $pathParts['filename'];
+        $uploadFile = $uploadPath.$baseName;
+        if(move_uploaded_file($file['tmp_name'], $uploadFile)) {
+          // insert record to table Part
+          $PR = array (
+            "PartName" => $fileName,
+            "PartFileName" => $uploadDir.$baseName,
+            "PartQuantity" => 1
+          );
+          if ($Pid = $P->insert($PR)) {
+            $PR["idPart"] = $Pid;
+            // copy relations to Material and PrintParameters from parent DataSet
+            insertRRCP("Part", $Pid, "DataSet", $DSR["idDataSet"]);
+            insertRRCP("Part", $Pid, "Material", getParentId("DataSet", $DSR["idDataSet"], "Material"));
+            insertRRCP("Part", $Pid, "PrintParameters", getParentId("DataSet", $DSR["idDataSet"], "PrintParameters"));
+            // set state 
+            /* states of Part must be defined */
+            // add htmlTable row and javascript onClick event to result
+            $dbRow = $P->displayRow($Pid, $PR); 
+            $htmlTable->deleteRows();             // delete rows remnant from previous for-cycle iteration
+            $htmlTable->addRow("tmp", $dbRow);    // this row is temporary and will be deleted in next iteration
+            // store row in result array 
+            $result["PartRow".$Pid]["html"] = preg_replace('/<\/?TR[^>]*>/i', '', $htmlTable->displayRows());
+            $result["PartRow".$Pid]["onClick"] = $dbRow["onClick"];
+          } else {
+            // error: row has not been inserted into table Part
+            
+          }
+        } else {
+          // error: file has not been uploaded
+          
+        }
+      } // foreach $_FILES
     } else {
-      $error = true;
+      // error: directory has not been created
+      
     }
   }
-  $result = ($error 
-    ? array('error' => 'There was an error uploading your files') 
-    : array('files' => $files)
-  );
+  
   //$data = array('success' => 'Form was submitted', 'formData' => $_POST);
   echo json_encode($result);
 }

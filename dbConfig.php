@@ -40,7 +40,13 @@
   
 
   $SCRIPT_DIRECTORY = pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME)."/";
-  $RepositoryDir = $SCRIPT_DIRECTORY."datafiles/"; // dependency! ajax.js.updatePath();
+  
+  $RepositoryDir = "datafiles/"; // dependency! ajax.js.updatePath();
+  $RepositoryPath = $SCRIPT_DIRECTORY."/".$RepositoryDir;
+  $AMDataDir     = "00_3ddata/";
+  $AMorginalDir  = "00_data/";
+  $AMprogressDir = "01_inProgress/";
+  $AMdoneDir     = "02_done/";
   
   $lang 		= 'ENG';  
 ?>
