@@ -24,7 +24,7 @@ namespace MaterialiseCloud
 		public function GetRepairOperationResult($operationId)
 		{
 			$result = $this->GetResult("/web-api/operation/".$operationId."/repair/result");
-			return $result->fileId;
+			return $result; //->fileId;
 		}
 	}
 }

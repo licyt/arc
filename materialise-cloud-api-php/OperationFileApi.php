@@ -25,7 +25,7 @@ namespace MaterialiseCloud
             $jsonObj = json_decode(utf8_encode($result));
             if($request->IsResponseStatusOk())
             {
-            	return $jsonObj->fileId;
+            	return $jsonObj; //->fileId; // return the whole json object not just fileId / by SiR 20170727
             }
             $this->ThrowException($jsonObj);
         }

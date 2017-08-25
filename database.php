@@ -178,6 +178,15 @@ class cDbField implements iDbField
   	}
   }
   
+  public function isNumber() {
+    return 
+      (strpos($this->properties[Type], "int") !== false) ||
+      (strpos($this->properties[Type], "decimal") !== false) ||
+      (strpos($this->properties[Type], "numeric") !== false) ||
+      (strpos($this->properties[Type], "float") !== false) ||
+      (strpos($this->properties[Type], "double") !== false);
+  }
+  
   public function isDateTime() {
     return ($this->properties[Type] == "datetime");
   }
@@ -779,6 +788,7 @@ class cDbTable implements iDbTable
     }
     $this->displayColumnNames[$i] = $columnName;
     ugi($this->name, "displayColumnNames", implode(",", $this->displayColumnNames));
+    ugi($this->name."ORDER".$columnName, $GLOBALS[lang], $displayedName);
     ugi($columnName, "width", $columnWidth);
     $this->reload();
   }
@@ -906,15 +916,20 @@ class cDbTable implements iDbTable
 
   protected function assignSQL($record) 
   {
-	foreach ($record as $fieldName=>$value) {
+  	foreach ($record as $fieldName=>$value) {
       // is there a field by this name
-	  if ($field=$this->getFieldByName($fieldName)) {
-        $assign .= 
-          ($assign?", ":"").
-	        "$fieldName = \"".addslashes($value)."\"";
-	  }
-	}
-	return $assign;
+  	  if ($field=$this->getFieldByName($fieldName)) {
+    	  // skip lookup fields
+    	  if ($field->isForeignKey()) break;
+    	  // initialize numeric fields without value to 0
+    	  if ($field->isNumber() && !$value) $value = 0;
+    	  // append assigned value
+  	    $assign .= 
+            ($assign?", ":"").
+  	        "$fieldName = \"".addslashes($value)."\"";
+  	  }
+  	}
+  	return $assign;
   }
   
   protected function buildSQL($id=-1) 
@@ -1596,16 +1611,8 @@ class cDbTable implements iDbTable
   	  	$this->setOrder($columnName);
   	  }
   	  // filter
-  	  if (isset($_POST[$this->name."FILTER".$cleanColumnName])) {
-  		  $_SESSION[table][$this->name]["FILTER"][$cleanColumnName] = $_POST[$this->name."FILTER".$cleanColumnName];
-  	  }
-  	  if ($_SESSION[table][$this->name]["FILTER"][$cleanColumnName]) {
-  		  $this->filter .= 
-  		    ($this->filter ? " AND " : "").
-  		    "($columnName LIKE \"".$_SESSION[table][$this->name]["FILTER"][$cleanColumnName]."%\")";
-  	  }
+  	  $this->addToFilter($cleanColumnName, $_POST[$this->name."FILTER".$cleanColumnName]);  	  	
   	}
-  	
   }
   
   public function printFields() {
@@ -1811,6 +1818,17 @@ class cDbTable implements iDbTable
     return $result;
   }
   
+  public function addToFilter($columnName, $value) {
+    $_SESSION[table][$this->name]["FILTER"][$columnName] = $value;
+    if (isset($value)) {
+      $this->filter .= ($this->filter ? " AND " : "")."($columnName LIKE \"".$value."%\")";
+    }
+  }
+  
+  public function dropFilter() {
+    $this->filter = "";
+  }
+  
   public function lumpChildren() {
     foreach ($this->scheme->tables as $table) {
       $tableName = $table->getName();
@@ -2009,6 +2027,14 @@ class cDbTable implements iDbTable
       ");";
     $displayRow[onClick] = $js;
     return $displayRow;
+  }
+  
+  public function iterate($callback) {
+    if ($dbResult = myQuery($this->buildSQL())) {
+      while ($dbRow = mysql_fetch_assoc($dbResult)) {
+        $callback($dbRow);
+      }
+    }
   }
  
   public function browse($include="") {

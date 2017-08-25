@@ -26,7 +26,7 @@ namespace MaterialiseCloud
 		public function GetGenerateThumbnailOperationResult($operationId)
 		{
 			$result = $this->GetResult("/web-api/operation/".$operationId."/thumbnail/result");
-			return $result->fileId;
+			return $result; //->fileId;
 		}
 	}
 }

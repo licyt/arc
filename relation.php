@@ -118,6 +118,19 @@ function getChildren($childTableName, $parentTableName, $parentId) {
   return $result;
 }
 
+function getStatusId($tableName, $statusName) {
+  $query = 
+    "SELECT idStatus".
+    " FROM Status".
+    " WHERE (StatusType='$tableName')".
+      " AND (StatusName='$statusName')";  
+  if ($dbResult = myQuery($query)) {
+    if ($dbRow = mysql_fetch_assoc($dbResult)) {
+      return $dbRow["idStatus"];
+    }
+  }
+}
+
 function updateStatus($LObject, $LId, $statusId) {
   $query =
     "UPDATE Relation SET ".

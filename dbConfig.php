@@ -47,6 +47,7 @@
   $AMorginalDir  = "00_data/";
   $AMprogressDir = "01_inProgress/";
   $AMdoneDir     = "02_done/";
+  $imageDir      = "img/";
   
   $lang 		= 'ENG';  
 ?>

@@ -22,7 +22,7 @@ namespace MaterialiseCloud
 		public function GetImportOperationResult($operationId)
 		{
 			$result = $this->GetResult("/web-api/operation/".$operationId."/import/result");
-			return $result->resultId;
+			return $result; //->resultId;
 		}
 	}
 }

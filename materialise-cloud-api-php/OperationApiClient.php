@@ -24,7 +24,7 @@ namespace MaterialiseCloud
 			$this->CheckResponseIsOk($request, $result);
 			$jsonObj = json_decode(utf8_encode($result));
 			
-			return $jsonObj->operationId;
+			return $jsonObj; //->operationId;
 		}
 
 		protected function GetResult($url)
