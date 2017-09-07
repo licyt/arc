@@ -125,6 +125,8 @@ function httpRequest(request, params) {
               var newRowIndex = getRowIndex(table, newRowName);
               if (newRow = table.rows.namedItem(newRowName)) {
                 newRow.innerHTML = response.newRow;
+                newRow.className = oldRow.className;
+                oldRow.className = '';
                 newRow.setAttribute('onClick', response.onEditClick);
                 newRow.setAttribute('onKeyPress', response.onKeyPress);
               }

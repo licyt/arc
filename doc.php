@@ -5,7 +5,7 @@ require_once 'database.php';
 function printQuote($quoteId) {
   global $dbScheme;
   // load template 
-  $template = file_get_contents("./templates/quote.html");
+  $template = file_get_contents("./templates/printQuote.html");
   // gather data
   $dbQuote = $dbScheme->getTableByName("Quote");
   $quote = $dbQuote->getCurrentRecord($quoteId);

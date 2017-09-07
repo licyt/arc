@@ -1,0 +1,437 @@
+@CHARSET "UTF-8";
+
+tr.PartEditBox {
+	position: relative;
+	width: 1600px;
+	height: 440px;
+}
+
+
+
+                                                        /* the first column of fields */
+
+#labelPartName {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+}
+#PartName {
+	position: absolute;
+	left: 5px;
+	top: 25px;
+}
+
+#labelStatusName {
+	position: absolute;
+	left: 5px;
+	top: 50px;
+}
+#StatusName {
+	position: absolute;
+	left: 5px;
+	top: 70px;
+}
+
+#labelPartThumb {
+	position: absolute;
+	left: 5px;
+	top: 95px;
+}
+#PartThumbWrap {
+	position: absolute;
+	left: 5px;
+	top: 115px;
+}
+#PartThumbLink {
+}
+
+
+                                                        /* the second column of fields */
+
+#labelMaterialName {
+	position: absolute;
+	left: 315px;
+	top: 5px;
+}
+#PartIdMaterialWrap {
+	position: absolute;
+	left: 315px;
+	top: 25px;
+}
+
+#labelPrintParametersTechnology {
+	position: absolute;
+	left: 315px;
+	top: 50px;
+}
+#PrintParametersTechnology {
+	position: absolute;
+	left: 315px;
+	top: 70px;
+}
+
+#labelPartFinish {
+	position: absolute;
+	left: 315px;
+	top: 95px;
+}
+#PartFinish {
+	position: absolute;
+	left: 315px;
+	top: 115px;
+}
+
+#labelPartMcDimensionXMm {
+	position: absolute;
+	left: 315px;
+	top: 140px;
+}
+#PartMcDimensionXMm {
+	position: absolute;
+	left: 315px;
+	top: 160px;
+	width: 90px;
+}
+
+#labelPartMcDimensionYMm {
+	position: absolute;
+	left: 410px;
+	top: 140px;
+}
+#PartMcDimensionYMm {
+	position: absolute;
+	left: 410px;
+	top: 160px;
+	width: 90px;
+}
+
+#labelPartMcDimensionZMm {
+	position: absolute;
+	left: 505px;
+	top: 140px;
+}
+#PartMcDimensionZMm {
+	position: absolute;
+	left: 505px;
+	top: 160px;
+	width: 90px;
+}
+
+#labelPartQuantity {
+	position: absolute;
+	left: 315px;
+	top: 185px;
+}
+#PartQuantity {
+	position: absolute;
+	left: 315px;
+	top: 205px;
+}
+
+
+
+                                                       /* the third column of fields */
+
+#labelPartMcVertices {
+	position: absolute;
+	left: 625px;
+	top: 5px;
+}
+#PartMcVertices {
+	position: absolute;
+	left: 625px;
+	top: 25px;
+}
+
+#labelPartMcTriangles {
+	position: absolute;
+	left: 780px;
+	top: 5px;
+}
+#PartMcTriangles {
+	position: absolute;
+	left: 780px;
+	top: 25px;
+}
+
+#labelPartMcContours {
+	position: absolute;
+	left: 625px;
+	top: 50px;
+}
+#PartMcContours {
+	position: absolute;
+	left: 625px;
+	top: 70px;
+}
+
+#labelPartMcShells {
+	position: absolute;
+	left: 780px;
+	top: 50px;
+}
+#PartMcShells {
+	position: absolute;
+	left: 780px;
+	top: 70px;
+}
+
+#labelPartMcVolumeMm3 {
+	position: absolute;
+	left: 625px;
+	top: 140px;
+}
+#PartMcVolumeMm3 {
+	position: absolute;
+	left: 625px;
+	top: 160px;
+	width: 120px;
+}
+
+#labelPartMcSurfaceAreaMm2 {
+	position: absolute;
+	left: 780px;
+	top: 140px;
+}
+#PartMcSurfaceAreaMm2 {
+	position: absolute;
+	left: 780px;
+	top: 160px;
+	width: 120px;
+}
+
+
+                                                                /* column No. 4 */
+
+#labelPartFileName {
+	position: absolute;
+	left: 935px;
+	top: 5px;
+}
+#PartFileNameWrap {
+	position: absolute;
+	left: 935px;
+	top: 25px;
+}
+
+#labelPartQuoteFileName {
+	position: absolute;
+	left: 935px;
+	top: 50px;
+}
+#PartQuoteFileNameWrap {
+	position: absolute;
+	left: 935px;
+	top: 70px;
+}
+
+#labelPartAMFileName {
+	position: absolute;
+	left: 935px;
+	top: 95px;
+}
+#PartAMFileNameWrap {
+	position: absolute;
+	left: 935px;
+	top: 115px;
+}
+
+#labelPartMcBadEdges {
+	position: absolute;
+	left: 935px;
+	top: 185px;
+}
+#PartMcBadEdges {
+	position: absolute;
+	left: 935px;
+	top: 205px;
+	width: 120px;
+}
+
+#labelPartMcBadContours {
+	position: absolute;
+	left: 1090px;
+	top: 185px;
+}
+#PartMcBadContours {
+	position: absolute;
+	left: 1090px;
+	top: 205px;
+	width: 120px;
+}
+
+#labelPartMcSpInvertedNormals {
+	position: absolute;
+	left: 935px;
+	top: 230px;
+}
+#PartMcSpInvertedNormals {
+	position: absolute;
+	left: 935px;
+	top: 250px;
+	width: 120px;
+}
+
+#labelPartMcSpNearBadEdges {
+	position: absolute;
+	left: 1090px;
+	top: 230px;
+}
+#PartMcSpNearBadEdges {
+	position: absolute;
+	left: 1090px;
+	top: 250px;
+	width: 120px;
+}
+
+#labelPartMcSpPlanarHoles {
+	position: absolute;
+	left: 935px;
+	top: 275px;
+}
+#PartMcSpPlanarHoles {
+	position: absolute;
+	left: 935px;
+	top: 295px;
+	width: 120px;
+}
+
+#labelPartMcQpNoiseShells {
+	position: absolute;
+	left: 935px;
+	top: 320px;
+}
+#PartMcQpNoiseShells {
+	position: absolute;
+	left: 935px;
+	top: 340px;
+	width: 120px;
+}
+
+#labelPartMcQpOverlappingTriangles {
+	position: absolute;
+	left: 1090px;
+	top: 320px;
+}
+#PartMcQpOverlappingTriangles {
+	position: absolute;
+	left: 1090px;
+	top: 340px;
+	width: 120px;
+}
+
+#labelPartMcQpIntersectingTriangles {
+	position: absolute;
+	left: 935px;
+	top: 365px;
+}
+#PartMcQpIntersectingTriangles {
+	position: absolute;
+	left: 935px;
+	top: 385px;
+	width: 120px;
+}
+
+#labelPartMcQpIsFacetingScoreOk {
+	position: absolute;
+	left: 1090px;
+	top: 365px;
+}
+#PartMcQpIsFacetingScoreOk {
+	position: absolute;
+	left: 1090px;
+	top: 385px;
+	width: 20px;
+}
+
+
+
+                                                                /* column No. 5 */
+
+#labelPartMcFileId {
+	position: absolute;
+	left: 1245px;
+	top: 5px;
+}
+#PartMcFileId {
+	position: absolute;
+	left: 1245px;
+	top: 25px;
+}
+
+#labelPartMcFileUrl {
+	position: absolute;
+	left: 1245px;
+	top: 50px;
+}
+#PartMcFileUrl {
+	position: absolute;
+	left: 1245px;
+	top: 70px;
+}
+
+#labelPartMcCreationTime {
+	position: absolute;
+	left: 1245px;
+	top: 95px;
+}
+#PartMcCreationTime {
+	position: absolute;
+	left: 1245px;
+	top: 115px;
+}
+
+#labelPartMcImportResultId {
+	position: absolute;
+	left: 1245px;
+	top: 140px;
+}
+#PartMcImportResultId {
+	position: absolute;
+	left: 1245px;
+	top: 160px;
+}
+
+#labelPartMcPreviewFileId {
+	position: absolute;
+	left: 1245px;
+	top: 185px;
+}
+#PartMcPreviewFileId {
+	position: absolute;
+	left: 1245px;
+	top: 205px;
+}
+
+#labelPartMcAnalyzeOperationId {
+	position: absolute;
+	left: 1245px;
+	top: 230px;
+}
+#PartMcAnalyzeOperationId {
+	position: absolute;
+	left: 1245px;
+	top: 250px;
+}
+
+#labelPartMcRepairResultId {
+	position: absolute;
+	left: 1245px;
+	top: 275px;
+}
+#PartMcRepairResultId {
+	position: absolute;
+	left: 1245px;
+	top: 295px;
+}
+
+
+
+
+#PartDelete {
+	position: absolute;
+}
+
+#PartCancel {
+	position: absolute;
+}

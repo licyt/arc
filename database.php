@@ -145,6 +145,11 @@ class cDbField implements iDbField
     return $this->properties[Field];
   }
   
+  public function getDisplayName() {
+    global $lang;
+    return gui($this->table->getName()."ORDER".$this->getName(), $lang);
+  }
+  
   public function getType() {
     return $this->properties[Type];
   }
@@ -217,6 +222,10 @@ class cDbField implements iDbField
 	  $this->table=$table;
   }
   
+  public function getLabel() {
+    return "<label id='label".$this->getName()."'>".$this->getDisplayName()."</label>";
+  }
+  
   public function getHtmlControl($value="", $disabled=false)
   {
   	if ($this->getName()=="NoteText") {
@@ -255,9 +264,11 @@ class cDbField implements iDbField
   	} 
   	
   	// ----------------------------------------------------------------------------- GUI field types
-  	switch (gui($this->getName(), "type")) { 
+  	$fieldType = gui($this->getName(), "type");
+  	switch ($fieldType) { 
   	  case "path":
-   	    $htmlControl = new cHtmlFilePath($value, $this->table->getName());
+  	  case "image":
+   	    $htmlControl = new cHtmlFilePath($value, $this->table->getName(), ($fieldType == "image") );
   	    break;
   	}
   	
@@ -1674,7 +1685,7 @@ class cDbTable implements iDbTable
   	  	
   	  // get html control for field
   	  if ($field = $this->getFieldByName($columnName)) {
-  	  	$html = $field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
+  	  	$html = $field->getLabel().$field->getHtmlControl($this->currentRecord[$columnName], $this->mode=="BROWSE");
   	  	if (($columnName=="StatusLogRowId")&&!is_null($this->parent)) {
   	  	  	
   	  	} else {
@@ -1689,7 +1700,7 @@ class cDbTable implements iDbTable
   	  	$lookupTableName=iug($parentColumnName, "lookupField", substr($parentColumnName, 0, -4)); // -4 (default): remove "Name"  from the end of the string
   	  	if ($foreignField = $this->scheme->tables[$lookupTableName]->getFieldByName($parentColumnName)) {
   	  	  $parentId = getParentId($this->name, $this->currentRecordId, $lookupTableName);
-  	  	  $result[$columnName] = $foreignField->getLookupControl($this, $parentId);
+  	  	  $result[$columnName] = $foreignField->getLabel().$foreignField->getLookupControl($this, $parentId);
   	  	} else {
   	  	  $result[$columnName] = "";
   	  	}
@@ -1699,7 +1710,7 @@ class cDbTable implements iDbTable
   	    $result[$columnName] = $this->manipulator();
    	  }
   	}
-  	$result["CLASS"] = $this->mode;
+  	$result["CLASS"] = $this->mode." ".$this->name."EditBox";
   	$result["onKeyPress"] = "if (event && event.keyCode==13) {elementById('".$this->name."Ok').click();}";
   	$result["onKeyPress"].= "if (event && event.keyCode==27) {elementById('".$this->name."Cancel').click();}";
   	$sbName = $this->name."Sb".$id;

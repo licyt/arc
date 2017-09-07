@@ -31,6 +31,7 @@ echo
   	linkCss("css/statuslog.css").
   	linkCss("css/action.css").
     linkCss("css/history.css").
+    linkCss("css/editPart.css").
   	
   	linkCss("css/datepicker.css").
   		

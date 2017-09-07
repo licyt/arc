@@ -728,15 +728,17 @@ class cHtmlImg extends cHtmlElement
   	  "<IMG ".
   	    $this->add(SRC).
   	    $this->add(onClick).
+  	    $this->add(ID).
   	  ">";
   }
 }
 
 class cHtmlFilePath extends cHtmlElement
 {
-  public function __construct($path, $tableName) {
+  public function __construct($path, $tableName, $isImage) {
   	$this->setAttribute(PATH, $path);
   	$this->setAttribute(tableName, $tableName);
+  	$this->setAttribute(isImage, $isImage);
   }
   public function display() {
   	$id=$this->attributes[ID];
@@ -758,10 +760,19 @@ class cHtmlFilePath extends cHtmlElement
   	  "rowHasChanged('".$this->attributes[tableName]."');".
   	  "stopEvent(event);"; 
   	$button->setAttribute(onClick, $js);
+  	if ($this->attributes["isImage"]) {
+  	    global $RepositoryDir;
+  	    $image = new cHtmlImg($RepositoryDir.$this->attributes["PATH"]);
+  	    $image->setAttribute("ID", "img".$this->attributes["ID"]);
+  	}
   	
   	$div = new cHtmlDiv($id."Wrap");
   	$div->setAttribute("CLASS", "cHtmlFilePath");
-  	$div->setAttribute(CONTENT, $input->display().$a->display().$button->display());
+  	$div->setAttribute(
+  	    CONTENT, 
+  	    $input->display().$a->display().$button->display().
+  	    ($this->attributes["isImage"] ? $image->display() : "")
+  	);
   	
   	return 
   	  $div->display();

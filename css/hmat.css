@@ -42,7 +42,7 @@ span {
 label {
   display: inline-block;
   width: 300px;
-  text-align: right;
+ /* text-align: right; */
   margin-right: 5px;
   font-style: italic;
 }
@@ -54,6 +54,7 @@ select {
   padding: 0px;
   border: 1px;
   max-width: 170px;
+   background-color: #dddddd;
 }
 
 select:disabled {
@@ -301,6 +302,8 @@ img {
 }
 .UPDATE {
   background-color: gray;
+	border-top: 1px white solid;
+	border-bottom: 1px white solid;
 }
 .UPDATE:hover {
   background-color: lightgray;
@@ -362,7 +365,7 @@ img {
 
 .cHtmlFilePath a {
    display: inline-block;
-  background-color: white;
+  background-color: #dddddd;
   color: black;
   padding: 0px 3px 0px 3px;
   margin: 0px 0px 0px 0px;
